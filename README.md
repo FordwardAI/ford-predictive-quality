@@ -4,12 +4,12 @@
 
 Este espacio organiza las decisiones para llegar a una especificación que el equipo pueda ejecutar. El alcance del mapa y la fecha están confirmados; responsables individuales, hitos internos y recortes que se sugieren abajo todavía deben acordarse.
 
-[Mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) · [Vocabulario](CONTEXT.md)
+[Mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) · [Tablero del proyecto](https://github.com/orgs/FordwardAI/projects/1) · [Vocabulario](CONTEXT.md)
 
 ## Cómo avanzar
 
 1. Leer las investigaciones ya terminadas: [población y etiquetas](research/poblacion-etiquetas.md) y [consigna y fuentes](research/consigna-fuentes.md).
-2. Trabajar **Cuándo y sobre qué conjunto de VIN se decide la auditoría** con industrial y preparar las consultas a Ford. En paralelo, acordar el alcance de entrega a partir de la lectura de la consigna ya terminada.
+2. Trabajar **Qué aclaraciones pedir a Ford y cómo avanzar si no llegan** con industrial, retomando los pendientes de la decisión operativa ya acordada. En paralelo, acordar el alcance de entrega a partir de la lectura de la consigna ya terminada.
 3. Resolver admisibilidad de datos, validación y medida de éxito antes de elegir representación y modelos.
 4. Precisar la salida que necesita Calidad y cerrar una especificación con responsables y criterios de aceptación.
 
@@ -17,13 +17,13 @@ Las dependencias indican qué decisiones deben estar resueltas para cerrar otra;
 
 ## Tickets y dependencias
 
-Vista de navegación al 16 de septiembre de 2026. El estado y las dependencias canónicos viven en GitHub; esta tabla es una instantánea.
+Vista de navegación al 17 de septiembre de 2026. El estado y las dependencias canónicos viven en GitHub; esta tabla es una instantánea.
 
 | Decisión o investigación | Estado | Depende de | Participación sugerida |
 | --- | --- | --- | --- |
 | [¿Qué población y etiquetas representa la base entregada?](https://github.com/FordwardAI/ford-predictive-quality/issues/2) | Resuelta | Sin bloqueantes | Informática — datos |
 | [¿Qué exige la consigna y qué fuentes están disponibles?](https://github.com/FordwardAI/ford-predictive-quality/issues/3) | Resuelta | Sin bloqueantes | Informática — documentación, con revisión de industrial |
-| [¿Cuándo y sobre qué conjunto de VIN se decide la auditoría?](https://github.com/FordwardAI/ford-predictive-quality/issues/4) | Abierta | Sin bloqueantes | Industrial, con el equipo |
+| [¿Cuándo y sobre qué conjunto de VIN se decide la auditoría?](https://github.com/FordwardAI/ford-predictive-quality/issues/4) | Resuelta | Sin bloqueantes | Industrial, con el equipo |
 | [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5) | Abierta | [¿Qué población y etiquetas representa la base entregada?](https://github.com/FordwardAI/ford-predictive-quality/issues/2)<br>[¿Qué exige la consigna y qué fuentes están disponibles?](https://github.com/FordwardAI/ford-predictive-quality/issues/3)<br>[¿Cuándo y sobre qué conjunto de VIN se decide la auditoría?](https://github.com/FordwardAI/ford-predictive-quality/issues/4) | Industrial, con informática para evidencia |
 | [¿Qué registros y variables son admisibles para el experimento?](https://github.com/FordwardAI/ford-predictive-quality/issues/6) | Abierta | [¿Qué población y etiquetas representa la base entregada?](https://github.com/FordwardAI/ford-predictive-quality/issues/2)<br>[¿Cuándo y sobre qué conjunto de VIN se decide la auditoría?](https://github.com/FordwardAI/ford-predictive-quality/issues/4)<br>[¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5) | Informática — datos, con industrial |
 | [¿Qué validación permite evaluar el uso propuesto sin fuga de información?](https://github.com/FordwardAI/ford-predictive-quality/issues/7) | Abierta | [¿Qué registros y variables son admisibles para el experimento?](https://github.com/FordwardAI/ford-predictive-quality/issues/6) | Informática — evaluación |
@@ -68,7 +68,7 @@ La base está declarada **ficticia**. El benchmark operativo propuesto es el mue
 
 ## Cómo retomar
 
-Abrir el mapa y elegir el primer ticket abierto, no asignado y sin bloqueantes abiertos. En esta sesión quedan disponibles las decisiones sobre el momento de selección y sobre el alcance de entrega. Reclamarlo antes de trabajar; cerrar un ticket de conversación solo con una decisión explícita del equipo. Al resolver, conservar la respuesta en el ticket y añadir un enlace resumido al mapa. Consultar las skills indicadas en sus Notes.
+Abrir el mapa y elegir el primer ticket abierto, no asignado y sin bloqueantes abiertos. Tras resolver el momento y la población de selección, quedan disponibles las decisiones sobre consultas a Ford, mejora útil frente al muestreo aleatorio y alcance de entrega. Reclamarlo antes de trabajar; cerrar un ticket de conversación solo con una decisión explícita del equipo. Al resolver, conservar la respuesta en el ticket y añadir un enlace resumido al mapa. Consultar las skills indicadas en sus Notes.
 
 La fuente canónica es el mapa en GitHub, con sus sub-issues y dependencias nativas. Las copias locales en `.scratch/` son una instantánea de la migración y no deben usarse como un segundo tracker. La consigna y el documento inicial están en [fuentes](docs/fuentes/).
 

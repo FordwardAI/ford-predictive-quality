@@ -17,6 +17,12 @@ Instancia de validación del cumplimiento de especificaciones al finalizar las i
 **Auditoría Adicional**:
 Inspección de alta precisión posterior a Gate Release, denominada también Inspección Adicional en la consigna. Evalúa la necesidad de ajustes finos en unidades que ya cumplen los estándares de liberación.
 
+**Recomendación de auditoría**:
+Propuesta dirigida a Calidad para priorizar un VIN que acaba de aprobar Gate Release, antes de su derivación a Auditoría Adicional y con el historial disponible en ese momento. Calidad confirma la selección.
+
+**VIN elegible para Auditoría Adicional**:
+Unidad que aprobó Gate Release, sigue disponible para derivación y todavía no pasó por Auditoría Adicional.
+
 **OK en Auditoría Adicional**:
 Resultado de una auditoría sin calibración adicional. No equivale por sí solo a «no auditado» ni debe confundirse con el OK de Gate Release.
 
@@ -24,4 +30,4 @@ Resultado de una auditoría sin calibración adicional. No equivale por sí solo
 Resultado que indica necesidad de calibración adicional durante la auditoría. No significa que la unidad incumpliera los estándares de Gate Release.
 
 **Cupo de auditoría**:
-Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa. El documento refiere aproximadamente el 5%; la ventana y las reglas exactas están por definir.
+Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa. Según el contexto del proceso aportado por el equipo, Ford selecciona actualmente el 5% mediante muestreo aleatorio; la ventana y las reglas operativas exactas quedan pendientes de confirmación de Ford.
