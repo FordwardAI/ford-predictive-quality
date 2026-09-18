@@ -1,3 +1,8 @@
 .scratch/
 .DS_Store
 __pycache__/
+
+# Raw datasets stay outside the repository.
+*.csv
+*.xlsx
+dataset.md

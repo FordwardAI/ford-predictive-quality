@@ -17,7 +17,7 @@ Las dependencias indican qué decisiones deben estar resueltas para cerrar otra;
 
 ## Tickets y dependencias
 
-Vista de navegación al 17 de septiembre de 2026. El estado y las dependencias canónicos viven en GitHub; esta tabla es una instantánea.
+Vista de navegación al 18 de septiembre de 2026. El estado y las dependencias canónicos viven en GitHub; esta tabla es una instantánea.
 
 | Decisión o investigación | Estado | Depende de | Participación sugerida |
 | --- | --- | --- | --- |
@@ -64,7 +64,7 @@ El ticket de alcance debe fijar responsables reales, formatos, hora de cierre, m
 
 La ficha pide justificar el enfoque y el modelo, describir la preparación de datos y la validación. Valora una interfaz o reporte accionable y evalúa también aplicabilidad, innovación y presentación oral con soporte visual. No debemos inventar formatos de entrega que la fuente no especifica.
 
-La base está declarada **ficticia**. El benchmark operativo propuesto es el muestreo del 5%; la fracción de unidades CALIBRADA dentro de la base es un concepto distinto. Los informes separan lo observado de lo que sigue pendiente de Ford. Se verificaron 195.808 eventos, 59.681 VIN y 6.079 VIN CALIBRADA. Los 4.910 VIN cuya primera inspección registrada es posterior a DIA_260 son todos OK; existen eventos positivos posteriores de VIN anteriores. La causa sigue abierta.
+La base está declarada **ficticia**. El benchmark operativo propuesto es el muestreo del 5%; la fracción de unidades CALIBRADA dentro de la base es un concepto distinto. Los informes separan lo observado de lo que sigue pendiente de Ford. La fuente vigente es el CSV recibido el 18 de septiembre, auditado completo y comparado con el Markdown anterior; ver [identificación y reproducción](docs/datos-locales.md). Conserva mayor precisión en las horas y confirma los agregados previos. Se verificaron 195.808 eventos, 59.681 VIN y 6.079 VIN CALIBRADA. Los 4.910 VIN cuya primera inspección registrada es posterior a DIA_260 son todos OK; existen eventos positivos posteriores de VIN anteriores. La causa sigue abierta.
 
 ## Cómo retomar
 

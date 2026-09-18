@@ -1,12 +1,12 @@
 # Consigna y fuentes: qué está exigido y qué falta confirmar
 
-Investigación documental del 16 de septiembre de 2026. Alcance: consigna, documento inicial, inventario local y primeras líneas del dataset; no es una auditoría de sus datos ni una decisión de diseño.
+Investigación documental del 16 de septiembre de 2026. Alcance: consigna, documento inicial, inventario local y primeras líneas del dataset; no es una decisión de diseño. Inventario y referencias de estructura actualizados el 18 de septiembre de 2026 tras la [auditoría del CSV](poblacion-etiquetas.md).
 
 ## Evidencia y autoridad
 
 - **Consigna del desafío:** [documentation.md](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/documentation.md), encabezado y fecha, líneas 1–13. Se presenta como Ford Innovation Challenge III, área Calidad, fechado **23/7/26**. Esa es la fecha de la ficha, no una fecha de entrega.
 - **Documento de ideas y preguntas:** [ford_predictive_quality_wayfinder.md](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/ford_predictive_quality_wayfinder.md#L185), especialmente «Decisiones», «Innovación» y «Posible concepto de producto». Sus propuestas no equivalen a exigencias de Ford ni a decisiones ya tomadas por el equipo.
-- **Datos y descripciones:** [dataset.md](../docs/datos-locales.md), líneas 2–5. La línea 2 contiene descripciones, la 4 nombres de campos y la 5 un primer registro.
+- **Datos y descripciones:** [CSV vigente](../docs/datos-locales.md), registros 1–3: descripciones, nombres técnicos y primer evento. La investigación inicial utilizó las líneas 2–5 del Markdown histórico; la auditoría del CSV revalida los nombres técnicos y la desalineación de descripciones.
 - **Confirmaciones del usuario en esta conversación:** proyecto completo y todos los entregables para el **2 de octubre de 2026**; equipo de tres, dos informáticos y un industrial; pueden consultar mentores. El destino de esta planificación es una especificación lista para repartir trabajo. El día y mes fueron expresos; el año se contextualiza en la fecha actual. No hay compromiso cuantificado de horas semanales.
 
 ## Exigencias y criterios
@@ -23,17 +23,17 @@ La consigna habla de muestreo del **5%** posterior a Gate Release; no explicita 
 
 ## Fuentes presentes, prometidas y límites
 
-Inventario observado en la carpeta de datos recibida: `documentation.md`, `documentation.docx`, `dataset.md`, `table.xlsx` y `ford_predictive_quality_wayfinder.md`. No se verificó equivalencia entre cada archivo original y su conversión Markdown. No aparece un ZIP ni un archivo adicional identificado como parámetros operativos, mediciones o diccionario.
+Inventario inicial observado en la carpeta de datos recibida: `documentation.md`, `documentation.docx`, `dataset.md`, `table.xlsx` y `ford_predictive_quality_wayfinder.md`. El 18 de septiembre se recibió `Dataset QLS Inspección Adicional.csv`, ahora fuente vigente. Se comparó por completo contra el Markdown y se documentaron las diferencias de representación en [datos locales](../docs/datos-locales.md). No se verificó equivalencia con el Excel ni entre las otras conversiones. No aparece un ZIP ni un archivo adicional identificado como parámetros operativos, mediciones o diccionario.
 
 La ficha promete parámetros operativos por separado y registros de instrumentales después de la ficha, con aproximadamente «190.000 valores»; esta expresión no certifica cantidad de filas ni VIN. También menciona documentación adjunta en ZIP. No puede concluirse solo con el inventario si `table.xlsx` satisface total o parcialmente esos anuncios. Fuentes: [Parámetros Operativos y Base de Datos](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/documentation.md#L68), líneas 70–76; [Documentación Disponible](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/documentation.md#L93).
 
 **La base se declara ficticia, generada para el desafío.** Sus resultados permiten evaluar la demostración sobre esa base; por sí solos no prueban desempeño o ahorro real en planta. Esta última frase es una implicación metodológica, no una restricción adicional de Ford. Fuente: [disclaimer](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/documentation.md#L74).
 
-Los conteos y la anomalía `DIA_260` están reportados en el documento inicial; esta investigación no los revalida. Fuentes: [Dataset disponible](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/ford_predictive_quality_wayfinder.md#L47) y [Anomalía temporal](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/ford_predictive_quality_wayfinder.md#L169).
+Los conteos y la anomalía `DIA_260` están reportados en el documento inicial; su revalidación completa sobre el CSV está en [Población y etiquetas](poblacion-etiquetas.md). Fuentes: [Dataset disponible](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/ford_predictive_quality_wayfinder.md#L47) y [Anomalía temporal](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/ford_predictive_quality_wayfinder.md#L169).
 
 ## Semántica efectivamente documentada
 
-Al alinear las descripciones de la línea 2 con los nombres de la línea 4 de [dataset.md](../docs/datos-locales.md):
+Al alinear las descripciones del primer registro con los nombres del segundo en el [CSV vigente](../docs/datos-locales.md):
 
 - `CCC`: código funcional específico del defecto.
 - `VFG`: código funcional del defecto por componente.
@@ -44,7 +44,7 @@ Al alinear las descripciones de la línea 2 con los nombres de la línea 4 de [d
 
 No se observó un diccionario de valores de CCC/VFG/VRT ni de catálogo. No corresponde inventar expansiones de siglas, órdenes de gravedad o relaciones jerárquicas adicionales.
 
-**Advertencia de cabecera:** hacia el final, la descripción «Resultado OK… y CALIBRADA…» está alineada con el nombre `Rep Respuesta a Pregunta Desensamblar`; `Unnamed: 38` con `Código de Catálogo`; y «Código de Catálogo del vehículo» con `Auditoría Adicional`. El primer registro tiene respectivamente `N`, `AFD5` y `OK`, compatible con los nombres de campos y con una desalineación de las descripciones. Es evidencia de cabecera y un único registro, no una validación general. No usar esa descripción para convertir Desensamblar en el target. Fuente: [dataset.md](../docs/datos-locales.md), líneas 2–5.
+**Advertencia de cabecera:** hacia el final, la descripción «Resultado OK… y CALIBRADA…» está alineada con el nombre `Rep Respuesta a Pregunta Desensamblar`; una descripción vacía con `Código de Catálogo` (`Unnamed: 38` en el Markdown); y «Código de Catálogo del vehículo» con `Auditoría Adicional`. El primer registro tiene respectivamente `N`, `AFD5` y `OK`, compatible con los nombres de campos y con una desalineación de las descripciones. Es evidencia de cabecera y un único registro, no una validación general. No usar esa descripción para convertir Desensamblar en el target. Fuente: [CSV vigente](../docs/datos-locales.md), registros 1–3; el Markdown histórico conserva la misma desalineación.
 
 ## Preguntas críticas para Ford, preparadas pero no enviadas
 

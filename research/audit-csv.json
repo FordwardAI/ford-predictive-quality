@@ -1,0 +1,345 @@
+{
+  "source": "Dataset QLS Inspección Adicional.csv",
+  "format": "csv",
+  "sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+  "bytes": 54586528,
+  "rows": 195808,
+  "columns": 41,
+  "vins": 59681,
+  "event_labels": {
+    "OK": 174991,
+    "CALIBRADA": 20817
+  },
+  "vin_label_sets": {
+    "OK": 53602,
+    "CALIBRADA": 6079
+  },
+  "min_rows_per_vin": 1,
+  "max_rows_per_vin": 63,
+  "exact_duplicate_event_rows": 477,
+  "missing_by_column": {
+    "VIN": 0,
+    "INSPECTOR": 0,
+    "Hora Inspección": 0,
+    "Fecha Inspección": 0,
+    "CP": 0,
+    "Sec.CP": 117310,
+    "CP Grupo Trabajo Reporta": 0,
+    "CP Zona Reporta": 0,
+    "Componente Inspección": 0,
+    "UC Nombre Incidencia": 0,
+    "UC Nombre Tipo Incidencia": 188248,
+    "UC Nombre Posicion A": 108553,
+    "UC Nombre Posicion B": 140614,
+    "UC Nombre Posicion C": 156681,
+    "UC Nombre Grupo Posicion C": 172646,
+    "UC Nombre Posición D": 122694,
+    "UC Nombre Grupo Posición D": 137492,
+    "UC Posición Arbitraria": 190898,
+    "CCC": 0,
+    "VFG": 0,
+    "VRT": 0,
+    "UC Nombre PUL a Reparar": 0,
+    "Fecha Reparación": 9,
+    "Hora Reparación": 0,
+    "Código de Reparador": 0,
+    "Rep PUL": 76698,
+    "Rep Parte Causal": 21593,
+    "Rep.incid.": 22874,
+    "Rep.Tipo Incid.": 186588,
+    "Rep.PosA": 109250,
+    "Rep.PosB": 142095,
+    "Rep.PosC": 158304,
+    "Rep.Grp.PosC": 171001,
+    "Rep Nombre Posición D": 122945,
+    "Rep Nombre Grupo Posición D": 132586,
+    "Rep.Pos.arbit": 191183,
+    "Rep Respuesta a Pregunta Remplazar": 21593,
+    "Rep Respuesta a Pregunta Desensamblar": 21593,
+    "Código de Catálogo": 0,
+    "Auditoría Adicional": 0,
+    "Componente Auditoría Adicional": 174991
+  },
+  "temporal": {
+    "Fecha Inspección": {
+      "first_date_vin_cohorts": {
+        "antes_260": {
+          "OK": 48439,
+          "CALIBRADA": 6070
+        },
+        "dia_260": {
+          "OK": 253,
+          "CALIBRADA": 9
+        },
+        "despues_260": {
+          "OK": 4910
+        }
+      },
+      "latest_first_event_day_of_positive_vin": 260,
+      "min": 1,
+      "max": 284,
+      "days_present": 283,
+      "missing_day_ids_in_range": [
+        2
+      ],
+      "last_positive_day": 282,
+      "first_positive_day": 1,
+      "period_event_labels": {
+        "antes_260": {
+          "OK": 159765,
+          "CALIBRADA": 20731
+        },
+        "dia_260": {
+          "OK": 675,
+          "CALIBRADA": 36
+        },
+        "despues_260": {
+          "OK": 14551,
+          "CALIBRADA": 50
+        }
+      },
+      "vin_groups_at_260": {
+        "solo_hasta_260": {
+          "OK": 48530,
+          "CALIBRADA": 6076
+        },
+        "cruza_260": {
+          "OK": 162,
+          "CALIBRADA": 3
+        },
+        "solo_despues_260": {
+          "OK": 4910
+        }
+      }
+    },
+    "Fecha Reparación": {
+      "first_date_vin_cohorts": {
+        "antes_260": {
+          "OK": 48429,
+          "CALIBRADA": 6070
+        },
+        "dia_260": {
+          "OK": 258,
+          "CALIBRADA": 9
+        },
+        "despues_260": {
+          "OK": 4914
+        },
+        "sin_fecha": {
+          "OK": 1
+        }
+      },
+      "latest_first_event_day_of_positive_vin": 260,
+      "min": 1,
+      "max": 284,
+      "days_present": 255,
+      "missing_day_ids_in_range": [
+        2,
+        6,
+        7,
+        18,
+        24,
+        35,
+        40,
+        41,
+        54,
+        60,
+        61,
+        72,
+        77,
+        94,
+        139,
+        146,
+        152,
+        161,
+        165,
+        169,
+        176,
+        215,
+        225,
+        226,
+        233,
+        239,
+        242,
+        251,
+        269
+      ],
+      "last_positive_day": 282,
+      "first_positive_day": 1,
+      "period_event_labels": {
+        "antes_260": {
+          "OK": 159684,
+          "CALIBRADA": 20727
+        },
+        "dia_260": {
+          "OK": 702,
+          "CALIBRADA": 36
+        },
+        "despues_260": {
+          "OK": 14596,
+          "CALIBRADA": 54
+        }
+      },
+      "vin_groups_at_260": {
+        "solo_hasta_260": {
+          "OK": 48519,
+          "CALIBRADA": 6075
+        },
+        "cruza_260": {
+          "OK": 168,
+          "CALIBRADA": 4
+        },
+        "solo_despues_260": {
+          "OK": 4914
+        },
+        "sin_fecha": {
+          "OK": 1
+        }
+      }
+    }
+  },
+  "description_mismatch_at_38_40": [
+    [
+      38,
+      "Resultado OK (no tuvo calibraciones adicionales) y CALIBRADA (necesitó calibración adicional)",
+      "Rep Respuesta a Pregunta Desensamblar"
+    ],
+    [
+      39,
+      "",
+      "Código de Catálogo"
+    ],
+    [
+      40,
+      "Código de Catálogo del vehículo",
+      "Auditoría Adicional"
+    ]
+  ],
+  "component_missing_event_labels": {
+    "OK": 174991,
+    "CALIBRADA": 0
+  },
+  "vins_with_multiple_component_values": 0,
+  "integrity_checks": "PASS: 41 unique headers; every row has 41 fields; all nonmissing dates match DIA_n; no missing VIN; row and VIN partitions reconcile.",
+  "markdown_comparison": {
+    "compared_rows": 195808,
+    "technical_headers_equal": true,
+    "reference_sha256": "5f0e6dc11262fb4ff675797ebfe51c1d43feafc0029c5dcc3f2bd4574c56c3e2",
+    "description_differences_at_positions": [
+      3,
+      4,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      39,
+      41
+    ],
+    "different_cells_by_column": {
+      "Hora Inspección": {
+        "compatible_with_6_decimal_place_rounding": 195808
+      },
+      "Sec.CP": {
+        "missing_representation": 117310
+      },
+      "UC Nombre Tipo Incidencia": {
+        "missing_representation": 188248
+      },
+      "UC Nombre Posicion C": {
+        "missing_representation": 156681
+      },
+      "UC Nombre Grupo Posicion C": {
+        "missing_representation": 172646
+      },
+      "UC Posición Arbitraria": {
+        "missing_representation": 190898
+      },
+      "Hora Reparación": {
+        "compatible_with_6_decimal_place_rounding": 195808
+      },
+      "Rep PUL": {
+        "missing_representation": 76698
+      },
+      "Rep.Tipo Incid.": {
+        "missing_representation": 186588
+      },
+      "Rep.PosC": {
+        "missing_representation": 158304
+      },
+      "Rep.Grp.PosC": {
+        "missing_representation": 171001
+      },
+      "Rep.Pos.arbit": {
+        "missing_representation": 191183
+      },
+      "Componente Auditoría Adicional": {
+        "missing_representation": 174991
+      },
+      "UC Nombre Posición D": {
+        "missing_representation": 122694
+      },
+      "Rep Nombre Posición D": {
+        "missing_representation": 122945
+      },
+      "UC Nombre Posicion A": {
+        "missing_representation": 108553,
+        "whitespace": 3400
+      },
+      "UC Nombre Posicion B": {
+        "missing_representation": 140614
+      },
+      "UC Nombre Grupo Posición D": {
+        "missing_representation": 137492
+      },
+      "VRT": {
+        "whitespace": 46985
+      },
+      "Rep.PosA": {
+        "missing_representation": 109250,
+        "whitespace": 3337
+      },
+      "Rep.PosB": {
+        "missing_representation": 142095
+      },
+      "Rep Nombre Grupo Posición D": {
+        "missing_representation": 132586
+      },
+      "UC Nombre Incidencia": {
+        "whitespace": 13269
+      },
+      "Rep.incid.": {
+        "whitespace": 13074,
+        "missing_representation": 22874
+      },
+      "Rep Parte Causal": {
+        "missing_representation": 21593,
+        "whitespace": 13
+      },
+      "Rep Respuesta a Pregunta Remplazar": {
+        "missing_representation": 21593
+      },
+      "Rep Respuesta a Pregunta Desensamblar": {
+        "missing_representation": 21593
+      },
+      "UC Nombre PUL a Reparar": {
+        "whitespace": 1979
+      },
+      "Componente Inspección": {
+        "whitespace": 13
+      },
+      "Fecha Reparación": {
+        "missing_representation": 9
+      }
+    },
+    "max_absolute_hour_difference": "5E-7",
+    "unexplained_cells": 0
+  }
+}

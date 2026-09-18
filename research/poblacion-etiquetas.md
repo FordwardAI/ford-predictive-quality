@@ -1,22 +1,24 @@
 # Población y etiquetas de la base Ford
 
-Investigación AFK resuelta el 16 de septiembre de 2026. Alcance: describir la base entregada y precisar qué sigue requiriendo aclaración de Ford; no elegir exclusiones, particiones ni modelos.
+Investigación inicial del 16 de septiembre de 2026, revalidada íntegramente sobre el CSV el 18 de septiembre de 2026. Alcance: describir la base entregada y precisar qué sigue requiriendo aclaración de Ford; no elegir exclusiones, particiones ni modelos.
 
 ## Fuentes y reproducción
 
-- [Exportación Markdown del dataset](../docs/datos-locales.md), fuente de todos los conteos siguientes; se procesó el archivo completo por streaming, sin muestreo.
+- [CSV vigente del dataset](../docs/datos-locales.md), fuente de todos los conteos siguientes; se procesó el archivo completo por streaming, sin muestreo.
 - [Consigna oficial](https://github.com/FordwardAI/ford-predictive-quality/blob/main/docs/fuentes/documentation.md), secciones «Base de Datos», «Desafío Específico» y «Descripción del Proceso Actual»: base ficticia creada para el desafío; inspección adicional posterior a Gate Release por muestreo del 5%.
 - El documento de propuesta `ford_predictive_quality_wayfinder.md` es contexto de planificación; sus interpretaciones no sustituyen a la consigna ni a la confirmación del responsable del dato.
 
-Archivo analizado: 78.164.273 bytes. SHA-256: `5f0e6dc11262fb4ff675797ebfe51c1d43feafc0029c5dcc3f2bd4574c56c3e2`.
+Archivo CSV analizado: 54.586.528 bytes. SHA-256: `a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b`. [Resultados agregados y comparación completa](audit-csv.json).
 
 Comando reproducible desde la raíz del repositorio:
 
 ```sh
-python3 research/audit_dataset.py /ruta/al/dataset.md
+python3 research/audit_dataset.py "/ruta/al/Dataset QLS Inspección Adicional.csv"
 ```
 
-El script usa solo la biblioteca estándar de Python y deja verificaciones ejecutables: parsing de separadores escapados; 41 encabezados únicos; 41 celdas en cada fila; formato DIA_n de toda fecha no faltante; VIN no faltante; reconciliación de filas, etiquetas y grupos temporales de VIN. Resultado: PASS. Solo se imprimen agregados; ningún VIN individual.
+El script usa solo la biblioteca estándar de Python y deja verificaciones ejecutables: lectura CSV con comillas, comas, saltos de línea y BOM; reconocimiento de vacíos, `NaN` y `#N/A`; 41 encabezados únicos; 41 celdas en cada fila; formato DIA_n de toda fecha no faltante; VIN no faltante; reconciliación de filas, etiquetas y grupos temporales de VIN. Resultado: PASS. Solo se imprimen agregados; ningún VIN individual. La prueba sintética se ejecuta con `python3 research/test_audit_dataset.py`.
+
+La comparación celda a celda con el Markdown confirmó los agregados anteriores. El CSV conserva mayor precisión en las horas, además de diferencias de espacios y representación de nulos. La [comparación de fuentes](../docs/datos-locales.md#correspondencia-con-el-markdown-anterior) detalla los límites: no son archivos textualmente iguales y no se verificó el Excel.
 
 ## Unidad de observación y etiquetas
 
@@ -29,23 +31,23 @@ Hay **195.808 filas de eventos**, **59.681 VIN únicos** y **41 columnas**. Cada
 
 La fracción CALIBRADA por VIN es **10,1858%**. Es la proporción dentro de la base entregada, no una estimación validada sobre toda la producción ni una prueba de que todos esos VIN fueron realmente auditados. La tabla por sí sola no identifica el mecanismo de inclusión ni diferencia explícitamente «no auditado» de «auditado y OK». [Fuentes: dataset y consigna, que declara ficticia la base.]
 
-Hay **477 repeticiones exactas de fila** después de la primera ocurrencia: 195.331 filas textualmente distintas. Esto no permite decidir si son duplicados espurios o eventos legítimos indistinguibles; no se eliminaron. [Fuente: hash de cada fila de datos del export.]
+Hay **477 repeticiones exactas de fila** después de la primera ocurrencia: 195.331 filas distintas por sus 41 valores textuales. Esto no permite decidir si son duplicados espurios o eventos legítimos indistinguibles; no se eliminaron. [Fuente: hash de la lista de valores de cada registro CSV, sin redondear ni limpiar espacios.]
 
 ## Riesgo de interpretar el encabezado incorrecto
 
-El export tiene una fila de descripciones, una fila separadora y luego los nombres técnicos. Los registros comienzan después de esos tres renglones de tabla. Las descripciones de las posiciones 38–40 están desalineadas o incompletas:
+El CSV tiene un registro de descripciones y otro de nombres técnicos. Los eventos comienzan en el tercer registro CSV. El Markdown anterior intercalaba una fila separadora. Las descripciones de las posiciones 38–40 están desalineadas o incompletas:
 
 | Posición (base 1) | Descripción superior | Nombre técnico utilizado |
 |---|---|---|
 | 38 | Resultado OK / CALIBRADA | Rep Respuesta a Pregunta Desensamblar |
-| 39 | Unnamed: 38 | Código de Catálogo |
+| 39 | Vacía | Código de Catálogo |
 | 40 | Código de Catálogo del vehículo | Auditoría Adicional |
 
-Por eso el resultado se contó en **Auditoría Adicional, columna 40**, usando los nombres técnicos. La columna 41 es **Componente Auditoría Adicional**. No se desplazaron los datos para forzarlos a coincidir con la descripción superior. [Fuente: primeras tres filas de la tabla del dataset.]
+Por eso el resultado se contó en **Auditoría Adicional, columna 40**, usando los nombres técnicos. La columna 41 es **Componente Auditoría Adicional**. No se desplazaron los datos para forzarlos a coincidir con la descripción superior. [Fuente: primeros dos registros CSV; la desalineación también estaba presente en el Markdown.]
 
 ## Cobertura temporal: eventos y cohortes de VIN
 
-«Día» significa el identificador numérico DIA_n del export. No se conoce su correspondencia con fechas de calendario ni se infiere que sea la fecha de auditoría.
+«Día» significa el identificador numérico DIA_n del CSV. No se conoce su correspondencia con fechas de calendario ni se infiere que sea la fecha de auditoría.
 
 | Fecha de evento | Primer día | Último día | Días distintos | Último evento de VIN CALIBRADA | Fechas faltantes |
 |---|---:|---:|---:|---:|---:|
@@ -97,7 +99,7 @@ Cruzar significa tener al menos un evento fechado hasta DIA_260 inclusive y otro
 
 ## Faltantes y componente de auditoría
 
-Se consideran faltantes las celdas vacías o `NaN`; el conteo se hace por fila, no por VIN. No se interpretaron otros códigos como nulos.
+Se consideran faltantes las celdas vacías, `NaN` o `#N/A`; el conteo se hace por fila, no por VIN. No se interpretaron otros códigos como nulos.
 
 | Columna con faltantes | Filas faltantes |
 |---|---:|
@@ -126,7 +128,7 @@ Se consideran faltantes las celdas vacías o `NaN`; el conteo se hace por fila, 
 | Rep Respuesta a Pregunta Desensamblar | 21.593 |
 | Componente Auditoría Adicional | 174.991 |
 
-Todas las columnas no listadas tienen 0 celdas vacías/NaN. De los VIN, uno no tiene ninguna fecha de reparación registrada; los restantes tienen al menos una. [Fuente: conteos completos.]
+Todas las columnas no listadas tienen 0 celdas faltantes según esa regla. En el CSV, las nueve fechas de reparación faltantes están expresadas como `#N/A`; en el Markdown figuraban como `NaN`. De los VIN, uno no tiene ninguna fecha de reparación registrada; los restantes tienen al menos una. [Fuente: conteos completos.]
 
 **Componente Auditoría Adicional** está ausente en todas las 174.991 filas OK y presente en todas las 20.817 filas CALIBRADA; dentro de cada VIN su valor es constante. Su presencia revela exactamente el resultado en esta base, además de describir el componente calibrado según el encabezado; no es evidencia predictiva previa a la auditoría. [Fuente: dataset y nombre/descripción de la columna 41.]
 

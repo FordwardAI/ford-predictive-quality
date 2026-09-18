@@ -1,6 +1,6 @@
 # Consultas a Ford y alternativas si no llegan respuestas
 
-Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Es preparación para una reunión: no registra una respuesta de Ford ni la resolución del ticket.
+Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Evidencia revalidada sobre el CSV recibido ese día. Es preparación para una reunión: no registra una respuesta de Ford ni la resolución del ticket.
 
 ## Estado del contacto y objetivo acordado
 
@@ -23,8 +23,7 @@ Para revisar con Ford, llevar la tabla de cohortes de la auditoría, la correspo
 ## Fuentes y alcance
 
 - **Fuente primaria del proceso:** [consigna oficial](../docs/fuentes/documentation.md), especialmente «Descripción del Proceso Actual», «Desafío Específico», «Parámetros Operativos» y «Base de Datos».
-- **Fuente de estructura:** cabecera del `dataset.md` documentada en la [auditoría previa](poblacion-etiquetas.md#riesgo-de-interpretar-el-encabezado-incorrecto). Su identificación y reproducción están en [datos locales](../docs/datos-locales.md). No se repitió la auditoría completa ni se verificó equivalencia con `table.xlsx`.
-- **Evidencia cuantitativa ya obtenida:** [Población y etiquetas](poblacion-etiquetas.md), con conteos y auditoría reproducible de esa entrega. Los números citados abajo provienen de ese informe; no son nuevos conteos.
+- **Fuente de estructura y conteos:** CSV vigente identificado en [datos locales](../docs/datos-locales.md), auditado completo y comparado celda a celda con el Markdown anterior. [Población y etiquetas](poblacion-etiquetas.md) y [salida agregada](audit-csv.json) confirman los conteos citados. Cambian precisión de horas, espacios y representación de faltantes; no se verificó equivalencia con `table.xlsx`.
 - **Contraste de autoridad:** [Consigna y fuentes](consigna-fuentes.md) separa requisitos de Ford de propuestas del equipo. [CONTEXT.md](../CONTEXT.md) recoge el vocabulario y el uso previsto; [documento inicial](../docs/fuentes/ford_predictive_quality_wayfinder.md) aporta preguntas e hipótesis, no confirmaciones adicionales de Ford.
 
 La consigna declara ficticia la base. La evidencia local permite describirla, pero no determinar por qué Ford la construyó así ni certificar disponibilidad operativa de los campos. Estas preguntas requieren a quien conoce el proceso y la generación de la entrega; una búsqueda web no resolvería esa semántica propietaria.
@@ -96,7 +95,7 @@ El orden siguiente es una recomendación por impacto sobre la interpretación y 
 
 **Evidencia:** hecho 6; [inventario recibido](consigna-fuentes.md#fuentes-presentes-prometidas-y-límites). La cabecera actual no identifica explícitamente tiempos de permanencia, mediciones instrumentales ni recorrido completo por estaciones sin incidencia.
 
-**Pregunta concreta:** ¿`table.xlsx` y su export constituyen toda la entrega o faltan los parámetros, instrumentales y ZIP mencionados? ¿Qué archivo contiene cada fuente? Si existen tiempos de ciclo, permanencias, controles automáticos o pasos por estaciones sin defectos, ¿pueden compartir esquema, claves de vínculo con VIN/evento y fechas de captura/disponibilidad, además de aclarar si el Excel y el Markdown representan la misma versión?
+**Pregunta concreta:** ¿`table.xlsx` y su export constituyen toda la entrega o faltan los parámetros, instrumentales y ZIP mencionados? ¿Qué archivo contiene cada fuente? Si existen tiempos de ciclo, permanencias, controles automáticos o pasos por estaciones sin defectos, ¿pueden compartir esquema, claves de vínculo con VIN/evento y fechas de captura/disponibilidad, además de aclarar si el Excel y el CSV representan la misma versión?
 
 **Decisión que bloquea:** cerrar qué fuentes entran en el alcance y si permiten reconstruir las señales que la propuesta pretende utilizar.
 
@@ -111,7 +110,7 @@ El orden siguiente es una recomendación por impacto sobre la interpretación y 
 > 3. No encontramos VIN CALIBRADA cuya primera inspección observada sea posterior a DIA_260; sí hay eventos CALIBRADA posteriores de VIN anteriores. ¿Qué explica el patrón, qué período tiene etiquetas completas y qué orden/distancias conserva DIA_n?
 > 4. ¿Sobre qué población y ventana se calcula el 5%, qué restricciones de capacidad y elegibilidad existen, y la selección actual es aleatoria con o sin excepciones?
 > 5. ¿Pueden confirmar las descripciones de las columnas finales —Desensamblar, Código de Catálogo y Auditoría Adicional— y facilitar diccionarios de códigos? ¿Existe ID de evento y qué significan filas repetidas o reparaciones sin fecha?
-> 6. ¿La entrega incluye todos los parámetros e instrumentales anunciados? Si hay otras fuentes, ¿cuáles son sus claves y fechas de disponibilidad? ¿El Excel y el export Markdown corresponden a la misma versión?
+> 6. ¿La entrega incluye todos los parámetros e instrumentales anunciados? Si hay otras fuentes, ¿cuáles son sus claves y fechas de disponibilidad? ¿El Excel y el CSV corresponden a la misma versión?
 >
 > Con estas aclaraciones podremos distinguir qué se demuestra sobre la base del desafío y qué requiere validación operativa. Muchas gracias.
 
