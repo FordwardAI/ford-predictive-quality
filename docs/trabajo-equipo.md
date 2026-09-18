@@ -29,7 +29,7 @@ Para instalar en una máquina nueva, consultar el [repositorio oficial de Matt P
 
 Las skills de Matt que ya existen en la máquina del autor no están vendorizadas en este repo. Para una instalación compartida futura, registrar origen y commit/versión, revisar el diff y conservar una sola copia por skill con enlaces para los agentes; evitar duplicados globales y locales del mismo nombre. No suponer que `grill-me` y `grilling`, por ejemplo, tienen instrucciones idénticas sin leerlas.
 
-Si se ejecuta `setup-matt-pocock-skills`, conservar el tracker existente: **GitHub**, este documento como configuración, `research/` como ubicación de investigaciones y `CONTEXT.md` como vocabulario. No crear un mapa local ni otro Project. La sesión actual no instala ni actualiza el catálogo de terceros.
+El proyecto ya se inició con **wayfinder**. Si se ejecuta `setup-matt-pocock-skills`, conservar el tracker existente: **GitHub Project FordwardAI-v1** con los issues del repositorio, este documento como configuración, `research/` como ubicación de investigaciones y `CONTEXT.md` como vocabulario. Retomar el mapa existente; no crear un mapa local ni otro Project.
 
 ## Skill de análisis de datos del equipo
 
@@ -39,7 +39,7 @@ Para gráficos o tablas futuras, usar las herramientas disponibles para la neces
 
 ## Wayfinding operations
 
-**Tracker:** `FordwardAI/ford-predictive-quality` en GitHub. **Mapa:** [Ford Predictive Quality — mapa de decisiones](https://github.com/FordwardAI/ford-predictive-quality/issues/1), label `wayfinder:map`. **Tablero:** [Project FordwardAI-v1](https://github.com/orgs/FordwardAI/projects/1).
+**Issue tracker y seguimiento:** [GitHub Project FordwardAI-v1](https://github.com/orgs/FordwardAI/projects/1). **Tickets y dependencias nativas:** issues de `FordwardAI/ford-predictive-quality`. **Mapa wayfinder existente:** [Ford Predictive Quality — mapa de decisiones](https://github.com/FordwardAI/ford-predictive-quality/issues/1), label `wayfinder:map`.
 
 - Los tickets de decisiones son **sub-issues nativos** del mapa, con `wayfinder:research`, `wayfinder:prototype`, `wayfinder:grilling` o `wayfinder:task` según corresponda. Un enlace en el cuerpo no crea parentesco.
 - Las dependencias usan **blocked by / blocking nativos** de GitHub. Crear primero los tickets y después vincularlos. No sustituir las relaciones con listas de números en Markdown.

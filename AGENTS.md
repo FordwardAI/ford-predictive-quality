@@ -4,6 +4,7 @@ Estas instrucciones se aplican al equipo, Codex y Claude Code. Mantener las regl
 
 ## Orientación y fuentes
 
+- El proyecto se inició con **wayfinder** y continúa sobre ese mapa. El issue tracker compartido es **GitHub Project FordwardAI-v1**, apoyado en los issues, sub-issues y dependencias nativas del repositorio. Retomar ese flujo; no reiniciar la planificación ni crear un tracker paralelo.
 - Al iniciar, leer `README.md`, `CONTEXT.md` y el ticket pertinente; revisar `git status --short --branch` antes de editar. No deshacer cambios ajenos.
 - La guía del equipo y el documento del tracker para las skills están en [docs/trabajo-equipo.md](docs/trabajo-equipo.md), sección **Wayfinding operations**.
 - El [mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) y sus dependencias viven en GitHub. El README es una instantánea; `.scratch/` no es otro tracker.
