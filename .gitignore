@@ -6,3 +6,10 @@ __pycache__/
 *.csv
 *.xlsx
 dataset.md
+.venv/
+.env
+.env.*
+!.env.example
+.claude/settings.local.json
+CLAUDE.local.md
+.ipynb_checkpoints/

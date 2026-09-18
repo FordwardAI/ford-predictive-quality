@@ -6,6 +6,10 @@ Este espacio organiza las decisiones para llegar a una especificación que el eq
 
 [Mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) · [Tablero del proyecto](https://github.com/orgs/FordwardAI/projects/1) · [Vocabulario](CONTEXT.md)
 
+## Trabajo en equipo
+
+Las [convenciones compartidas](AGENTS.md) rigen para Codex y Claude Code. La [guía de incorporación y skills](docs/trabajo-equipo.md) explica cómo retomar tickets, coordinar agentes y usar `ford-data-analysis` sobre el CSV sin subir datos crudos. Claude importa las mismas instrucciones mediante `CLAUDE.md`.
+
 ## Cómo avanzar
 
 1. Leer las investigaciones ya terminadas: [población y etiquetas](research/poblacion-etiquetas.md) y [consigna y fuentes](research/consigna-fuentes.md).
