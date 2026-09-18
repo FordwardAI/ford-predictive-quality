@@ -8,6 +8,8 @@ Este espacio organiza las decisiones para llegar a una especificación que el eq
 
 ## Trabajo en equipo
 
+Consultar [CONTRIBUTING.md](CONTRIBUTING.md) para nombres de ramas, mensajes de commit y títulos de PR.
+
 Las [convenciones compartidas](AGENTS.md) rigen para Codex y Claude Code. La [guía de incorporación y skills](docs/trabajo-equipo.md) explica cómo retomar tickets, coordinar agentes y usar `ford-data-analysis` sobre el CSV sin subir datos crudos. Claude importa las mismas instrucciones mediante `CLAUDE.md`.
 
 ## Cómo avanzar

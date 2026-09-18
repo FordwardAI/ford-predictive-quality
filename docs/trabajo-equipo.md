@@ -1,6 +1,6 @@
 # Trabajo compartido con Codex y Claude Code
 
-La fuente de convenciones es [AGENTS.md](../AGENTS.md). Claude la importa mediante [CLAUDE.md](../CLAUDE.md); los dos agentes reciben las mismas reglas del repo. Las preferencias personales no deben convertirse en requisitos del equipo sin documentarlas aquí.
+El flujo compartido está en [AGENTS.md](../AGENTS.md) y las convenciones de ramas, commits y títulos de PR en [CONTRIBUTING.md](../CONTRIBUTING.md). Claude importa AGENTS mediante [CLAUDE.md](../CLAUDE.md); los dos agentes reciben las mismas reglas del repo. Las preferencias personales no deben convertirse en requisitos del equipo sin documentarlas aquí.
 
 ## Incorporación
 

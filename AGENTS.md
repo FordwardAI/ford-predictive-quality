@@ -1,6 +1,6 @@
 # Convenciones compartidas
 
-Estas instrucciones se aplican al equipo, Codex y Claude Code. Mantener las reglas comunes aquí; `CLAUDE.md` solo importa este archivo. Una petición explícita del usuario puede ajustar el alcance de la tarea; registrar cualquier cambio duradero de convención.
+Estas instrucciones se aplican al equipo, Codex y Claude Code. Mantener el flujo común aquí y las convenciones de nombres de ramas, commits y PRs en [CONTRIBUTING.md](CONTRIBUTING.md); `CLAUDE.md` importa este archivo. Una petición explícita del usuario puede ajustar el alcance de la tarea; registrar cualquier cambio duradero de convención.
 
 ## Orientación y fuentes
 
@@ -15,7 +15,7 @@ Estas instrucciones se aplican al equipo, Codex y Claude Code. Mantener las regl
 
 - Mantener sincronizados repo, ticket y [Project FordwardAI-v1](https://github.com/orgs/FordwardAI/projects/1). Reclamar el ticket antes de trabajarlo y comprobar que nadie lo está trabajando; estar asignado a la misma cuenta no garantiza que otra sesión esté libre.
 - Para trabajo simultáneo, usar un checkout/worktree distinto por tarea y rama `codex/<tema>` o `claude/<tema>`. No ejecutar dos agentes que editen el mismo checkout. Una sesión serial puede continuar en la rama acordada.
-- Hacer commits pequeños y descriptivos, vinculados al ticket (`refs #N`). Publicar los cambios autorizados y enlazar el commit o PR en el ticket. No usar force-push ni sobrescribir trabajo remoto para resolver divergencias.
+- Seguir [CONTRIBUTING.md](CONTRIBUTING.md): Conventional Branch para ramas y Conventional Commits para commits y títulos de PR. Hacer commits pequeños, vinculados al ticket (`Refs: #N`). Publicar los cambios autorizados y enlazar el commit o PR en el ticket. No usar force-push ni sobrescribir trabajo remoto para resolver divergencias.
 - Las ramas de trabajo se integran mediante PR; una PR abierta no equivale a trabajo integrado. No inferir permiso para merge de una solicitud de revisión. Se permite continuar el flujo directo a `main` cuando el usuario lo autoriza, como en las tareas seriales de documentación ya acordadas.
 - Estado real: **Todo** sin iniciar, **In progress** mientras haya trabajo/validación/integración pendiente, **Done** al satisfacer el ticket. Registrar bloqueos y próximos pasos en el ticket; no cerrar una decisión HITL sin la respuesta humana.
 - Antes de terminar o cambiar de agente, dejar qué cambió, evidencia/comandos, commit o rama, pendientes y próximo paso. Si no se pudo publicar o sincronizar, decirlo; no declarar éxito remoto.
