@@ -1,6 +1,6 @@
 ---
 name: ford-data-analysis
-description: Auditar o explorar datos QLS de Ford, comparar entregas CSV/Markdown y actualizar evidencia reproducible por evento y VIN. Usar ante cambios de dataset, preguntas de calidad, etiquetas, faltantes o cobertura temporal; no para elegir modelos ni resolver decisiones operativas sin el equipo.
+description: Auditar o explorar datos QLS de Ford, comparar entregas CSV y actualizar evidencia reproducible por evento y VIN. Usar ante cambios de dataset, preguntas de calidad, etiquetas, faltantes o cobertura temporal; no para elegir modelos ni resolver decisiones operativas sin el equipo.
 ---
 
 # Análisis QLS reproducible
@@ -9,9 +9,9 @@ Trabajar desde la raíz del repo. Leer `AGENTS.md`, `CONTEXT.md`, `docs/datos-lo
 
 ## Identificar antes de calcular
 
-- Usar la ruta local proporcionada por el usuario; si el archivo falta, pedirlo. No buscar datos alternativos en servicios externos ni incorporar archivos crudos al repo.
+- Usar exclusivamente entregas CSV como fuente de datos. Usar la ruta local proporcionada por el usuario; si el archivo falta, pedirlo. No buscar datos alternativos en servicios externos ni incorporar archivos crudos al repo.
 - Registrar nombre de entrega, tamaño, SHA-256, codificación, delimitador y esquema. El CSV vigente tiene descripciones en el primer registro y nombres técnicos en el segundo; no usar la descripción como cabecera ni inferir por posición sin verificar nombres.
-- No presuponer equivalencia con Markdown, Excel o una nueva exportación. Comparar contra la referencia cuando esté disponible; si no lo está, declarar el límite. No sobreescribir el archivo recibido.
+- No presuponer equivalencia entre entregas CSV. Ante una nueva versión, contrastar esquema, hash y resultados con el CSV de referencia cuando esté disponible; si no lo está, declarar el límite. No sobreescribir el archivo recibido.
 
 ## Reutilizar la auditoría
 
@@ -20,13 +20,7 @@ python3 research/test_audit_dataset.py
 python3 research/audit_dataset.py "/ruta/al/archivo.csv"
 ```
 
-Para comparar la entrega CSV con el Markdown histórico:
-
-```sh
-python3 research/audit_dataset.py "/ruta/al/archivo.csv" --compare-markdown "/ruta/al/dataset.md"
-```
-
-Los argumentos son rutas del usuario, no ubicaciones fijas. Revisar la salida antes de guardar agregados en `research/`. La comparación existente exige los mismos nombres técnicos y orden de filas; un fallo por reordenamiento no demuestra por sí solo pérdida de datos. Investigar la causa y adaptar la comparación solo si la pregunta lo requiere, preservando multiplicidades y sin publicar filas individuales.
+Los argumentos son rutas del usuario, no ubicaciones fijas. Revisar la salida antes de guardar agregados en `research/`. Al comparar versiones CSV, preservar multiplicidades: un cambio de orden de filas no demuestra por sí solo pérdida de datos. No publicar filas individuales.
 
 - Conservar identificadores y códigos como texto. No perder ceros iniciales ni redondear horas al cargar; el CSV usa coma decimal dentro de campos entrecomillados. Para operaciones aritméticas, hacer conversión explícita y documentar unidad/precisión; no asumir que hora numérica significa timestamp de auditoría.
 - Distinguir vacíos, `NaN`, `#N/A` y códigos de negocio. La auditoría actual cuenta los tres primeros como faltantes; si aparecen otros tokens, describirlos antes de ampliar la regla. `#N/A` no debe convertirse en una fecha ni en cero.
