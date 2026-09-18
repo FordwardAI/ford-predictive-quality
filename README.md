@@ -9,7 +9,7 @@ Este espacio organiza las decisiones para llegar a una especificación que el eq
 ## Cómo avanzar
 
 1. Leer las investigaciones ya terminadas: [población y etiquetas](research/poblacion-etiquetas.md) y [consigna y fuentes](research/consigna-fuentes.md).
-2. Trabajar **Qué aclaraciones pedir a Ford y cómo avanzar si no llegan** con industrial, retomando los pendientes de la decisión operativa ya acordada. En paralelo, acordar el alcance de entrega a partir de la lectura de la consigna ya terminada.
+2. Preparar la reunión con Ford usando [conclusiones preliminares y consultas priorizadas](research/consultas-ford.md). El equipo ya pidió la reunión por correo y consultó por datos operativos numéricos y diccionarios; espera respuesta. El ticket **Qué aclaraciones pedir a Ford y cómo avanzar si no llegan** sigue en curso. En paralelo, acordar el alcance de entrega a partir de la lectura de la consigna ya terminada.
 3. Resolver admisibilidad de datos, validación y medida de éxito antes de elegir representación y modelos.
 4. Precisar la salida que necesita Calidad y cerrar una especificación con responsables y criterios de aceptación.
 
@@ -71,4 +71,3 @@ La base está declarada **ficticia**. El benchmark operativo propuesto es el mue
 Abrir el mapa y elegir el primer ticket abierto, no asignado y sin bloqueantes abiertos. Tras resolver el momento y la población de selección, quedan disponibles las decisiones sobre consultas a Ford, mejora útil frente al muestreo aleatorio y alcance de entrega. Reclamarlo antes de trabajar; cerrar un ticket de conversación solo con una decisión explícita del equipo. Al resolver, conservar la respuesta en el ticket y añadir un enlace resumido al mapa. Consultar las skills indicadas en sus Notes.
 
 La fuente canónica es el mapa en GitHub, con sus sub-issues y dependencias nativas. Las copias locales en `.scratch/` son una instantánea de la migración y no deben usarse como un segundo tracker. La consigna y el documento inicial están en [fuentes](docs/fuentes/).
-

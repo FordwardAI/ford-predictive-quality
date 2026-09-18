@@ -14,3 +14,5 @@ python3 research/audit_dataset.py /ruta/al/dataset.md
 ```
 
 La salida contiene solo conteos agregados y comprobaciones de integridad. La investigación no elimina registros ni entrena modelos.
+
+Para el próximo análisis, el usuario proporcionará un CSV: avisarle cuando sea necesario. Los conteos y el hash anteriores identifican exclusivamente el Markdown ya auditado; verificar esquema y correspondencia antes de reutilizarlos para el CSV.
