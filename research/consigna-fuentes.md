@@ -48,6 +48,8 @@ No se observó un diccionario de valores de CCC/VFG/VRT ni de catálogo. No corr
 
 ## Preguntas críticas para Ford, preparadas pero no enviadas
 
+Esta lista es la de esta investigación, del 16 de septiembre. La lista vigente de consultas a Ford, con evidencia, alternativas, responsable y plazo, es [Consultas a Ford y alternativas si no llegan respuestas](consultas-ford.md); la pregunta 1 de aquí se incorporó allí como consulta 7.
+
 1. ¿Cuál es la lista oficial de archivos y formatos que deben entregarse el 2 de octubre, y cuáles son los límites del pitch y la demostración?
 2. ¿La base contiene todas las unidades producidas, solo auditadas o otra población? ¿Qué significa `OK` para una unidad no auditada? ¿El muestreo del 5% es aleatorio y cuál es su ventana operativa?
 3. ¿En qué instante se decide la Inspección Adicional y qué registros de inspección y reparación están disponibles entonces? ¿Cómo identificar eventos posteriores?

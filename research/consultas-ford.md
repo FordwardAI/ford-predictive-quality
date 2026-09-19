@@ -6,7 +6,7 @@ Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones p
 
 El equipo confirmó el 18 de septiembre que **ya envió un correo** solicitando una reunión la semana siguiente para revisar el dataset. Adelantó dos preguntas urgentes: disponibilidad de datos operativos numéricos (tiempos de ciclo y parámetros de ajuste) y diccionarios de CCC, VFG, VRT, catálogo y PUL. Está esperando respuesta; la reunión todavía no tiene fecha confirmada. Fuente: correo reproducido por el usuario en esta sesión, no verificado en una bandeja de correo.
 
-El objetivo acordado es llegar con conclusiones preliminares y dudas concretas. No se acordó una fecha límite de espera ni una alternativa definitiva si Ford no responde. Las seis consultas siguientes sirven como agenda de reunión; no implican enviar otro correo.
+El objetivo acordado es llegar con conclusiones preliminares y dudas concretas. Las consultas siguientes sirven como agenda de reunión y, desde el acuerdo del 18 de septiembre, también como contenido de un mensaje de seguimiento por escrito; el plazo de espera y el responsable quedaron fijados en [Acuerdos del equipo y qué sigue pendiente](#acuerdos-del-equipo-y-qué-sigue-pendiente).
 
 ## Conclusiones preliminares para llevar a la reunión
 
@@ -39,7 +39,9 @@ La consigna declara ficticia la base. La evidencia local permite describirla, pe
 
 ## Consultas priorizadas y alternativas propuestas
 
-El orden siguiente es una recomendación por impacto sobre la interpretación y el uso del dato, no una prioridad acordada con Ford. Se pueden enviar las seis consultas juntas. Las alternativas son propuestas para seguir planificando sin convertir silencio en confirmación; su aceptación corresponde al equipo.
+El orden siguiente es una recomendación por impacto sobre la interpretación y el uso del dato, no una prioridad acordada con Ford. Se pueden enviar las ocho consultas juntas. Las alternativas son propuestas para seguir planificando sin convertir silencio en confirmación; su aceptación corresponde al equipo.
+
+Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agregaron el 18 de septiembre al resolver el ticket: la 7 recupera una pregunta que [Consigna y fuentes](consigna-fuentes.md#preguntas-críticas-para-ford-preparadas-pero-no-enviadas) ya había preparado y esta lista había perdido; la 8 cubre un hueco señalado en la revisión del ticket. Esta es la lista vigente de consultas a Ford.
 
 ### 1. Población, etiquetas y mecanismo de inclusión — crítica
 
@@ -50,6 +52,8 @@ El orden siguiente es una recomendación por impacto sobre la interpretación y 
 **Decisión que bloquea:** definir la población objetivo y la interpretación del resultado que se evaluará; justificar si los negativos son resultados observados y a qué población se podrían extender las conclusiones.
 
 **Sin respuesta:** proponer una demostración limitada a los VIN y a las etiquetas **tal como fueron entregados**, declarando desconocido el mecanismo de inclusión. No presentar OK como comprobación universal de auditoría realizada ni extrapolar tasa, detección o ahorro a toda la producción. Si la especificación exige demostrar eficacia real en planta, esta incertidumbre sigue abierta: la demo no la resuelve.
+
+**Respuesta que invalidaría el supuesto:** si Ford indica que las etiquetas sintéticas se asignaron sin relación con el historial registrado, ninguna alternativa predictiva podría superar al azar y el resultado sería inconcluso **por construcción de la base**, no por la metodología. Esa distinción debe poder sostenerse en la presentación. El criterio operativo que declara un resultado inconcluso corresponde a [¿Qué cuenta como una mejora útil frente al muestreo aleatorio?](https://github.com/FordwardAI/ford-predictive-quality/issues/8) y no se fija aquí.
 
 ### 2. Disponibilidad temporal en el instante de recomendación — crítica
 
@@ -75,7 +79,7 @@ El orden siguiente es una recomendación por impacto sobre la interpretación y 
 
 **Evidencia:** hecho 1. El 5% documentado no determina una política de selección implementable ni el conjunto de VIN simultáneamente disponibles.
 
-**Pregunta concreta:** ¿El 5% se calcula por turno, día, lote u otra ventana, y sobre qué denominador? ¿Es un límite de capacidad, una meta aproximada o una regla fija? ¿La selección actual es aleatoria y hay excepciones o prioridades obligatorias? ¿Cuánto permanece elegible cada VIN y cuándo Calidad confirma la selección?
+**Pregunta concreta:** ¿El 5% se calcula por turno, día, lote u otra ventana, y sobre qué denominador? ¿Es un límite de capacidad, una meta aproximada o una regla fija? ¿La selección actual es aleatoria y hay excepciones o prioridades obligatorias? ¿Cuánto permanece elegible cada VIN y cuándo Calidad confirma la selección? ¿La capacidad de auditoría puede ampliarse por encima del 5%, o ese porcentaje es el techo disponible? Esta última pregunta es distinta de si el 5% es límite, meta o regla: cambia si la propuesta de valor puede ser auditar más y mejor, o solo acertar más a cupo constante.
 
 **Decisión que bloquea:** definir candidatos, oportunidad de selección y capacidad comparable para elegir después la métrica y el benchmark.
 
@@ -101,9 +105,29 @@ El orden siguiente es una recomendación por impacto sobre la interpretación y 
 
 **Sin respuesta:** proponer que la especificación se fundamente en la entrega identificada en [datos locales](../docs/datos-locales.md). Mantener las fuentes adicionales como no disponibles; no prometer variables que no se observan ni tratar falta de incidencias como paso exitoso por una estación. No interpretar «190.000 valores» como garantía de cobertura ni asumir equivalencia entre export y Excel. Si llega otra fuente, evaluar pertinencia, vínculo y temporalidad antes de incorporarla.
 
+### 7. Formatos de entrega y límites del pitch — necesaria para comprometer el alcance
+
+**Evidencia:** la lectura completa de la consigna no encontró especificación de formatos de entrega, repositorio, notebook, memoria escrita, archivo del modelo, video o demo, cantidad de diapositivas ni duración del pitch. [Consigna y fuentes](consigna-fuentes.md#exigencias-y-criterios), fila «Sin especificación encontrada». La consigna sí valora un complemento accionable —interfaz, dashboard **o** reporte— sin imponer una aplicación, y evalúa la exposición oral con soporte visual.
+
+**Pregunta concreta:** ¿Cuál es la lista oficial de archivos y formatos que deben entregarse el 2 de octubre? ¿Hay límite de duración para la presentación y para la demostración, y en qué orden se exponen? ¿Se espera entregar código, datos procesados o modelo, y por qué canal? ¿Hay requisitos de confidencialidad sobre lo que se publique?
+
+**Decisión que bloquea:** [¿Qué alcance de entrega y reparto de trabajo se compromete para el 2 de octubre?](https://github.com/FordwardAI/ford-predictive-quality/issues/12), cuyo enunciado registra que formatos y horario de cierre no están especificados.
+
+**Sin respuesta:** fijar nosotros la lista de entregables y la duración, declarándolos supuesto del equipo y no requisito de Ford, y dimensionarlos para lo que la consigna sí exige: metodología, justificación frente a alternativas, preparación de datos, validación y presentación oral con soporte visual. No inventar formatos que la fuente no especifica ni comprometer una aplicación que no está exigida.
+
+### 8. Costo relativo de los dos errores — necesaria para elegir la medida de éxito
+
+**Evidencia:** hecho 1 y la resolución de [¿Cuándo y sobre qué conjunto de VIN se decide la auditoría?](https://github.com/FordwardAI/ford-predictive-quality/issues/4#issuecomment-5718463685), que fijó la comparación al mismo cupo del 5%. Comparar a cupo constante pondera implícitamente por igual los dos errores posibles, y ninguna fuente disponible declara esa equivalencia. La consigna evalúa capacidad predictiva junto con aplicabilidad e impacto, sin fijar métrica ni umbral.
+
+**Pregunta concreta:** ¿Cuánto cuesta relativamente dejar pasar una unidad que requería calibración frente a auditar una que no la requería? ¿El costo del primer caso es de retrabajo, de garantía, de reputación o de reproceso en línea? ¿Existe una estimación, aunque sea un orden de magnitud o una preferencia declarada entre detectar más y molestar menos?
+
+**Decisión que bloquea:** [¿Qué cuenta como una mejora útil frente al muestreo aleatorio?](https://github.com/FordwardAI/ford-predictive-quality/issues/8). Sin la asimetría se pueden enumerar métricas, pero no fundamentar la elección entre precisión y recupero.
+
+**Sin respuesta:** presentar la comparación a cupo fijo declarando explícitamente que pondera por igual ambos errores, como supuesto del equipo y no como criterio de Ford, y mostrar la sensibilidad del resultado si esa ponderación cambiara. No elegir aquí métrica, umbral ni criterio de éxito: eso corresponde a su ticket.
+
 ## Guion breve para la reunión solicitada
 
-> Hola, estamos definiendo el alcance de la solución y necesitamos confirmar seis puntos de la base ficticia y del proceso:
+> Hola, estamos definiendo el alcance de la solución y necesitamos confirmar ocho puntos de la base ficticia, del proceso y de la entrega:
 >
 > 1. ¿Los 59.681 VIN representan toda la producción, solo auditados u otra población sintética? ¿OK siempre es una auditoría realizada sin calibración o incluye no auditados/pendientes? ¿Cómo se generaron las etiquetas?
 > 2. Para recomendar inmediatamente después de Gate Release, ¿qué historial ya está disponible? ¿Hay registros agregados o modificados después? ¿Disponemos de marcas de Gate Release, selección y resultado de auditoría que permitan reconstruir ese instante?
@@ -111,9 +135,38 @@ El orden siguiente es una recomendación por impacto sobre la interpretación y 
 > 4. ¿Sobre qué población y ventana se calcula el 5%, qué restricciones de capacidad y elegibilidad existen, y la selección actual es aleatoria con o sin excepciones?
 > 5. ¿Pueden confirmar las descripciones de las columnas finales —Desensamblar, Código de Catálogo y Auditoría Adicional— y facilitar diccionarios de códigos? ¿Existe ID de evento y qué significan filas repetidas o reparaciones sin fecha?
 > 6. ¿La entrega incluye todos los parámetros e instrumentales anunciados? Si hay otras fuentes, ¿cuáles son sus claves y fechas de disponibilidad? ¿El Excel y el CSV corresponden a la misma versión?
+> 7. ¿Cuál es la lista oficial de archivos y formatos a entregar el 2 de octubre, y qué límites tienen la presentación y la demostración?
+> 8. ¿Cuánto cuesta relativamente dejar pasar una unidad que requería calibración frente a auditar una que no la requería?
 >
 > Con estas aclaraciones podremos distinguir qué se demuestra sobre la base del desafío y qué requiere validación operativa. Muchas gracias.
 
-## Pendiente de acuerdo del equipo
+## Mensaje de seguimiento por escrito
 
-El correo ya fue enviado por el equipo; queda confirmar quién coordinará la reunión y documentará las respuestas, el plazo de espera y cuáles de estas alternativas acepta el equipo si no hay aclaraciones. No se asignan responsable individual ni fecha en esta investigación. Tampoco se eligen exclusiones, splits, modelos, métricas o una lista de variables admisibles. El ticket de conversación permanece pendiente de ese acuerdo; recibir una respuesta de Ford puede modificar las alternativas propuestas.
+El correo del 18 de septiembre pidió reunión y adelantó las consultas **5 y 6** —diccionarios de códigos y datos operativos numéricos—; al 18 de septiembre no hubo respuesta. Como la reunión no tiene fecha, las consultas que quedaron solo en el guion se envían también por escrito. Este texto reutiliza las preguntas de arriba y **no repite** las dos ya enviadas. Es una propuesta de redacción: el envío lo realiza el equipo.
+
+> Hola, retomamos el correo anterior sobre el dataset de Inspección Adicional. Seguimos a disposición para la reunión cuando les resulte posible; mientras tanto dejamos por escrito las consultas que más condicionan el alcance, para que puedan responderlas cuando les quede cómodo.
+>
+> 1. ¿Los 59.681 VIN representan toda la producción, solo auditados u otra población sintética? ¿OK siempre es una auditoría realizada sin calibración o incluye no auditados/pendientes? ¿Cómo se generaron las etiquetas?
+> 2. Para recomendar inmediatamente después de Gate Release, ¿qué historial ya está disponible en ese instante? ¿Hay registros agregados o modificados después? ¿Existen marcas de Gate Release, selección y resultado de auditoría que permitan reconstruir ese momento?
+> 3. No encontramos VIN CALIBRADA cuya primera inspección observada sea posterior a DIA_260, aunque sí hay eventos CALIBRADA posteriores de VIN iniciados antes. ¿Qué explica el patrón, qué período tiene etiquetas completas y qué orden y distancias conserva DIA_n?
+> 4. ¿Sobre qué población y ventana se calcula el 5%, qué restricciones de capacidad y elegibilidad existen, la selección actual es aleatoria, y esa capacidad puede ampliarse o es un techo?
+> 5. ¿Cuál es la lista oficial de archivos y formatos a entregar el 2 de octubre, y qué límites tienen la presentación y la demostración?
+> 6. ¿Cuánto cuesta relativamente dejar pasar una unidad que requería calibración frente a auditar una que no la requería? Nos sirve incluso un orden de magnitud o una preferencia declarada.
+>
+> Quedan también pendientes las dos consultas del correo anterior, sobre diccionarios de códigos y datos operativos numéricos. Muchas gracias.
+
+La numeración del mensaje es correlativa para quien lo lee; la correspondencia con esta lista es 1→1, 2→2, 3→3, 4→4, 5→7 y 6→8.
+
+## Acuerdos del equipo y qué sigue pendiente
+
+Acordado el 18 de septiembre de 2026 al trabajar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Lo que sigue son decisiones del equipo, no respuestas de Ford.
+
+- **Quién la lleva:** MaximoGeorgalos coordina las ocho consultas, la reunión si se concreta, y documenta las respuestas en el ticket. Es el frente que el [README](../README.md#reparto-sugerido) asigna a industrial. El acuerdo vale para este frente; el reparto general del trabajo corresponde a [¿Qué alcance de entrega y reparto de trabajo se compromete para el 2 de octubre?](https://github.com/FordwardAI/ford-predictive-quality/issues/12).
+- **Hasta qué fecha esperamos:** **20 de septiembre de 2026** es el gatillo. Se deriva del hito propuesto en el README, que ubica la construcción entre el 21 y el 25: una respuesta posterior ya no puede cambiar la especificación. Al vencer, las alternativas de cada consulta dejan de ser propuestas y pasan a ser el supuesto vigente, sin necesidad de un acuerdo nuevo.
+- **Última fecha útil:** **25 de septiembre de 2026**. Una respuesta que llegue entre el 20 y el 25 se integra; después de esa fecha se documenta como limitación en lugar de rehacer trabajo.
+- **Alternativas:** las ocho se aceptan en bloque como alcance defendible si no llegan aclaraciones.
+- **Canal:** además de la reunión, las consultas que no se enviaron todavía van por escrito, con el texto de la sección anterior. El envío lo hace el equipo.
+
+**Sigue pendiente de Ford** la respuesta a las ocho consultas; al 18 de septiembre no hubo ninguna, ni fecha de reunión confirmada. Recibir una respuesta puede modificar las alternativas propuestas.
+
+**Sigue fuera de este documento,** y corresponde a sus tickets: exclusiones, deduplicación, particiones, modelos, métricas, umbrales, criterio de resultado inconcluso y la lista de variables admisibles.
