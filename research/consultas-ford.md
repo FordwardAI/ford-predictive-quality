@@ -1,12 +1,28 @@
 # Consultas a Ford y alternativas si no llegan respuestas
 
-Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Evidencia revalidada sobre el CSV recibido ese día. Es preparación para una reunión: no registra una respuesta de Ford ni la resolución del ticket.
+Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Evidencia revalidada sobre el CSV recibido ese día. Actualizado el 21 de septiembre con una respuesta parcial de Ford; el ticket permanece abierto.
 
 ## Estado del contacto y objetivo acordado
 
-El equipo confirmó el 18 de septiembre que **ya envió un correo** solicitando una reunión la semana siguiente para revisar el dataset. Adelantó dos preguntas urgentes: disponibilidad de datos operativos numéricos (tiempos de ciclo y parámetros de ajuste) y diccionarios de CCC, VFG, VRT, catálogo y PUL. Está esperando respuesta; la reunión todavía no tiene fecha confirmada. Fuente: correo reproducido por el usuario en esta sesión, no verificado en una bandeja de correo.
+El equipo confirmó el 18 de septiembre que **ya envió un correo** solicitando una reunión la semana siguiente para revisar el dataset. Adelantó dos preguntas urgentes: disponibilidad de datos operativos numéricos (tiempos de ciclo y parámetros de ajuste) y diccionarios de CCC, VFG, VRT, catálogo y PUL. El 21 de septiembre se registró una respuesta parcial, detallada abajo; la reunión todavía no tiene fecha confirmada. Fuente: correo reproducido por el usuario en esta sesión, no verificado en una bandeja de correo.
 
 El objetivo acordado es llegar con conclusiones preliminares y dudas concretas. Las consultas siguientes sirven como agenda de reunión y, desde el acuerdo del 18 de septiembre, también como contenido de un mensaje de seguimiento por escrito; el plazo de espera y el responsable quedaron fijados en [Acuerdos del equipo y qué sigue pendiente](#acuerdos-del-equipo-y-qué-sigue-pendiente).
+
+## Respuesta parcial registrada el 21 de septiembre de 2026
+
+El [correo completo y su alcance](https://github.com/FordwardAI/ford-predictive-quality/issues/5#issuecomment-5762760463) se conservan en el ticket. Fuente: texto atribuido a Ford aportado por el usuario, sin verificación en una bandeja ni fecha exacta de recepción conocida. El 21/09 es la fecha de registro, no necesariamente la de recepción.
+
+**Observaciones de la respuesta:**
+
+| Consulta | Aclaración de Ford | Pendiente o no verificado |
+| --- | --- | --- |
+| 5 — Diccionario y significado | Los códigos son confidenciales y estandarizan información ya presente. VRT (Variable Reduction Team) identifica el equipo funcional; VFG (Vehicle Function Group) es un subconjunto; CCC (Customer Concern Code) aporta el máximo detalle. Ford orienta a detectar componente y área. Catálogo combina versión y mercado; PUL es el equipo de reparación. | No se entregó un diccionario de valores. Siguen sin aclararse cabecera, CP, nulos, identidad de evento, repeticiones y reparaciones sin fecha. |
+| 6 — Fuentes | Ford indica que los datos ya fueron enviados y que el dataset del Drive contiene los parámetros necesarios para el desafío. | No se verificó equivalencia Excel/CSV ni se identificaron mediciones adicionales, claves o disponibilidad temporal. |
+| 1–4 y 7–8 | No hay respuesta a estas consultas en el correo aportado. | Población/etiquetas, disponibilidad temporal, DIA_260, ventana/cupo, formatos y costo relativo de errores. |
+
+**Límites e hipótesis:** la explicación de los códigos no prueba disponibilidad previa de campos ni habilita usar el resultado o componente de Auditoría Adicional como predictor. No se adoptan hipótesis nuevas ni se incorpora otra entrega. Tampoco hay confirmación de reunión o del envío del borrador de seguimiento.
+
+**Decisión acordada el 21/09:** registrar y sincronizar esta respuesta parcial, manteniendo el ticket abierto y **In progress**, sus responsables y dependencias. Los acuerdos previos de alternativas y plazos se conservan; esta actualización no cierra decisiones sobre datos, modelos o evaluación.
 
 ## Conclusiones preliminares para llevar a la reunión
 
@@ -39,9 +55,9 @@ La consigna declara ficticia la base. La evidencia local permite describirla, pe
 
 ## Consultas priorizadas y alternativas propuestas
 
-El orden siguiente es una recomendación por impacto sobre la interpretación y el uso del dato, no una prioridad acordada con Ford. Se pueden enviar las ocho consultas juntas. Las alternativas son propuestas para seguir planificando sin convertir silencio en confirmación; su aceptación corresponde al equipo.
+El orden siguiente es una recomendación por impacto sobre la interpretación y el uso del dato, no una prioridad acordada con Ford. Se conserva la formulación original de las ocho consultas como historial; para el contacto actual, usar el mensaje de seguimiento actualizado y los pendientes de la respuesta parcial. Las alternativas fueron aceptadas por el equipo el 18/09 con los plazos documentados al final; no convierten silencio en confirmación.
 
-Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agregaron el 18 de septiembre al resolver el ticket: la 7 recupera una pregunta que [Consigna y fuentes](consigna-fuentes.md#preguntas-críticas-para-ford-preparadas-pero-no-enviadas) ya había preparado y esta lista había perdido; la 8 cubre un hueco señalado en la revisión del ticket. Esta es la lista vigente de consultas a Ford.
+Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agregaron el 18 de septiembre al acordar el seguimiento: la 7 recupera una pregunta que [Consigna y fuentes](consigna-fuentes.md#preguntas-críticas-para-ford-preparadas-pero-no-enviadas) ya había preparado y esta lista había perdido; la 8 cubre un hueco señalado en la revisión del ticket. Esta lista conserva las preguntas originales; su estado actual figura en la tabla de respuesta parcial.
 
 ### 1. Población, etiquetas y mecanismo de inclusión — crítica
 
@@ -87,6 +103,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ### 5. Diccionario, cabecera y significado de eventos — necesaria para interpretación
 
+**Actualización 21/09:** parcialmente aclarada; ver la tabla de respuesta parcial. La pregunta y alternativa siguientes conservan la formulación original del 18/09. No reiterar el pedido de códigos confidenciales ni tratar como desconocidas las definiciones ahora aportadas.
+
 **Evidencia:** hecho 5; [semántica documentada](consigna-fuentes.md#semántica-efectivamente-documentada). La auditoría halló 477 repeticiones exactas y nueve fechas de reparación faltantes, sin establecer su causa. [Población y etiquetas](poblacion-etiquetas.md).
 
 **Pregunta concreta:** ¿Pueden confirmar la correspondencia nombre/descripción de las columnas 38–40 y el significado de `Rep Respuesta a Pregunta Desensamblar`? ¿Existe diccionario de CCC, VFG, VRT, PUL, CP, catálogo y componente calibrado, incluyendo códigos de nulos/no aplica? ¿Una fila representa un evento único, existe ID de evento y qué significan las repeticiones exactas y reparaciones sin fecha?
@@ -96,6 +114,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 **Sin respuesta:** conservar nombres técnicos y códigos como categorías sin expandir siglas, inventar gravedad ni inferir jerarquías. Registrar la incertidumbre de descripciones, ausencias y repeticiones; no equiparar repetición exacta a error ni campo vacío a ausencia del suceso. Dejar normalización, deduplicación y representación para sus decisiones específicas. El diccionario semántico tampoco sustituye la confirmación temporal de la consulta 2.
 
 ### 6. Inventario y fuentes adicionales — útil para delimitar el alcance
+
+**Actualización 21/09:** Ford remite al dataset ya compartido. La pregunta y alternativa siguientes conservan la formulación original del 18/09; la respuesta no verifica equivalencia entre archivos.
 
 **Evidencia:** hecho 6; [inventario recibido](consigna-fuentes.md#fuentes-presentes-prometidas-y-límites). La cabecera actual no identifica explícitamente tiempos de permanencia, mediciones instrumentales ni recorrido completo por estaciones sin incidencia.
 
@@ -127,6 +147,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ## Guion breve para la reunión solicitada
 
+Guion histórico del 18/09, conservado como antecedente. Para un nuevo contacto, usar el mensaje actualizado siguiente y la tabla de pendientes; no reiterar las partes respondidas de las consultas 5 y 6.
+
 > Hola, estamos definiendo el alcance de la solución y necesitamos confirmar ocho puntos de la base ficticia, del proceso y de la entrega:
 >
 > 1. ¿Los 59.681 VIN representan toda la producción, solo auditados u otra población sintética? ¿OK siempre es una auditoría realizada sin calibración o incluye no auditados/pendientes? ¿Cómo se generaron las etiquetas?
@@ -142,9 +164,9 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ## Mensaje de seguimiento por escrito
 
-El correo del 18 de septiembre pidió reunión y adelantó las consultas **5 y 6** —diccionarios de códigos y datos operativos numéricos—; al 18 de septiembre no hubo respuesta. Como la reunión no tiene fecha, las consultas que quedaron solo en el guion se envían también por escrito. Este texto reutiliza las preguntas de arriba y **no repite** las dos ya enviadas. Es una propuesta de redacción: el envío lo realiza el equipo.
+Borrador actualizado el 21/09 tras la respuesta parcial a las consultas **5 y 6**. Mantiene las seis consultas aún sin respuesta, reconoce las aclaraciones y retira la reiteración del pedido de diccionarios y datos operativos. Los puntos residuales de las consultas 5 y 6 permanecen registrados arriba. No consta el envío de este borrador: el contacto lo realiza el equipo.
 
-> Hola, retomamos el correo anterior sobre el dataset de Inspección Adicional. Seguimos a disposición para la reunión cuando les resulte posible; mientras tanto dejamos por escrito las consultas que más condicionan el alcance, para que puedan responderlas cuando les quede cómodo.
+> Hola, gracias por la respuesta y las aclaraciones sobre el dataset, la clasificación VRT/VFG/CCC, el Código de Catálogo y PUL. Seguimos a disposición para la reunión cuando les resulte posible; mientras tanto dejamos por escrito las consultas que más condicionan el alcance, para que puedan responderlas cuando les quede cómodo.
 >
 > 1. ¿Los 59.681 VIN representan toda la producción, solo auditados u otra población sintética? ¿OK siempre es una auditoría realizada sin calibración o incluye no auditados/pendientes? ¿Cómo se generaron las etiquetas?
 > 2. Para recomendar inmediatamente después de Gate Release, ¿qué historial ya está disponible en ese instante? ¿Hay registros agregados o modificados después? ¿Existen marcas de Gate Release, selección y resultado de auditoría que permitan reconstruir ese momento?
@@ -153,7 +175,7 @@ El correo del 18 de septiembre pidió reunión y adelantó las consultas **5 y 6
 > 5. ¿Cuál es la lista oficial de archivos y formatos a entregar el 2 de octubre, y qué límites tienen la presentación y la demostración?
 > 6. ¿Cuánto cuesta relativamente dejar pasar una unidad que requería calibración frente a auditar una que no la requería? Nos sirve incluso un orden de magnitud o una preferencia declarada.
 >
-> Quedan también pendientes las dos consultas del correo anterior, sobre diccionarios de códigos y datos operativos numéricos. Muchas gracias.
+> Muchas gracias por la ayuda.
 
 La numeración del mensaje es correlativa para quien lo lee; la correspondencia con esta lista es 1→1, 2→2, 3→3, 4→4, 5→7 y 6→8.
 
@@ -167,6 +189,6 @@ Acordado el 18 de septiembre de 2026 al trabajar [¿Qué aclaraciones pedir a Fo
 - **Alternativas:** las ocho se aceptan en bloque como alcance defendible si no llegan aclaraciones.
 - **Canal:** además de la reunión, las consultas que no se enviaron todavía van por escrito, con el texto de la sección anterior. El envío lo hace el equipo.
 
-**Sigue pendiente de Ford** la respuesta a las ocho consultas; al 18 de septiembre no hubo ninguna, ni fecha de reunión confirmada. Recibir una respuesta puede modificar las alternativas propuestas.
+**Estado al 21/09:** se registró una respuesta parcial a las consultas 5 y 6. Siguen sin respuesta las consultas 1–4 y 7–8, y los puntos residuales indicados en la tabla de respuesta parcial; no hay fecha de reunión confirmada. Por elección explícita del usuario, el ticket permanece abierto y en In progress. Se conservan los acuerdos del 18/09 y no se resuelven aquí las decisiones de otros tickets.
 
 **Sigue fuera de este documento,** y corresponde a sus tickets: exclusiones, deduplicación, particiones, modelos, métricas, umbrales, criterio de resultado inconcluso y la lista de variables admisibles.
