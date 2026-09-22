@@ -14,7 +14,7 @@ La skill compartida vive en `.agents/skills/ford-data-analysis/`; `.claude/skill
 
 ## Skills de Matt Pocock
 
-Se usan las versiones realmente instaladas, no una lista de comandos supuestos. Estas son las funciones relevantes para este proyecto; algunos nombres cambian entre versiones del catálogo.
+Se usan las versiones vendorizadas en el repo, no una lista de comandos supuestos. Estas son las funciones relevantes para este proyecto; algunos nombres cambian entre versiones del catálogo.
 
 | Trabajo | Skill usada en este proyecto |
 | --- | --- |
@@ -25,9 +25,12 @@ Se usan las versiones realmente instaladas, no una lista de comandos supuestos. 
 | Diagnosticar fallos o revisar cambios | `diagnosing-bugs`, `code-review` |
 | Implementar comportamiento test-first cuando corresponde | `tdd` |
 
-Para instalar en una máquina nueva, consultar el [repositorio oficial de Matt Pocock](https://github.com/mattpocock/skills). Su instalador documentado es `npx skills@latest add mattpocock/skills`: permite elegir skills y agentes. Es una instalación de software, no un requisito para ejecutar nuestra auditoría. Revisar los archivos y la versión resuelta antes de incorporarlos al repo; incluir los recursos relativos y la licencia que requiera cada skill. No actualizar durante un ticket por rutina.
+Las skills están vendorizadas en el repo: Codex las descubre en `.agents/skills/` y Claude Code en `.claude/skills/`, que contiene enlaces relativos a esas mismas carpetas (igual que `ford-data-analysis`). No hace falta instalar nada; al clonar, los dos agentes tienen las mismas instrucciones. Invocación: Codex `$wayfinder`, Claude Code `/wayfinder`.
 
-Las skills de Matt que ya existen en la máquina del autor no están vendorizadas en este repo. Para una instalación compartida futura, registrar origen y commit/versión, revisar el diff y conservar una sola copia por skill con enlaces para los agentes; evitar duplicados globales y locales del mismo nombre. No suponer que `grill-me` y `grilling`, por ejemplo, tienen instrucciones idénticas sin leerlas.
+- **Origen:** [mattpocock/skills](https://github.com/mattpocock/skills) v1.2.3, commit `959a8e9f1edc3adbe2f7e3054bb6fbefa6696260`. Se copiaron sin cambios las 25 skills del manifiesto del plugin (`.claude-plugin/plugin.json`); las carpetas `in-progress`, `misc` y `deprecated` del catálogo no se incluyen. Licencia MIT en `.agents/skills/LICENSE-mattpocock-skills`.
+- **Una sola copia:** no instalar además el plugin `mattpocock-skills` de Claude Code ni copias globales en `~/.codex/skills` o `~/.claude/skills` con los mismos nombres; generan duplicados que pueden divergir. Si ya están instaladas, desactivarlas para este repo.
+- **No editar las copias** para adaptarlas al proyecto: las particularidades van en AGENTS.md o en skills del equipo. No suponer que `grill-me` y `grilling`, por ejemplo, tienen instrucciones idénticas sin leerlas.
+- **Actualizar** solo con un ticket propio, fuera del trabajo de otros tickets: obtener la nueva versión, revisar el diff, reemplazar las carpetas y registrar aquí versión y commit.
 
 El proyecto ya se inició con **wayfinder**. Si se ejecuta `setup-matt-pocock-skills`, conservar el tracker existente: **GitHub Project FordwardAI-v1** con los issues del repositorio, este documento como configuración, `research/` como ubicación de investigaciones y `CONTEXT.md` como vocabulario. Retomar el mapa existente; no crear un mapa local ni otro Project.
 
