@@ -1,6 +1,6 @@
 # Consultas a Ford y alternativas si no llegan respuestas
 
-Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Evidencia revalidada sobre el CSV recibido ese día. Actualizado el 21 de septiembre con una respuesta parcial de Ford; el ticket permanece abierto.
+Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Evidencia revalidada sobre el CSV recibido ese día. Actualizado el 21 de septiembre con una respuesta parcial de Ford y con el vencimiento del plazo de espera acordado; el ticket permanece abierto.
 
 ## Estado del contacto y objetivo acordado
 
@@ -190,5 +190,15 @@ Acordado el 18 de septiembre de 2026 al trabajar [¿Qué aclaraciones pedir a Fo
 - **Canal:** además de la reunión, las consultas que no se enviaron todavía van por escrito, con el texto de la sección anterior. El envío lo hace el equipo.
 
 **Estado al 21/09:** se registró una respuesta parcial a las consultas 5 y 6. Siguen sin respuesta las consultas 1–4 y 7–8, y los puntos residuales indicados en la tabla de respuesta parcial; no hay fecha de reunión confirmada. Por elección explícita del usuario, el ticket permanece abierto y en In progress. Se conservan los acuerdos del 18/09 y no se resuelven aquí las decisiones de otros tickets.
+
+### Gatillo del 20 de septiembre: vencido
+
+**Observación:** al 21 de septiembre las consultas 1–4 y 7–8 siguen sin respuesta y la reunión no tiene fecha confirmada. El plazo de espera acordado el 18/09 venció el 20 de septiembre.
+
+**Consecuencia ya acordada, sin acuerdo nuevo:** por el acuerdo de esa fecha, las alternativas «Sin respuesta» de las consultas 1–4 y 7–8 dejan de ser propuestas y pasan a ser el **supuesto vigente**. Las consultas 5 y 6 quedan fuera de este efecto: recibieron respuesta parcial y sus puntos residuales figuran en la tabla anterior.
+
+**Lo que esto no hace:** no resuelve ningún ticket ni elige exclusiones, deduplicación, particiones, métricas, umbrales ni modelos. Cada ticket que adopte uno de estos supuestos debe declararlo como supuesto del equipo y no como criterio de Ford, y mostrar la sensibilidad del resultado si la ponderación o la interpretación cambiara.
+
+**Límite del supuesto:** no consta que el mensaje de seguimiento por escrito se haya enviado. Las consultas 1–4 y 7–8 se formularon en el guion de reunión y en el borrador, no en el correo del 18/09, que adelantó únicamente las consultas 5 y 6. El plazo se cumplió en los términos del acuerdo del equipo, pero la ausencia de respuesta no equivale a que Ford haya declinado responder preguntas que todavía puede no haber recibido. Enviar el borrador sigue pendiente a cargo del equipo y la ventana de integración hasta el **25 de septiembre de 2026** permanece abierta.
 
 **Sigue fuera de este documento,** y corresponde a sus tickets: exclusiones, deduplicación, particiones, modelos, métricas, umbrales, criterio de resultado inconcluso y la lista de variables admisibles.
