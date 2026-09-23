@@ -1,10 +1,10 @@
 # Consultas a Ford y alternativas si no llegan respuestas
 
-Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Evidencia revalidada sobre el CSV recibido ese día. Actualizado el 21 de septiembre con una respuesta parcial de Ford y con el vencimiento del plazo de espera acordado; el ticket permanece abierto.
+Investigación del 18 de septiembre de 2026 para preparar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Evidencia revalidada sobre el CSV recibido ese día. Actualizado el 21 de septiembre con una respuesta parcial de Ford y con el vencimiento del plazo de espera acordado, y el 23 de septiembre con lo dicho en la reunión con Ford del 22/09. El ticket se cerró con resolución el 23/09.
 
 ## Estado del contacto y objetivo acordado
 
-El equipo confirmó el 18 de septiembre que **ya envió un correo** solicitando una reunión la semana siguiente para revisar el dataset. Adelantó dos preguntas urgentes: disponibilidad de datos operativos numéricos (tiempos de ciclo y parámetros de ajuste) y diccionarios de CCC, VFG, VRT, catálogo y PUL. El 21 de septiembre se registró una respuesta parcial, detallada abajo; la reunión todavía no tiene fecha confirmada. Fuente: correo reproducido por el usuario en esta sesión, no verificado en una bandeja de correo.
+El equipo confirmó el 18 de septiembre que **ya envió un correo** solicitando una reunión la semana siguiente para revisar el dataset. Adelantó dos preguntas urgentes: disponibilidad de datos operativos numéricos (tiempos de ciclo y parámetros de ajuste) y diccionarios de CCC, VFG, VRT, catálogo y PUL. El 21 de septiembre se registró una respuesta parcial, detallada abajo. Fuente: correo reproducido por el usuario en esta sesión, no verificado en una bandeja de correo. La reunión se realizó el **22 de septiembre**; lo dicho se registra en [Reunión con Ford del 22 de septiembre de 2026](#reunión-con-ford-del-22-de-septiembre-de-2026).
 
 El objetivo acordado es llegar con conclusiones preliminares y dudas concretas. Las consultas siguientes sirven como agenda de reunión y, desde el acuerdo del 18 de septiembre, también como contenido de un mensaje de seguimiento por escrito; el plazo de espera y el responsable quedaron fijados en [Acuerdos del equipo y qué sigue pendiente](#acuerdos-del-equipo-y-qué-sigue-pendiente).
 
@@ -23,6 +23,40 @@ El [correo completo y su alcance](https://github.com/FordwardAI/ford-predictive-
 **Límites e hipótesis:** la explicación de los códigos no prueba disponibilidad previa de campos ni habilita usar el resultado o componente de Auditoría Adicional como predictor. No se adoptan hipótesis nuevas ni se incorpora otra entrega. Tampoco hay confirmación de reunión o del envío del borrador de seguimiento.
 
 **Decisión acordada el 21/09:** registrar y sincronizar esta respuesta parcial, manteniendo el ticket abierto y **In progress**, sus responsables y dependencias. Los acuerdos previos de alternativas y plazos se conservan; esta actualización no cierra decisiones sobre datos, modelos o evaluación.
+
+## Reunión con Ford del 22 de septiembre de 2026
+
+Fuente: relato del usuario y sus notas, registrados el 23/09. No hay acta ni texto de Ford; lo que sigue es la versión del equipo sobre lo que dijo Ford, no una cita.
+
+**Observaciones — lo que dijo Ford:**
+
+- **Población:** el dataset reúne todos los VIN que fueron a Auditoría Adicional durante un período de tiempo representativo. No es necesariamente el 5% de la población completa. Por costo y capacidad se audita el 5% de forma aleatoria; si pudieran auditarían el 100%, pero no es realista.
+- **Selección:** la selección de los vehículos que pasan por la inspección adicional es completamente aleatoria, sin criterio de selección específico. No se busca ampliar el porcentaje, por costo y capacidad. Sobre la ventana del 5%, indicaron que no es relevante y que el trabajo debe basarse en el dataset entregado.
+- **Tiempo:** desde Gate Release hasta la inspección adicional pueden pasar entre 0 y 5 días.
+- **DIA_260:** están analizando una posible medida de corte que pudo haberse tomado en la planta alrededor del día 260. Mencionaron que podría tratarse de alguna mejora, sin poder vincularla a un hecho específico, y que identificar estos cambios es útil para estudiar los patrones de los VIN que no fallaron y extender lo que funciona.
+- **Código de catálogo:** representa la versión y los features del vehículo. Ford trabaja en una subcategorización de estos códigos para lograr mayor detalle; no se indicó fecha ni compromiso de entrega.
+- **Entregables:** los templates de presentaciones anteriores, disponibles en el Drive compartido, detallan las entregas obligatorias. No descartan materiales adicionales útiles para presentar; esperan una buena forma de presentar la solución con los datos.
+- **Costos:** los costos no están dentro del enfoque del desafío porque Ford no puede dar referencias.
+
+**Hipótesis e implicaciones, no acordadas:**
+
+- Si toda la base son VIN auditados, OK equivale a auditado sin calibración y el 10,1858% CALIBRADA es una proporción entre auditados de ese período. Con selección aleatoria podría leerse como estimación de la tasa del período, pero la base sigue declarada ficticia y no se acreditó que represente la planta.
+- La ventana de 0 a 5 días implica que parte de los eventos fechados entre Gate Release y la auditoría pueden ser posteriores al instante de recomendación. Sin marca de Gate Release en el archivo, la reconstrucción de ese instante sigue sin verificarse.
+- La mejora cerca de DIA_260 es una hipótesis de Ford, no una causa confirmada. Es compatible con que los 4.910 VIN posteriores sean OK, pero no descarta otras explicaciones.
+- El catálogo se describió como versión y features; el correo del 21/09 lo describió como versión y mercado de destino. Se registran ambas descripciones sin elegir una.
+
+**Decisiones acordadas el 23/09 (usuario):** registrar la reunión y **cerrar** el ticket con resolución. Lo que quedó sin respuesta se trabaja con la alternativa acordada el 18/09, ya vigente desde el gatillo del 20/09. Una aclaración que llegue hasta el 25/09 se registra en el ticket que la use. El estado de cada consulta figura en la tabla siguiente y en su sección.
+
+| Consulta | Estado tras la reunión | Supuesto vigente y ticket que lo recibe |
+| --- | --- | --- |
+| 1 — Población y etiquetas | Respondida: la base son VIN auditados de un período representativo, seleccionados al azar. | Sin cambios sobre la generación de etiquetas ficticias; sigue la cláusula de resultado inconcluso por construcción. [Mejora útil](https://github.com/FordwardAI/ford-predictive-quality/issues/8). |
+| 2 — Disponibilidad temporal | Parcial: 0 a 5 días entre Gate Release y auditoría; sin respuesta sobre el historial disponible al recomendar. | Alternativa 2. [Registros y variables admisibles](https://github.com/FordwardAI/ford-predictive-quality/issues/6). |
+| 3 — DIA_260 | Hipótesis de Ford: posible mejora en planta, no confirmada. | Alternativa 3: no se excluye ni se atribuye. [Validación sin fuga](https://github.com/FordwardAI/ford-predictive-quality/issues/7); patrones de VIN sin falla como idea para [alternativas predictivas](https://github.com/FordwardAI/ford-predictive-quality/issues/10) y [lo que necesita Calidad](https://github.com/FordwardAI/ford-predictive-quality/issues/11). |
+| 4 — Ventana y cupo | Respondida: selección aleatoria sin criterio; el 5% no se amplía; basarse en el dataset. | Comparación a cupo fijo del 5% frente al azar; la ventana es supuesto del equipo sobre el dataset. [Mejora útil](https://github.com/FordwardAI/ford-predictive-quality/issues/8). |
+| 5 — Diccionario | Parcial: catálogo como versión y features; subcategorización en curso. | Alternativa 5 para columnas 38–40, repeticiones y reparaciones sin fecha. Una subcategorización recibida es entrega nueva: verificar esquema, hash y diferencias. |
+| 6 — Fuentes | Sin novedad; «basarse en el dataset» refuerza el correo del 21/09. | Alternativa 6. |
+| 7 — Entregables | Parcial: las entregas obligatorias están en los templates del Drive, todavía no revisados por el equipo. | Revisarlos en [alcance de entrega](https://github.com/FordwardAI/ford-predictive-quality/issues/12); duración del pitch sin dato. |
+| 8 — Costo de errores | Respondida: fuera del enfoque, sin referencias de Ford. | No se modelan costos. La forma de declarar la ponderación implícita del cupo fijo corresponde a [mejora útil](https://github.com/FordwardAI/ford-predictive-quality/issues/8). |
 
 ## Conclusiones preliminares para llevar a la reunión
 
@@ -55,11 +89,13 @@ La consigna declara ficticia la base. La evidencia local permite describirla, pe
 
 ## Consultas priorizadas y alternativas propuestas
 
-El orden siguiente es una recomendación por impacto sobre la interpretación y el uso del dato, no una prioridad acordada con Ford. Se conserva la formulación original de las ocho consultas como historial; para el contacto actual, usar el mensaje de seguimiento actualizado y los pendientes de la respuesta parcial. Las alternativas fueron aceptadas por el equipo el 18/09 con los plazos documentados al final; no convierten silencio en confirmación.
+El orden siguiente es una recomendación por impacto sobre la interpretación y el uso del dato, no una prioridad acordada con Ford. Se conserva la formulación original de las ocho consultas como historial; su estado tras la respuesta parcial y la reunión del 22/09 figura en cada consulta. Las alternativas fueron aceptadas por el equipo el 18/09 con los plazos documentados al final; no convierten silencio en confirmación.
 
-Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agregaron el 18 de septiembre al acordar el seguimiento: la 7 recupera una pregunta que [Consigna y fuentes](consigna-fuentes.md#preguntas-críticas-para-ford-preparadas-pero-no-enviadas) ya había preparado y esta lista había perdido; la 8 cubre un hueco señalado en la revisión del ticket. Esta lista conserva las preguntas originales; su estado actual figura en la tabla de respuesta parcial.
+Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agregaron el 18 de septiembre al acordar el seguimiento: la 7 recupera una pregunta que [Consigna y fuentes](consigna-fuentes.md#preguntas-críticas-para-ford-preparadas-pero-no-enviadas) ya había preparado y esta lista había perdido; la 8 cubre un hueco señalado en la revisión del ticket. Esta lista conserva las preguntas originales; su estado actual figura en la tabla de respuesta parcial y en la de la reunión del 22/09.
 
 ### 1. Población, etiquetas y mecanismo de inclusión — crítica
+
+**Actualización 22/09:** respondida en la reunión. Ford indicó que la base reúne todos los VIN que fueron a Auditoría Adicional en un período representativo, seleccionados al azar; OK corresponde a auditado sin calibración. No se explicó cómo se generaron las etiquetas ficticias.
 
 **Evidencia:** hecho 3 y carácter ficticio declarado en la consigna. El 10,1858% CALIBRADA es una proporción dentro de la entrega, no una tasa acreditada de toda la planta.
 
@@ -73,6 +109,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ### 2. Disponibilidad temporal en el instante de recomendación — crítica
 
+**Actualización 22/09:** parcial. Entre Gate Release y la inspección adicional pasan de 0 a 5 días. Sigue sin respuesta qué historial existe al recomendar; rige la alternativa siguiente.
+
 **Evidencia:** hechos 2 y 5. Tener fecha de inspección/reparación no prueba cuándo quedó disponible el registro ni si hubo actualizaciones posteriores.
 
 **Pregunta concreta:** Para recomendar inmediatamente después de aprobar Gate Release, ¿qué campos y eventos del export ya existen y pueden consultarse en ese instante? ¿Se incorporan reparaciones, inspecciones o correcciones después del scoring o de la Auditoría Adicional? ¿Pueden proporcionar timestamps de Gate Release, selección, auditoría y disponibilidad/actualización del registro, o una regla documentada que permita distinguirlos? ¿Qué orden tienen los eventos con la misma fecha/hora?
@@ -82,6 +120,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 **Sin respuesta:** documentar disponibilidad como **no verificada** y mantener la reconstrucción operativa pendiente. Una simulación retrospectiva puede ilustrar el flujo, pero debe declarar el supuesto sobre el historial disponible; no demostraría anticipación real. El ticket de datos admisibles deberá resolver el alcance del experimento. Este research no aprueba todos los campos de inspección, ni toda reparación, por estar en QLS o ser anterior a la auditoría.
 
 ### 3. Patrón de primeras fechas alrededor de DIA_260 — crítica para validación
+
+**Actualización 22/09:** Ford está analizando una posible mejora o medida de corte en planta cerca del día 260, sin vincularla a un hecho específico. Es una hipótesis de Ford, no una causa confirmada; rige la alternativa siguiente.
 
 **Evidencia:** hecho 4. El patrón no equivale a ausencia de eventos CALIBRADA después de ese día.
 
@@ -93,6 +133,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ### 4. Ventana, cupo y selección actual — necesaria para comparación operativa
 
+**Actualización 22/09:** respondida. La selección es completamente aleatoria, sin criterio; el 5% no se busca ampliar por costo y capacidad; sobre la ventana, basarse en el dataset entregado. La comparación a cupo fijo frente al azar queda confirmada; la ventana es supuesto del equipo.
+
 **Evidencia:** hecho 1. El 5% documentado no determina una política de selección implementable ni el conjunto de VIN simultáneamente disponibles.
 
 **Pregunta concreta:** ¿El 5% se calcula por turno, día, lote u otra ventana, y sobre qué denominador? ¿Es un límite de capacidad, una meta aproximada o una regla fija? ¿La selección actual es aleatoria y hay excepciones o prioridades obligatorias? ¿Cuánto permanece elegible cada VIN y cuándo Calidad confirma la selección? ¿La capacidad de auditoría puede ampliarse por encima del 5%, o ese porcentaje es el techo disponible? Esta última pregunta es distinta de si el 5% es límite, meta o regla: cambia si la propuesta de valor puede ser auditar más y mejor, o solo acertar más a cupo constante.
@@ -102,6 +144,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 **Sin respuesta:** proponer solo escenarios ilustrativos con cupo del 5% sobre un conjunto declarado de candidatos sintéticos. La selección aleatoria sería una referencia simulada bajo un supuesto del equipo; la ventana y la política efectiva de planta seguirían sin confirmar. No presentar un ranking global sobre toda la base como operación por turno o día ni fijar aquí ventana o métrica.
 
 ### 5. Diccionario, cabecera y significado de eventos — necesaria para interpretación
+
+**Actualización 22/09:** el código de catálogo representa versión y features; Ford trabaja en una subcategorización más detallada, sin fecha. Columnas 38–40, repeticiones y reparaciones sin fecha siguen sin respuesta.
 
 **Actualización 21/09:** parcialmente aclarada; ver la tabla de respuesta parcial. La pregunta y alternativa siguientes conservan la formulación original del 18/09. No reiterar el pedido de códigos confidenciales ni tratar como desconocidas las definiciones ahora aportadas.
 
@@ -115,6 +159,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ### 6. Inventario y fuentes adicionales — útil para delimitar el alcance
 
+**Actualización 22/09:** sin fuentes nuevas; Ford pidió basarse en el dataset entregado. Rige la alternativa siguiente.
+
 **Actualización 21/09:** Ford remite al dataset ya compartido. La pregunta y alternativa siguientes conservan la formulación original del 18/09; la respuesta no verifica equivalencia entre archivos.
 
 **Evidencia:** hecho 6; [inventario recibido](consigna-fuentes.md#fuentes-presentes-prometidas-y-límites). La cabecera actual no identifica explícitamente tiempos de permanencia, mediciones instrumentales ni recorrido completo por estaciones sin incidencia.
@@ -127,6 +173,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ### 7. Formatos de entrega y límites del pitch — necesaria para comprometer el alcance
 
+**Actualización 22/09:** las entregas obligatorias están detalladas en los templates de presentaciones anteriores del Drive compartido; se admiten materiales adicionales útiles. El equipo debe revisarlos en el ticket de alcance de entrega. Duración del pitch: sin dato.
+
 **Evidencia:** la lectura completa de la consigna no encontró especificación de formatos de entrega, repositorio, notebook, memoria escrita, archivo del modelo, video o demo, cantidad de diapositivas ni duración del pitch. [Consigna y fuentes](consigna-fuentes.md#exigencias-y-criterios), fila «Sin especificación encontrada». La consigna sí valora un complemento accionable —interfaz, dashboard **o** reporte— sin imponer una aplicación, y evalúa la exposición oral con soporte visual.
 
 **Pregunta concreta:** ¿Cuál es la lista oficial de archivos y formatos que deben entregarse el 2 de octubre? ¿Hay límite de duración para la presentación y para la demostración, y en qué orden se exponen? ¿Se espera entregar código, datos procesados o modelo, y por qué canal? ¿Hay requisitos de confidencialidad sobre lo que se publique?
@@ -136,6 +184,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 **Sin respuesta:** fijar nosotros la lista de entregables y la duración, declarándolos supuesto del equipo y no requisito de Ford, y dimensionarlos para lo que la consigna sí exige: metodología, justificación frente a alternativas, preparación de datos, validación y presentación oral con soporte visual. No inventar formatos que la fuente no especifica ni comprometer una aplicación que no está exigida.
 
 ### 8. Costo relativo de los dos errores — necesaria para elegir la medida de éxito
+
+**Actualización 22/09:** respondida. Los costos quedan fuera del enfoque porque Ford no puede dar referencias. No se modelan costos ni se vuelven a consultar.
 
 **Evidencia:** hecho 1 y la resolución de [¿Cuándo y sobre qué conjunto de VIN se decide la auditoría?](https://github.com/FordwardAI/ford-predictive-quality/issues/4#issuecomment-5718463685), que fijó la comparación al mismo cupo del 5%. Comparar a cupo constante pondera implícitamente por igual los dos errores posibles, y ninguna fuente disponible declara esa equivalencia. La consigna evalúa capacidad predictiva junto con aplicabilidad e impacto, sin fijar métrica ni umbral.
 
@@ -147,7 +197,7 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ## Guion breve para la reunión solicitada
 
-Guion histórico del 18/09, conservado como antecedente. Para un nuevo contacto, usar el mensaje actualizado siguiente y la tabla de pendientes; no reiterar las partes respondidas de las consultas 5 y 6.
+Guion histórico del 18/09, conservado como antecedente. La reunión se realizó el 22/09; su registro está en [Reunión con Ford del 22 de septiembre de 2026](#reunión-con-ford-del-22-de-septiembre-de-2026).
 
 > Hola, estamos definiendo el alcance de la solución y necesitamos confirmar ocho puntos de la base ficticia, del proceso y de la entrega:
 >
@@ -163,6 +213,8 @@ Guion histórico del 18/09, conservado como antecedente. Para un nuevo contacto,
 > Con estas aclaraciones podremos distinguir qué se demuestra sobre la base del desafío y qué requiere validación operativa. Muchas gracias.
 
 ## Mensaje de seguimiento por escrito
+
+**Superado el 22/09:** la reunión cubrió estas consultas; no enviar este borrador. Se conserva como antecedente.
 
 Borrador actualizado el 21/09 tras la respuesta parcial a las consultas **5 y 6**. Mantiene las seis consultas aún sin respuesta, reconoce las aclaraciones y retira la reiteración del pedido de diccionarios y datos operativos. Los puntos residuales de las consultas 5 y 6 permanecen registrados arriba. No consta el envío de este borrador: el contacto lo realiza el equipo.
 
@@ -200,5 +252,9 @@ Acordado el 18 de septiembre de 2026 al trabajar [¿Qué aclaraciones pedir a Fo
 **Lo que esto no hace:** no resuelve ningún ticket ni elige exclusiones, deduplicación, particiones, métricas, umbrales ni modelos. Cada ticket que adopte uno de estos supuestos debe declararlo como supuesto del equipo y no como criterio de Ford, y mostrar la sensibilidad del resultado si la ponderación o la interpretación cambiara.
 
 **Límite del supuesto:** no consta que el mensaje de seguimiento por escrito se haya enviado. Las consultas 1–4 y 7–8 se formularon en el guion de reunión y en el borrador, no en el correo del 18/09, que adelantó únicamente las consultas 5 y 6. El plazo se cumplió en los términos del acuerdo del equipo, pero la ausencia de respuesta no equivale a que Ford haya declinado responder preguntas que todavía puede no haber recibido. Enviar el borrador sigue pendiente a cargo del equipo y la ventana de integración hasta el **25 de septiembre de 2026** permanece abierta.
+
+### Cierre del 23 de septiembre de 2026
+
+**Decisión del usuario:** registrar la reunión del 22/09 y cerrar [¿Qué aclaraciones pedir a Ford y cómo avanzar si no llegan?](https://github.com/FordwardAI/ford-predictive-quality/issues/5). Lo que el ticket pedía —qué preguntar, quién lo lleva, hasta cuándo esperar y qué alcance queda sin respuesta— quedó acordado el 18/09, y la reunión respondió o acotó las ocho consultas. Los puntos sin respuesta siguen con su alternativa como supuesto vigente; una aclaración de Ford que llegue hasta el 25/09 se registra en el ticket que la use.
 
 **Sigue fuera de este documento,** y corresponde a sus tickets: exclusiones, deduplicación, particiones, modelos, métricas, umbrales, criterio de resultado inconcluso y la lista de variables admisibles.
