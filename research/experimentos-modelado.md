@@ -9,7 +9,7 @@
 - **Propuestas, no decisiones acordadas:** el puntaje por tasa móvil de 60 días y la operación 80 % por ranking + 20 % al azar. La política de admisibilidad y el protocolo de modelado siguen abiertos en el mapa.
 - **Fuente:** el CSV vigente (SHA-256 `a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b`, ver [datos locales](../docs/datos-locales.md)). Lo declaró el autor el 23/09; el hash no se recalculó sobre el archivo usado.
 - **Unidad de análisis:** VIN. «Día» es el identificador DIA_n del CSV.
-- **Reproducibilidad:** el código de los experimentos y el documento «EDA - Dataset QLS Inspeccion Adicional» todavía no están versionados, así que por ahora estos resultados no se pueden reproducir desde el repositorio.
+- **Reproducibilidad:** el documento «EDA - Dataset QLS Inspeccion Adicional» está versionado en [eda-qls.md](eda-qls.md). El código de los experimentos todavía no, así que por ahora estos resultados no se pueden reproducir desde el repositorio.
 - **Elecciones del experimento, no del protocolo:** el split (entrenamiento con días < 200, test con días 200–260), la métrica diaria y el margen de 5 días.
 - **Límite de la base:** es ficticia y no prueba impacto en planta.
 
