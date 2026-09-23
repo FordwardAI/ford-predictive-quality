@@ -187,6 +187,8 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 **Actualización 22/09:** respondida. Los costos quedan fuera del enfoque porque Ford no puede dar referencias. No se modelan costos ni se vuelven a consultar.
 
+**Actualización 23/09:** corrección al resolver [¿Qué cuenta como una mejora útil frente al muestreo aleatorio?](https://github.com/FordwardAI/ford-predictive-quality/issues/8). Comparar a cupo fijo no pondera por igual los dos errores: vuelve irrelevante la ponderación. Con k auditorías y P unidades CALIBRADA, costo = c_FN·(P − TP) + c_FP·(k − TP) = constante − (c_FN + c_FP)·TP. Cualquier par de costos positivos ordena igual a las alternativas: gana la que más CALIBRADA encuentra. Los costos solo servirían para elegir el cupo, que fija Ford. No hace falta análisis de sensibilidad. Las frases de «Evidencia» y «Sin respuesta» sobre la ponderación implícita quedan superadas.
+
 **Evidencia:** hecho 1 y la resolución de [¿Cuándo y sobre qué conjunto de VIN se decide la auditoría?](https://github.com/FordwardAI/ford-predictive-quality/issues/4#issuecomment-5718463685), que fijó la comparación al mismo cupo del 5%. Comparar a cupo constante pondera implícitamente por igual los dos errores posibles, y ninguna fuente disponible declara esa equivalencia. La consigna evalúa capacidad predictiva junto con aplicabilidad e impacto, sin fijar métrica ni umbral.
 
 **Pregunta concreta:** ¿Cuánto cuesta relativamente dejar pasar una unidad que requería calibración frente a auditar una que no la requería? ¿El costo del primer caso es de retrabajo, de garantía, de reputación o de reproceso en línea? ¿Existe una estimación, aunque sea un orden de magnitud o una preferencia declarada entre detectar más y molestar menos?
