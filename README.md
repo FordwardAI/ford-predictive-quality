@@ -66,6 +66,8 @@ Esta secuencia es una propuesta organizativa, no un calendario aprobado ni una r
 
 El ticket de alcance debe fijar responsables reales, formatos, hora de cierre, margen y qué se recorta primero.
 
+Al 23/09 estos hitos quedaron superados. El borrador de reemplazo, con entregables, responsables, calendario y orden de recorte, está en [alcance de entrega](docs/alcance-entrega.md) y sigue pendiente de acuerdo del equipo.
+
 ## Qué se sabe de la consigna
 
 La ficha pide justificar el enfoque y el modelo, describir la preparación de datos y la validación. Valora una interfaz o reporte accionable y evalúa también aplicabilidad, innovación y presentación oral con soporte visual. No debemos inventar formatos de entrega que la fuente no especifica.
