@@ -1,6 +1,6 @@
 # EDA — Dataset QLS Inspección Adicional (Desafío 3: Data-Driven Predictive Quality)
 
-**Estado:** análisis exploratorio de mateoserebrinsky, versionado como evidencia de [¿Qué registros y variables son admisibles para el experimento?](https://github.com/FordwardAI/ford-predictive-quality/issues/6). No es una decisión acordada. Las decisiones vigentes están en la [resolución del ticket](https://github.com/FordwardAI/ford-predictive-quality/issues/6#issuecomment-5804466671). Los experimentos posteriores están en [experimentos de modelado](experimentos-modelado.md).
+**Estado:** análisis exploratorio de mateoserebrinsky, versionado como evidencia de [¿Qué registros y variables son admisibles para el experimento?](https://github.com/FordwardAI/ford-predictive-quality/issues/6). No es una decisión acordada y puede estar desactualizado respecto de los experimentos posteriores (según el autor, 23/09). Las decisiones vigentes están en la [resolución del ticket](https://github.com/FordwardAI/ford-predictive-quality/issues/6#issuecomment-5804466671). Los experimentos posteriores están en [experimentos de modelado](experimentos-modelado.md).
 
 ## Alcance y límites
 
