@@ -30,4 +30,4 @@ Resultado de una auditoría sin calibración adicional. No equivale por sí solo
 Resultado que indica necesidad de calibración adicional durante la auditoría. No significa que la unidad incumpliera los estándares de Gate Release.
 
 **Cupo de auditoría**:
-Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa. Según el contexto del proceso aportado por el equipo, Ford selecciona actualmente el 5% mediante muestreo aleatorio; la ventana y las reglas operativas exactas quedan pendientes de confirmación de Ford.
+Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa. Ford confirmó el 22/09 que hoy selecciona el 5% de forma completamente aleatoria, sin criterio específico, y que no busca ampliar ese porcentaje por costo y capacidad. La ventana exacta no se precisó: Ford pidió basarse en el dataset entregado, por lo que queda como supuesto del equipo.
