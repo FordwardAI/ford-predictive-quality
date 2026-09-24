@@ -9,7 +9,8 @@ Identificador de una unidad o vehículo. Un VIN puede estar asociado a múltiple
 _Avoid_: Usar «registro» como sinónimo de vehículo.
 
 **Evento de calidad**:
-Registro de una incidencia, inspección o reparación asociado a un vehículo. Varias filas pueden referirse al mismo VIN; la semántica exacta y la duplicación de eventos requieren revisión.
+Incidencia registrada en la verificación de calidad sobre un vehículo, junto con su reparación. La inspección y la reparación de una incidencia forman un solo evento, no dos. Un VIN puede tener varios eventos; el conjunto de sus eventos es su historial. La causa de los eventos repetidos exactamente sigue sin conocerse.
+_Avoid_: Contar la inspección y la reparación como eventos separados; usar la cantidad de eventos como sinónimo de riesgo del VIN.
 
 **Verificación de calidad**:
 Etapa del proceso productivo, anterior a Gate Release, por la que pasan todos los vehículos y en la que se registran los eventos de calidad.
