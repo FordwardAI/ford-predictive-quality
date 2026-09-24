@@ -65,6 +65,14 @@ _Avoid_: Elegir o ajustar una alternativa mirando su resultado.
 **Cupo de auditoría**:
 Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa, expresada como fracción de la producción que aprueba Gate Release. Ford confirmó el 22/09 que hoy selecciona el 5% de forma completamente aleatoria, sin criterio específico, y que no busca ampliar ese porcentaje por costo y capacidad. La ventana exacta no se precisó: Ford pidió basarse en el dataset entregado, por lo que queda como supuesto del equipo.
 
+**Cupo diario**:
+Cupo de auditoría de un día: el 5% de los VIN de ese Día del VIN, redondeado hacia abajo y con mínimo de uno. Es la ventana que supone el equipo, coherente con una hoja por día; Ford no la fijó.
+_Avoid_: Un único cupo sobre todo un tramo de días.
+
+**Grupo de control**:
+Porción del cupo que se sigue eligiendo al azar mientras se usa una recomendación de auditoría. Sirve para medir la selección frente al azar y para seguir conociendo el resultado de códigos que la recomendación no elige.
+_Avoid_: «Exploración» a secas; confundirlo con la selección aleatoria actual, que abarca todo el cupo.
+
 **Proporción auditada**:
 Fracción de la producción que aprueba Gate Release y se deriva a Auditoría Adicional; hoy, el 5%.
 _Avoid_: Confundirla con la proporción CALIBRADA.
