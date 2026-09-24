@@ -55,7 +55,7 @@ Fuente: relato del usuario y sus notas, registrados el 23/09. No hay acta ni tex
 | 4 — Ventana y cupo | Respondida: selección aleatoria sin criterio; el 5% no se amplía; basarse en el dataset. | Comparación a cupo fijo del 5% frente al azar; la ventana es supuesto del equipo sobre el dataset. [Mejora útil](https://github.com/FordwardAI/ford-predictive-quality/issues/8). |
 | 5 — Diccionario | Parcial: catálogo como versión y features; subcategorización en curso. | Alternativa 5 para columnas 38–40, repeticiones y reparaciones sin fecha. Una subcategorización recibida es entrega nueva: verificar esquema, hash y diferencias. |
 | 6 — Fuentes | Sin novedad; «basarse en el dataset» refuerza el correo del 21/09. | Alternativa 6. |
-| 7 — Entregables | Parcial: las entregas obligatorias están en los templates del Drive, todavía no revisados por el equipo. | Revisarlos en [alcance de entrega](https://github.com/FordwardAI/ford-predictive-quality/issues/12); duración del pitch sin dato. |
+| 7 — Entregables | Parcial: los templates del Drive, revisados el 24/09, fijan informe (.docx), presentación (.pptx) y .zip. | Estructura en [alcance de entrega](../docs/alcance-entrega.md#qué-exigen-los-templates). Duración del pitch, canal y hora de cierre sin dato. |
 | 8 — Costo de errores | Respondida: fuera del enfoque, sin referencias de Ford. | No se modelan costos. La forma de declarar la ponderación implícita del cupo fijo corresponde a [mejora útil](https://github.com/FordwardAI/ford-predictive-quality/issues/8). |
 
 ## Conclusiones preliminares para llevar a la reunión
@@ -173,7 +173,7 @@ Las consultas 1 a 6 son las de la investigación original. Las **7 y 8** se agre
 
 ### 7. Formatos de entrega y límites del pitch — necesaria para comprometer el alcance
 
-**Actualización 22/09:** las entregas obligatorias están detalladas en los templates de presentaciones anteriores del Drive compartido; se admiten materiales adicionales útiles. El equipo debe revisarlos en el ticket de alcance de entrega. Duración del pitch: sin dato.
+**Actualización 22/09:** las entregas obligatorias están detalladas en los templates de presentaciones anteriores del Drive compartido; se admiten materiales adicionales útiles. Revisados el 24/09: piden un Informe de la Solución (.docx), una presentación (.pptx) y un .zip; ver [alcance de entrega](../docs/alcance-entrega.md#qué-exigen-los-templates). Duración del pitch, canal y hora de cierre: sin dato.
 
 **Evidencia:** la lectura completa de la consigna no encontró especificación de formatos de entrega, repositorio, notebook, memoria escrita, archivo del modelo, video o demo, cantidad de diapositivas ni duración del pitch. [Consigna y fuentes](consigna-fuentes.md#exigencias-y-criterios), fila «Sin especificación encontrada». La consigna sí valora un complemento accionable —interfaz, dashboard **o** reporte— sin imponer una aplicación, y evalúa la exposición oral con soporte visual.
 
