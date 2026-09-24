@@ -20,6 +20,15 @@ Usar el nombre exacto del archivo local: las tildes pueden tener distinta normal
 
 La [salida agregada versionada](../research/audit-csv.json) incluye la auditoría completa y la comparación con la entrega anterior. No contiene VIN individuales ni filas de datos. La auditoría no elimina registros, elige variables ni entrena modelos.
 
+Los conteos de las particiones de validación acordadas en [¿Qué validación permite evaluar el uso propuesto sin fuga de información?](https://github.com/FordwardAI/ford-predictive-quality/issues/7) se reproducen así:
+
+```sh
+python3 research/validation_partitions.py "/ruta/al/Dataset QLS Inspección Adicional.csv" > research/validation-partitions.json
+python3 research/test_validation_partitions.py
+```
+
+La [salida](../research/validation-partitions.json) contiene solo agregados por partición (VIN, CALIBRADA, porcentaje y cupo del 5%). No entrena ni evalúa modelos.
+
 ## Correspondencia con el Markdown anterior
 
 El Markdown histórico `dataset.md` tiene 78.164.273 bytes y SHA-256 `5f0e6dc11262fb4ff675797ebfe51c1d43feafc0029c5dcc3f2bd4574c56c3e2`. Sus descripciones están en la línea 2, el separador en la 3 y los nombres técnicos en la 4.

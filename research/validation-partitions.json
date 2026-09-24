@@ -1,0 +1,84 @@
+{
+  "source": "Dataset QLS Inspección Adicional.csv",
+  "sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+  "unit": "VIN",
+  "definitions": {
+    "dia_del_vin": "max(Fecha Inspección, Fecha Reparación)",
+    "poblacion_principal": "primera Fecha Inspección <= DIA_260",
+    "particiones": {
+      "entrenamiento_comparacion": [
+        null,
+        149
+      ],
+      "validacion": [
+        155,
+        194
+      ],
+      "entrenamiento_final": [
+        null,
+        194
+      ],
+      "prueba_final": [
+        200,
+        null
+      ]
+    },
+    "k": "max(1, floor(0.05 * N))"
+  },
+  "partitions": {
+    "entrenamiento_comparacion": {
+      "vins": 31279,
+      "calibrada": 3998,
+      "calibrada_pct": 12.78,
+      "k_5pct": 1563
+    },
+    "validacion": {
+      "vins": 8038,
+      "calibrada": 780,
+      "calibrada_pct": 9.7,
+      "k_5pct": 401
+    },
+    "entrenamiento_final": {
+      "vins": 40359,
+      "calibrada": 4898,
+      "calibrada_pct": 12.14,
+      "k_5pct": 2017
+    },
+    "prueba_final": {
+      "vins": 13312,
+      "calibrada": 1098,
+      "calibrada_pct": 8.25,
+      "k_5pct": 665
+    },
+    "prueba_final_hasta_260": {
+      "vins": 13135,
+      "calibrada": 1094,
+      "calibrada_pct": 8.33,
+      "k_5pct": 656
+    },
+    "prueba_final_despues_260": {
+      "vins": 177,
+      "calibrada": 4,
+      "calibrada_pct": 2.26,
+      "k_5pct": 8
+    },
+    "cohorte_posterior_260": {
+      "vins": 4910,
+      "calibrada": 0,
+      "calibrada_pct": 0.0,
+      "k_5pct": 245
+    },
+    "sensibilidad_prueba_con_cohorte": {
+      "vins": 18222,
+      "calibrada": 1098,
+      "calibrada_pct": 6.03,
+      "k_5pct": 911
+    },
+    "poblacion_principal": {
+      "vins": 54771,
+      "calibrada": 6079,
+      "calibrada_pct": 11.1,
+      "k_5pct": 2738
+    }
+  }
+}
