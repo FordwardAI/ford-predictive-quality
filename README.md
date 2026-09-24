@@ -15,7 +15,7 @@ Las [convenciones compartidas](AGENTS.md) rigen para Codex y Claude Code. La [gu
 ## Cómo avanzar
 
 1. Leer las investigaciones ya terminadas: [población y etiquetas](research/poblacion-etiquetas.md) y [consigna y fuentes](research/consigna-fuentes.md).
-2. Consultas a Ford: resueltas. Tras la respuesta parcial del 21/09, la reunión del 22 de septiembre aclaró población, selección aleatoria, cupo, ventana de 0 a 5 días entre Gate Release y auditoría, la hipótesis de Ford sobre DIA_260, entregables y costos; ver [consultas y estado por consulta](research/consultas-ford.md#reunión-con-ford-del-22-de-septiembre-de-2026). Lo no respondido sigue con su alternativa como supuesto vigente. Siguen admisibilidad de datos y, en paralelo, el alcance de entrega a partir de los templates del Drive.
+2. Consultas a Ford: resueltas. Tras la respuesta parcial del 21/09, la reunión del 22 de septiembre aclaró población, selección aleatoria, cupo, ventana de 0 a 5 días entre Gate Release y auditoría, la hipótesis de Ford sobre DIA_260, entregables y costos; ver [consultas y estado por consulta](research/consultas-ford.md#reunión-con-ford-del-22-de-septiembre-de-2026). Lo no respondido sigue con su alternativa como supuesto vigente. Los templates del Drive se revisaron el 24/09 y fijan el formato de la entrega; ver [alcance de entrega](docs/alcance-entrega.md).
 3. Resolver admisibilidad de datos, validación y medida de éxito antes de elegir representación y modelos.
 4. Precisar la salida que necesita Calidad y cerrar una especificación con responsables y criterios de aceptación.
 
@@ -66,11 +66,11 @@ Esta secuencia es una propuesta organizativa, no un calendario aprobado ni una r
 
 El ticket de alcance debe fijar responsables reales, formatos, hora de cierre, margen y qué se recorta primero.
 
-Al 23/09 estos hitos quedaron superados. El borrador de reemplazo, con entregables, responsables, calendario y orden de recorte, está en [alcance de entrega](docs/alcance-entrega.md) y sigue pendiente de acuerdo del equipo.
+Al 23/09 estos hitos quedaron superados. Los reemplaza el [alcance de entrega](docs/alcance-entrega.md), cerrado el 24/09 con entregables, formato, calendario y orden de recorte. Los responsables por persona siguen sin asignar.
 
 ## Qué se sabe de la consigna
 
-La ficha pide justificar el enfoque y el modelo, describir la preparación de datos y la validación. Valora una interfaz o reporte accionable y evalúa también aplicabilidad, innovación y presentación oral con soporte visual. No debemos inventar formatos de entrega que la fuente no especifica.
+La ficha pide justificar el enfoque y el modelo, describir la preparación de datos y la validación. Valora una interfaz o reporte accionable y evalúa también aplicabilidad, innovación y presentación oral con soporte visual. El formato de la entrega lo fijan los templates del Drive: Informe de la Solución (.docx), presentación (.pptx) y un .zip con lo que no entre en el informe. Ver [alcance de entrega](docs/alcance-entrega.md#qué-exigen-los-templates).
 
 La base está declarada **ficticia**. El benchmark operativo propuesto es el muestreo del 5%; la fracción de unidades CALIBRADA dentro de la base es un concepto distinto. Los informes separan lo observado de lo que sigue pendiente de Ford. La fuente vigente es el CSV recibido el 18 de septiembre, auditado completo y comparado con el Markdown anterior; ver [identificación y reproducción](docs/datos-locales.md). Conserva mayor precisión en las horas y confirma los agregados previos. Se verificaron 195.808 eventos, 59.681 VIN y 6.079 VIN CALIBRADA. Los 4.910 VIN cuya primera inspección registrada es posterior a DIA_260 son todos OK; existen eventos positivos posteriores de VIN anteriores. Ford analiza una posible mejora en planta cerca de ese día, sin confirmarla; la causa no está acreditada.
 
