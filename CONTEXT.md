@@ -11,14 +11,30 @@ _Avoid_: Usar «registro» como sinónimo de vehículo.
 **Evento de calidad**:
 Registro de una incidencia, inspección o reparación asociado a un vehículo. Varias filas pueden referirse al mismo VIN; la semántica exacta y la duplicación de eventos requieren revisión.
 
+**Verificación de calidad**:
+Etapa del proceso productivo, anterior a Gate Release, por la que pasan todos los vehículos y en la que se registran los eventos de calidad.
+_Avoid_: «Calidad» a secas para nombrar la etapa.
+
 **Gate Release**:
 Instancia de validación del cumplimiento de especificaciones al finalizar las intervenciones del proceso productivo, según la consigna.
 
 **Auditoría Adicional**:
 Inspección de alta precisión posterior a Gate Release, denominada también Inspección Adicional en la consigna. Evalúa la necesidad de ajustes finos en unidades que ya cumplen los estándares de liberación.
 
+**Responsable de la selección**:
+Persona que elige, entre los vehículos que aprobaron Gate Release, cuáles se derivan a Auditoría Adicional. Hoy los elige al azar.
+_Avoid_: «Calidad» a secas para nombrar a quien selecciona.
+
 **Recomendación de auditoría**:
-Propuesta dirigida a Calidad para priorizar un VIN que acaba de aprobar Gate Release, antes de su derivación a Auditoría Adicional y con el historial disponible en ese momento. Calidad confirma la selección.
+Propuesta dirigida al responsable de la selección para priorizar vehículos que acaban de aprobar Gate Release, antes de su derivación a Auditoría Adicional y con la información disponible en ese momento. El responsable de la selección decide cuántos y cuáles se derivan.
+
+**Hoja de códigos prioritarios**:
+Forma diaria de la recomendación de auditoría: los códigos de catálogo ordenados por su tasa reciente del código, con rango, vehículos programados y acumulado. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes.
+_Avoid_: Ranking de VIN, lista de unidades.
+
+**Tasa reciente del código**:
+Proporción CALIBRADA entre los VIN auditados de un código de catálogo en una ventana cuyos resultados ya se conocen según el margen de disponibilidad. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo.
+_Avoid_: Probabilidad de la unidad, score.
 
 **VIN elegible para Auditoría Adicional**:
 Unidad que aprobó Gate Release, sigue disponible para derivación y todavía no pasó por Auditoría Adicional.
