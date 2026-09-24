@@ -30,8 +30,20 @@ Resultado de una auditoría sin calibración adicional. No equivale por sí solo
 Resultado que indica necesidad de calibración adicional durante la auditoría. No significa que la unidad incumpliera los estándares de Gate Release.
 
 **Día del VIN**:
-Última fecha de evento (DIA_n) observada para un VIN. Se usa como aproximación del día de su Auditoría Adicional, porque la base no registra esa fecha. Es un identificador de día, no una fecha de calendario.
+Última fecha de evento (DIA_n) observada para un VIN, contando inspecciones y reparaciones. Se usa como aproximación del día de su Auditoría Adicional, porque la base no registra esa fecha. Es un identificador de día, no una fecha de calendario.
 _Avoid_: Llamarlo «fecha de auditoría».
+
+**Margen de disponibilidad**:
+Días que pasan entre el Día del VIN y el momento en que su resultado puede usarse para recomendar otros VIN. Se toman 5 días, el máximo informado por Ford entre Gate Release y Auditoría Adicional.
+_Avoid_: Usar un resultado antes de que se conozca.
+
+**Validación**:
+Tramo de VIN, anterior a la prueba final, que se usa para comparar alternativas y elegir sus ajustes.
+_Avoid_: Llamarlo «prueba».
+
+**Prueba final**:
+Tramo de VIN posterior a la validación, sobre el que la alternativa elegida y congelada se evalúa una sola vez frente al azar.
+_Avoid_: Elegir o ajustar una alternativa mirando su resultado.
 
 **Cupo de auditoría**:
 Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa, expresada como fracción de la producción que aprueba Gate Release. Ford confirmó el 22/09 que hoy selecciona el 5% de forma completamente aleatoria, sin criterio específico, y que no busca ampliar ese porcentaje por costo y capacidad. La ventana exacta no se precisó: Ford pidió basarse en el dataset entregado, por lo que queda como supuesto del equipo.
