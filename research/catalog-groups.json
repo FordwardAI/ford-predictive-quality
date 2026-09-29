@@ -1,0 +1,1446 @@
+{
+  "source": "Dataset QLS Inspección Adicional.csv",
+  "sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+  "grouping": "Códigos de catálogo.csv",
+  "grouping_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+  "unit": "VIN",
+  "definitions": {
+    "poblacion_principal": "primera Fecha Inspección <= DIA_260",
+    "particiones": {
+      "entrenamiento_comparacion": [
+        null,
+        149
+      ],
+      "validacion": [
+        155,
+        194
+      ],
+      "prueba_final": [
+        200,
+        null
+      ]
+    },
+    "dia_del_vin": "max(Fecha Inspección, Fecha Reparación)"
+  },
+  "cobertura": {
+    "codigos_agrupacion": 98,
+    "codigos_base": 98,
+    "vin_con_mas_de_un_codigo": 0,
+    "codigos_base_sin_agrupacion": [],
+    "codigos_agrupacion_sin_vin": [],
+    "combinaciones_distintas": 45,
+    "atributos_determinados_por_posicion": {
+      "1": [],
+      "2": [
+        "motor_dominante",
+        "traccion",
+        "traccion_dominante"
+      ],
+      "3": [
+        "mercado"
+      ],
+      "4": []
+    }
+  },
+  "poblacion_principal": {
+    "codigo": {
+      "grupos": 98,
+      "chi2": 674.2
+    },
+    "familia_motor": {
+      "grupos": 2,
+      "chi2": 22.1,
+      "tasas": {
+        "LION": {
+          "vins": 26403,
+          "calibrada": 3103,
+          "calibrada_pct": 11.75
+        },
+        "PANTHER": {
+          "vins": 28368,
+          "calibrada": 2976,
+          "calibrada_pct": 10.49
+        }
+      }
+    },
+    "motor_dominante": {
+      "grupos": 3,
+      "chi2": 28.5,
+      "tasas": {
+        "LION B": {
+          "vins": 26403,
+          "calibrada": 3103,
+          "calibrada_pct": 11.75
+        },
+        "PANTHER C": {
+          "vins": 8320,
+          "calibrada": 934,
+          "calibrada_pct": 11.23
+        },
+        "PANTHER J": {
+          "vins": 20048,
+          "calibrada": 2042,
+          "calibrada_pct": 10.19
+        }
+      }
+    },
+    "traccion": {
+      "grupos": 2,
+      "chi2": 21.1,
+      "tasas": {
+        "4X4": {
+          "vins": 45884,
+          "calibrada": 5217,
+          "calibrada_pct": 11.37
+        },
+        "4X2": {
+          "vins": 8887,
+          "calibrada": 862,
+          "calibrada_pct": 9.7
+        }
+      }
+    },
+    "version_dominante": {
+      "grupos": 4,
+      "chi2": 25.4,
+      "tasas": {
+        "VERSION_P": {
+          "vins": 16187,
+          "calibrada": 1904,
+          "calibrada_pct": 11.76
+        },
+        "VERSION_3": {
+          "vins": 9792,
+          "calibrada": 1127,
+          "calibrada_pct": 11.51
+        },
+        "VERSION_1": {
+          "vins": 15398,
+          "calibrada": 1709,
+          "calibrada_pct": 11.1
+        },
+        "VERSION_2": {
+          "vins": 13394,
+          "calibrada": 1339,
+          "calibrada_pct": 10.0
+        }
+      }
+    },
+    "mercado": {
+      "grupos": 9,
+      "chi2": 187.8,
+      "tasas": {
+        "LOCATION_4": {
+          "vins": 1615,
+          "calibrada": 331,
+          "calibrada_pct": 20.5
+        },
+        "LOCATION_1": {
+          "vins": 20394,
+          "calibrada": 2394,
+          "calibrada_pct": 11.74
+        },
+        "LOCATION_5": {
+          "vins": 222,
+          "calibrada": 26,
+          "calibrada_pct": 11.71
+        },
+        "LOCATION_9": {
+          "vins": 27,
+          "calibrada": 3,
+          "calibrada_pct": 11.11
+        },
+        "LOCATION_6": {
+          "vins": 1432,
+          "calibrada": 152,
+          "calibrada_pct": 10.61
+        },
+        "LOCATION_2": {
+          "vins": 26220,
+          "calibrada": 2732,
+          "calibrada_pct": 10.42
+        },
+        "LOCATION_3": {
+          "vins": 4386,
+          "calibrada": 404,
+          "calibrada_pct": 9.21
+        },
+        "LOCATION_7": {
+          "vins": 332,
+          "calibrada": 29,
+          "calibrada_pct": 8.73
+        },
+        "LOCATION_8": {
+          "vins": 143,
+          "calibrada": 8,
+          "calibrada_pct": 5.59
+        }
+      }
+    },
+    "combinacion": {
+      "grupos": 45,
+      "chi2": 353.1,
+      "tasas": {
+        "LION B / 4X4 / VERSION_P / LOCATION_4": {
+          "vins": 139,
+          "calibrada": 40,
+          "calibrada_pct": 28.78
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_4": {
+          "vins": 50,
+          "calibrada": 12,
+          "calibrada_pct": 24.0
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_4": {
+          "vins": 975,
+          "calibrada": 214,
+          "calibrada_pct": 21.95
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_4": {
+          "vins": 310,
+          "calibrada": 49,
+          "calibrada_pct": 15.81
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_5": {
+          "vins": 112,
+          "calibrada": 16,
+          "calibrada_pct": 14.29
+        },
+        "PANTHER C / 4X4 / VERSION_P / LOCATION_1": {
+          "vins": 1643,
+          "calibrada": 234,
+          "calibrada_pct": 14.24
+        },
+        "LION B / 4X4 / VERSION_2 / LOCATION_1": {
+          "vins": 2797,
+          "calibrada": 385,
+          "calibrada_pct": 13.76
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_6": {
+          "vins": 190,
+          "calibrada": 25,
+          "calibrada_pct": 13.16
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_1": {
+          "vins": 2138,
+          "calibrada": 263,
+          "calibrada_pct": 12.3
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_1": {
+          "vins": 3067,
+          "calibrada": 371,
+          "calibrada_pct": 12.1
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_1": {
+          "vins": 4096,
+          "calibrada": 478,
+          "calibrada_pct": 11.67
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_9": {
+          "vins": 26,
+          "calibrada": 3,
+          "calibrada_pct": 11.54
+        },
+        "LION B / 4X4 / VERSION_1 / LOCATION_2": {
+          "vins": 8657,
+          "calibrada": 998,
+          "calibrada_pct": 11.53
+        },
+        "LION B / 4X4 / VERSION_2 / LOCATION_2": {
+          "vins": 341,
+          "calibrada": 39,
+          "calibrada_pct": 11.44
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_2": {
+          "vins": 8652,
+          "calibrada": 982,
+          "calibrada_pct": 11.35
+        },
+        "LION B / 4X4 / VERSION_1 / LOCATION_4": {
+          "vins": 141,
+          "calibrada": 16,
+          "calibrada_pct": 11.35
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_1": {
+          "vins": 3203,
+          "calibrada": 355,
+          "calibrada_pct": 11.08
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_6": {
+          "vins": 253,
+          "calibrada": 28,
+          "calibrada_pct": 11.07
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_3": {
+          "vins": 543,
+          "calibrada": 60,
+          "calibrada_pct": 11.05
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_6": {
+          "vins": 521,
+          "calibrada": 57,
+          "calibrada_pct": 10.94
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_3": {
+          "vins": 1015,
+          "calibrada": 109,
+          "calibrada_pct": 10.74
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_7": {
+          "vins": 210,
+          "calibrada": 22,
+          "calibrada_pct": 10.48
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_6": {
+          "vins": 105,
+          "calibrada": 10,
+          "calibrada_pct": 9.52
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_5": {
+          "vins": 106,
+          "calibrada": 10,
+          "calibrada_pct": 9.43
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_3": {
+          "vins": 159,
+          "calibrada": 15,
+          "calibrada_pct": 9.43
+        },
+        "PANTHER C / 4X2 / VERSION_1 / LOCATION_1": {
+          "vins": 1765,
+          "calibrada": 165,
+          "calibrada_pct": 9.35
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_2": {
+          "vins": 5161,
+          "calibrada": 466,
+          "calibrada_pct": 9.03
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_3": {
+          "vins": 1584,
+          "calibrada": 143,
+          "calibrada_pct": 9.03
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_6": {
+          "vins": 236,
+          "calibrada": 21,
+          "calibrada_pct": 8.9
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_1": {
+          "vins": 1161,
+          "calibrada": 101,
+          "calibrada_pct": 8.7
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_6": {
+          "vins": 127,
+          "calibrada": 11,
+          "calibrada_pct": 8.66
+        },
+        "PANTHER C / 4X2 / VERSION_1 / LOCATION_3": {
+          "vins": 417,
+          "calibrada": 34,
+          "calibrada_pct": 8.15
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_1": {
+          "vins": 524,
+          "calibrada": 42,
+          "calibrada_pct": 8.02
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_2": {
+          "vins": 2010,
+          "calibrada": 151,
+          "calibrada_pct": 7.51
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_7": {
+          "vins": 14,
+          "calibrada": 1,
+          "calibrada_pct": 7.14
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_2": {
+          "vins": 1399,
+          "calibrada": 96,
+          "calibrada_pct": 6.86
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_3": {
+          "vins": 596,
+          "calibrada": 39,
+          "calibrada_pct": 6.54
+        },
+        "PANTHER C / 4X4 / VERSION_P / LOCATION_7": {
+          "vins": 77,
+          "calibrada": 5,
+          "calibrada_pct": 6.49
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_8": {
+          "vins": 33,
+          "calibrada": 2,
+          "calibrada_pct": 6.06
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_8": {
+          "vins": 102,
+          "calibrada": 6,
+          "calibrada_pct": 5.88
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_3": {
+          "vins": 72,
+          "calibrada": 4,
+          "calibrada_pct": 5.56
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_7": {
+          "vins": 31,
+          "calibrada": 1,
+          "calibrada_pct": 3.23
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_5": {
+          "vins": 4,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_8": {
+          "vins": 8,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_9": {
+          "vins": 1,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        }
+      }
+    }
+  },
+  "entrenamiento_comparacion": {
+    "familia_motor": {
+      "grupos": 2,
+      "chi2": 43.2,
+      "tasas": {
+        "LION": {
+          "vins": 14929,
+          "calibrada": 2102,
+          "calibrada_pct": 14.08
+        },
+        "PANTHER": {
+          "vins": 16350,
+          "calibrada": 1896,
+          "calibrada_pct": 11.6
+        }
+      }
+    },
+    "motor_dominante": {
+      "grupos": 3,
+      "chi2": 57.1,
+      "tasas": {
+        "LION B": {
+          "vins": 14929,
+          "calibrada": 2102,
+          "calibrada_pct": 14.08
+        },
+        "PANTHER C": {
+          "vins": 5007,
+          "calibrada": 654,
+          "calibrada_pct": 13.06
+        },
+        "PANTHER J": {
+          "vins": 11343,
+          "calibrada": 1242,
+          "calibrada_pct": 10.95
+        }
+      }
+    },
+    "traccion": {
+      "grupos": 2,
+      "chi2": 29.6,
+      "tasas": {
+        "4X4": {
+          "vins": 26511,
+          "calibrada": 3504,
+          "calibrada_pct": 13.22
+        },
+        "4X2": {
+          "vins": 4768,
+          "calibrada": 494,
+          "calibrada_pct": 10.36
+        }
+      }
+    },
+    "version_dominante": {
+      "grupos": 4,
+      "chi2": 43.3,
+      "tasas": {
+        "VERSION_P": {
+          "vins": 9314,
+          "calibrada": 1326,
+          "calibrada_pct": 14.24
+        },
+        "VERSION_1": {
+          "vins": 8940,
+          "calibrada": 1171,
+          "calibrada_pct": 13.1
+        },
+        "VERSION_3": {
+          "vins": 5422,
+          "calibrada": 672,
+          "calibrada_pct": 12.39
+        },
+        "VERSION_2": {
+          "vins": 7603,
+          "calibrada": 829,
+          "calibrada_pct": 10.9
+        }
+      }
+    },
+    "mercado": {
+      "grupos": 9,
+      "chi2": 99.6,
+      "tasas": {
+        "LOCATION_4": {
+          "vins": 903,
+          "calibrada": 208,
+          "calibrada_pct": 23.03
+        },
+        "LOCATION_1": {
+          "vins": 11740,
+          "calibrada": 1528,
+          "calibrada_pct": 13.02
+        },
+        "LOCATION_2": {
+          "vins": 14665,
+          "calibrada": 1821,
+          "calibrada_pct": 12.42
+        },
+        "LOCATION_6": {
+          "vins": 865,
+          "calibrada": 106,
+          "calibrada_pct": 12.25
+        },
+        "LOCATION_7": {
+          "vins": 215,
+          "calibrada": 25,
+          "calibrada_pct": 11.63
+        },
+        "LOCATION_5": {
+          "vins": 152,
+          "calibrada": 17,
+          "calibrada_pct": 11.18
+        },
+        "LOCATION_9": {
+          "vins": 27,
+          "calibrada": 3,
+          "calibrada_pct": 11.11
+        },
+        "LOCATION_3": {
+          "vins": 2612,
+          "calibrada": 282,
+          "calibrada_pct": 10.8
+        },
+        "LOCATION_8": {
+          "vins": 100,
+          "calibrada": 8,
+          "calibrada_pct": 8.0
+        }
+      }
+    },
+    "combinacion": {
+      "grupos": 44,
+      "chi2": 237.0,
+      "tasas": {
+        "LION B / 4X4 / VERSION_P / LOCATION_4": {
+          "vins": 121,
+          "calibrada": 37,
+          "calibrada_pct": 30.58
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_4": {
+          "vins": 553,
+          "calibrada": 127,
+          "calibrada_pct": 22.97
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_4": {
+          "vins": 192,
+          "calibrada": 39,
+          "calibrada_pct": 20.31
+        },
+        "PANTHER C / 4X4 / VERSION_P / LOCATION_1": {
+          "vins": 959,
+          "calibrada": 158,
+          "calibrada_pct": 16.48
+        },
+        "LION B / 4X4 / VERSION_2 / LOCATION_1": {
+          "vins": 1486,
+          "calibrada": 230,
+          "calibrada_pct": 15.48
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_6": {
+          "vins": 46,
+          "calibrada": 7,
+          "calibrada_pct": 15.22
+        },
+        "LION B / 4X4 / VERSION_2 / LOCATION_2": {
+          "vins": 196,
+          "calibrada": 29,
+          "calibrada_pct": 14.8
+        },
+        "LION B / 4X4 / VERSION_1 / LOCATION_4": {
+          "vins": 34,
+          "calibrada": 5,
+          "calibrada_pct": 14.71
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_7": {
+          "vins": 132,
+          "calibrada": 19,
+          "calibrada_pct": 14.39
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_3": {
+          "vins": 85,
+          "calibrada": 12,
+          "calibrada_pct": 14.12
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_6": {
+          "vins": 285,
+          "calibrada": 40,
+          "calibrada_pct": 14.04
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_3": {
+          "vins": 521,
+          "calibrada": 73,
+          "calibrada_pct": 14.01
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_2": {
+          "vins": 4884,
+          "calibrada": 678,
+          "calibrada_pct": 13.88
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_1": {
+          "vins": 1347,
+          "calibrada": 186,
+          "calibrada_pct": 13.81
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_1": {
+          "vins": 2374,
+          "calibrada": 327,
+          "calibrada_pct": 13.77
+        },
+        "LION B / 4X4 / VERSION_1 / LOCATION_2": {
+          "vins": 4924,
+          "calibrada": 675,
+          "calibrada_pct": 13.71
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_1": {
+          "vins": 1447,
+          "calibrada": 189,
+          "calibrada_pct": 13.06
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_6": {
+          "vins": 187,
+          "calibrada": 23,
+          "calibrada_pct": 12.3
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_5": {
+          "vins": 84,
+          "calibrada": 10,
+          "calibrada_pct": 11.9
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_6": {
+          "vins": 145,
+          "calibrada": 17,
+          "calibrada_pct": 11.72
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_9": {
+          "vins": 26,
+          "calibrada": 3,
+          "calibrada_pct": 11.54
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_1": {
+          "vins": 2197,
+          "calibrada": 249,
+          "calibrada_pct": 11.33
+        },
+        "PANTHER C / 4X2 / VERSION_1 / LOCATION_1": {
+          "vins": 1020,
+          "calibrada": 113,
+          "calibrada_pct": 11.08
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_5": {
+          "vins": 64,
+          "calibrada": 7,
+          "calibrada_pct": 10.94
+        },
+        "PANTHER C / 4X2 / VERSION_1 / LOCATION_3": {
+          "vins": 243,
+          "calibrada": 26,
+          "calibrada_pct": 10.7
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_3": {
+          "vins": 1003,
+          "calibrada": 107,
+          "calibrada_pct": 10.67
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_3": {
+          "vins": 329,
+          "calibrada": 35,
+          "calibrada_pct": 10.64
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_2": {
+          "vins": 3124,
+          "calibrada": 316,
+          "calibrada_pct": 10.12
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_1": {
+          "vins": 285,
+          "calibrada": 28,
+          "calibrada_pct": 9.82
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_6": {
+          "vins": 83,
+          "calibrada": 8,
+          "calibrada_pct": 9.64
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_6": {
+          "vins": 119,
+          "calibrada": 11,
+          "calibrada_pct": 9.24
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_2": {
+          "vins": 441,
+          "calibrada": 40,
+          "calibrada_pct": 9.07
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_3": {
+          "vins": 46,
+          "calibrada": 4,
+          "calibrada_pct": 8.7
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_8": {
+          "vins": 70,
+          "calibrada": 6,
+          "calibrada_pct": 8.57
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_8": {
+          "vins": 24,
+          "calibrada": 2,
+          "calibrada_pct": 8.33
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_1": {
+          "vins": 625,
+          "calibrada": 48,
+          "calibrada_pct": 7.68
+        },
+        "PANTHER C / 4X4 / VERSION_P / LOCATION_7": {
+          "vins": 66,
+          "calibrada": 5,
+          "calibrada_pct": 7.58
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_2": {
+          "vins": 1096,
+          "calibrada": 83,
+          "calibrada_pct": 7.57
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_3": {
+          "vins": 385,
+          "calibrada": 25,
+          "calibrada_pct": 6.49
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_7": {
+          "vins": 17,
+          "calibrada": 1,
+          "calibrada_pct": 5.88
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_5": {
+          "vins": 4,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_4": {
+          "vins": 3,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_8": {
+          "vins": 6,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_9": {
+          "vins": 1,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        }
+      }
+    }
+  },
+  "validacion": {
+    "familia_motor": {
+      "grupos": 2,
+      "chi2": 0.4,
+      "tasas": {
+        "PANTHER": {
+          "vins": 3878,
+          "calibrada": 385,
+          "calibrada_pct": 9.93
+        },
+        "LION": {
+          "vins": 4160,
+          "calibrada": 395,
+          "calibrada_pct": 9.5
+        }
+      }
+    },
+    "motor_dominante": {
+      "grupos": 3,
+      "chi2": 1.1,
+      "tasas": {
+        "PANTHER J": {
+          "vins": 2784,
+          "calibrada": 283,
+          "calibrada_pct": 10.17
+        },
+        "LION B": {
+          "vins": 4160,
+          "calibrada": 395,
+          "calibrada_pct": 9.5
+        },
+        "PANTHER C": {
+          "vins": 1094,
+          "calibrada": 102,
+          "calibrada_pct": 9.32
+        }
+      }
+    },
+    "traccion": {
+      "grupos": 2,
+      "chi2": 0.0,
+      "tasas": {
+        "4X4": {
+          "vins": 6822,
+          "calibrada": 664,
+          "calibrada_pct": 9.73
+        },
+        "4X2": {
+          "vins": 1216,
+          "calibrada": 116,
+          "calibrada_pct": 9.54
+        }
+      }
+    },
+    "version_dominante": {
+      "grupos": 4,
+      "chi2": 7.4,
+      "tasas": {
+        "VERSION_3": {
+          "vins": 1230,
+          "calibrada": 144,
+          "calibrada_pct": 11.71
+        },
+        "VERSION_1": {
+          "vins": 2154,
+          "calibrada": 208,
+          "calibrada_pct": 9.66
+        },
+        "VERSION_P": {
+          "vins": 2490,
+          "calibrada": 235,
+          "calibrada_pct": 9.44
+        },
+        "VERSION_2": {
+          "vins": 2164,
+          "calibrada": 193,
+          "calibrada_pct": 8.92
+        }
+      }
+    },
+    "mercado": {
+      "grupos": 8,
+      "chi2": 56.1,
+      "tasas": {
+        "LOCATION_4": {
+          "vins": 266,
+          "calibrada": 58,
+          "calibrada_pct": 21.8
+        },
+        "LOCATION_5": {
+          "vins": 39,
+          "calibrada": 4,
+          "calibrada_pct": 10.26
+        },
+        "LOCATION_1": {
+          "vins": 2579,
+          "calibrada": 262,
+          "calibrada_pct": 10.16
+        },
+        "LOCATION_2": {
+          "vins": 4197,
+          "calibrada": 385,
+          "calibrada_pct": 9.17
+        },
+        "LOCATION_3": {
+          "vins": 582,
+          "calibrada": 48,
+          "calibrada_pct": 8.25
+        },
+        "LOCATION_6": {
+          "vins": 296,
+          "calibrada": 22,
+          "calibrada_pct": 7.43
+        },
+        "LOCATION_7": {
+          "vins": 55,
+          "calibrada": 1,
+          "calibrada_pct": 1.82
+        },
+        "LOCATION_8": {
+          "vins": 24,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        }
+      }
+    },
+    "combinacion": {
+      "grupos": 41,
+      "chi2": 104.1,
+      "tasas": {
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_4": {
+          "vins": 148,
+          "calibrada": 40,
+          "calibrada_pct": 27.03
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_4": {
+          "vins": 43,
+          "calibrada": 11,
+          "calibrada_pct": 25.58
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_5": {
+          "vins": 15,
+          "calibrada": 3,
+          "calibrada_pct": 20.0
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_4": {
+          "vins": 6,
+          "calibrada": 1,
+          "calibrada_pct": 16.67
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_3": {
+          "vins": 62,
+          "calibrada": 9,
+          "calibrada_pct": 14.52
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_6": {
+          "vins": 69,
+          "calibrada": 10,
+          "calibrada_pct": 14.49
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_1": {
+          "vins": 378,
+          "calibrada": 47,
+          "calibrada_pct": 12.43
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_1": {
+          "vins": 109,
+          "calibrada": 13,
+          "calibrada_pct": 11.93
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_1": {
+          "vins": 212,
+          "calibrada": 25,
+          "calibrada_pct": 11.79
+        },
+        "PANTHER C / 4X4 / VERSION_P / LOCATION_1": {
+          "vins": 252,
+          "calibrada": 27,
+          "calibrada_pct": 10.71
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_3": {
+          "vins": 19,
+          "calibrada": 2,
+          "calibrada_pct": 10.53
+        },
+        "LION B / 4X4 / VERSION_1 / LOCATION_2": {
+          "vins": 1287,
+          "calibrada": 130,
+          "calibrada_pct": 10.1
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_2": {
+          "vins": 1494,
+          "calibrada": 147,
+          "calibrada_pct": 9.84
+        },
+        "LION B / 4X4 / VERSION_2 / LOCATION_1": {
+          "vins": 520,
+          "calibrada": 51,
+          "calibrada_pct": 9.81
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_1": {
+          "vins": 473,
+          "calibrada": 46,
+          "calibrada_pct": 9.73
+        },
+        "LION B / 4X4 / VERSION_1 / LOCATION_4": {
+          "vins": 31,
+          "calibrada": 3,
+          "calibrada_pct": 9.68
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_3": {
+          "vins": 85,
+          "calibrada": 8,
+          "calibrada_pct": 9.41
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_1": {
+          "vins": 331,
+          "calibrada": 31,
+          "calibrada_pct": 9.37
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_3": {
+          "vins": 193,
+          "calibrada": 16,
+          "calibrada_pct": 8.29
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_2": {
+          "vins": 690,
+          "calibrada": 57,
+          "calibrada_pct": 8.26
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_2": {
+          "vins": 412,
+          "calibrada": 34,
+          "calibrada_pct": 8.25
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_4": {
+          "vins": 38,
+          "calibrada": 3,
+          "calibrada_pct": 7.89
+        },
+        "PANTHER C / 4X2 / VERSION_1 / LOCATION_1": {
+          "vins": 242,
+          "calibrada": 18,
+          "calibrada_pct": 7.44
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_3": {
+          "vins": 168,
+          "calibrada": 11,
+          "calibrada_pct": 6.55
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_1": {
+          "vins": 62,
+          "calibrada": 4,
+          "calibrada_pct": 6.45
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_2": {
+          "vins": 224,
+          "calibrada": 14,
+          "calibrada_pct": 6.25
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_6": {
+          "vins": 148,
+          "calibrada": 9,
+          "calibrada_pct": 6.08
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_6": {
+          "vins": 39,
+          "calibrada": 2,
+          "calibrada_pct": 5.13
+        },
+        "PANTHER C / 4X2 / VERSION_1 / LOCATION_3": {
+          "vins": 46,
+          "calibrada": 2,
+          "calibrada_pct": 4.35
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_5": {
+          "vins": 24,
+          "calibrada": 1,
+          "calibrada_pct": 4.17
+        },
+        "LION B / 4X4 / VERSION_2 / LOCATION_2": {
+          "vins": 90,
+          "calibrada": 3,
+          "calibrada_pct": 3.33
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_7": {
+          "vins": 34,
+          "calibrada": 1,
+          "calibrada_pct": 2.94
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_6": {
+          "vins": 39,
+          "calibrada": 1,
+          "calibrada_pct": 2.56
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_8": {
+          "vins": 18,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_7": {
+          "vins": 8,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_8": {
+          "vins": 4,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER C / 4X4 / VERSION_P / LOCATION_7": {
+          "vins": 6,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_3": {
+          "vins": 9,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_6": {
+          "vins": 1,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_7": {
+          "vins": 7,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_8": {
+          "vins": 2,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        }
+      }
+    }
+  },
+  "prueba_final": {
+    "familia_motor": {
+      "grupos": 2,
+      "chi2": 0.0,
+      "tasas": {
+        "PANTHER": {
+          "vins": 6841,
+          "calibrada": 566,
+          "calibrada_pct": 8.27
+        },
+        "LION": {
+          "vins": 6471,
+          "calibrada": 532,
+          "calibrada_pct": 8.22
+        }
+      }
+    },
+    "motor_dominante": {
+      "grupos": 3,
+      "chi2": 2.6,
+      "tasas": {
+        "PANTHER J": {
+          "vins": 4978,
+          "calibrada": 428,
+          "calibrada_pct": 8.6
+        },
+        "LION B": {
+          "vins": 6471,
+          "calibrada": 532,
+          "calibrada_pct": 8.22
+        },
+        "PANTHER C": {
+          "vins": 1863,
+          "calibrada": 138,
+          "calibrada_pct": 7.41
+        }
+      }
+    },
+    "traccion": {
+      "grupos": 2,
+      "chi2": 1.3,
+      "tasas": {
+        "4X2": {
+          "vins": 2427,
+          "calibrada": 214,
+          "calibrada_pct": 8.82
+        },
+        "4X4": {
+          "vins": 10885,
+          "calibrada": 884,
+          "calibrada_pct": 8.12
+        }
+      }
+    },
+    "version_dominante": {
+      "grupos": 4,
+      "chi2": 13.6,
+      "tasas": {
+        "VERSION_3": {
+          "vins": 2649,
+          "calibrada": 250,
+          "calibrada_pct": 9.44
+        },
+        "VERSION_2": {
+          "vins": 3082,
+          "calibrada": 279,
+          "calibrada_pct": 9.05
+        },
+        "VERSION_P": {
+          "vins": 3830,
+          "calibrada": 296,
+          "calibrada_pct": 7.73
+        },
+        "VERSION_1": {
+          "vins": 3751,
+          "calibrada": 273,
+          "calibrada_pct": 7.28
+        }
+      }
+    },
+    "mercado": {
+      "grupos": 8,
+      "chi2": 56.9,
+      "tasas": {
+        "LOCATION_5": {
+          "vins": 25,
+          "calibrada": 5,
+          "calibrada_pct": 20.0
+        },
+        "LOCATION_4": {
+          "vins": 380,
+          "calibrada": 52,
+          "calibrada_pct": 13.68
+        },
+        "LOCATION_6": {
+          "vins": 217,
+          "calibrada": 22,
+          "calibrada_pct": 10.14
+        },
+        "LOCATION_1": {
+          "vins": 5215,
+          "calibrada": 505,
+          "calibrada_pct": 9.68
+        },
+        "LOCATION_2": {
+          "vins": 6450,
+          "calibrada": 458,
+          "calibrada_pct": 7.1
+        },
+        "LOCATION_3": {
+          "vins": 967,
+          "calibrada": 54,
+          "calibrada_pct": 5.58
+        },
+        "LOCATION_7": {
+          "vins": 45,
+          "calibrada": 2,
+          "calibrada_pct": 4.44
+        },
+        "LOCATION_8": {
+          "vins": 13,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        }
+      }
+    },
+    "combinacion": {
+      "grupos": 41,
+      "chi2": 114.1,
+      "tasas": {
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_4": {
+          "vins": 4,
+          "calibrada": 1,
+          "calibrada_pct": 25.0
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_5": {
+          "vins": 12,
+          "calibrada": 3,
+          "calibrada_pct": 25.0
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_4": {
+          "vins": 12,
+          "calibrada": 2,
+          "calibrada_pct": 16.67
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_4": {
+          "vins": 222,
+          "calibrada": 35,
+          "calibrada_pct": 15.77
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_5": {
+          "vins": 13,
+          "calibrada": 2,
+          "calibrada_pct": 15.38
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_7": {
+          "vins": 7,
+          "calibrada": 1,
+          "calibrada_pct": 14.29
+        },
+        "LION B / 4X4 / VERSION_2 / LOCATION_1": {
+          "vins": 706,
+          "calibrada": 95,
+          "calibrada_pct": 13.46
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_6": {
+          "vins": 23,
+          "calibrada": 3,
+          "calibrada_pct": 13.04
+        },
+        "LION B / 4X4 / VERSION_2 / LOCATION_2": {
+          "vins": 47,
+          "calibrada": 6,
+          "calibrada_pct": 12.77
+        },
+        "LION B / 4X4 / VERSION_1 / LOCATION_4": {
+          "vins": 71,
+          "calibrada": 8,
+          "calibrada_pct": 11.27
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_3": {
+          "vins": 126,
+          "calibrada": 14,
+          "calibrada_pct": 11.11
+        },
+        "PANTHER C / 4X4 / VERSION_P / LOCATION_1": {
+          "vins": 361,
+          "calibrada": 40,
+          "calibrada_pct": 11.08
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_1": {
+          "vins": 1085,
+          "calibrada": 117,
+          "calibrada_pct": 10.78
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_6": {
+          "vins": 67,
+          "calibrada": 7,
+          "calibrada_pct": 10.45
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_6": {
+          "vins": 67,
+          "calibrada": 7,
+          "calibrada_pct": 10.45
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_1": {
+          "vins": 509,
+          "calibrada": 53,
+          "calibrada_pct": 10.41
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_1": {
+          "vins": 364,
+          "calibrada": 35,
+          "calibrada_pct": 9.62
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_6": {
+          "vins": 21,
+          "calibrada": 2,
+          "calibrada_pct": 9.52
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_4": {
+          "vins": 71,
+          "calibrada": 6,
+          "calibrada_pct": 8.45
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_3": {
+          "vins": 257,
+          "calibrada": 21,
+          "calibrada_pct": 8.17
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_1": {
+          "vins": 1123,
+          "calibrada": 90,
+          "calibrada_pct": 8.01
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_6": {
+          "vins": 38,
+          "calibrada": 3,
+          "calibrada_pct": 7.89
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_1": {
+          "vins": 504,
+          "calibrada": 39,
+          "calibrada_pct": 7.74
+        },
+        "LION B / 4X4 / VERSION_1 / LOCATION_2": {
+          "vins": 2182,
+          "calibrada": 167,
+          "calibrada_pct": 7.65
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_2": {
+          "vins": 1178,
+          "calibrada": 85,
+          "calibrada_pct": 7.22
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_2": {
+          "vins": 2009,
+          "calibrada": 139,
+          "calibrada_pct": 6.92
+        },
+        "PANTHER C / 4X2 / VERSION_1 / LOCATION_1": {
+          "vins": 421,
+          "calibrada": 29,
+          "calibrada_pct": 6.89
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_2": {
+          "vins": 370,
+          "calibrada": 25,
+          "calibrada_pct": 6.76
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_2": {
+          "vins": 664,
+          "calibrada": 36,
+          "calibrada_pct": 5.42
+        },
+        "PANTHER C / 4X2 / VERSION_1 / LOCATION_3": {
+          "vins": 100,
+          "calibrada": 5,
+          "calibrada_pct": 5.0
+        },
+        "PANTHER J / 4X4 / VERSION_2 / LOCATION_1": {
+          "vins": 142,
+          "calibrada": 7,
+          "calibrada_pct": 4.93
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_7": {
+          "vins": 31,
+          "calibrada": 1,
+          "calibrada_pct": 3.23
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_3": {
+          "vins": 316,
+          "calibrada": 10,
+          "calibrada_pct": 3.16
+        },
+        "PANTHER J / 4X4 / VERSION_3 / LOCATION_3": {
+          "vins": 103,
+          "calibrada": 3,
+          "calibrada_pct": 2.91
+        },
+        "PANTHER J / 4X2 / VERSION_2 / LOCATION_3": {
+          "vins": 50,
+          "calibrada": 1,
+          "calibrada_pct": 2.0
+        },
+        "LION B / 4X4 / VERSION_P / LOCATION_8": {
+          "vins": 10,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_7": {
+          "vins": 3,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER C / 4X4 / VERSION_1 / LOCATION_8": {
+          "vins": 3,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER C / 4X4 / VERSION_P / LOCATION_7": {
+          "vins": 4,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_3": {
+          "vins": 15,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        },
+        "PANTHER J / 4X2 / VERSION_3 / LOCATION_6": {
+          "vins": 1,
+          "calibrada": 0,
+          "calibrada_pct": 0.0
+        }
+      }
+    }
+  }
+}

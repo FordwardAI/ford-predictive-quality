@@ -29,6 +29,10 @@ _Avoid_: «Calidad» a secas para nombrar a quien selecciona.
 **Recomendación de auditoría**:
 Propuesta dirigida al responsable de la selección para priorizar vehículos que acaban de aprobar Gate Release, antes de su derivación a Auditoría Adicional y con la información disponible en ese momento. El responsable de la selección decide cuántos y cuáles se derivan.
 
+**Agrupación del catálogo**:
+Atributos asignados a cada código de catálogo en el archivo recibido el 29/09: familia y motor dominante, tracción, versión dominante y mercado. Son atributos del código, no de cada vehículo. «Dominante» sugiere el valor mayoritario del código; el archivo no lo aclara.
+_Avoid_: Leer motor o versión como dato exacto de cada vehículo.
+
 **Hoja de códigos prioritarios**:
 Forma diaria de la recomendación de auditoría: los códigos de catálogo ordenados por su tasa reciente del código, con rango, vehículos programados y acumulado. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes.
 _Avoid_: Ranking de VIN, lista de unidades.
