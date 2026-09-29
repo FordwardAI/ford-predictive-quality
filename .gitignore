@@ -13,3 +13,4 @@ dataset.md
 .claude/settings.local.json
 CLAUDE.local.md
 .ipynb_checkpoints/
+.claude/worktrees/
