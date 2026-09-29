@@ -36,6 +36,26 @@
       ]
     },
     {
+      "nombre": "donde_mirar",
+      "archivos": [
+        "docs/entrega/figuras/donde_mirar.png",
+        "docs/entrega/figuras/donde_mirar.svg"
+      ],
+      "fuentes": [
+        "p6.json"
+      ]
+    },
+    {
+      "nombre": "detector_potencia",
+      "archivos": [
+        "docs/entrega/figuras/detector_potencia.png",
+        "docs/entrega/figuras/detector_potencia.svg"
+      ],
+      "fuentes": [
+        "p6.json"
+      ]
+    },
+    {
       "nombre": "diagrama_proceso",
       "archivos": [
         "docs/entrega/figuras/diagrama_proceso.png",
@@ -56,14 +76,5 @@
       ]
     }
   ],
-  "omitidas": [
-    {
-      "nombre": "componente",
-      "motivo": "falta p6.json o su bloque `componente`"
-    },
-    {
-      "nombre": "detector",
-      "motivo": "falta p6.json o su bloque `detector.potencia`"
-    }
-  ]
+  "omitidas": []
 }

@@ -623,6 +623,7 @@ def correr(tabla, opciones=None):
     _escribir_detalle(getattr(opciones, "salida", None), detalle)
     vins = sum(lo <= v.dia <= hi for v in tabla.vins)
     return {"pieza": "P6 diferencial", "tramo": TRAMO,
+            "configuracion": {s: config[s] for s in SECCIONES},  # Lo que lee preregistro.generar.
             "componente": {"configuracion": config["componente"], **comp,
                            "lectura": "El componente es lo que se predice («dónde mirar»), nunca un predictor."},
             "detector": {"configuracion": config["detector"], **det},
@@ -640,6 +641,10 @@ def prueba(tabla, config, puntaje=None, salida=None):
     fuera del repo para el detalle por código.
     """
     assert tabla.desbloqueada, "La prueba final solo se lee con el preregistro"
+    if puntaje is None and "preregistro" in config:  # Llamada desde preregistro.correr.
+        from .puntaje import crear
+        g = config["preregistro"]["ganadora_en_prueba"]
+        puntaje = crear(g["familia"], g["parametros"], tabla)
     fin = max(v.dia for v in tabla.vins)
     hasta_ant = TRAMOS["entrenamiento_final"][1]
     tramos = {"prueba_final": (PRUEBA_DESDE, fin), "prueba_final_hasta_260": TRAMOS["prueba_final_hasta_260"]}

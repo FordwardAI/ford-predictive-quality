@@ -343,44 +343,52 @@ def figura_componente(resultados, destino):
     c = (p6 or {}).get("componente")
     if not isinstance(c, dict):
         return None, "falta p6.json o su bloque `componente`" if not p6 else "p6.json sin bloque `componente`"
-    nombres = {"acierto_top3": "3 primeros de su código", "acierto_top3_general": "3 más frecuentes en general"}
+    grupos = (("todas_las_calibrada", "todas"), ("calibrada_elegidas_por_la_ganadora", "elegidas"))
     filas = []
-    for k, v in c.items():
-        if "acierto" in k and _numero(v):
-            rango = c.get(f"{k}_rango95")
-            filas.append((nombres.get(k, _capital(k.replace("_", " "))), v, rango if isinstance(rango, list) else None,
-                          "general" not in k))
+    for clave, rotulo in grupos:
+        g = c.get(clave)
+        if not isinstance(g, dict) or not _numero(g.get("acierto_codigo")):
+            continue
+        n = g.get("calibrada_evaluadas")
+        for k, texto, propia in (("acierto_codigo", "Top 3 del código", True),
+                                 ("acierto_general", "Top 3 general", False)):
+            rango = g.get(f"{k}_rango95")
+            filas.append((f"{texto} · {rotulo} (n = {n})", g[k], rango if isinstance(rango, list) else None, propia))
     if not filas:
-        return None, "p6.json `componente` sin valores `acierto*`"
-    calificador = _calificador(c, p6)
+        return None, "p6.json `componente` sin `todas_las_calibrada.acierto_codigo`"
+    calificador = _calificador(c.get("todas_las_calibrada", {}), p6)
     archivos = _puntos("donde_mirar", "«Dónde mirar»: acierto del componente en los 3 primeros", filas,
                        calificador, destino, "CALIBRADA cuyo componente está entre los 3 sugeridos", pct)
     return {"nombre": "donde_mirar", "archivos": archivos, "fuentes": ["p6.json"],
-            "leyenda": f"Acierto en los 3 primeros componentes por código frente a los 3 más frecuentes en "
-                       f"general, {calificador}."}, None
+            "leyenda": f"Acierto en los 3 primeros componentes por código («top 3 del código») frente a los 3 "
+                       f"más frecuentes en general, sobre todas las CALIBRADA de validación y sobre las CALIBRADA "
+                       f"que eligió la ganadora, {calificador}."}, None
 
 
 def figura_detector(resultados, destino):
     p6 = _leer(resultados, "p6")
     d = (p6 or {}).get("detector")
-    potencia = d.get("potencia") if isinstance(d, dict) else None
+    potencia = d.get("potencia_validacion") if isinstance(d, dict) else None
     if not isinstance(potencia, dict):
-        return None, "falta p6.json o su bloque `detector.potencia`" if not p6 else "p6.json sin `detector.potencia`"
+        return None, ("falta p6.json o su bloque `detector.potencia_validacion`" if not p6
+                      else "p6.json sin `detector.potencia_validacion`")
+    rotulos = {"sube_x2": "La tasa se duplica", "baja_a_la_mitad": "La tasa baja a la mitad"}
     filas = []
-    for cambio, v in potencia.items():
-        valor = v if _numero(v) else next((v[k] for k in ("potencia", "valor") if isinstance(v, dict)
-                                           and _numero(v.get(k))), None)
-        rango = v.get("rango95") if isinstance(v, dict) and isinstance(v.get("rango95"), list) else None
-        if valor is not None:
-            filas.append((f"Cambio {cambio}", valor, rango, False))
+    for clave, texto in rotulos.items():
+        v = potencia.get(clave)
+        if isinstance(v, dict) and _numero(v.get("deteccion")):
+            demora = v.get("demora_mediana_dia")
+            filas.append((f"{texto} (demora mediana {demora:.0f} días)" if _numero(demora) else texto,
+                          v["deteccion"], None, False))
     if not filas:
-        return None, "p6.json `detector.potencia` sin valores numéricos"
+        return None, "p6.json `detector.potencia_validacion` sin `deteccion`"
     calificador = _calificador(d, p6)
-    archivos = _puntos("detector_potencia", "Detector de cambios: potencia por tipo de cambio sintético", filas,
+    archivos = _puntos("detector_potencia", "Detector de cambios: detección de cambios sintéticos", filas,
                        calificador, destino, "Cambios sintéticos detectados", pct)
     return {"nombre": "detector_potencia", "archivos": archivos, "fuentes": ["p6.json"],
-            "leyenda": f"Potencia del detector de cambios (CUSUM de Bernoulli por código, umbral calibrado con "
-                       f"≤149) ante cambios sintéticos, {calificador}."}, None
+            "leyenda": f"Detección del CUSUM de Bernoulli por código (umbral calibrado con ≤149 para ≤1 falsa "
+                       f"alarma cada 30 días) ante cambios sintéticos inyectados en validación en "
+                       f"{potencia.get('codigos')} códigos, {calificador}."}, None
 
 
 # --- 4 y 5. diagramas ------------------------------------------------------------------------

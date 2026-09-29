@@ -32,6 +32,22 @@ Las figuras de resultados usan solo los agregados de `solucion/resultados/` y ci
 - Fuente: p5.json
 - Leyenda: Precisión en el cupo de cada política de exploración con etiquetas parciales (solo se conoce lo auditado desde el Día 155), entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN.
 
+## donde_mirar
+
+![donde_mirar](donde_mirar.png)
+
+- Archivos: [`donde_mirar.png`](donde_mirar.png), [`donde_mirar.svg`](donde_mirar.svg)
+- Fuente: p6.json
+- Leyenda: Acierto en los 3 primeros componentes por código («top 3 del código») frente a los 3 más frecuentes en general, sobre todas las CALIBRADA de validación y sobre las CALIBRADA que eligió la ganadora, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 780 VIN CALIBRADA.
+
+## detector_potencia
+
+![detector_potencia](detector_potencia.png)
+
+- Archivos: [`detector_potencia.png`](detector_potencia.png), [`detector_potencia.svg`](detector_potencia.svg)
+- Fuente: p6.json
+- Leyenda: Detección del CUSUM de Bernoulli por código (umbral calibrado con ≤149 para ≤1 falsa alarma cada 30 días) ante cambios sintéticos inyectados en validación en 18 códigos, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN, 43 códigos.
+
 ## diagrama_proceso
 
 ![diagrama_proceso](diagrama_proceso.png)
@@ -47,10 +63,3 @@ Las figuras de resultados usan solo los agregados de `solucion/resultados/` y ci
 - Archivos: [`diagrama_solucion.png`](diagrama_solucion.png), [`diagrama_solucion.svg`](diagrama_solucion.svg)
 - Fuente: docs/plan-de-accion.md (contrato común, P5, P6 y P8)
 - Leyenda: Entradas (programa del día, cupo diario de Calidad de Planta, resultados de auditorías con Día ≤ t−5 desde QLS y catálogo), recálculo diario (tasa por código de la alternativa elegida en validación, mínimo por código y detector de cambios) y salidas (hoja de códigos prioritarios en planilla e imprimible con la lista de unidades sugeridas, y «dónde mirar» si se sostiene).
-
-## Omitidas
-
-Se generan solas cuando la pieza tiene resultado.
-
-- `componente`: falta p6.json o su bloque `componente`.
-- `detector`: falta p6.json o su bloque `detector.potencia`.

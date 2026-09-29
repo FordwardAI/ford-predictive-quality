@@ -37,9 +37,10 @@ def _resultados(directorio, p5=True, p6=True):
             "politica": {"nombre": "mínimo por código, P = 40", "tipo": "minimo", "parametros": {"P": 40}},
             "minimo_por_codigo": {"P": 40}}}))
     if p6:
-        (d / "p6.json").write_text(json.dumps({"configuracion": {"componente": {"peso": 20},
-                                                                  "detector": {"h": 4.2},
-                                                                  "subcategorizacion": {"k": 3}}}))
+        (d / "p6.json").write_text(json.dumps({"configuracion": {  # Mismas claves que diferencial.correr.
+            "componente": {"peso": 20, "top": 3, "margen": 5},
+            "detector": {"factor": 2.0, "tope_p1": 0.99, "peso_p0": 20, "h": 4.2, "cerca_de_260_dia": 10},
+            "subcategorizacion": {"min_vin": 30, "k": 3, "semilla": 20261006, "n_init": 10}}}))
 
 
 def _preregistro(directorio, estado="acordado", **cambios):
@@ -70,7 +71,7 @@ def test_generar_propone_con_todas_las_claves():
             assert clave in p, clave
         assert p["ganadora_en_prueba"]["parametros"] == {"hasta": 194, "peso": 0}
         assert p["piezas"]["p5"]["politica"]["tipo"] == "minimo" and p["piezas"]["p5"]["minimo_por_codigo"] == {"P": 40}
-        assert p["piezas"]["p6"]["detector"] == {"h": 4.2}
+        assert p["piezas"]["p6"]["detector"]["h"] == 4.2
         assert [t["nombre"] for t in p["tramos"]] == ["prueba completa", "prueba ≤260", "prueba >260",
                                                      "sensibilidad con la cohorte posterior a 260"]
         assert p["tramos"][3]["vin_esperados"] == 18222

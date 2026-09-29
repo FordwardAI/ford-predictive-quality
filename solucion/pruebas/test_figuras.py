@@ -46,8 +46,11 @@ def test_genera_omite_y_es_determinista():
         _escribir(res, "p5", {"resultados": [{"politica": "ε = 0", "precision_cupo": 0.14, "calificador": CAL},
                                              {"politica": "mínimo por código", "precision_cupo": 0.13,
                                               "precision_rango95": [0.1, 0.16], "elegida": True}]})
-        _escribir(res, "p6", {"componente": {"acierto_top3": 0.4, "acierto_top3_general": 0.335},
-                              "detector": {"potencia": {"×2": 0.8, "×½": {"potencia": 0.3, "rango95": [0.2, 0.4]}}}})
+        _escribir(res, "p6", {  # Mismo esquema que diferencial.correr.
+            "componente": {"todas_las_calibrada": {"calibrada_evaluadas": 780, "acierto_codigo": 0.4,
+                                                   "acierto_codigo_rango95": [0.36, 0.44], "acierto_general": 0.335}},
+            "detector": {"potencia_validacion": {"codigos": 18, "sube_x2": {"deteccion": 0.9, "demora_mediana_dia": 10},
+                                                 "baja_a_la_mitad": {"deteccion": 0.67}}}})
         resumen = figuras.generar(res, dest)
         assert not resumen["omitidas"], resumen["omitidas"]
         nombres = {g["nombre"] for g in resumen["generadas"]}
