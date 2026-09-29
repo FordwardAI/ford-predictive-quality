@@ -34,7 +34,7 @@ _Avoid_: «Calidad» a secas para nombrar a quien selecciona; ubicar la selecci�
 Lugar al que llegan los vehículos después de Gate Release y donde esperan, de 0 a 5 días, el paso a despacho. Allí se eligen los vehículos para Auditoría Adicional; el código de catálogo figura en una etiqueta del parabrisas.
 
 **Recomendación de auditoría**:
-Propuesta dirigida al responsable de la selección para priorizar, en la playa de despacho, vehículos que ya aprobaron Gate Release, antes de su derivación a Auditoría Adicional y con la información disponible en ese momento. El responsable de la selección decide cuántos y cuáles se derivan.
+Propuesta dirigida al responsable de la selección para priorizar, en la playa de despacho, vehículos que ya aprobaron Gate Release, antes de su derivación a Auditoría Adicional y con la información disponible en ese momento. Calidad de Planta fija cuántos, con el cupo diario; el responsable de la selección decide cuáles se derivan.
 
 **Agrupación del catálogo**:
 Atributos asignados a cada código de catálogo en el archivo recibido el 29/09: familia y motor dominante, tracción, versión dominante y mercado. Son atributos del código, no de cada vehículo. «Dominante» sugiere el valor mayoritario del código; el archivo no lo aclara.
@@ -45,7 +45,7 @@ Atributo del código de catálogo que indica el país o mercado al que va el veh
 _Avoid_: «País», «location» o «región» como sinónimos sueltos.
 
 **Hoja de códigos prioritarios**:
-Forma diaria de la recomendación de auditoría, armada al inicio del día con los códigos programados: los códigos de catálogo ordenados por su tasa reciente del código, con rango, vehículos programados, acumulado y cantidad sugerida por código para llenar el cupo diario. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes. El equipo de analistas la consume en sus rondas y completa al azar lo que falte.
+Forma diaria de la recomendación de auditoría, armada al inicio del día con los códigos programados: los códigos de catálogo ordenados por su tasa reciente del código, con rango, vehículos programados, acumulado y cantidad sugerida por código para llenar el cupo diario. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes. El equipo de analistas la consume en sus rondas. Si un código no llega a la playa de despacho, la cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron, y solo se completa al azar si se agota el ranking.
 _Avoid_: Ranking de VIN; leer la cantidad sugerida como una elección de VIN concretos.
 
 **Tasa reciente del código**:
@@ -77,20 +77,24 @@ _Avoid_: Llamarlo «prueba».
 Tramo de VIN posterior a la validación, sobre el que la alternativa elegida y congelada se evalúa una sola vez frente al azar.
 _Avoid_: Elegir o ajustar una alternativa mirando su resultado.
 
+**Preregistro**:
+Registro versionado, hecho antes de leer la prueba final, de todo lo que se va a leer en ella: la alternativa elegida con sus parámetros, la configuración de cada pieza del diferencial, las semillas y el hash de la fuente. Lo que no figura en el preregistro no se lee en la prueba final.
+_Avoid_: «Congelar resultados»: lo que se congela es la configuración, antes de ver resultados.
+
 **Cupo de auditoría**:
-Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa, expresada como fracción de la producción que aprueba Gate Release. Ford confirmó el 22/09 que hoy selecciona el 5% de forma completamente aleatoria, sin criterio específico, y que no busca ampliar ese porcentaje por costo y capacidad. La ventana exacta no se precisó: Ford pidió basarse en el dataset entregado, por lo que queda como supuesto del equipo.
+Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa, expresada como fracción de la producción que aprueba Gate Release. Ford confirmó el 22/09 que hoy selecciona el 5% de forma completamente aleatoria, sin criterio específico, y que no busca ampliar ese porcentaje por costo y capacidad. El 29/09 Ford precisó que la ventana es el día: el cupo es una cantidad fija por día (ver cupo diario).
 
 **Cupo diario**:
-Cupo de auditoría de un día: el 5% de los VIN de ese Día del VIN, redondeado hacia abajo y con mínimo de uno. Ford informó el 29/09 que el cupo es una cantidad fija por día, definida según el programa de producción, y que Calidad de Planta lleva el control diario. El redondeo es una convención del equipo para simular sobre la base.
+Cupo de auditoría de un día. En la simulación sobre la base, el 5% de los auditados con actividad QLS de ese Día del VIN, redondeado hacia abajo y con mínimo de uno. Ford informó el 29/09 que el cupo es una cantidad fija por día, definida según el programa de producción, y que Calidad de Planta lleva el control diario. El redondeo es una convención del equipo para simular sobre la base.
 _Avoid_: Un único cupo sobre todo un tramo de días.
 
 **Días de control**:
-Días de una prueba en planta en que la selección se sigue haciendo al azar, alternados con días en que se usa la recomendación. Sirven para medir la recomendación frente al método actual en las mismas condiciones de producción. Terminada la prueba, la recomendación orienta todo el cupo.
+Días de la implementación inicial propuesta a Ford en que la selección se sigue haciendo al azar, alternados con días en que se usa la recomendación. Sirven para medir la recomendación frente al método actual en las mismas condiciones de producción. Terminada esa etapa, la recomendación orienta todo el cupo.
 _Avoid_: Reservar una porción permanente del cupo al azar; confundirlos con la selección aleatoria actual.
 
 **Mínimo por código**:
 Cantidad mínima de auditorías que recibe, por rotación, cada código de catálogo que se produce, aunque la recomendación no lo priorice. Mantiene al día la tasa de los códigos poco elegidos sin recurrir al azar.
-_Avoid_: «Exploración» a secas.
+_Avoid_: «Exploración» a secas; confundirlo con un mínimo de VIN para estimar la tasa de un código, que se descartó porque el suavizado cubre los códigos chicos.
 
 **Proporción auditada**:
 Fracción de la producción que aprueba Gate Release y se deriva a Auditoría Adicional; hoy, el 5%.
@@ -109,4 +113,4 @@ Cociente entre la precisión en el cupo de una selección y la proporción CALIB
 _Avoid_: Mejora, sin indicar la referencia.
 
 **Resultado inconcluso**:
-Lectura de una evaluación cuyo rango de incertidumbre incluye la referencia del azar: la dirección observada no se distingue de la suerte. Con la base ficticia no permite separar falta de señal de etiquetas sin relación con el historial.
+Lectura de una evaluación cuyo rango de incertidumbre incluye la referencia del azar: la dirección observada no se distingue de la suerte. Con la base ficticia no permite separar falta de señal en el código de catálogo de etiquetas sin relación con él.
