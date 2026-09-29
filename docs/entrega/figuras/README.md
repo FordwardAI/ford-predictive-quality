@@ -24,6 +24,14 @@ Las figuras de resultados usan solo los agregados de `solucion/resultados/` y ci
 - Fuente: p3.json, eleccion.json
 - Leyenda: Veces el azar de la ganadora (tasa fija (≤ 149)): 1,53×, rango del 95 % 1,18× a 1,90×, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN. Se compara con una selección al azar simulada y con el oráculo (techo).
 
+## etiquetas_parciales
+
+![etiquetas_parciales](etiquetas_parciales.png)
+
+- Archivos: [`etiquetas_parciales.png`](etiquetas_parciales.png), [`etiquetas_parciales.svg`](etiquetas_parciales.svg)
+- Fuente: p5.json
+- Leyenda: Precisión en el cupo de cada política de exploración con etiquetas parciales (solo se conoce lo auditado desde el Día 155), entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN.
+
 ## diagrama_proceso
 
 ![diagrama_proceso](diagrama_proceso.png)
@@ -44,6 +52,5 @@ Las figuras de resultados usan solo los agregados de `solucion/resultados/` y ci
 
 Se generan solas cuando la pieza tiene resultado.
 
-- `etiquetas_parciales`: falta p5.json (P5 todavía sin resultado).
 - `componente`: falta p6.json o su bloque `componente`.
 - `detector`: falta p6.json o su bloque `detector.potencia`.

@@ -26,6 +26,16 @@
       ]
     },
     {
+      "nombre": "etiquetas_parciales",
+      "archivos": [
+        "docs/entrega/figuras/etiquetas_parciales.png",
+        "docs/entrega/figuras/etiquetas_parciales.svg"
+      ],
+      "fuentes": [
+        "p5.json"
+      ]
+    },
+    {
       "nombre": "diagrama_proceso",
       "archivos": [
         "docs/entrega/figuras/diagrama_proceso.png",
@@ -47,10 +57,6 @@
     }
   ],
   "omitidas": [
-    {
-      "nombre": "etiquetas_parciales",
-      "motivo": "falta p5.json (P5 todavía sin resultado)"
-    },
     {
       "nombre": "componente",
       "motivo": "falta p6.json o su bloque `componente`"

@@ -321,12 +321,13 @@ def figura_etiquetas_parciales(resultados, destino):
     if not p5:
         return None, "falta p5.json (P5 todavía sin resultado)"
     filas = []
+    elegida = (p5.get("politica") or {}).get("nombre") if isinstance(p5.get("politica"), dict) else None
     for r in p5.get("resultados", []) if isinstance(p5.get("resultados"), list) else []:
-        nombre = next((r[k] for k in ("politica", "alternativa", "nombre") if isinstance(r.get(k), str)), None)
+        nombre = next((r[k] for k in ("alternativa", "nombre", "politica") if isinstance(r.get(k), str)), None)
         rango = r.get("precision_rango95")
         if nombre and _numero(r.get("precision_cupo")):
             filas.append((_capital(nombre), r["precision_cupo"], rango if isinstance(rango, list) else None,
-                          bool(r.get("elegida") or r.get("ganadora"))))
+                          bool(r.get("elegida") or r.get("ganadora") or nombre == elegida)))
     if not filas:
         return None, "p5.json no trae una lista `resultados` con `precision_cupo`"
     calificador = _calificador(p5)
