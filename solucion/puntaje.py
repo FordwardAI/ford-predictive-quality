@@ -164,6 +164,13 @@ def registrar(clase):
 
 def crear(familia, parametros, tabla=None):
     """Reconstruye una alternativa desde (familia, parametros), p. ej. la ganadora de eleccion.json."""
+    import importlib
+    for modulo in ("solucion.referencias", "solucion.ml", "solucion.diferencial"):  # Llenan el registro.
+        try:
+            importlib.import_module(modulo)
+        except ModuleNotFoundError as error:
+            if error.name != modulo:
+                raise
     clase = REGISTRO[familia]
     if getattr(clase, "necesita_catalogo", False):
         parametros = {**parametros, "mercados": {c: a.get("mercado") for c, a in tabla.catalogo.items()}}
