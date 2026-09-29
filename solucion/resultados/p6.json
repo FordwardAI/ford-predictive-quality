@@ -1,0 +1,1446 @@
+{
+  "pieza": "P6 diferencial",
+  "tramo": "validación 155–194",
+  "componente": {
+    "configuracion": {
+      "peso": 20,
+      "top": 3,
+      "margen": 5,
+      "desempate": "nombre del componente",
+      "referencia_fija_hasta": "fin del tramo anterior (149 en validación, 194 en prueba)",
+      "bootstrap": {
+        "semilla": 20261003,
+        "remuestreos": 2000
+      }
+    },
+    "todas_las_calibrada": {
+      "calibrada_evaluadas": 780,
+      "dias": 35,
+      "aciertos_codigo": 312,
+      "acierto_codigo": 0.4,
+      "acierto_codigo_rango95": [
+        0.3635142672763109,
+        0.4354220325859114
+      ],
+      "aciertos_general": 261,
+      "acierto_general": 0.3346153846153846,
+      "acierto_general_rango95": [
+        0.30069621981372124,
+        0.3699906335579039
+      ],
+      "aciertos_general_fija": 261,
+      "acierto_general_fija": 0.3346153846153846,
+      "acierto_general_fija_rango95": [
+        0.30069621981372124,
+        0.3699906335579039
+      ],
+      "diferencia_con_general_rango95": [
+        0.0383005347287271,
+        0.09393094843416191
+      ],
+      "lectura_contra_general": "mejora",
+      "diferencia_con_general_fija_rango95": [
+        0.0383005347287271,
+        0.09393094843416191
+      ],
+      "lectura_contra_general_fija": "mejora",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 780 VIN CALIBRADA"
+    },
+    "calibrada_elegidas_por_la_ganadora": {
+      "ganadora": {
+        "alternativa": "tasa fija (<= 149)",
+        "familia": "tasa_fija",
+        "parametros": {
+          "hasta": 149,
+          "peso": 0
+        }
+      },
+      "calibrada_evaluadas": 59,
+      "dias": 35,
+      "aciertos_codigo": 36,
+      "acierto_codigo": 0.6101694915254238,
+      "acierto_codigo_rango95": [
+        0.49206349206349204,
+        0.7307835820895521
+      ],
+      "aciertos_general": 18,
+      "acierto_general": 0.3050847457627119,
+      "acierto_general_rango95": [
+        0.20893967661691543,
+        0.4286263736263733
+      ],
+      "aciertos_general_fija": 18,
+      "acierto_general_fija": 0.3050847457627119,
+      "acierto_general_fija_rango95": [
+        0.20893967661691543,
+        0.4286263736263733
+      ],
+      "diferencia_con_general_rango95": [
+        0.2,
+        0.4
+      ],
+      "lectura_contra_general": "mejora",
+      "diferencia_con_general_fija_rango95": [
+        0.2,
+        0.4
+      ],
+      "lectura_contra_general_fija": "mejora",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 59 VIN CALIBRADA elegidos"
+    },
+    "lectura": "El componente es lo que se predice («dónde mirar»), nunca un predictor."
+  },
+  "detector": {
+    "configuracion": {
+      "metodo": "CUSUM de Bernoulli por código, dos lados, reinicio a 0 tras cada alarma",
+      "factor": 2.0,
+      "tope_p1": 0.99,
+      "peso_p0": 20,
+      "p0": "tasa del código hasta el fin del tramo anterior (149 en validación, 194 en prueba), suavizada hacia la general",
+      "h": 4.4,
+      "falsas_alarmas_cada_30_dia_max": 1.0,
+      "rejilla_h": [
+        0.5,
+        20.0,
+        0.1
+      ],
+      "permutaciones": 100,
+      "semilla_permutacion": 20261004,
+      "potencia": {
+        "dia_cambio": 165,
+        "min_vin": 100,
+        "replicas": 200,
+        "semilla": 20261005
+      },
+      "cerca_de_260_dia": 10
+    },
+    "calibracion_149": {
+      "h": 4.4,
+      "falsas_alarmas_cada_30_dia": 0.974496644295302,
+      "codigos": 94,
+      "dias_calendario": 149,
+      "permutaciones": 100,
+      "curva": {
+        "0.5": 176.71812080536915,
+        "1.5": 36.87181208053691,
+        "2.5": 9.8496644295302,
+        "3.5": 2.967785234899329,
+        "4.5": 0.8818791946308724,
+        "5.5": 0.27181208053691275,
+        "6.5": 0.08456375838926174,
+        "7.5": 0.03825503355704698,
+        "8.5": 0.010067114093959733,
+        "9.5": 0.0,
+        "10.5": 0.0,
+        "11.5": 0.0,
+        "12.5": 0.0,
+        "13.5": 0.0,
+        "14.5": 0.0,
+        "15.5": 0.0,
+        "16.5": 0.0,
+        "17.5": 0.0,
+        "18.5": 0.0,
+        "19.5": 0.0
+      },
+      "alarmas_sin_mezclar_en_calibracion": 9
+    },
+    "potencia_validacion": {
+      "codigos": 18,
+      "vins": 7192,
+      "replicas": 200,
+      "dia_cambio": 165,
+      "min_vin_en_validacion": 100,
+      "sin_cambio": {
+        "falsas_alarmas": 256,
+        "falsas_alarmas_cada_30_dia": 0.96
+      },
+      "sube_x2": {
+        "falsas_alarmas": 24,
+        "deteccion": 0.9083333333333333,
+        "detectadas": 3270,
+        "casos": 3600,
+        "demora_mediana_dia": 10.0,
+        "demora_p25_p75_dia": [
+          5.0,
+          15.0
+        ]
+      },
+      "baja_a_la_mitad": {
+        "falsas_alarmas": 21,
+        "deteccion": 0.6688888888888889,
+        "detectadas": 2408,
+        "casos": 3600,
+        "demora_mediana_dia": 16.0,
+        "demora_p25_p75_dia": [
+          12.0,
+          21.0
+        ]
+      }
+    },
+    "etiquetas_reales_validacion": {
+      "alarmas": 7,
+      "sube": 1,
+      "baja": 6,
+      "codigos_con_alarma": 7,
+      "alarmas_cada_30_dia": 5.25,
+      "dias_calendario": 40,
+      "codigos_evaluados": 43
+    },
+    "lectura": "Las detecciones son observaciones, no causas; el detector no modifica al predictor. Una alarma del Día d se conoce en d + 5 (margen de resultados).",
+    "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN, 43 códigos"
+  },
+  "subcategorizacion": {
+    "configuracion": {
+      "perfil": "distribución de UC Nombre Incidencia por código, eventos de VIN con Día <= 149",
+      "min_vin": 30,
+      "k": 3,
+      "k_rango": [
+        3,
+        8
+      ],
+      "criterio_k": "silhouette",
+      "semilla": 20261006,
+      "n_init": 10
+    },
+    "rotulo": "usa el historial, no predice",
+    "k": 3,
+    "silhouette_por_k": {
+      "3": 0.16989123285302735,
+      "4": 0.1196522999341902,
+      "5": 0.14019879620458559,
+      "6": 0.1237534483932504,
+      "7": 0.08646562088082868,
+      "8": 0.14007712038698478
+    },
+    "codigos_con_perfil": 64,
+    "grupos": [
+      {
+        "grupo": 1,
+        "codigos": 20,
+        "hasta_149": {
+          "vins": 6069,
+          "calibrada": 719,
+          "tasa": 0.11847091777887625,
+          "wilson95": [
+            0.11058081491276656,
+            0.1268437035180017
+          ]
+        },
+        "validacion": {
+          "vins": 1156,
+          "calibrada": 110,
+          "tasa": 0.09515570934256055,
+          "wilson95": [
+            0.07955640133622775,
+            0.11343675058748275
+          ]
+        }
+      },
+      {
+        "grupo": 2,
+        "codigos": 32,
+        "hasta_149": {
+          "vins": 18751,
+          "calibrada": 2414,
+          "tasa": 0.128739800543971,
+          "wilson95": [
+            0.12402208266247605,
+            0.13360960510597442
+          ]
+        },
+        "validacion": {
+          "vins": 4102,
+          "calibrada": 383,
+          "tasa": 0.09336908824963433,
+          "wilson95": [
+            0.08484194370527401,
+            0.10265712721380918
+          ]
+        }
+      },
+      {
+        "grupo": 3,
+        "codigos": 12,
+        "hasta_149": {
+          "vins": 6087,
+          "calibrada": 824,
+          "tasa": 0.1353704616395597,
+          "wilson95": [
+            0.12700550921781276,
+            0.14419535359116423
+          ]
+        },
+        "validacion": {
+          "vins": 2407,
+          "calibrada": 254,
+          "tasa": 0.10552555047777316,
+          "wilson95": [
+            0.09387417062965736,
+            0.11843404938859556
+          ]
+        }
+      },
+      {
+        "grupo": "sin perfil",
+        "codigos": 33,
+        "hasta_149": {
+          "vins": 372,
+          "calibrada": 41,
+          "tasa": 0.11021505376344086,
+          "wilson95": [
+            0.08228950597677073,
+            0.14610855084433094
+          ]
+        },
+        "validacion": {
+          "vins": 373,
+          "calibrada": 33,
+          "tasa": 0.08847184986595175,
+          "wilson95": [
+            0.06368973856444733,
+            0.12164405960263776
+          ]
+        }
+      }
+    ],
+    "orden_en_validacion": {
+      "grupos_comparados": 3,
+      "se_mantiene": false,
+      "tau_kendall": 0.33333333333333337
+    },
+    "cruce_con_agrupacion_oficial": {
+      "mercado": {
+        "codigos_por_grupo": {
+          "1": {
+            "LOCATION_1": 8,
+            "LOCATION_3": 3,
+            "LOCATION_4": 1,
+            "LOCATION_5": 1,
+            "LOCATION_6": 7
+          },
+          "2": {
+            "LOCATION_1": 8,
+            "LOCATION_2": 10,
+            "LOCATION_3": 8,
+            "LOCATION_4": 1,
+            "LOCATION_6": 3,
+            "LOCATION_7": 1,
+            "LOCATION_8": 1
+          },
+          "3": {
+            "LOCATION_1": 2,
+            "LOCATION_2": 2,
+            "LOCATION_3": 3,
+            "LOCATION_4": 3,
+            "LOCATION_5": 1,
+            "LOCATION_7": 1
+          }
+        },
+        "rand_ajustado": 0.0641338641826923
+      },
+      "motor": {
+        "codigos_por_grupo": {
+          "1": {
+            "PANTHER": 20
+          },
+          "2": {
+            "LION": 10,
+            "PANTHER": 22
+          },
+          "3": {
+            "LION": 9,
+            "PANTHER": 3
+          }
+        },
+        "rand_ajustado": 0.13741812227074235
+      },
+      "traccion": {
+        "codigos_por_grupo": {
+          "1": {
+            "4X2": 7,
+            "4X4": 13
+          },
+          "2": {
+            "4X2": 7,
+            "4X4": 25
+          },
+          "3": {
+            "4X2": 1,
+            "4X4": 11
+          }
+        },
+        "rand_ajustado": -0.00525990099009901
+      }
+    },
+    "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN"
+  },
+  "anexo_historial": {
+    "configuracion": {
+      "top_incidencias": 20,
+      "hiperparametros": {
+        "logistica": {
+          "C": 1.0,
+          "max_iter": 2000,
+          "escalado": "StandardScaler"
+        },
+        "xgboost": {
+          "n_estimators": 300,
+          "max_depth": 4,
+          "learning_rate": 0.05,
+          "tree_method": "hist",
+          "n_jobs": 4
+        }
+      },
+      "semilla": 20261007,
+      "entrenado_hasta": 149,
+      "elegible": false
+    },
+    "rotulo": "disponibilidad no probada",
+    "elegible": false,
+    "nota": "Las Horas de inspección y reparación se toman como fracción de día. Los VIN sin tiempo de reparación usan la mediana de <= 149.",
+    "vins_sin_tiempo_de_reparacion_hasta_194": 0,
+    "resultados": [
+      {
+        "alternativa": "anexo de historial: logistica, historial solo (disponibilidad no probada)",
+        "familia": "anexo_historial",
+        "parametros": {
+          "modelo": "logistica",
+          "rasgos": "historial solo",
+          "entrenado_hasta": 149,
+          "top_incidencias": 20,
+          "hiperparametros": {
+            "C": 1.0,
+            "max_iter": 2000,
+            "escalado": "StandardScaler"
+          },
+          "semilla": null
+        },
+        "orden_simplicidad": [
+          97,
+          0
+        ],
+        "elegible": false,
+        "tramo": "validación 155–194",
+        "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+        "dias": 35,
+        "vins": 8038,
+        "elegidos": 391,
+        "calibrada_elegidas": 34,
+        "calibrada_tramo": 780,
+        "precision_cupo": 0.08695652173913043,
+        "precision_rango95": [
+          0.05980690362269309,
+          0.11658125500385201
+        ],
+        "azar_mismo_cupo": 0.09877906979341364,
+        "veces_azar": 0.8803132274984077,
+        "veces_azar_rango95": [
+          0.6081543404457865,
+          1.1662810078854136
+        ],
+        "recupero": 0.04358974358974359,
+        "recupero_rango95": [
+          0.029883754423504237,
+          0.05821966453922789
+        ],
+        "diferencia_con_azar_rango95": [
+          -0.039240764909204355,
+          0.01634891285278896
+        ],
+        "lectura": "inconcluso",
+        "semillas": {
+          "desempate": 20261002,
+          "bootstrap": 20261003,
+          "remuestreos": 2000
+        },
+        "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+        "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+        "version_codigo": "380b51e3b9d3e05576aaf4f82985456e08d7646e",
+        "diario": {
+          "dias": [
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            162,
+            163,
+            166,
+            167,
+            168,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194
+          ],
+          "n": [
+            265,
+            278,
+            114,
+            1,
+            277,
+            262,
+            270,
+            281,
+            279,
+            297,
+            123,
+            262,
+            2,
+            287,
+            267,
+            147,
+            261,
+            251,
+            301,
+            285,
+            268,
+            265,
+            19,
+            296,
+            261,
+            281,
+            247,
+            257,
+            260,
+            263,
+            297,
+            278,
+            1,
+            277,
+            258
+          ],
+          "k": [
+            13,
+            13,
+            5,
+            1,
+            13,
+            13,
+            13,
+            14,
+            13,
+            14,
+            6,
+            13,
+            1,
+            14,
+            13,
+            7,
+            13,
+            12,
+            15,
+            14,
+            13,
+            13,
+            1,
+            14,
+            13,
+            14,
+            12,
+            12,
+            13,
+            13,
+            14,
+            13,
+            1,
+            13,
+            12
+          ],
+          "cal": [
+            28,
+            39,
+            8,
+            1,
+            30,
+            29,
+            28,
+            35,
+            28,
+            34,
+            14,
+            23,
+            0,
+            30,
+            30,
+            15,
+            32,
+            13,
+            31,
+            25,
+            16,
+            25,
+            2,
+            27,
+            26,
+            18,
+            28,
+            27,
+            18,
+            22,
+            29,
+            22,
+            0,
+            25,
+            22
+          ],
+          "cal_elegidas": [
+            1,
+            0,
+            1,
+            1,
+            1,
+            2,
+            0,
+            4,
+            2,
+            1,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            3,
+            1,
+            1,
+            3,
+            0,
+            1,
+            0,
+            1,
+            2,
+            2,
+            1,
+            0,
+            1,
+            2,
+            0,
+            0,
+            1
+          ]
+        },
+        "rotulo": "disponibilidad no probada",
+        "auc_validacion": 0.5055191088878055,
+        "diferencia_con_ganadora_rango95": [
+          -0.11286195072390144,
+          -0.018566411238825038
+        ],
+        "ganadora_comparada": {
+          "alternativa": "tasa fija (<= 149)",
+          "familia": "tasa_fija",
+          "parametros": {
+            "hasta": 149,
+            "peso": 0
+          }
+        }
+      },
+      {
+        "alternativa": "anexo de historial: xgboost, historial solo (disponibilidad no probada)",
+        "familia": "anexo_historial",
+        "parametros": {
+          "modelo": "xgboost",
+          "rasgos": "historial solo",
+          "entrenado_hasta": 149,
+          "top_incidencias": 20,
+          "hiperparametros": {
+            "n_estimators": 300,
+            "max_depth": 4,
+            "learning_rate": 0.05,
+            "tree_method": "hist",
+            "n_jobs": 4
+          },
+          "semilla": 20261007
+        },
+        "orden_simplicidad": [
+          97,
+          1
+        ],
+        "elegible": false,
+        "tramo": "validación 155–194",
+        "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+        "dias": 35,
+        "vins": 8038,
+        "elegidos": 391,
+        "calibrada_elegidas": 35,
+        "calibrada_tramo": 780,
+        "precision_cupo": 0.08951406649616368,
+        "precision_rango95": [
+          0.06443898703343749,
+          0.11688843942942301
+        ],
+        "azar_mismo_cupo": 0.09877906979341364,
+        "veces_azar": 0.9062047930130668,
+        "veces_azar_rango95": [
+          0.6625103122236397,
+          1.1694843304478126
+        ],
+        "recupero": 0.04487179487179487,
+        "recupero_rango95": [
+          0.03270271934578058,
+          0.05845780711825488
+        ],
+        "diferencia_con_azar_rango95": [
+          -0.03336878240924428,
+          0.016830906051187304
+        ],
+        "lectura": "inconcluso",
+        "semillas": {
+          "desempate": 20261002,
+          "bootstrap": 20261003,
+          "remuestreos": 2000
+        },
+        "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+        "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+        "version_codigo": "380b51e3b9d3e05576aaf4f82985456e08d7646e",
+        "diario": {
+          "dias": [
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            162,
+            163,
+            166,
+            167,
+            168,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194
+          ],
+          "n": [
+            265,
+            278,
+            114,
+            1,
+            277,
+            262,
+            270,
+            281,
+            279,
+            297,
+            123,
+            262,
+            2,
+            287,
+            267,
+            147,
+            261,
+            251,
+            301,
+            285,
+            268,
+            265,
+            19,
+            296,
+            261,
+            281,
+            247,
+            257,
+            260,
+            263,
+            297,
+            278,
+            1,
+            277,
+            258
+          ],
+          "k": [
+            13,
+            13,
+            5,
+            1,
+            13,
+            13,
+            13,
+            14,
+            13,
+            14,
+            6,
+            13,
+            1,
+            14,
+            13,
+            7,
+            13,
+            12,
+            15,
+            14,
+            13,
+            13,
+            1,
+            14,
+            13,
+            14,
+            12,
+            12,
+            13,
+            13,
+            14,
+            13,
+            1,
+            13,
+            12
+          ],
+          "cal": [
+            28,
+            39,
+            8,
+            1,
+            30,
+            29,
+            28,
+            35,
+            28,
+            34,
+            14,
+            23,
+            0,
+            30,
+            30,
+            15,
+            32,
+            13,
+            31,
+            25,
+            16,
+            25,
+            2,
+            27,
+            26,
+            18,
+            28,
+            27,
+            18,
+            22,
+            29,
+            22,
+            0,
+            25,
+            22
+          ],
+          "cal_elegidas": [
+            0,
+            2,
+            1,
+            1,
+            1,
+            0,
+            1,
+            0,
+            0,
+            3,
+            1,
+            1,
+            0,
+            2,
+            1,
+            0,
+            2,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            1,
+            3,
+            0,
+            2,
+            0,
+            2,
+            3,
+            1,
+            0,
+            0,
+            2,
+            1
+          ]
+        },
+        "rotulo": "disponibilidad no probada",
+        "auc_validacion": 0.5091827055556734,
+        "diferencia_con_ganadora_rango95": [
+          -0.09711394932268537,
+          -0.025508581295113474
+        ],
+        "ganadora_comparada": {
+          "alternativa": "tasa fija (<= 149)",
+          "familia": "tasa_fija",
+          "parametros": {
+            "hasta": 149,
+            "peso": 0
+          }
+        }
+      },
+      {
+        "alternativa": "anexo de historial: logistica, historial + código (disponibilidad no probada)",
+        "familia": "anexo_historial",
+        "parametros": {
+          "modelo": "logistica",
+          "rasgos": "historial + código",
+          "entrenado_hasta": 149,
+          "top_incidencias": 20,
+          "hiperparametros": {
+            "C": 1.0,
+            "max_iter": 2000,
+            "escalado": "StandardScaler"
+          },
+          "semilla": null
+        },
+        "orden_simplicidad": [
+          97,
+          2
+        ],
+        "elegible": false,
+        "tramo": "validación 155–194",
+        "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+        "dias": 35,
+        "vins": 8038,
+        "elegidos": 391,
+        "calibrada_elegidas": 56,
+        "calibrada_tramo": 780,
+        "precision_cupo": 0.1432225063938619,
+        "precision_rango95": [
+          0.10908384361752237,
+          0.17895026823256488
+        ],
+        "azar_mismo_cupo": 0.09877906979341364,
+        "veces_azar": 1.4499276688209068,
+        "veces_azar_rango95": [
+          1.1024813154080877,
+          1.81974431740968
+        ],
+        "recupero": 0.07179487179487179,
+        "recupero_rango95": [
+          0.05481085656425023,
+          0.09000030826140566
+        ],
+        "diferencia_con_azar_rango95": [
+          0.01060211774587057,
+          0.0800510393090934
+        ],
+        "lectura": "mejora",
+        "semillas": {
+          "desempate": 20261002,
+          "bootstrap": 20261003,
+          "remuestreos": 2000
+        },
+        "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+        "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+        "version_codigo": "380b51e3b9d3e05576aaf4f82985456e08d7646e",
+        "diario": {
+          "dias": [
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            162,
+            163,
+            166,
+            167,
+            168,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194
+          ],
+          "n": [
+            265,
+            278,
+            114,
+            1,
+            277,
+            262,
+            270,
+            281,
+            279,
+            297,
+            123,
+            262,
+            2,
+            287,
+            267,
+            147,
+            261,
+            251,
+            301,
+            285,
+            268,
+            265,
+            19,
+            296,
+            261,
+            281,
+            247,
+            257,
+            260,
+            263,
+            297,
+            278,
+            1,
+            277,
+            258
+          ],
+          "k": [
+            13,
+            13,
+            5,
+            1,
+            13,
+            13,
+            13,
+            14,
+            13,
+            14,
+            6,
+            13,
+            1,
+            14,
+            13,
+            7,
+            13,
+            12,
+            15,
+            14,
+            13,
+            13,
+            1,
+            14,
+            13,
+            14,
+            12,
+            12,
+            13,
+            13,
+            14,
+            13,
+            1,
+            13,
+            12
+          ],
+          "cal": [
+            28,
+            39,
+            8,
+            1,
+            30,
+            29,
+            28,
+            35,
+            28,
+            34,
+            14,
+            23,
+            0,
+            30,
+            30,
+            15,
+            32,
+            13,
+            31,
+            25,
+            16,
+            25,
+            2,
+            27,
+            26,
+            18,
+            28,
+            27,
+            18,
+            22,
+            29,
+            22,
+            0,
+            25,
+            22
+          ],
+          "cal_elegidas": [
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            4,
+            2,
+            2,
+            3,
+            2,
+            0,
+            2,
+            0,
+            1,
+            3,
+            1,
+            1,
+            1,
+            1,
+            3,
+            0,
+            0,
+            3,
+            4,
+            2,
+            3,
+            0,
+            4,
+            4,
+            1,
+            0,
+            3,
+            1
+          ]
+        },
+        "rotulo": "disponibilidad no probada",
+        "auc_validacion": 0.5395980385922519,
+        "diferencia_con_ganadora_rango95": [
+          -0.02921844018506279,
+          0.015626019908616184
+        ],
+        "ganadora_comparada": {
+          "alternativa": "tasa fija (<= 149)",
+          "familia": "tasa_fija",
+          "parametros": {
+            "hasta": 149,
+            "peso": 0
+          }
+        }
+      },
+      {
+        "alternativa": "anexo de historial: xgboost, historial + código (disponibilidad no probada)",
+        "familia": "anexo_historial",
+        "parametros": {
+          "modelo": "xgboost",
+          "rasgos": "historial + código",
+          "entrenado_hasta": 149,
+          "top_incidencias": 20,
+          "hiperparametros": {
+            "n_estimators": 300,
+            "max_depth": 4,
+            "learning_rate": 0.05,
+            "tree_method": "hist",
+            "n_jobs": 4
+          },
+          "semilla": 20261007
+        },
+        "orden_simplicidad": [
+          97,
+          3
+        ],
+        "elegible": false,
+        "tramo": "validación 155–194",
+        "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+        "dias": 35,
+        "vins": 8038,
+        "elegidos": 391,
+        "calibrada_elegidas": 58,
+        "calibrada_tramo": 780,
+        "precision_cupo": 0.1483375959079284,
+        "precision_rango95": [
+          0.11253196930946291,
+          0.1848356659755134
+        ],
+        "azar_mismo_cupo": 0.09877906979341364,
+        "veces_azar": 1.501710799850225,
+        "veces_azar_rango95": [
+          1.1439927900839924,
+          1.8799353196441464
+        ],
+        "recupero": 0.07435897435897436,
+        "recupero_rango95": [
+          0.056797518306274865,
+          0.09297212389061515
+        ],
+        "diferencia_con_azar_rango95": [
+          0.014363932661523032,
+          0.08561464343157268
+        ],
+        "lectura": "mejora",
+        "semillas": {
+          "desempate": 20261002,
+          "bootstrap": 20261003,
+          "remuestreos": 2000
+        },
+        "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+        "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+        "version_codigo": "380b51e3b9d3e05576aaf4f82985456e08d7646e",
+        "diario": {
+          "dias": [
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            162,
+            163,
+            166,
+            167,
+            168,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194
+          ],
+          "n": [
+            265,
+            278,
+            114,
+            1,
+            277,
+            262,
+            270,
+            281,
+            279,
+            297,
+            123,
+            262,
+            2,
+            287,
+            267,
+            147,
+            261,
+            251,
+            301,
+            285,
+            268,
+            265,
+            19,
+            296,
+            261,
+            281,
+            247,
+            257,
+            260,
+            263,
+            297,
+            278,
+            1,
+            277,
+            258
+          ],
+          "k": [
+            13,
+            13,
+            5,
+            1,
+            13,
+            13,
+            13,
+            14,
+            13,
+            14,
+            6,
+            13,
+            1,
+            14,
+            13,
+            7,
+            13,
+            12,
+            15,
+            14,
+            13,
+            13,
+            1,
+            14,
+            13,
+            14,
+            12,
+            12,
+            13,
+            13,
+            14,
+            13,
+            1,
+            13,
+            12
+          ],
+          "cal": [
+            28,
+            39,
+            8,
+            1,
+            30,
+            29,
+            28,
+            35,
+            28,
+            34,
+            14,
+            23,
+            0,
+            30,
+            30,
+            15,
+            32,
+            13,
+            31,
+            25,
+            16,
+            25,
+            2,
+            27,
+            26,
+            18,
+            28,
+            27,
+            18,
+            22,
+            29,
+            22,
+            0,
+            25,
+            22
+          ],
+          "cal_elegidas": [
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            1,
+            2,
+            3,
+            1,
+            1,
+            1,
+            0,
+            2,
+            1,
+            2,
+            3,
+            1,
+            0,
+            1,
+            1,
+            3,
+            0,
+            0,
+            2,
+            3,
+            4,
+            3,
+            0,
+            5,
+            4,
+            1,
+            0,
+            4,
+            1
+          ]
+        },
+        "rotulo": "disponibilidad no probada",
+        "auc_validacion": 0.5272976415061011,
+        "diferencia_con_ganadora_rango95": [
+          -0.025717474003016445,
+          0.0223463687150838
+        ],
+        "ganadora_comparada": {
+          "alternativa": "tasa fija (<= 149)",
+          "familia": "tasa_fija",
+          "parametros": {
+            "hasta": 149,
+            "peso": 0
+          }
+        }
+      }
+    ]
+  },
+  "calificador": {
+    "general": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+    "componente": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 780 VIN CALIBRADA",
+    "detector": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN, 43 códigos",
+    "subcategorizacion": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN"
+  }
+}
