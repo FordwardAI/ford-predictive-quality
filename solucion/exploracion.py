@@ -186,7 +186,8 @@ def prueba(tabla, config):
     assert tabla.desbloqueada, "Solo con el preregistro acordado"
     politica = next(p for p in politicas() if p.tipo == config["politica"]["tipo"]
                     and p.parametros == config["politica"]["parametros"])
-    puntaje = config.get("puntaje") or crear(config["ganadora"]["familia"], config["ganadora"]["parametros"], tabla)
+    g = config["preregistro"]["ganadora_en_prueba"]  # La ganadora reentrenada con <= 194 (P7).
+    puntaje = crear(g["familia"], g["parametros"], tabla)
     lo, hi = TRAMOS["prueba_final"][0], max(v.dia for v in tabla.vins)
     idx = remuestreos(len(tabla.por_dia(lo, hi)))
     salida = []

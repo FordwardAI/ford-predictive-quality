@@ -44,3 +44,17 @@ def test_voraz_con_etiquetas_completas_no_explora():
     elegidos = elegir_dia(Politica("voraz", "voraz", {}), Espia(), Contexto(Fuente([]), 170), vins, 2, {},
                           np.random.default_rng(1), np.random.default_rng(2))
     assert {v.codigo for v in elegidos} == {"AAA1"}
+
+
+def test_hook_de_prueba_final_con_tabla_desbloqueada():
+    from solucion.exploracion import prueba
+    t = tabla(desbloquear=True)
+    config = {"politica": {"tipo": "minimo", "parametros": {"P": 20}},
+              "preregistro": {"ganadora_en_prueba": {"familia": "tasa_fija", "parametros": {"hasta": 194, "peso": 0}}}}
+    salida = prueba(t, config)
+    assert [r["politica"] for r in salida["resultados"]] == ["minimo", "voraz", "azar"]
+    try:
+        prueba(tabla(), config)
+    except AssertionError:
+        return
+    raise AssertionError("El hook no debe correr con la tabla enmascarada")
