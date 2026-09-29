@@ -75,6 +75,7 @@ Fuente: respuesta escrita de Ford a la guía de [¿Cómo trabaja hoy quien selec
 **Hipótesis e implicaciones, no acordadas:**
 
 - La aclaración sobre la población corrige la lectura del 22/09 («todos los VIN que fueron a Auditoría Adicional»): quedan afuera los auditados sin actividad QLS. La proporción CALIBRADA del 10,1858 % y las tasas por código son, entonces, tasas entre auditados con incidencias, no entre todos los auditados. Cómo se declara se decide en un ticket aparte, enlazado desde la resolución de #23.
+- Decidido el 29/09 en [¿Cómo se declara que la base solo cubre auditados con actividad QLS?](https://github.com/FordwardAI/ford-predictive-quality/issues/29): el alcance se declara junto a cada cifra y la hoja se propone para todas las unidades. Queda una consulta operativa, que no bloquea el trabajo: qué fracción de las unidades producidas tiene actividad QLS y si los analistas pueden consultar QLS desde la playa de despacho.
 
 ## Conclusiones preliminares para llevar a la reunión
 
