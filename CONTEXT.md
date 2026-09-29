@@ -36,6 +36,10 @@ Propuesta dirigida al responsable de la selección para priorizar, en la playa d
 Atributos asignados a cada código de catálogo en el archivo recibido el 29/09: familia y motor dominante, tracción, versión dominante y mercado. Son atributos del código, no de cada vehículo. «Dominante» sugiere el valor mayoritario del código; el archivo no lo aclara.
 _Avoid_: Leer motor o versión como dato exacto de cada vehículo.
 
+**Mercado de destino**:
+Atributo del código de catálogo que indica el país o mercado al que va el vehículo, según la agrupación del catálogo. En la base está anonimizado como `LOCATION_n`.
+_Avoid_: «País», «location» o «región» como sinónimos sueltos.
+
 **Hoja de códigos prioritarios**:
 Forma diaria de la recomendación de auditoría, armada al inicio del día con los códigos programados: los códigos de catálogo ordenados por su tasa reciente del código, con rango, vehículos programados, acumulado y cantidad sugerida por código para llenar el cupo diario. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes. El equipo de analistas la consume en sus rondas y completa al azar lo que falte.
 _Avoid_: Ranking de VIN; leer la cantidad sugerida como una elección de VIN concretos.
