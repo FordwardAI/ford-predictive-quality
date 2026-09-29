@@ -18,10 +18,11 @@ def cupo(n):
     return max(1, n // 20) if n else 0
 
 
-def seleccionar(vins, tasas, k, rng):
-    """Los k de mayor tasa de su código; empates al azar con la semilla del día."""
+def seleccionar(vins, tasas, k, rng, por_vin=False):
+    """Los k de mayor tasa de su código (o de su VIN, solo en el anexo); empates al azar con semilla."""
     claves = rng.random(len(vins))
-    orden = sorted(range(len(vins)), key=lambda i: (-tasas[vins[i].codigo], claves[i]))
+    clave = (lambda v: v.vin) if por_vin else (lambda v: v.codigo)
+    orden = sorted(range(len(vins)), key=lambda i: (-tasas[clave(vins[i])], claves[i]))
     return [vins[i] for i in orden[:k]]
 
 
@@ -47,9 +48,10 @@ def simular(tabla, puntaje, lo, hi, fuente=None, semilla=SEMILLA_DESEMPATE, al_e
     filas = []
     for t, vins in tabla.por_dia(lo, hi).items():
         ctx = Contexto(fuente, t, permite_futuro=getattr(puntaje, "usa_futuro", False))
-        tasas = puntaje.puntuar(ctx, sorted({v.codigo for v in vins}))
+        por_vin = getattr(puntaje, "por_vin", False)  # Solo el anexo de historial puntúa unidades.
+        tasas = puntaje.puntuar(ctx, vins if por_vin else sorted({v.codigo for v in vins}))
         k = cupo(len(vins))
-        elegidos = seleccionar(vins, tasas, k, semilla_dia(semilla, t))
+        elegidos = seleccionar(vins, tasas, k, semilla_dia(semilla, t), por_vin)
         if al_elegir is not None:
             al_elegir(t, vins, elegidos)
         filas.append((t, len(vins), k, sum(v.calibrada for v in vins), sum(v.calibrada for v in elegidos)))
