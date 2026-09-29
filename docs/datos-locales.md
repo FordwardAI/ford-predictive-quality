@@ -44,6 +44,10 @@ python3 research/test_catalog_groups.py
 
 La [salida](../research/catalog-groups.json) publica solo agregados por grupo, sin el diccionario por código. Los hallazgos están en el [registro de la agrupación](../research/catalogo-agrupacion.md).
 
+## Planilla original
+
+`QLTY Download Sept 24/table.xlsx` (30,4 MB, en la carpeta de Ford del 24/09, fuera del repo) es la planilla Excel de la que se exportó el CSV vigente: una hoja con la tabla A2:AO195810, las mismas descripciones y los mismos 41 nombres técnicos, y 195.808 filas con las mismas claves (VIN, fechas, código, resultado y componente). Las horas están como números y hay 9 errores en Fecha Reparación, que son los `#N/A` del CSV. No trae diccionario ni otras hojas. No es una fuente nueva: se sigue usando el CSV. Revisión del 29/09/2026 en [¿La especificación permite repartir el trabajo sin decisiones críticas pendientes?](https://github.com/FordwardAI/ford-predictive-quality/issues/13); no se compararon celda por celda las horas ni el texto libre.
+
 ## Correspondencia con el Markdown anterior
 
 El Markdown histórico `dataset.md` tiene 78.164.273 bytes y SHA-256 `5f0e6dc11262fb4ff675797ebfe51c1d43feafc0029c5dcc3f2bd4574c56c3e2`. Sus descripciones están en la línea 2, el separador en la 3 y los nombres técnicos en la 4.

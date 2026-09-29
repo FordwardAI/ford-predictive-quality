@@ -2,6 +2,8 @@
 
 Ticket: [Registrar la agrupación de códigos de catálogo recibida el 29/09](https://github.com/FordwardAI/ford-predictive-quality/issues/26). La decisión de uso está en [¿Cómo se usa la agrupación del catálogo con los resultados ya congelados?](https://github.com/FordwardAI/ford-predictive-quality/issues/27).
 
+> **Nota del 29/09/2026** ([revisión de la especificación](https://github.com/FordwardAI/ford-predictive-quality/issues/13)): no existió ningún congelamiento de resultados; las menciones a «resultados congelados» quedaron sin efecto. Las tasas y χ² del tramo `prueba_final` de este registro usan etiquetas de la prueba final: esa lectura se declara en el preregistro y en los límites, y el suavizado hacia el mercado se justifica solo con validación. No volver a correr este análisis sobre la prueba antes de la corrida única. El resto del registro se conserva como histórico.
+
 ## Fuente
 
 - `Códigos de catálogo.csv`: el usuario lo entregó el 29/09/2026. Sería la entrega de Ford sobre la subcategorización anunciada el 22/09, pero el canal no se verificó. Queda fuera del repo, junto a la base.
