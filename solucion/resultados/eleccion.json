@@ -1,0 +1,154 @@
+{
+  "pieza": "Elección en validación",
+  "regla": "mayor precisión en el cupo; empate si el rango pareado por días de la diferencia con la mejor incluye 0; entre empatadas, la más simple (#10, punto 8)",
+  "piezas_consideradas": [
+    "azar",
+    "decaimiento",
+    "fuga",
+    "movil",
+    "movil_mercado",
+    "oraculo",
+    "tasa_fija"
+  ],
+  "mejor_precision": "móvil 120 d hacia el mercado, peso 20",
+  "ganadora": {
+    "alternativa": "tasa fija (<= 149)",
+    "familia": "tasa_fija",
+    "parametros": {
+      "hasta": 149,
+      "peso": 0
+    },
+    "precision_cupo": 0.15089514066496162,
+    "precision_rango95": [
+      0.11573925307055127,
+      0.1876652842676362
+    ],
+    "veces_azar": 1.5276023653648838,
+    "veces_azar_rango95": [
+      1.175831221511182,
+      1.8955464017615562
+    ],
+    "recupero": 0.07564102564102564,
+    "lectura": "mejora",
+    "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN"
+  },
+  "comparacion": [
+    {
+      "alternativa": "tasa fija (<= 149)",
+      "precision_cupo": 0.15089514066496162,
+      "diferencia_con_mejor_rango95": [
+        -0.06097793706944703,
+        0.008198985599130501
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 30 d, peso 0",
+      "precision_cupo": 0.16624040920716113,
+      "diferencia_con_mejor_rango95": [
+        -0.03098877956735629,
+        0.013021683257180153
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 30 d, peso 20",
+      "precision_cupo": 0.15601023017902813,
+      "diferencia_con_mejor_rango95": [
+        -0.05426836288279991,
+        0.010753412746717674
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 60 d, peso 0",
+      "precision_cupo": 0.1534526854219949,
+      "diferencia_con_mejor_rango95": [
+        -0.053659784168174164,
+        0.007713580723790234
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 60 d, peso 20",
+      "precision_cupo": 0.15601023017902813,
+      "diferencia_con_mejor_rango95": [
+        -0.051023967726625534,
+        0.007792715097402594
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 120 d, peso 0",
+      "precision_cupo": 0.1534526854219949,
+      "diferencia_con_mejor_rango95": [
+        -0.051686298197926105,
+        0.0
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 120 d, peso 20",
+      "precision_cupo": 0.1636828644501279,
+      "diferencia_con_mejor_rango95": [
+        -0.03242148693307382,
+        0.004927333774477361
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 30 d hacia el mercado, peso 20",
+      "precision_cupo": 0.17391304347826086,
+      "diferencia_con_mejor_rango95": [
+        -0.017857142857142856,
+        0.015463917525773196
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 60 d hacia el mercado, peso 20",
+      "precision_cupo": 0.17135549872122763,
+      "diferencia_con_mejor_rango95": [
+        -0.029781576865606046,
+        0.013738161010260447
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "móvil 120 d hacia el mercado, peso 20",
+      "precision_cupo": 0.17647058823529413,
+      "diferencia_con_mejor_rango95": [
+        0.0,
+        0.0
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "decaimiento, vida media 15 d, peso 20",
+      "precision_cupo": 0.1636828644501279,
+      "diferencia_con_mejor_rango95": [
+        -0.04500176056338028,
+        0.021286686271117974
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "decaimiento, vida media 30 d, peso 20",
+      "precision_cupo": 0.15089514066496162,
+      "diferencia_con_mejor_rango95": [
+        -0.05687541511409305,
+        0.007336318306093191
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "decaimiento, vida media 60 d, peso 20",
+      "precision_cupo": 0.1483375959079284,
+      "diferencia_con_mejor_rango95": [
+        -0.056435349776207566,
+        -0.002849002849002849
+      ],
+      "empata": false
+    }
+  ]
+}
