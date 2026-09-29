@@ -58,6 +58,24 @@ Fuente: relato del usuario y sus notas, registrados el 23/09. No hay acta ni tex
 | 7 — Entregables | Parcial: los templates del Drive, revisados el 24/09, fijan informe (.docx), presentación (.pptx) y .zip. | Estructura en [alcance de entrega](../docs/alcance-entrega.md#qué-exigen-los-templates). Duración del pitch, canal y hora de cierre sin dato. |
 | 8 — Costo de errores | Respondida: fuera del enfoque, sin referencias de Ford. | No se modelan costos. La forma de declarar la ponderación implícita del cupo fijo corresponde a [mejora útil](https://github.com/FordwardAI/ford-predictive-quality/issues/8). |
 
+## Respuesta escrita del 29 de septiembre de 2026
+
+Fuente: respuesta escrita de Ford a la guía de [¿Cómo trabaja hoy quien selecciona en Gate Release?](https://github.com/FordwardAI/ford-predictive-quality/issues/23), recibida por Facundo-Lanusse. Lo que sigue es la versión del equipo, no una cita. La interpretación y las decisiones están en la resolución de ese ticket.
+
+**Observaciones — lo que dijo Ford:**
+
+- **Quién y cuándo:** el equipo de analistas elige cada dos horas aproximadamente, entre las unidades recién producidas que llegan a la playa de despacho, después de Gate Release. Hoy la selección es aleatoria; no se detalló cómo se genera el azar.
+- **Momento de la decisión:** después de Gate Release, mientras las unidades esperan el paso a despacho. Los 0 a 5 días varían por el flujo de trabajo, los feriados y los fines de semana; Ford aclaró que no es el foco del desafío.
+- **Cupo:** una cantidad fija de unidades por día, definida según el programa de producción. Calidad de Planta lleva el control diario y ajusta para alcanzar el porcentaje.
+- **Código de catálogo:** figura en una etiqueta del parabrisas, con versión y características. Hoy no se considera al seleccionar. Los códigos que se producirán en el día se conocen de antemano.
+- **Formato preferido:** una lista de unidades sugeridas al inicio del día.
+- **Población de la base:** incluye las unidades que pasaron por la inspección adicional **y además** tuvieron actividad en QLS.
+- **Público y jurado de la presentación:** sin respuesta.
+
+**Hipótesis e implicaciones, no acordadas:**
+
+- La aclaración sobre la población corrige la lectura del 22/09 («todos los VIN que fueron a Auditoría Adicional»): quedan afuera los auditados sin actividad QLS. La proporción CALIBRADA del 10,1858 % y las tasas por código son, entonces, tasas entre auditados con incidencias, no entre todos los auditados. Cómo se declara se decide en un ticket aparte, enlazado desde la resolución de #23.
+
 ## Conclusiones preliminares para llevar a la reunión
 
 | Qué podemos sostener | Evidencia | Qué todavía no significa |
