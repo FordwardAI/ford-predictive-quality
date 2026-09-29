@@ -58,7 +58,7 @@
       },
       "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
       "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
-      "version_codigo": "5b36f9b40bf40f3686f9031eea5447a4fcdd9430+cambios",
+      "version_codigo": "1c4667660bf8735400724b890e0de24b658115ca+cambios",
       "politica": "minimo",
       "parametros_politica": {
         "P": 10
@@ -297,7 +297,7 @@
       },
       "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
       "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
-      "version_codigo": "5b36f9b40bf40f3686f9031eea5447a4fcdd9430+cambios",
+      "version_codigo": "1c4667660bf8735400724b890e0de24b658115ca+cambios",
       "politica": "minimo",
       "parametros_politica": {
         "P": 20
@@ -536,7 +536,7 @@
       },
       "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
       "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
-      "version_codigo": "5b36f9b40bf40f3686f9031eea5447a4fcdd9430+cambios",
+      "version_codigo": "1c4667660bf8735400724b890e0de24b658115ca+cambios",
       "politica": "minimo",
       "parametros_politica": {
         "P": 40
@@ -774,7 +774,7 @@
       },
       "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
       "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
-      "version_codigo": "5b36f9b40bf40f3686f9031eea5447a4fcdd9430+cambios",
+      "version_codigo": "1c4667660bf8735400724b890e0de24b658115ca+cambios",
       "politica": "thompson",
       "parametros_politica": {
         "peso": 20
@@ -1010,7 +1010,7 @@
       },
       "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
       "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
-      "version_codigo": "5b36f9b40bf40f3686f9031eea5447a4fcdd9430+cambios",
+      "version_codigo": "1c4667660bf8735400724b890e0de24b658115ca+cambios",
       "politica": "voraz",
       "parametros_politica": {},
       "diario": {
@@ -1246,7 +1246,7 @@
       },
       "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
       "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
-      "version_codigo": "5b36f9b40bf40f3686f9031eea5447a4fcdd9430+cambios",
+      "version_codigo": "1c4667660bf8735400724b890e0de24b658115ca+cambios",
       "politica": "epsilon",
       "parametros_politica": {
         "epsilon": 0.2
@@ -1482,7 +1482,7 @@
       },
       "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
       "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
-      "version_codigo": "5b36f9b40bf40f3686f9031eea5447a4fcdd9430+cambios",
+      "version_codigo": "1c4667660bf8735400724b890e0de24b658115ca+cambios",
       "politica": "azar",
       "parametros_politica": {},
       "diario": {
@@ -1715,6 +1715,26 @@
         "empata": true
       }
     ]
+  },
+  "configuracion": {
+    "politica": {
+      "nombre": "mínimo por código, P = 40",
+      "tipo": "minimo",
+      "parametros": {
+        "P": 40
+      }
+    },
+    "minimo_por_codigo": {
+      "P": 40
+    },
+    "completas_hasta_prueba": 194,
+    "periodos": [
+      10,
+      20,
+      40
+    ],
+    "peso_thompson": 20,
+    "semilla_politica": 20261004
   },
   "politica": {
     "nombre": "mínimo por código, P = 40",

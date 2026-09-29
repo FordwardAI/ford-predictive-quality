@@ -33,8 +33,9 @@ def _resultados(directorio, p5=True, p6=True):
         "alternativa": "tasa fija (<= 149)", "familia": "tasa_fija", "parametros": {"hasta": 149, "peso": 0},
         "precision_cupo": 0.15, "lectura": "mejora"}}))
     if p5:
-        (d / "p5.json").write_text(json.dumps({"configuracion": {"politica": "minimo_por_codigo",
-                                                                  "minimo_por_codigo": {"P": 40}}}))
+        (d / "p5.json").write_text(json.dumps({"configuracion": {
+            "politica": {"nombre": "mínimo por código, P = 40", "tipo": "minimo", "parametros": {"P": 40}},
+            "minimo_por_codigo": {"P": 40}}}))
     if p6:
         (d / "p6.json").write_text(json.dumps({"configuracion": {"componente": {"peso": 20},
                                                                   "detector": {"h": 4.2},
@@ -68,7 +69,7 @@ def test_generar_propone_con_todas_las_claves():
                       "tramos", "reglas_de_lectura", "ya_visto", "no_se_lee_en_prueba"):
             assert clave in p, clave
         assert p["ganadora_en_prueba"]["parametros"] == {"hasta": 194, "peso": 0}
-        assert p["piezas"]["p5"] == {"politica": "minimo_por_codigo", "minimo_por_codigo": {"P": 40}}
+        assert p["piezas"]["p5"]["politica"]["tipo"] == "minimo" and p["piezas"]["p5"]["minimo_por_codigo"] == {"P": 40}
         assert p["piezas"]["p6"]["detector"] == {"h": 4.2}
         assert [t["nombre"] for t in p["tramos"]] == ["prueba completa", "prueba ≤260", "prueba >260",
                                                      "sensibilidad con la cohorte posterior a 260"]

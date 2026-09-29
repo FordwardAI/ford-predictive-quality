@@ -168,6 +168,9 @@ def correr(tabla, opciones=None):
             "regla": "compiten el mínimo por código (P = 10, 20, 40) y Thompson; mayor precisión en el cupo y, si "
                      "empatan, la rotación con el P más largo; ε = 0, ε = 20 % y azar son referencias",
             "resultados": [r for r, _ in evaluadas], "eleccion": detalle,
+            "configuracion": {"politica": {"nombre": elegida.nombre, "tipo": elegida.tipo,
+                                           "parametros": elegida.parametros},
+                              "minimo_por_codigo": {"P": elegida.parametros.get("P")}, **configuracion()},
             "politica": {"nombre": elegida.nombre, "tipo": elegida.tipo, "parametros": elegida.parametros},
             "minimo_por_codigo": {"P": elegida.parametros.get("P")},
             "dias_de_control": dias_de_control(tabla, puntaje, elegida, *VALIDACION)}
