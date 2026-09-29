@@ -16,6 +16,10 @@ _Avoid_: Contar la inspección y la reparación como eventos separados; usar la 
 Etapa del proceso productivo, anterior a Gate Release, por la que pasan todos los vehículos y en la que se registran los eventos de calidad.
 _Avoid_: «Calidad» a secas para nombrar la etapa.
 
+**Actividad QLS**:
+Que un VIN tenga al menos un evento de calidad registrado en QLS, el sistema donde la verificación de calidad registra incidencias y reparaciones. Según Ford (29/09), la base entregada reúne solo VIN auditados con actividad QLS: quedan afuera los auditados sin incidencias.
+_Avoid_: «Todos los auditados» para describir la base; usar QLS sin haberlo definido en el mismo documento.
+
 **Gate Release**:
 Instancia de validación del cumplimiento de especificaciones al finalizar las intervenciones del proceso productivo, según la consigna.
 
@@ -80,16 +84,20 @@ Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro
 Cupo de auditoría de un día: el 5% de los VIN de ese Día del VIN, redondeado hacia abajo y con mínimo de uno. Ford informó el 29/09 que el cupo es una cantidad fija por día, definida según el programa de producción, y que Calidad de Planta lleva el control diario. El redondeo es una convención del equipo para simular sobre la base.
 _Avoid_: Un único cupo sobre todo un tramo de días.
 
-**Grupo de control**:
-Porción del cupo que se sigue eligiendo al azar mientras se usa una recomendación de auditoría. Sirve para medir la selección frente al azar y para seguir conociendo el resultado de códigos que la recomendación no elige.
-_Avoid_: «Exploración» a secas; confundirlo con la selección aleatoria actual, que abarca todo el cupo.
+**Días de control**:
+Días de una prueba en planta en que la selección se sigue haciendo al azar, alternados con días en que se usa la recomendación. Sirven para medir la recomendación frente al método actual en las mismas condiciones de producción. Terminada la prueba, la recomendación orienta todo el cupo.
+_Avoid_: Reservar una porción permanente del cupo al azar; confundirlos con la selección aleatoria actual.
+
+**Mínimo por código**:
+Cantidad mínima de auditorías que recibe, por rotación, cada código de catálogo que se produce, aunque la recomendación no lo priorice. Mantiene al día la tasa de los códigos poco elegidos sin recurrir al azar.
+_Avoid_: «Exploración» a secas.
 
 **Proporción auditada**:
 Fracción de la producción que aprueba Gate Release y se deriva a Auditoría Adicional; hoy, el 5%.
 _Avoid_: Confundirla con la proporción CALIBRADA.
 
 **Proporción CALIBRADA**:
-Fracción de VIN auditados cuyo resultado es CALIBRADA. En la base entregada, que reúne solo auditados y es ficticia, es 10,1858%; no es una tasa acreditada de planta.
+Fracción de VIN auditados cuyo resultado es CALIBRADA. En la base entregada, que reúne solo auditados con actividad QLS y es ficticia, es 10,1858%; no es una tasa acreditada de planta.
 _Avoid_: Prevalencia de planta, tasa de falla.
 
 **Precisión en el cupo**:
