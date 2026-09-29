@@ -23,19 +23,22 @@ Instancia de validación del cumplimiento de especificaciones al finalizar las i
 Inspección de alta precisión posterior a Gate Release, denominada también Inspección Adicional en la consigna. Evalúa la necesidad de ajustes finos en unidades que ya cumplen los estándares de liberación.
 
 **Responsable de la selección**:
-Persona que elige, entre los vehículos que aprobaron Gate Release, cuáles se derivan a Auditoría Adicional. Hoy los elige al azar.
-_Avoid_: «Calidad» a secas para nombrar a quien selecciona.
+Equipo de analistas que elige, entre los vehículos que aprobaron Gate Release y esperan en la playa de despacho, cuáles se derivan a Auditoría Adicional. Según Ford (29/09), elige cada dos horas aproximadamente y hoy lo hace al azar.
+_Avoid_: «Calidad» a secas para nombrar a quien selecciona; ubicar la selección en Gate Release.
+
+**Playa de despacho**:
+Lugar al que llegan los vehículos después de Gate Release y donde esperan, de 0 a 5 días, el paso a despacho. Allí se eligen los vehículos para Auditoría Adicional; el código de catálogo figura en una etiqueta del parabrisas.
 
 **Recomendación de auditoría**:
-Propuesta dirigida al responsable de la selección para priorizar vehículos que acaban de aprobar Gate Release, antes de su derivación a Auditoría Adicional y con la información disponible en ese momento. El responsable de la selección decide cuántos y cuáles se derivan.
+Propuesta dirigida al responsable de la selección para priorizar, en la playa de despacho, vehículos que ya aprobaron Gate Release, antes de su derivación a Auditoría Adicional y con la información disponible en ese momento. El responsable de la selección decide cuántos y cuáles se derivan.
 
 **Agrupación del catálogo**:
 Atributos asignados a cada código de catálogo en el archivo recibido el 29/09: familia y motor dominante, tracción, versión dominante y mercado. Son atributos del código, no de cada vehículo. «Dominante» sugiere el valor mayoritario del código; el archivo no lo aclara.
 _Avoid_: Leer motor o versión como dato exacto de cada vehículo.
 
 **Hoja de códigos prioritarios**:
-Forma diaria de la recomendación de auditoría: los códigos de catálogo ordenados por su tasa reciente del código, con rango, vehículos programados y acumulado. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes.
-_Avoid_: Ranking de VIN, lista de unidades.
+Forma diaria de la recomendación de auditoría, armada al inicio del día con los códigos programados: los códigos de catálogo ordenados por su tasa reciente del código, con rango, vehículos programados, acumulado y cantidad sugerida por código para llenar el cupo diario. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes. El equipo de analistas la consume en sus rondas y completa al azar lo que falte.
+_Avoid_: Ranking de VIN; leer la cantidad sugerida como una elección de VIN concretos.
 
 **Tasa reciente del código**:
 Proporción CALIBRADA entre los VIN auditados de un código de catálogo en una ventana cuyos resultados ya se conocen según el margen de disponibilidad. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo.
@@ -70,7 +73,7 @@ _Avoid_: Elegir o ajustar una alternativa mirando su resultado.
 Cantidad de vehículos que pueden seleccionarse para Auditoría Adicional dentro de una ventana operativa, expresada como fracción de la producción que aprueba Gate Release. Ford confirmó el 22/09 que hoy selecciona el 5% de forma completamente aleatoria, sin criterio específico, y que no busca ampliar ese porcentaje por costo y capacidad. La ventana exacta no se precisó: Ford pidió basarse en el dataset entregado, por lo que queda como supuesto del equipo.
 
 **Cupo diario**:
-Cupo de auditoría de un día: el 5% de los VIN de ese Día del VIN, redondeado hacia abajo y con mínimo de uno. Es la ventana que supone el equipo, coherente con una hoja por día; Ford no la fijó.
+Cupo de auditoría de un día: el 5% de los VIN de ese Día del VIN, redondeado hacia abajo y con mínimo de uno. Ford informó el 29/09 que el cupo es una cantidad fija por día, definida según el programa de producción, y que Calidad de Planta lleva el control diario. El redondeo es una convención del equipo para simular sobre la base.
 _Avoid_: Un único cupo sobre todo un tramo de días.
 
 **Grupo de control**:
