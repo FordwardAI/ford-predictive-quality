@@ -29,6 +29,21 @@ python3 research/test_validation_partitions.py
 
 La [salida](../research/validation-partitions.json) contiene solo agregados por partición (VIN, CALIBRADA, porcentaje y cupo del 5%). No entrena ni evalúa modelos.
 
+## Agrupación de códigos de catálogo
+
+Desde el 29 de septiembre de 2026 se cuenta también con **Códigos de catálogo.csv**, proporcionado por el usuario y guardado fuera del repositorio, junto a la base.
+
+- Tamaño: 7.079 bytes.
+- SHA-256: `89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047`.
+- UTF-8 y delimitador coma. La fila 1 es el título y la 3 los encabezados. Contiene tres tablas lado a lado que no comparten filas: motor, tracción y mercado, cada una con sus 98 códigos.
+
+```sh
+python3 research/catalog_groups.py "/ruta/al/Dataset QLS Inspección Adicional.csv" "/ruta/a/Códigos de catálogo.csv" > research/catalog-groups.json
+python3 research/test_catalog_groups.py
+```
+
+La [salida](../research/catalog-groups.json) publica solo agregados por grupo, sin el diccionario por código. Los hallazgos están en el [registro de la agrupación](../research/catalogo-agrupacion.md).
+
 ## Correspondencia con el Markdown anterior
 
 El Markdown histórico `dataset.md` tiene 78.164.273 bytes y SHA-256 `5f0e6dc11262fb4ff675797ebfe51c1d43feafc0029c5dcc3f2bd4574c56c3e2`. Sus descripciones están en la línea 2, el separador en la 3 y los nombres técnicos en la 4.
