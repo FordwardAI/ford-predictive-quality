@@ -155,3 +155,18 @@ def test_escribir_no_pisa_un_preregistro_acordado():
         except pr.Rechazo:
             return
         raise AssertionError("No debe sobrescribir un preregistro acordado")
+
+
+def test_salida_utf8_permite_imprimir_el_resumen_en_una_consola_cp1252():
+    import io
+    consola = io.TextIOWrapper(io.BytesIO(), encoding="cp1252")
+    try:
+        consola.write("≤")
+    except UnicodeEncodeError:
+        pass
+    else:
+        raise AssertionError("cp1252 debería fallar con «≤»")
+    pr.salida_utf8(consola)
+    consola.write("prueba ≤260")
+    consola.flush()
+    assert consola.buffer.getvalue().endswith("prueba ≤260".encode("utf-8"))
