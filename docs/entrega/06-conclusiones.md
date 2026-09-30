@@ -23,6 +23,7 @@ Siempre se agregan los límites fijos: el tramo de prueba y la tasa por mercado 
 - El techo con el código como predictor (oráculo) es 20,2 % en el mismo cupo y la misma base ([`p3.json`][p3]).
 - Elegida por precisión en cinco bloques de tiempo (Día < 195, prueba final no releída), la mejor es CatBoost con los atributos del código (18,4 % en los días 100–174, 740 elegidos), contra 12,7 % de la tasa fija reajustada; los modelos que usan mercado y versión rinden 17–18 % y los que usan solo el código, 13–15 %. En el último bloque (175–194, 225 elegidos) no se confirmó: 17,3 % contra 20,4 % de la tasa fija, dentro del ruido ([`precision.json`][prec]).
 - La señal del código se explica sobre todo por el mercado de destino ([agrupación del catálogo][cat]).
+- El historial de eventos del VIN, probado con siete modelos (promedio y atención sobre eventos, ranker, CatBoost, LightGBM) en los mismos bloques de tiempo, no mejora a su par sin historial: los rangos del 95 % de la diferencia incluyen 0 y el AUC queda en 0,53–0,54. Evaluado en validación (Día < 195); prueba final no releída; disponibilidad no verificada ([informe](../../research/historial-vin.md)).
 
 ### Hipótesis
 

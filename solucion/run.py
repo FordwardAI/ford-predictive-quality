@@ -27,8 +27,9 @@ PIEZAS = {  # Orden de dependencias del plan de acción.
     "p8": "solucion.hoja",
     "p9": "solucion.figuras",
     "precision": "solucion.precision",  # Opcional: ~30 min; no entra en el comando por defecto.
+    "historial_vin": "solucion.historial_vin",  # Opcional: experimento de validación sobre el historial del VIN.
 }
-OPCIONALES = ("precision",)
+OPCIONALES = ("precision", "historial_vin")
 CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 
 
@@ -53,7 +54,7 @@ def main(argv=None):
                         help="Carpeta fuera del repo para la hoja (tiene tasas por código)")
     parser.add_argument("--cache", type=Path, default=CACHE)
     parser.add_argument("--piezas", default=",".join(p for p in PIEZAS if p not in OPCIONALES),
-                        help=f"Subconjunto de {','.join(PIEZAS)} (`precision` solo si se pide)")
+                        help=f"Subconjunto de {','.join(PIEZAS)} (`precision` y `historial_vin` solo si se piden)")
     parser.add_argument("--dia-hoja", type=int, default=190, help="Día del programa simulado de la hoja (E3)")
     opciones = parser.parse_args(argv)
     assert datos.RAIZ not in opciones.salida.resolve().parents, "La salida de la hoja va fuera del repo"
