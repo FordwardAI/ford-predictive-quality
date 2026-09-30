@@ -35,6 +35,13 @@ TRAMOS = {  # Día del VIN, inclusivo.
 }
 
 
+# Columnas del evento que alimentan el experimento de historial por VIN (#33). Lista cerrada: nunca el resultado ni el
+# componente de Auditoría Adicional.
+EVENTO_COLUMNAS = {"CP": "cp", "CP Grupo Trabajo Reporta": "grupo", "CP Zona Reporta": "zona",
+                   "Componente Inspección": "comp", "UC Nombre Incidencia": "inc", "UC Nombre Tipo Incidencia": "tipo",
+                   "CCC": "ccc", "VFG": "vfg", "VRT": "vrt", "UC Nombre PUL a Reparar": "pul"}
+
+
 @dataclasses.dataclass(frozen=True, slots=True)
 class Vin:
     vin: str  # Solo interno: nunca sale en resultados ni en la hoja.
@@ -70,6 +77,7 @@ class Tabla:
     fuente: dict  # Hashes y nombres.
     preparacion: dict  # Conteos del parseo sin etiquetas.
     desbloqueada: bool = False
+    eventos: dict = dataclasses.field(default_factory=dict)  # VIN -> ((día del evento, (fichas,...)), ...).
 
     def tramo(self, nombre):
         lo, hi = TRAMOS[nombre]
@@ -97,7 +105,7 @@ def construir(eventos, catalogo, fuente=None, desbloquear=False, preparacion=Non
     for r in eventos:
         vin = r["VIN"]
         x = por_vin.setdefault(vin, {"codigos": set(), "primera": None, "dia": None, "etiqueta": r["Auditoría Adicional"],
-                                     "componentes": set(), "incidencias": [], "reparaciones": [], "dias": []})
+                                     "componentes": set(), "incidencias": [], "reparaciones": [], "dias": [], "fichas": []})
         x["codigos"].add(r["Código de Catálogo"].strip())
         inspeccion, reparacion = day(r["Fecha Inspección"]), day(r["Fecha Reparación"])
         fechas = [d for d in (inspeccion, reparacion) if d is not None]
@@ -110,10 +118,14 @@ def construir(eventos, catalogo, fuente=None, desbloquear=False, preparacion=Non
         if componente not in MISSING:
             x["componentes"].add(componente)
         x["incidencias"].append(r.get("UC Nombre Incidencia", "").strip())
+        if fechas:
+            fichas = tuple(f"{corto}={valor}" for columna, corto in EVENTO_COLUMNAS.items()
+                           if (valor := r.get(columna, "").strip()) not in MISSING)
+            x["fichas"].append((max(fechas), fichas))
         hi, hr = _hora(r.get("Hora Inspección", "")), _hora(r.get("Hora Reparación", ""))
         if None not in (inspeccion, reparacion, hi, hr):
             x["reparaciones"].append(reparacion + hr - inspeccion - hi)
-    vins, cohorte, historial = [], [], {}
+    vins, cohorte, historial, por_evento = [], [], {}, {}
     for vin, x in por_vin.items():
         assert len(x["codigos"]) == 1, "Un VIN con más de un código de catálogo"
         assert len(x["componentes"]) <= 1, "Un VIN con más de un componente"
@@ -122,6 +134,7 @@ def construir(eventos, catalogo, fuente=None, desbloquear=False, preparacion=Non
                        etiqueta=x["etiqueta"] if visible else None,
                        componente=(next(iter(x["componentes"]), None) if visible else None))
         (vins if x["primera"] is not None and x["primera"] <= CUTOFF else cohorte).append(registro)
+        por_evento[vin] = tuple(sorted(x["fichas"]))
         rep = x["reparaciones"]
         historial[vin] = Historial(eventos=len(x["incidencias"]), incidencias_distintas=len(set(x["incidencias"])),
                                    reparacion_media=sum(rep) / len(rep) if rep else None,
@@ -131,7 +144,7 @@ def construir(eventos, catalogo, fuente=None, desbloquear=False, preparacion=Non
     vins.sort(key=lambda v: v.vin)
     cohorte.sort(key=lambda v: v.vin)
     return Tabla(vins=vins, cohorte=cohorte, catalogo=catalogo, historial=historial, fuente=fuente or {},
-                 preparacion=preparacion or {}, desbloqueada=desbloquear)
+                 preparacion=preparacion or {}, desbloqueada=desbloquear, eventos=por_evento)
 
 
 def leer_catalogo(path):
