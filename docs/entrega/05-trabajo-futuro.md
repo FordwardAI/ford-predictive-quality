@@ -53,6 +53,18 @@ El historial (incidencias, reparaciones, tiempos) queda fuera del predictor porq
 
 Qué fracción de las unidades producidas tiene actividad QLS y si los analistas pueden consultar QLS desde la playa de despacho. Si no hay respuesta, se mantienen el supuesto y el límite declarados ([base QLS][qls], punto 8; [plan][plan-pend], «Pendientes con default»).
 
+
+## 7. Plataforma web
+
+Propuesta de implementación, no un entregable del 2/10 ([#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33), decisión del 30/09). La hoja sigue siendo la salida operativa y el piso si la plataforma no está disponible. La plataforma reúne en un solo lugar lo que hoy son archivos sueltos:
+
+- **Operación diaria:** la hoja del día con la cantidad sugerida y las unidades, y el registro de cada ronda en la playa de despacho (qué códigos llegaron y cómo baja lo pendiente por el ranking).
+- **Códigos y mercado:** la tasa de cada código en el tiempo, con su rango y su n; la señal por mercado de destino; «dónde mirar», si se sostiene en la prueba final; y las alertas del detector de cambios.
+- **Evidencia del modelo:** la comparación de alternativas, las etiquetas parciales, la preparación de datos y el estado de la prueba final.
+- **Implementación:** el seguimiento de los días de control y la configuración del cupo diario, el mínimo por código y la carga del programa del día.
+
+**Límites:** el prototipo usa la base ficticia y cifras de validación. No hay integración con QLS ni con el programa de producción; esa integración es el trabajo principal para llevarla a planta. Los riesgos de acceso y de datos se analizan en [seguridad y privacidad](02-3-seguridad-privacidad.md).
+
 [ctx]: ../../CONTEXT.md
 [sol]: ../../solucion/README.md
 [p6]: ../../solucion/resultados/p6.json

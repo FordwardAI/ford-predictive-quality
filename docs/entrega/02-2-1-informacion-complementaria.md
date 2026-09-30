@@ -4,7 +4,7 @@ Borrador para la sección 2.2.1 del Informe (E2). El template pide aquí «todos
 
 ## La hoja de códigos prioritarios (E3)
 
-La ficha valora «un dashboard o reporte accionable» que presente las predicciones, identifique las unidades priorizadas y muestre las variables de mayor impacto ([ficha técnica][ficha]). Nuestra respuesta es un **reporte estático diario**, no una plataforma web ([salida para Calidad][sal], punto 7; [uso de la agrupación][agr], punto 2).
+La ficha valora «un dashboard o reporte accionable» que presente las predicciones, identifique las unidades priorizadas y muestre las variables de mayor impacto ([ficha técnica][ficha]). Nuestra respuesta para el 2/10 es un **reporte estático diario**: la hoja, en planilla e imprimible ([salida para Calidad][sal], punto 7; [uso de la agrupación][agr], punto 2). Para la implementación proponemos además una **plataforma web** que muestra la hoja, el detalle por código, las alertas, la evidencia del modelo y el seguimiento de los días de control; en la presentación se muestra con un prototipo de pantallas ([trabajo futuro](05-trabajo-futuro.md#7-plataforma-web); [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)).
 
 ### Cómo se usa
 

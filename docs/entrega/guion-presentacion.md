@@ -27,9 +27,12 @@ Borrador para la presentación (E1), que se arma fuera del repo sobre el templat
 | 12 | 03 | La fórmula para Ford | (precisión de la hoja − precisión al azar) × auditorías por día × costo evitado por calibración encontrada | [3](03-factibilidad-economica.md#5-justificación-de-la-inversión) | 0,6 |
 | 13 | **04** Valor diferencial (núcleo) | Más que una lista | «Dónde mirar», selección que aprende de sus auditorías, detector de cambios, señal por mercado, subcategorización | `figuras/donde_mirar.png`, `figuras/etiquetas_parciales.png`, `figuras/detector_potencia.png`. Cifras de validación en [4](04-valor-diferencial.md) | 2,0 |
 | 14 | **05** Trabajo futuro (núcleo) | Implementar midiendo | Días de control alternados, mínimo por código, resultados con y sin actividad QLS por separado, replicable en otras líneas | [5](05-trabajo-futuro.md) | 1,2 |
+| 14b | 05 | La plataforma propuesta | Así se vería todo junto en planta: hoja, rondas, códigos, alertas y seguimiento de los días de control. Es una propuesta; hoy se entrega la hoja | Prototipo de pantallas (galería local, fuera del repo) | 0,8 |
 | 15 | **06** Conclusiones (núcleo) | Resultado, valor y próximos pasos | Una frase de resultado, tres de valor y los próximos pasos en orden | [6](06-conclusiones.md) | 1,0 |
 | 16 | Cierre | Gracias y preguntas | — | Template | 0,2 |
-| | | | | **Total** | **~20** |
+| | | | | **Total** | **~21** |
+
+La 14b (plataforma propuesta) suma ~0,8 min: para volver a ~20, se recorta la demo (9) o la fuga (7).
 
 **Versión núcleo (12 a 15 minutos):** diapositivas 0, 1, 2, 4, 5, 6, 8, 9, 11, 13, 14, 15 y 16, recortando cada una a lo esencial. La demo baja a un minuto. Se omiten la preparación de datos (3), la fuga (7), seguridad (10) y la fórmula (12); se responden en preguntas.
 

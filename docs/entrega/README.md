@@ -23,7 +23,7 @@ Reglas que siguen todos los archivos:
 | [04-valor-diferencial.md](04-valor-diferencial.md) | «Dónde mirar», selección que aprende, detector de cambios, señal por mercado, subcategorización | Informe §4 · Separador 04 |
 | [05-trabajo-futuro.md](05-trabajo-futuro.md) | Implementación con días de control, escalado, replicabilidad y límites de una prueba en planta | Informe §5 · Separador 05 |
 | [06-conclusiones.md](06-conclusiones.md) | Resultado (a elegir), valor y próximos pasos concretos | Informe §6 · Separador 06 |
-| [ideas-descartadas.md](ideas-descartadas.md) | Passport, perfil por VIN, plataforma web, secuencias, anomalías, 20 % permanente y otras, con su motivo | Informe §2.2 o anexo · Preguntas |
+| [ideas-descartadas.md](ideas-descartadas.md) | Passport, perfil por VIN, secuencias, anomalías, 20 % permanente y otras, con su motivo | Informe §2.2 o anexo · Preguntas |
 | [preguntas-jurado.md](preguntas-jurado.md) | 30 preguntas probables con respuesta corta y fuente | Preparación de preguntas |
 | [guion-presentacion.md](guion-presentacion.md) | Diapositiva por diapositiva, ~20 minutos más versión núcleo de 12 a 15 | Presentación |
 
