@@ -65,3 +65,15 @@ def test_todas_las_columnas_politicas_y_objetivo_conjunto_sinteticos():
     assert any(k.endswith("sintetico_prior") for k in p)
     assert cobertura["B"]["sin_eventos"] == len(vs)
     assert all(len(x) == len(vs) and np.isfinite(x).all() and ((x >= 0) & (x <= 1)).all() for x in p.values())
+
+
+def test_eleccion_adaptativa_no_mira_el_bloque_futuro_ni_el_margen():
+    from solucion.robustez_busqueda import seleccionar_en_el_pasado, solo_catalogo
+    dias = [{"t": 100}, {"t": 113}, {"t": 118}, {"t": 119}, {"t": 125}]
+    cuentas = np.array([[2, 3, 0, 0, 0], [0, 0, 10, 10, 10]])
+    resultado, decisiones = seleccionar_en_el_pasado(cuentas, dias, [0, 1], ((119, 125),))
+    assert decisiones[0]["indice"] == 0 and decisiones[0]["hasta_eleccion"] == 113
+    assert resultado[3:].sum() == 0  # El mejor mirando futuro habría sido el otro, pero está prohibido.
+    assert solo_catalogo("conjunto|catboost") and solo_catalogo("historial|ranker|sin")
+    assert not solo_catalogo("campos_A|logistica|todas|natural")
+    assert not solo_catalogo("historial|catboost|B")
