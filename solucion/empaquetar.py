@@ -39,10 +39,10 @@ catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: hay que ten
    ```sh
    .venv/bin/python -m solucion.pruebas
    ```
-3. Recalcular, con las rutas locales de los dos archivos (el código verifica sus hashes y el tramo evaluado):
+3. Recalcular, con las rutas locales de los dos archivos (el código verifica sus hashes; la salida va fuera de esta carpeta):
    ```sh
    .venv/bin/python -m solucion.run --csv "/ruta/Dataset QLS Inspección Adicional.csv" \\
-     --catalogo "/ruta/Códigos de catálogo.csv" --salida ./salida
+     --catalogo "/ruta/Códigos de catálogo.csv" --salida ../salida
    ```
 4. Comparar `solucion/resultados/*.json` (incluidos acá) con los recién escritos: deben coincidir.
 
