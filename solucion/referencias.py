@@ -1,7 +1,7 @@
 """Referencias sin ML (P3): azar, tasa fija, móviles, suavizado hacia el mercado, decaimiento, oráculo y fuga."""
 from .cupo import remuestreos, resultado, simular
 from .datos import MARGEN, TRAMOS
-from .puntaje import Puntaje, completar, media_vida, registrar, suavizada
+from .puntaje import Puntaje, atributos_de, completar, media_vida, registrar, suavizada
 
 ENTRENAMIENTO_HASTA = TRAMOS["entrenamiento"][1]
 VALIDACION = TRAMOS["validacion"]
@@ -85,6 +85,46 @@ class MovilMercado(Puntaje):
             base = previa.get(self.mercados.get(c), general)
             n, cal = conteos.get(c, (0.0, 0.0))
             tasas[c] = suavizada(n, cal, base, self.peso)
+        return tasas
+
+
+@registrar
+class Jerarquico(Puntaje):
+    """Suavizado jerárquico: código → celda (mercado × versión) → mercado → tasa general, con ventana móvil.
+
+    Cada nivel se encoge hacia el de arriba con `peso` unidades: un código con pocos resultados toma fuerza de sus
+    parecidos y uno con muchos se queda en su tasa. Generaliza `MovilMercado`, que solo encogía hacia el mercado.
+    Los atributos se leen del propio código; un código sin agrupación cae a la tasa general.
+    """
+    familia, orden, necesita_atributos = "jerarquico", (3, 2), True
+
+    def __init__(self, ventana, peso, atributos=None):
+        self.ventana, self.peso, self.atributos = ventana, peso, atributos or {}
+        self.parametros = {"ventana": ventana, "peso": peso}
+        self.nombre = f"jerárquico {'todo el historial' if ventana is None else f'{ventana} d'}, peso {peso}"
+
+    def puntuar(self, ctx, codigos):
+        hasta = ctx.t - MARGEN
+        conocidas = ctx.conocidas(hasta, desde=None if self.ventana is None else hasta - self.ventana + 1)
+        general = conocidas.general()
+        conteos = conocidas.por_codigo()
+        mercados, celdas = {}, {}
+        for c, (n, cal) in conteos.items():
+            a = self.atributos.get(c)
+            if a is None:
+                continue
+            for acumulado, clave in ((mercados, a[0]), (celdas, a[4])):
+                x = acumulado.setdefault(clave, [0.0, 0.0])
+                x[0] += n
+                x[1] += cal
+        tasa_mercado = {m: suavizada(n, cal, general, self.peso) for m, (n, cal) in mercados.items()}
+        tasa_celda = {k: suavizada(n, cal, tasa_mercado[k.split("|")[0]], self.peso) for k, (n, cal) in celdas.items()}
+        tasas = {}
+        for c in codigos:
+            a = self.atributos.get(c)
+            previa = general if a is None else tasa_celda.get(a[4], tasa_mercado.get(a[0], general))
+            n, cal = conteos.get(c, (0.0, 0.0))
+            tasas[c] = suavizada(n, cal, previa, self.peso)
         return tasas
 
 

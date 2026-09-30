@@ -127,6 +127,22 @@ def resultado(puntaje, d, idx, tabla, tramo, extra=None):
             "version_codigo": version_codigo(), **(extra or {})}
 
 
+def elegir_por_precision(candidatas):
+    """Regla del 30/09: gana la elegible de mayor precisión acumulada en los tramos de selección.
+
+    No hay desempate por simplicidad (enmienda al punto 8 de #10). `candidatas`: resultados con `elegible`,
+    `alternativa`, `precision_cupo` (acumulada) y `precision_por_bloque`. Ante un empate exacto gana la de menor
+    varianza entre bloques y, si persiste, la de menor nombre: el resultado es determinista.
+    Devuelve (ganadora, ranking de todas las elegibles).
+    """
+    def clave(r):
+        por_bloque = r["precision_por_bloque"]
+        return (-r["precision_cupo"], float(np.var(por_bloque)) if len(por_bloque) > 1 else 0.0, r["alternativa"])
+
+    ranking = sorted((r for r in candidatas if r["elegible"]), key=clave)
+    return ranking[0], ranking
+
+
 def elegir(candidatas, idx):
     """Regla de #10: mayor precisión en el cupo; empate si el rango pareado incluye 0; gana la más simple.
 
