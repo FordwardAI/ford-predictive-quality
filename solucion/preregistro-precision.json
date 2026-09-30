@@ -1,5 +1,5 @@
 {
-  "estado": "propuesto",
+  "estado": "acordado",
   "fecha": "2026-09-30",
   "como_acordar": "Segunda lectura de la prueba final. Revisar en equipo, cambiar estado a \"acordado\", commitear, enlazar en #33 y correr una vez con --preregistro solucion/preregistro-precision.json --hash-preregistro <sha256 del archivo commiteado>. Se informan las dos lecturas.",
   "fuente": {
