@@ -1,0 +1,150 @@
+"""Arma el .zip de reproducción (P13, E4): código, entorno, resultados agregados y la hoja; nunca datos crudos.
+
+    python -m solucion.empaquetar --destino reproduccion.zip [--salida DIR_HOJA] [--anexo ARCHIVO ...]
+        [--csv CSV --catalogo CATALOGO]
+
+Parte de `git ls-files` (lo versionado), así que `.venv`, cachés, `data.js` y capturas quedan fuera. La hoja y los
+anexos se agregan desde fuera del repo. Al generar verifica que el .zip no tenga ningún .csv de datos, ningún VIN de la
+tabla (si se pasan `--csv` y `--catalogo`) ni nada con forma de VIN.
+"""
+import argparse
+import io
+import re
+import subprocess
+import sys
+import zipfile
+from pathlib import Path
+
+from solucion.datos import RAIZ
+
+PREFIJOS = {"solucion/": None, "research/": {".py", ".json"}}  # Prefijo versionado -> extensiones admitidas (None: todas).
+RAIZ_INCLUIDA = {"requirements.txt", ".python-version"}
+EXCLUIDOS = ("/__pycache__/", "/.venv/", "prototipos/")
+DATOS_CRUDOS = {".csv", ".xlsx", ".xls", ".pickle", ".pkl", ".parquet"}
+CARPETA_HOJA, CARPETA_ANEXOS = "hoja/", "anexos/"
+FORMA_VIN = re.compile(r"\b(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-HJ-NPR-Z0-9]{17}\b")
+
+README = """# Reproducción de la prueba de concepto (FordwardAI)
+
+Versión del código: `{version}`. Fuente de los datos: los hashes de `docs/datos-locales.md` (CSV `a24860d8…c5a82b`,
+catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: hay que tener los dos archivos locales.
+
+1. Python 3.13 (ver `.python-version`). Desde esta carpeta:
+   ```sh
+   python3.13 -m venv .venv
+   .venv/bin/pip install -r requirements.txt          # Windows: .venv\\Scripts\\pip
+   ```
+   En macOS, xgboost y lightgbm necesitan `brew install libomp`. En Windows hace falta `set PYTHONUTF8=1`.
+2. Pruebas sintéticas (no necesitan los datos):
+   ```sh
+   .venv/bin/python -m solucion.pruebas
+   ```
+3. Recalcular, con las rutas locales de los dos archivos (el código verifica sus hashes; la salida va fuera de esta carpeta):
+   ```sh
+   .venv/bin/python -m solucion.run --csv "/ruta/Dataset QLS Inspección Adicional.csv" \\
+     --catalogo "/ruta/Códigos de catálogo.csv" --salida ../salida
+   ```
+4. Comparar `solucion/resultados/*.json` (incluidos acá) con los recién escritos. Coinciden `preparacion`, `p3`, `p5`,
+   `p8` y `p9` salvo nombres de archivo y `version_codigo`; en `p4` y `eleccion` (modelos de ML) y en `p6` puede variar
+   la 3.ª cifra decimal o la semilla mediana según la plataforma, sin cambiar la alternativa ganadora.
+
+Contenido: `solucion/` (código y pruebas), `research/` (auditoría y particiones), `solucion/resultados/` (solo
+agregados), `{hoja}` (hoja de códigos prioritarios, sin VIN) y `{anexos}` (material de apoyo).
+Todas las cifras valen entre auditados con actividad QLS, base ficticia.
+"""
+
+
+def _git(*args):
+    return subprocess.run(["git", "-C", str(RAIZ), *args], capture_output=True, text=True, check=True).stdout
+
+
+def archivos_versionados():
+    """Rutas relativas (con `/`) de lo versionado que entra en el .zip."""
+    elegidos = []
+    for ruta in _git("ls-files").splitlines():
+        if any(x in "/" + ruta for x in EXCLUIDOS) or Path(ruta).suffix in DATOS_CRUDOS:
+            continue
+        if ruta in RAIZ_INCLUIDA:
+            elegidos.append(ruta)
+            continue
+        for prefijo, extensiones in PREFIJOS.items():
+            if ruta.startswith(prefijo) and (extensiones is None or Path(ruta).suffix in extensiones):
+                elegidos.append(ruta)
+    return sorted(elegidos)
+
+
+def version_codigo():
+    sucio = bool(_git("status", "--porcelain", "--untracked-files=no").strip())
+    return _git("rev-parse", "HEAD").strip() + ("+cambios" if sucio else "")
+
+
+def _textos(zf):
+    """(nombre, texto) de cada miembro; abre los .xlsx anidados, que guardan el texto en XML."""
+    for nombre in zf.namelist():
+        datos = zf.read(nombre)
+        if nombre.endswith(".xlsx"):
+            with zipfile.ZipFile(io.BytesIO(datos)) as interno:
+                yield nombre, " ".join(interno.read(n).decode("utf-8", "replace") for n in interno.namelist())
+        else:
+            yield nombre, datos.decode("utf-8", "replace")
+
+
+def controlar(destino, vins=()):
+    """Lista de problemas del .zip: CSV de datos, VIN de la tabla o texto con forma de VIN."""
+    problemas, vins = [], set(vins)
+    with zipfile.ZipFile(destino) as zf:
+        for nombre in zf.namelist():
+            sufijo = Path(nombre).suffix
+            if sufijo in DATOS_CRUDOS and not nombre.startswith(CARPETA_HOJA):
+                problemas.append(f"{nombre}: archivo de datos fuera de la hoja")
+            if Path(nombre).name == "data.js" or nombre.startswith(("prototipos/", ".venv/")):
+                problemas.append(f"{nombre}: no debe ir en el .zip")
+        for nombre, texto in _textos(zf):
+            palabras = set(re.findall(r"[A-Za-z0-9]+", texto))
+            if vins & palabras:
+                problemas.append(f"{nombre}: contiene un VIN de la tabla")
+            elif FORMA_VIN.search(texto):
+                problemas.append(f"{nombre}: contiene texto con forma de VIN")
+    return problemas
+
+
+def armar(destino, salida=None, anexos=(), vins=(), permitir_sucio=False):
+    destino = Path(destino)
+    assert RAIZ not in destino.resolve().parents, "El .zip se escribe fuera del repo"
+    version = version_codigo()
+    assert permitir_sucio or not version.endswith("+cambios"), "Hay cambios sin commitear en lo versionado"
+    hoja = [p for p in sorted(Path(salida).rglob("*")) if p.is_file()] if salida else []
+    with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr("LEEME.md", README.format(version=version, hoja=CARPETA_HOJA, anexos=CARPETA_ANEXOS))
+        for ruta in archivos_versionados():
+            zf.write(RAIZ / ruta, ruta)
+        for p in hoja:
+            zf.write(p, CARPETA_HOJA + p.relative_to(salida).as_posix())
+        for p in map(Path, anexos):
+            zf.write(p, CARPETA_ANEXOS + p.name)
+    problemas = controlar(destino, vins)
+    if problemas:
+        destino.unlink()
+        raise AssertionError("El .zip no pasó los controles:\n" + "\n".join(problemas))
+    return destino
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--destino", required=True, type=Path)
+    parser.add_argument("--salida", type=Path, help="Carpeta de la hoja generada por solucion.run")
+    parser.add_argument("--anexo", action="append", default=[], type=Path)
+    parser.add_argument("--csv", type=Path, help="Con --catalogo: busca además los VIN exactos de la tabla")
+    parser.add_argument("--catalogo", type=Path)
+    parser.add_argument("--permitir-sucio", action="store_true", help="Solo para ensayar la herramienta")
+    opciones = parser.parse_args(argv)
+    vins = ()
+    if opciones.csv and opciones.catalogo:
+        from solucion import datos, run
+        vins = [v.vin for v in datos.cargar(opciones.csv, opciones.catalogo, cache=run.CACHE).vins]
+    destino = armar(opciones.destino, opciones.salida, opciones.anexo, vins, opciones.permitir_sucio)
+    print(f"{destino} ({destino.stat().st_size} bytes); VIN buscados: {len(vins) or 'solo forma de VIN'}")
+
+
+if __name__ == "__main__":
+    sys.exit(main())

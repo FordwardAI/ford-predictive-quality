@@ -106,7 +106,7 @@ def _eje_porcentaje(ax):
 
 def _leer(directorio, pieza):
     archivo = Path(directorio) / f"{pieza}.json"
-    return json.loads(archivo.read_text()) if archivo.exists() else None
+    return json.loads(archivo.read_text(encoding="utf-8")) if archivo.exists() else None
 
 
 def _guardar(fig, destino, nombre):
@@ -115,7 +115,7 @@ def _guardar(fig, destino, nombre):
     fig.savefig(png, dpi=DPI, metadata={"Software": None})
     fig.savefig(svg, metadata={"Date": None, "Creator": None})
     # matplotlib deja espacios al final de las líneas del SVG; se quitan para que `git diff --check` pase.
-    svg.write_text("\n".join(linea.rstrip() for linea in svg.read_text().splitlines()) + "\n")
+    svg.write_text("\n".join(linea.rstrip() for linea in svg.read_text(encoding="utf-8").splitlines()) + "\n", encoding="utf-8", newline="\n")
     plt.close(fig)
     return [png, svg]
 
@@ -578,7 +578,7 @@ def _indice(destino, generadas, omitidas):
         lineas += ["## Omitidas", "", "Se generan solas cuando la pieza tiene resultado.", ""]
         lineas += [f"- `{o['nombre']}`: {o['motivo']}." for o in omitidas] + [""]
     archivo = destino / "README.md"
-    archivo.write_text("\n".join(lineas))
+    archivo.write_text("\n".join(lineas), encoding="utf-8", newline="\n")
     return archivo
 
 
@@ -600,7 +600,7 @@ def generar(resultados=RESULTADOS, destino=FIGURAS):
 
     def relativa(p):
         p = Path(p).resolve()
-        return str(p.relative_to(RAIZ)) if RAIZ in p.parents else p.name
+        return p.relative_to(RAIZ).as_posix() if RAIZ in p.parents else p.name
 
     return {"pieza": "P9 figuras", "destino": relativa(destino), "indice": relativa(indice),
             "generadas": [{"nombre": g["nombre"], "archivos": [relativa(a) for a in g["archivos"]],

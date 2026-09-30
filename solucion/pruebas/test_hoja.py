@@ -65,9 +65,9 @@ def test_ninguna_salida_contiene_un_vin():
         assert {Path(a).suffix for a in archivos} == {".csv", ".xlsx", ".html"}
         vins = [v.vin for v in t.vins]
         assert not hoja.vins_en(archivos, vins)
-        assert "U-0001" in Path(archivos[2]).read_text()
+        assert "U-0001" in Path(archivos[2]).read_text(encoding="utf-8")
         # El control detecta un VIN si llegara a colarse.
-        Path(archivos[2]).write_text(Path(archivos[2]).read_text() + vins[0])
+        Path(archivos[2]).write_text(Path(archivos[2]).read_text(encoding="utf-8") + vins[0], encoding="utf-8", newline="\n")
         assert hoja.vins_en(archivos, vins) == {vins[0]}
         # El programa recibido por archivo arma la misma hoja.
         otra = hoja.construir_hoja(t, 190, Path(carpeta) / "otra", programa_path=archivos[3], predictor=Movil(60, 20),

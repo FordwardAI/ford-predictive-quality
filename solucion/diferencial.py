@@ -585,7 +585,7 @@ def _configuracion(h, k):
 
 def configuracion():
     """Configuración congelada para el preregistro, leída del último p6.json."""
-    resultado = json.loads((RESULTADOS / "p6.json").read_text())
+    resultado = json.loads((RESULTADOS / "p6.json").read_text(encoding="utf-8"))
     return {s: resultado[s]["configuracion"] for s in SECCIONES}
 
 
@@ -595,7 +595,7 @@ def _escribir_detalle(salida, detalle):
     assert RAIZ not in salida.resolve().parents, "El detalle por código va fuera del repo"
     salida.mkdir(parents=True, exist_ok=True)
     destino = salida / "p6-detalle.json"
-    destino.write_text(json.dumps(detalle, ensure_ascii=False, indent=2) + "\n")
+    destino.write_text(json.dumps(detalle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return destino
 
 

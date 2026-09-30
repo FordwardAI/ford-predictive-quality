@@ -16,7 +16,7 @@ def _alt(nombre, familia, orden, prec, elegible=True):
 
 
 def _escribir(carpeta, pieza, contenido):
-    (carpeta / f"{pieza}.json").write_text(json.dumps(contenido, ensure_ascii=False))
+    (carpeta / f"{pieza}.json").write_text(json.dumps(contenido, ensure_ascii=False), encoding="utf-8", newline="\n")
 
 
 def test_formato_con_coma_decimal():
@@ -38,7 +38,7 @@ def test_genera_omite_y_es_determinista():
         assert generadas == {"comparacion_alternativas", "veces_azar", "diagrama_proceso", "diagrama_solucion"}
         assert {o["nombre"] for o in resumen["omitidas"]} == {"etiquetas_parciales", "componente", "detector"}
         assert all((dest / f"{n}.{ext}").stat().st_size > 0 for n in generadas for ext in ("png", "svg"))
-        assert CAL in (dest / "README.md").read_text()
+        assert CAL in (dest / "README.md").read_text(encoding="utf-8")
         svg, png = (dest / "veces_azar.svg").read_bytes(), (dest / "veces_azar.png").read_bytes()
         figuras.generar(res, dest)
         assert (dest / "veces_azar.svg").read_bytes() == svg and (dest / "veces_azar.png").read_bytes() == png

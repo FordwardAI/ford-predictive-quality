@@ -43,7 +43,7 @@ def control_particiones(tabla, publicadas):
 
 
 def evidencia(tabla):
-    publicadas = json.loads(PARTICIONES.read_text())["partitions"]
+    publicadas = json.loads(PARTICIONES.read_text(encoding="utf-8"))["partitions"]
     control = control_particiones(tabla, publicadas)
     entrenamiento = {v.codigo for v in tabla.tramo("entrenamiento")}
     nuevos = {}

@@ -48,7 +48,7 @@ def _preregistro(directorio, estado="acordado", **cambios):
     p = pr.generar(directorio, fecha="2026-09-30")
     p.update(estado=estado, fuente=dict(FUENTE), **cambios)
     archivo = Path(directorio) / "preregistro.json"
-    archivo.write_text(json.dumps(p, ensure_ascii=False, indent=2) + "\n")
+    archivo.write_text(json.dumps(p, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return archivo, pr.sha256(archivo)
 
 
@@ -121,9 +121,9 @@ def test_correr_lee_la_prueba_y_agrega_corridas():
         salida = Path(d) / "prueba-final.json"
         semillas = {"desempate": 20261002, "bootstrap": 20261003, "remuestreos": 200, "modelo": "no aplica"}
         archivo, _ = _preregistro(d, semillas=semillas)
-        p = json.loads(archivo.read_text())
+        p = json.loads(archivo.read_text(encoding="utf-8"))
         p["piezas"]["e3"]["salida"] = str(Path(d) / "e3")  # La E3 final de prueba no pisa la carpeta real.
-        archivo.write_text(json.dumps(p, ensure_ascii=False, indent=2) + "\n")
+        archivo.write_text(json.dumps(p, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
         sha = pr.sha256(archivo)
         registro = pr.correr(archivo, sha, salida=salida, git=_git_ok, cargar=_tabla, ahora=AHORA)
         corrida = registro["corridas"][0]
@@ -139,9 +139,9 @@ def test_correr_lee_la_prueba_y_agrega_corridas():
         assert e3["corrida"] is True and e3["resultado"]["vin_en_salidas"] == 0, e3
         assert e3["resultado"]["dia"] == 260 and (Path(d) / "e3" / "hoja-dia-260.html").exists()
         assert corrida["piezas"]["casi_no_se_calibran"]["corrida"] is True
-        assert "SYN" not in salida.read_text() and "TARDE" not in salida.read_text()  # Sin identificadores.
+        assert "SYN" not in salida.read_text(encoding="utf-8") and "TARDE" not in salida.read_text(encoding="utf-8")  # Sin identificadores.
         pr.correr(archivo, sha, salida=salida, git=_git_ok, cargar=_tabla, ahora=AHORA)
-        registro = json.loads(salida.read_text())
+        registro = json.loads(salida.read_text(encoding="utf-8"))
         assert len(registro["corridas"]) == 2
         assert registro["corridas"][0]["tramos"] == registro["corridas"][1]["tramos"]
         assert "Hay 2 corridas" in pr.resumen(registro) and "de cada 100 elegidos" in pr.resumen(registro)

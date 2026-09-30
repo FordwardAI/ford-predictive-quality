@@ -109,7 +109,7 @@ def minimo_p():
     """P del mínimo por código: el elegido por P5 si existe, si no el provisorio."""
     archivo = RESULTADOS / "p5.json"
     if archivo.exists():
-        p = json.loads(archivo.read_text()).get("minimo_por_codigo", {}).get("P")
+        p = json.loads(archivo.read_text(encoding="utf-8")).get("minimo_por_codigo", {}).get("P")
         if p:
             return int(p), "elegido en validación (P5)"
     return P_PROVISORIO, "provisorio, hasta que P5 lo elija en validación"
@@ -251,7 +251,7 @@ def evaluacion_ganadora():
     archivo = RESULTADOS / "eleccion.json"
     if not archivo.exists():
         return None
-    g = json.loads(archivo.read_text())["ganadora"]
+    g = json.loads(archivo.read_text(encoding="utf-8"))["ganadora"]
     azar = g["precision_cupo"] / g["veces_azar"] if g.get("veces_azar") else None
     return {"alternativa": g["alternativa"], "precision": g["precision_cupo"], "rango": g["precision_rango95"],
             "azar": azar, "lectura": g["lectura"], "calificador": g["calificador"]}
@@ -590,7 +590,7 @@ equivalentes. No es la probabilidad de una unidad.</p>
 <h2>Límites</h2><ul class="chico suave">{''.join(f'<li>{e(x)}</li>' for x in LIMITES)}</ul>
 </div></div></body></html>
 """
-    Path(destino).write_text(pagina, encoding="utf-8")
+    Path(destino).write_text(pagina, encoding="utf-8", newline="\n")
 
 
 def escribir(h, carpeta, programa=None):

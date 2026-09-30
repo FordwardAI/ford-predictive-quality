@@ -127,13 +127,13 @@ def para_prueba(familia, parametros):
 
 def _leer(archivo):
     archivo = Path(archivo)
-    return (json.loads(archivo.read_text()), {"archivo": _relativo(archivo), "sha256": sha256(archivo)}) \
+    return (json.loads(archivo.read_text(encoding="utf-8")), {"archivo": _relativo(archivo), "sha256": sha256(archivo)}) \
         if archivo.exists() else (None, "no existía al generar")  # Sus claves quedan "pendiente".
 
 
 def _relativo(path):
     path = Path(path).resolve()
-    return str(path.relative_to(RAIZ)) if RAIZ in path.parents else path.name
+    return path.relative_to(RAIZ).as_posix() if RAIZ in path.parents else path.name
 
 
 def _seccion(resultado_pieza, claves, nombres=("configuracion", "eleccion", "elegida")):
@@ -148,7 +148,7 @@ def _esperados():
     archivo = RAIZ / "research" / "validation-partitions.json"
     if not archivo.exists():
         return {}
-    return json.loads(archivo.read_text()).get("partitions", {})
+    return json.loads(archivo.read_text(encoding="utf-8")).get("partitions", {})
 
 
 def generar(resultados=RESULTADOS, fecha=None):
@@ -207,10 +207,10 @@ def generar(resultados=RESULTADOS, fecha=None):
 
 def escribir(preregistro, salida):
     salida = Path(salida)
-    if salida.exists() and json.loads(salida.read_text()).get("estado") == "acordado":
+    if salida.exists() and json.loads(salida.read_text(encoding="utf-8")).get("estado") == "acordado":
         raise Rechazo(f"{salida} ya está acordado: no se sobrescribe")
     salida.parent.mkdir(parents=True, exist_ok=True)
-    salida.write_text(json.dumps(preregistro, ensure_ascii=False, indent=2) + "\n")
+    salida.write_text(json.dumps(preregistro, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return sha256(salida)
 
 
@@ -243,7 +243,7 @@ def verificar_git(path):
 def habilitar(path, hash_pasado, git=verificar_git):
     """Aplica los controles previos a leer la prueba; devuelve (preregistro, sha, commit)."""
     path = Path(path)
-    preregistro = json.loads(path.read_text())
+    preregistro = json.loads(path.read_text(encoding="utf-8"))
     if preregistro.get("estado") != "acordado":
         raise Rechazo(f"El preregistro está {preregistro.get('estado')!r}, no \"acordado\"")
     sha = sha256(path)
@@ -382,10 +382,10 @@ def correr(preregistro_path, hash_pasado, csv_path=None, catalogo_path=None, sal
         "ya_visto": preregistro["ya_visto"],
     }
     salida = Path(salida)
-    registro = json.loads(salida.read_text()) if salida.exists() else {"pieza": "P7 prueba final", "corridas": []}
+    registro = json.loads(salida.read_text(encoding="utf-8")) if salida.exists() else {"pieza": "P7 prueba final", "corridas": []}
     registro["corridas"].append(corrida)
     salida.parent.mkdir(parents=True, exist_ok=True)
-    salida.write_text(json.dumps(registro, ensure_ascii=False, indent=2) + "\n")
+    salida.write_text(json.dumps(registro, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return registro
 
 

@@ -19,7 +19,7 @@ def candidatas():
     for pieza in ("p3", "p4"):
         archivo = RESULTADOS / f"{pieza}.json"
         if archivo.exists():
-            salida += [r for r in json.loads(archivo.read_text())["resultados"] if "diario" in r]
+            salida += [r for r in json.loads(archivo.read_text(encoding="utf-8"))["resultados"] if "diario" in r]
     return salida
 
 
@@ -39,5 +39,5 @@ def correr(tabla=None, opciones=None):
 def ganadora(tabla):
     """La alternativa ganadora reconstruida; la provisoria si todavía no hay elección."""
     archivo = RESULTADOS / "eleccion.json"
-    g = json.loads(archivo.read_text())["ganadora"] if archivo.exists() else PROVISORIA
+    g = json.loads(archivo.read_text(encoding="utf-8"))["ganadora"] if archivo.exists() else PROVISORIA
     return crear(g["familia"], g["parametros"], tabla)
