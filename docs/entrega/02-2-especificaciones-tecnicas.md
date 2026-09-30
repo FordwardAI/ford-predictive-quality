@@ -217,7 +217,7 @@ Fuente: [`preparacion.json`][prep]. Población: entre auditados con actividad QL
 ### Prueba final de un solo uso y preregistro
 
 1. **Antes de la corrida**, se commitea el **preregistro** ([`solucion/preregistro.json`][plan-contrato]): la opción elegida con sus parámetros, la configuración de cada pieza del diferencial, las semillas, los hashes y lo ya visto. Lo que no figura en el preregistro no se lee en la prueba ([CONTEXT.md][ctx]).
-2. **Corrida única**, en una sesión conjunta del equipo. Se leen la prueba completa, ≤260 (13.135 VIN), >260 (177 VIN, 21 elegidos en 17 días; solo descriptivo porque el 71 % de su cupo sale de días con menos de 20 VIN) y la sensibilidad con la cohorte posterior a DIA_260 ([plan][plan-piezas], P7; [`preparacion.json`][prep]). Resultado: [pendiente: P7].
+2. **Corrida única**, en una sesión conjunta del equipo. Se leen la prueba completa, ≤260 (13.135 VIN), >260 (177 VIN, 21 elegidos en 17 días; solo descriptivo porque el 71 % de su cupo sale de días con menos de 20 VIN) y la sensibilidad con la cohorte posterior a DIA_260 ([plan][plan-piezas], P7; [`preparacion.json`][prep]). Resultado ([`prueba-final.json`][final], corrida 1, entre auditados con actividad QLS, base ficticia): prueba completa (n = 13.312 VIN), 10,9 % (8,3–13,6) contra 8,2 % al azar, 1,32 veces el azar: mejora; prueba ≤260 (n = 13.135 VIN), 11,1 % contra 8,3 %: mejora; >260 (n = 177 VIN), 1 CALIBRADA en 21 elegidos, solo descriptivo; sensibilidad con la cohorte posterior a 260 (n = 18.222 VIN), 8,0 % contra 6,0 %: mejora.
 3. **Después de la corrida** solo se decide qué se muestra. Si aparece un bug, se corrige, se vuelve a correr y se informan las dos cifras ([plan][plan-reg]).
 4. **Lo ya visto se declara.** Los experimentos exploratorios usaron los días 200–260 como prueba y eligieron allí una ventana de 60 días; el registro de la agrupación publicó tasas por mercado dentro de la prueba. La cifra final puede ser optimista por eso ([validación][val], punto 2; [plan][plan-inc], incompatibilidad 4).
 
@@ -265,3 +265,4 @@ La cifra principal supone que se conoce el resultado de todos los auditados. En 
 [agr]: https://github.com/FordwardAI/ford-predictive-quality/issues/27#issuecomment-5896362581
 [qls]: https://github.com/FordwardAI/ford-predictive-quality/issues/29#issuecomment-5896631478
 [reu]: https://github.com/FordwardAI/ford-predictive-quality/issues/5#issuecomment-5800841330
+[final]: ../../solucion/resultados/prueba-final.json

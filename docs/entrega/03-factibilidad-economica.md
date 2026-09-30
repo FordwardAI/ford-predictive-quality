@@ -69,7 +69,7 @@ A cupo fijo, cualquier par de costos positivos ordena igual a las alternativas: 
 
 La diferencia de precisión en puntos porcentuales equivale a cuántas calibraciones más se encuentran cada 100 auditorías.
 
-**Sobre la base ficticia**, la diferencia de la opción elegida en la prueba final es [pendiente: P7], entre auditados con actividad QLS, prueba final ≥200, base ficticia, n = 13.312 VIN. **Esa cifra no es un ahorro de planta**: la base es ficticia y solo cubre unidades con actividad QLS ([validación][val], punto 8; [base QLS][qls], hipótesis). Si la tasa de las unidades sin actividad QLS fuera distinta, la diferencia en planta también lo sería. La forma de medirla es la etapa con días de control.
+**Sobre la base ficticia**, la diferencia de la opción elegida en la prueba final es de 2,7 puntos porcentuales (10,9 % contra 8,2 % al azar; rango del 95 % de la diferencia: de 0,07 a 5,2 puntos), es decir, unas 2,7 calibraciones más cada 100 auditorías, entre auditados con actividad QLS, prueba final ≥200, base ficticia, n = 13.312 VIN. **Esa cifra no es un ahorro de planta**: la base es ficticia y solo cubre unidades con actividad QLS ([validación][val], punto 8; [base QLS][qls], hipótesis). Si la tasa de las unidades sin actividad QLS fuera distinta, la diferencia en planta también lo sería. La forma de medirla es la etapa con días de control.
 
 **Costo total de propiedad, para comparar con el beneficio:** implementación (horas internas) + operación (casi nula en equipo existente, o una VM chica) + mantenimiento (horas internas de revisión).
 
