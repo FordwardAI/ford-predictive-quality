@@ -23,6 +23,8 @@ Los datos quedan fuera del repo y se pasan por argumento. El código verifica su
 ```
 
 - `--piezas preparacion,p3,p4,eleccion,p6,p5,p8,p9` corre un subconjunto, en ese orden de dependencias.
+- `--piezas precision` corre la elección por mayor precisión en origen móvil (opcional, unos 30 minutos; no entra en el
+  comando por defecto). Escribe `solucion/resultados/precision.json` y usa solo Día < 195.
 - `--cache` (por defecto `~/.cache/ford-predictive-quality`) guarda la tabla por VIN ya enmascarada, fuera del repo.
 - `--salida` (por defecto `~/.cache/ford-predictive-quality/salida`) recibe la hoja de códigos prioritarios, que tiene tasas por código y no se versiona.
 
@@ -46,4 +48,5 @@ python3 research/test_audit_dataset.py
 | `referencias.py` | P3 | Azar, tasa fija, móviles, mercado, decaimiento, oráculo y fuga |
 | `eleccion.py` | P3/P4 | Ganadora en validación |
 | `run.py` | P2 | Comando único |
+| `precision.py` | propuesta 30/09 | Elección por mayor precisión en bloques de tiempo (selección 100–174, confirmación 175–194), con suavizado jerárquico y ML con atributos del código; sin desempate por simplicidad |
 | `empaquetar.py` | P13 | .zip de reproducción (código, entorno, resultados, hoja); falla si entra un CSV o un VIN |

@@ -74,3 +74,19 @@ def test_ancla_del_bloque_en_ml():
     assert ml.dia_reentreno(104, 100) == 100 and ml.dia_reentreno(109, 100) == 105
     assert ml.dia_reentreno(157) == 155  # Por defecto, la grilla de la validación original.
     assert ml.fin_interno(155) == 149 and ml.fin_interno(100) == 94
+
+
+def test_todas_las_alternativas_de_un_bloque_puntuan_sin_fuga():
+    """Corre de punta a punta cada grupo de alternativas (incluidas las de ML con atributos) en un bloque corto."""
+    t = tabla(dias=range(1, 61), por_dia=40)
+    fuente = precision.fuente_completa(t)
+    grupos = precision.grupos_del_bloque(t, fuente, 40, 44, con_ml=False)
+    assert {"tasa_fija", "jerarquico_60_10", "movil_mercado_60", "azar", "oraculo"} <= set(grupos)
+    atributos = atributos_de(t.catalogo)
+    modelo = ml.BASES_ATRIBUTOS["logistica"]("fijo", {"C": 1.0}, hasta=30, atributos=atributos)
+    promedio = ml.PromedioAtributos("fijo", {b: {"hiperparametros": {"C": 1.0} if b == "logistica" else
+                                                 ml.FAMILIAS[b].grilla[0], "vida": None}
+                                              for b in ml.ATRIBUTOS_FAMILIAS}, semilla=1, hasta=30, atributos=atributos)
+    for alternativa in (modelo, promedio):
+        d = precision.simular(t, alternativa, 40, 44, fuente)
+        assert len(d.dias) == 5 and d.k.sum() > 0

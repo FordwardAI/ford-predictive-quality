@@ -340,7 +340,7 @@ class Stacking(Combinado):
 
 
 @registrar
-class PromedioAtributos(Combinado):
+class PromedioAtributos(Promedio):
     """Promedio simple de las 6 bases con atributos del código."""
     familia, orden_familia, nombre_familia = "ml_promedio_atributos", (9, 1), "promedio de modelos con atributos"
     familias, necesita_atributos = ATRIBUTOS_FAMILIAS, True
