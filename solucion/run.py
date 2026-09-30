@@ -32,13 +32,13 @@ CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 
 def leer(pieza):
     """Resultado ya guardado de otra pieza."""
-    return json.loads((RESULTADOS / f"{pieza}.json").read_text())
+    return json.loads((RESULTADOS / f"{pieza}.json").read_text(encoding="utf-8"))
 
 
 def guardar(pieza, resultado):
     RESULTADOS.mkdir(parents=True, exist_ok=True)
     destino = RESULTADOS / f"{pieza}.json"
-    destino.write_text(json.dumps(resultado, ensure_ascii=False, indent=2) + "\n")
+    destino.write_text(json.dumps(resultado, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return destino
 
 

@@ -39,7 +39,7 @@ def test_csv():
         old = ["NaN" if x in {"", "#N/A"} else x for x in row]
         old[1], old[2], old[23] = "text", "0.243981", "0.253519"
         markdown = Path(directory) / "sample.md"
-        markdown.write_text("\n".join("| " + " | ".join(r) + " |" for r in [headers, ["---"] * 41, headers, old]))
+        markdown.write_text("\n".join("| " + " | ".join(r) + " |" for r in [headers, ["---"] * 41, headers, old]), encoding="utf-8", newline="\n")
         assert compare(path, markdown)["unexplained_cells"] == 0
         row[2] = "0,243982"
         write([row])

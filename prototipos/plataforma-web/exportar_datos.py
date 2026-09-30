@@ -54,9 +54,9 @@ def main(argv=None):
     from solucion.puntaje import Contexto, wilson
 
     res = repo / "solucion" / "resultados"
-    leer = lambda n: json.loads((res / f"{n}.json").read_text())  # noqa: E731
+    leer = lambda n: json.loads((res / f"{n}.json").read_text(encoding="utf-8"))  # noqa: E731
     prep, p3, p4, p5, p6, p8, elec = (leer(n) for n in ("preparacion", "p3", "p4", "p5", "p6", "p8", "eleccion"))
-    prereg = json.loads((repo / "solucion" / "preregistro.json").read_text())
+    prereg = json.loads((repo / "solucion" / "preregistro.json").read_text(encoding="utf-8"))
 
     tabla = datos.cargar(a.csv, a.catalogo, cache=a.cache)
     assert not tabla.desbloqueada, "La tabla tiene que estar enmascarada"
@@ -181,7 +181,7 @@ def main(argv=None):
     top_general = list(diferencial.primeros(dist))
     contraste = None
     if a.p6_detalle and a.p6_detalle.exists():
-        det = json.loads(a.p6_detalle.read_text())
+        det = json.loads(a.p6_detalle.read_text(encoding="utf-8"))
         # p6-detalle tiene el componente al cierre de la validación (hasta el 189): solo se contrastan las alarmas.
         al_ref = sorted((x["codigo"], x["dia"], x["sentido"]) for x in det.get("alarmas_validacion", []))
         contraste = {"alarmas_coinciden": al_ref == sorted(alarmas)}
@@ -357,7 +357,7 @@ def main(argv=None):
 
     texto = "// Generado por exportar_datos.py: datos reales de la base ficticia. No se versiona.\nwindow.B = " + \
         json.dumps(B, ensure_ascii=False, indent=1) + ";\n"
-    a.salida.write_text(texto, encoding="utf-8")
+    a.salida.write_text(texto, encoding="utf-8", newline="\n")
 
     # --- Control: ningún VIN en la carpeta ---------------------------------------------------------------------
     vins = {v.vin for v in tabla.vins} | {v.vin for v in tabla.cohorte}
