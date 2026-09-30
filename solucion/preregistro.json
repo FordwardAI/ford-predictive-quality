@@ -1,23 +1,23 @@
 {
   "estado": "propuesto",
-  "fecha": "2026-09-29",
+  "fecha": "2026-09-30",
   "como_acordar": "Revisar en equipo. Reemplazar cada \"pendiente\" por su valor o por \"fuera del preregistro\", cambiar estado a \"acordado\", commitear, enlazar en #33 y correr una vez con --hash-preregistro <sha256 del archivo commiteado>.",
   "fuente": {
     "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
     "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
   },
-  "version_codigo": "17612dfcde15883af48380d841ea3c50230587db+cambios",
+  "version_codigo": "ec502bb9f053a6e02513206ef7759f17f7b1365d",
   "entradas": {
     "eleccion": {
-      "archivo": "solucion/resultados/eleccion.json",
+      "archivo": "solucion\\resultados\\eleccion.json",
       "sha256": "b9b4eb99666d0deefe0582786a6fbeabf56c4bacd967e5cfbbe23071893b1f3a"
     },
     "p5": {
-      "archivo": "solucion/resultados/p5.json",
+      "archivo": "solucion\\resultados\\p5.json",
       "sha256": "f7a39668794e57fdbae0d417bca998260cc2b7c45e9f7ede4a3569faf0256e6f"
     },
     "p6": {
-      "archivo": "solucion/resultados/p6.json",
+      "archivo": "solucion\\resultados\\p6.json",
       "sha256": "be47d899151ada6561f26a64dd9e4d552d84d66fa6784b2fb6b153792074ed53"
     }
   },
