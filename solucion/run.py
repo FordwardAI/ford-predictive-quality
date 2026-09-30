@@ -28,8 +28,9 @@ PIEZAS = {  # Orden de dependencias del plan de acción.
     "p9": "solucion.figuras",
     "precision": "solucion.precision",  # Opcional: ~30 min; no entra en el comando por defecto.
     "historial_vin": "solucion.historial_vin",  # Opcional: experimento de validación sobre el historial del VIN.
+    "ensemble": "solucion.ensemble",  # Opcional: CatBoost + tasa móvil, solo Día <195.
 }
-OPCIONALES = ("precision", "historial_vin")
+OPCIONALES = ("precision", "historial_vin", "ensemble")
 CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 
 

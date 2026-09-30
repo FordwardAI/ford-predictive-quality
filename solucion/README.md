@@ -25,6 +25,9 @@ Los datos quedan fuera del repo y se pasan por argumento. El código verifica su
 - `--piezas preparacion,p3,p4,eleccion,p6,p5,p8,p9` corre un subconjunto, en ese orden de dependencias.
 - `--piezas precision` corre la elección por mayor precisión en origen móvil (opcional, unos 30 minutos; no entra en el
   comando por defecto). Escribe `solucion/resultados/precision.json` y usa solo Día < 195.
+- `--piezas ensemble` compara CatBoost con atributos y la tasa móvil suavizada hacia mercado, solos y mezclados
+  (pesos 25/50/75 %, ventanas 30/60/120 días). Elige en 100–174 y comprueba en 175–194, ya visto: exploratorio.
+  Escribe `solucion/resultados/ensemble.json`; no modifica el preregistro ni lee la prueba final.
 - `--cache` (por defecto `~/.cache/ford-predictive-quality`) guarda la tabla por VIN ya enmascarada, fuera del repo.
 - `--salida` (por defecto `~/.cache/ford-predictive-quality/salida`) recibe la hoja de códigos prioritarios, que tiene tasas por código y no se versiona.
 
