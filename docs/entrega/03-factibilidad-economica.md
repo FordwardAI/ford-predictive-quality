@@ -8,7 +8,7 @@ Borrador para la sección 3 del Informe (E2) y el separador 03 de la presentaci�
 
 Un script de Python con bibliotecas de código abierto (versiones fijadas en `requirements.txt`) que lee una exportación de QLS, el catálogo, el programa del día y el cupo, y produce una planilla y un imprimible. **No usa LLM ni servicios pagos**, no necesita GPU y no requiere nube ([plan][plan-fact]; [seguridad y privacidad](02-3-seguridad-privacidad.md)). No tiene costo de licencias.
 
-Tiempo del recálculo diario en una notebook: [pendiente: P2 — medir con el comando único]. El plan lo estima en segundos, porque con el código como predictor el cálculo es una tabla de tasas por código ([plan][plan-fact]).
+Tiempo del recálculo diario en una notebook (Apple M1 Pro, medido el 29/09/2026): unos 2,2 s para leer el CSV completo y verificar su hash, y 0,2 s para armar la hoja del día (ranking, cantidades, planilla, imprimible y control de que no salga ningún VIN). El plan lo estima en segundos, porque con el código como predictor el cálculo es una tabla de tasas por código ([plan][plan-fact]).
 
 ## 1. Implementación
 
@@ -25,7 +25,7 @@ Fórmula para Ford: **costo de implementación = horas de integración × costo 
 
 | Qué | Consumo |
 | --- | --- |
-| Cómputo del recálculo diario | Una corrida por día: [pendiente: P2 — tiempo medido] |
+| Cómputo del recálculo diario | Una corrida por día: unos 2,4 s en una notebook (lectura del CSV 2,2 s + hoja 0,2 s) |
 | Almacenamiento | La exportación de QLS y la hoja del día. La base de todo el período ocupa 54,6 MB en CSV ([población y etiquetas][pob]) |
 | Impresión o planilla | Una hoja de una página por día |
 | Auditorías | **Ninguna adicional**: el cupo lo sigue fijando Calidad de Planta |
@@ -51,7 +51,7 @@ Encendida todo el mes (730 horas), una `t3.small` en São Paulo cuesta 730 × 0,
 
 | Escenario | Dónde corre | Cómputo | Qué cambia con un modelo más pesado |
 | --- | --- | --- | --- |
-| **Una línea** | Una notebook existente de Calidad | Una corrida diaria de [pendiente: P2] | La opción elegida en validación es la tasa fija: no hay modelo que reentrenar. Si en una revisión futura ganara un modelo reentrenado, la corrida sumaría reentrenar sobre unas decenas de miles de VIN, sin GPU (tiempo no medido) |
+| **Una línea** | Una notebook existente de Calidad | Una corrida diaria de unos 2,4 s | La opción elegida en validación es la tasa fija: no hay modelo que reentrenar. Si en una revisión futura ganara un modelo reentrenado, la corrida sumaría reentrenar sobre unas decenas de miles de VIN, sin GPU (como referencia, evaluar los 18 modelos de ML en validación, con 8 reentrenamientos cada uno, llevó unos 50 s en la misma notebook) |
 | **Una planta** | Un servidor de planta existente, o una VM chica como las de la tabla | Una corrida por línea y por día | Igual que arriba, por línea |
 | **Varias plantas** | Un servidor por planta o uno central que corre una vez por planta; cada planta con su catálogo y su cupo | Crece en proporción a la cantidad de plantas: sigue siendo una tabla de tasas por código por planta | El reentrenamiento se puede programar fuera del turno |
 

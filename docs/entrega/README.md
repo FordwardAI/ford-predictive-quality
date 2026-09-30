@@ -35,7 +35,6 @@ Las cifras de validación de P3 a P6 y la hoja de desarrollo de P8 ya están en 
 
 | Marca | Qué falta | Archivos |
 | --- | --- | --- |
-| `[pendiente: P2]` | Tiempo medido del recálculo diario con el comando único | 03 |
 | `[pendiente: P7]` | Todo lo de la prueba final: X, Y, rango, lectura, piezas del diferencial que se sostienen, preregistro y la hoja del último día ≤260 | 02-1, 02-2, 02-2-1, 03, 04, 06, guion |
 
 Para listar todas las marcas: `grep -n "pendiente:" docs/entrega/*.md`.
