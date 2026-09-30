@@ -20,6 +20,7 @@ import numpy as np
 
 from . import cupo
 from .datos import MARGEN, PRUEBA_DESDE, RAIZ, TRAMOS
+from .preregistro import FUERA
 from .puntaje import Puntaje, suavizada, wilson
 from .referencias import evaluar  # Además registra las referencias para reconstruir la ganadora.
 
@@ -669,11 +670,14 @@ def prueba(tabla, config, puntaje=None, salida=None):
                            f"a_{cerca}_dia_de_260": sum(abs(d - corte) <= cerca for _, d, _ in alarmas),
                            "lectura": "Observaciones, no causas."}
 
-    grupo_de, k, _ = agrupar(tabla, config["subcategorizacion"]["k"], config["subcategorizacion"]["semilla"])
-    filas = tabla_de_grupos(tabla, grupo_de, [("hasta_149", 0, ENTRENAMIENTO_HASTA),
-                                              ("prueba_final", PRUEBA_DESDE, fin)])
-    salida_["subcategorizacion"] = {"rotulo": "usa el historial, no predice", "k": k, "grupos": filas,
-                                    "orden_en_prueba": orden_entre_grupos(filas, "hasta_149", "prueba_final")}
+    if config["subcategorizacion"] == FUERA:  # El equipo la dejó fuera del preregistro: solo cifras de validación.
+        salida_["subcategorizacion"] = {"corrida": False, "motivo": "Fuera del preregistro."}
+    else:
+        grupo_de, k, _ = agrupar(tabla, config["subcategorizacion"]["k"], config["subcategorizacion"]["semilla"])
+        filas = tabla_de_grupos(tabla, grupo_de, [("hasta_149", 0, ENTRENAMIENTO_HASTA),
+                                                  ("prueba_final", PRUEBA_DESDE, fin)])
+        salida_["subcategorizacion"] = {"rotulo": "usa el historial, no predice", "k": k, "grupos": filas,
+                                        "orden_en_prueba": orden_entre_grupos(filas, "hasta_149", "prueba_final")}
     if salida is not None:
         _escribir_detalle(salida, {"alarmas_prueba": [{"codigo": c, "dia": d, "sentido": s} for c, d, s in alarmas]})
     return salida_

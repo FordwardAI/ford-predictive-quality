@@ -53,3 +53,11 @@ def test_prueba_corre_en_tabla_desbloqueada():
         pass
     else:
         raise AssertionError("prueba() exige la tabla desbloqueada")
+
+
+def test_subcategorizacion_fuera_del_preregistro_no_se_corre():
+    config = diferencial._configuracion(h=5.0, k=3)
+    config["subcategorizacion"] = "fuera del preregistro"
+    salida = diferencial.prueba(tabla(desbloquear=True), config)
+    assert salida["subcategorizacion"] == {"corrida": False, "motivo": "Fuera del preregistro."}
+    assert salida["detector"]["dias_calendario"] == 61  # Lo demás de p6 sigue corriendo.
