@@ -1,0 +1,187 @@
+{
+  "estado": "propuesto",
+  "fecha": "2026-09-29",
+  "como_acordar": "Revisar en equipo. Reemplazar cada \"pendiente\" por su valor o por \"fuera del preregistro\", cambiar estado a \"acordado\", commitear, enlazar en #33 y correr una vez con --hash-preregistro <sha256 del archivo commiteado>.",
+  "fuente": {
+    "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+    "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+  },
+  "version_codigo": "17612dfcde15883af48380d841ea3c50230587db+cambios",
+  "entradas": {
+    "eleccion": {
+      "archivo": "solucion/resultados/eleccion.json",
+      "sha256": "b9b4eb99666d0deefe0582786a6fbeabf56c4bacd967e5cfbbe23071893b1f3a"
+    },
+    "p5": {
+      "archivo": "solucion/resultados/p5.json",
+      "sha256": "f7a39668794e57fdbae0d417bca998260cc2b7c45e9f7ede4a3569faf0256e6f"
+    },
+    "p6": {
+      "archivo": "solucion/resultados/p6.json",
+      "sha256": "be47d899151ada6561f26a64dd9e4d552d84d66fa6784b2fb6b153792074ed53"
+    }
+  },
+  "ganadora": {
+    "alternativa": "tasa fija (<= 149)",
+    "familia": "tasa_fija",
+    "parametros": {
+      "hasta": 149,
+      "peso": 0
+    },
+    "en_validacion": {
+      "precision_cupo": 0.15089514066496162,
+      "precision_rango95": [
+        0.11573925307055127,
+        0.1876652842676362
+      ],
+      "veces_azar": 1.5276023653648838,
+      "veces_azar_rango95": [
+        1.175831221511182,
+        1.8955464017615562
+      ],
+      "recupero": 0.07564102564102564,
+      "lectura": "mejora",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN"
+    }
+  },
+  "ganadora_en_prueba": {
+    "familia": "tasa_fija",
+    "parametros": {
+      "hasta": 194,
+      "peso": 0
+    },
+    "modo": "fijo: reentrenada con Día ≤194"
+  },
+  "semillas": {
+    "desempate": 20261002,
+    "bootstrap": 20261003,
+    "remuestreos": 2000,
+    "modelo": "no aplica: la ganadora es determinista"
+  },
+  "piezas": {
+    "p5": {
+      "politica": {
+        "nombre": "mínimo por código, P = 40",
+        "tipo": "minimo",
+        "parametros": {
+          "P": 40
+        }
+      },
+      "minimo_por_codigo": {
+        "P": 40
+      }
+    },
+    "p6": {
+      "componente": {
+        "peso": 20,
+        "top": 3,
+        "margen": 5,
+        "desempate": "nombre del componente",
+        "referencia_fija_hasta": "fin del tramo anterior (149 en validación, 194 en prueba)",
+        "bootstrap": {
+          "semilla": 20261003,
+          "remuestreos": 2000
+        }
+      },
+      "detector": {
+        "metodo": "CUSUM de Bernoulli por código, dos lados, reinicio a 0 tras cada alarma",
+        "factor": 2.0,
+        "tope_p1": 0.99,
+        "peso_p0": 20,
+        "p0": "tasa del código hasta el fin del tramo anterior (149 en validación, 194 en prueba), suavizada hacia la general",
+        "h": 4.4,
+        "falsas_alarmas_cada_30_dia_max": 1.0,
+        "rejilla_h": [
+          0.5,
+          20.0,
+          0.1
+        ],
+        "permutaciones": 100,
+        "semilla_permutacion": 20261004,
+        "potencia": {
+          "dia_cambio": 165,
+          "min_vin": 100,
+          "replicas": 200,
+          "semilla": 20261005
+        },
+        "cerca_de_260_dia": 10
+      },
+      "subcategorizacion": {
+        "perfil": "distribución de UC Nombre Incidencia por código, eventos de VIN con Día <= 149",
+        "min_vin": 30,
+        "k": 3,
+        "k_rango": [
+          3,
+          8
+        ],
+        "criterio_k": "silhouette",
+        "semilla": 20261006,
+        "n_init": 10
+      },
+      "casi_no_se_calibran": {
+        "candidatos": "Códigos cuyo rango de Wilson del 95 % con Día ≤194 queda entero por debajo de la tasa general ≤194",
+        "hasta": 194
+      }
+    },
+    "e3": {
+      "dia": "último día de la prueba ≤260 con VIN (se cuenta sin etiquetas al correr)"
+    }
+  },
+  "tramos": [
+    {
+      "nombre": "prueba completa",
+      "desde": 200,
+      "hasta": null,
+      "cohorte": false,
+      "lectura": "principal",
+      "vin_esperados": 13312
+    },
+    {
+      "nombre": "prueba ≤260",
+      "desde": 200,
+      "hasta": 260,
+      "cohorte": false,
+      "lectura": "principal",
+      "vin_esperados": 13135
+    },
+    {
+      "nombre": "prueba >260",
+      "desde": 261,
+      "hasta": null,
+      "cohorte": false,
+      "lectura": "descriptiva: cupo ~8, demasiado chico para leerlo",
+      "vin_esperados": 177
+    },
+    {
+      "nombre": "sensibilidad con la cohorte posterior a 260",
+      "desde": 200,
+      "hasta": null,
+      "cohorte": true,
+      "lectura": "sensibilidad: suma la cohorte de primer evento posterior a DIA_260 (toda OK)",
+      "vin_esperados": 18222
+    }
+  ],
+  "reglas_de_lectura": {
+    "predictor": "En cada tramo, la ganadora congelada contra el azar al mismo cupo diario: precisión en el cupo, veces el azar y recupero con rango del 95 % (bootstrap por días). Lectura sin umbral: mejora si el rango de la diferencia con el azar queda entero sobre 0, peor si queda entero debajo, inconcluso si incluye 0. Donde no hay CALIBRADA no se calcula veces el azar: solo cuántas se encontraron.",
+    "componente": "Acierto de los 3 primeros componentes por código contra los 3 primeros generales, con rango del 95 % por bootstrap, en la prueba.",
+    "detector": "Detecciones reales del detector configurado hasta el final de la prueba, incluidas las cercanas a DIA_260, como observaciones: no se afirman causas.",
+    "subcategorizacion": "Orden de las subcategorías en la prueba (tabla descriptiva).",
+    "casi_no_se_calibran": "Un código que casi no se calibra se sostiene si su rango de Wilson del 95 % en la prueba completa queda entero por debajo de la tasa general de la prueba completa.",
+    "e3": "La hoja final (E3) usa el último día de la prueba ≤260 con VIN.",
+    "anexo_historial": "No se lee en la prueba: no es elegible y queda con cifras de validación."
+  },
+  "ya_visto": [
+    "El tramo de prueba (Día 200–260) ya lo exploraron los experimentos de modelado (research/experimentos-modelado.md), que eligieron ahí la ventana de 60 días: la cifra puede ser optimista.",
+    "Las tasas por mercado dentro de la prueba ya están publicadas en research/catalog-groups.json.",
+    "Los totales CALIBRADA de la prueba por tramo ya están publicados en research/validation-partitions.json.",
+    "Que los auditados sean una selección al azar es un supuesto de Ford.",
+    "En planta solo se conocería el resultado de lo que se elige auditar.",
+    "El Día del VIN es aproximado: max(Fecha Inspección, Fecha Reparación)."
+  ],
+  "no_se_lee_en_prueba": [
+    "Las demás alternativas de P3 y P4: solo con cifras de validación.",
+    "Oráculo y versión con fuga: no elegibles.",
+    "Anexo de historial: disponibilidad no probada; solo validación.",
+    "Todo lo que no figura en este preregistro."
+  ]
+}
