@@ -157,7 +157,7 @@ def _eventos(path, conteos):
 
 def _clave_cache(sha):
     codigo = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:16]
-    return f"tabla-{sha[:16]}-{codigo}.pickle"
+    return f"tabla-{hashlib.sha256(sha.encode()).hexdigest()[:16]}-{codigo}.pickle"
 
 
 def cargar(csv_path, catalogo_path, cache=None, verificar=True, desbloquear=False):

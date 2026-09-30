@@ -47,3 +47,10 @@ def test_contexto_respeta_margen_y_prueba():
         pass
     else:
         raise AssertionError("Sin desbloqueo no hay etiquetas >= 200 ni siquiera con permite_futuro")
+
+
+def test_clave_de_cache_depende_de_csv_y_catalogo():
+    from solucion.datos import _clave_cache
+    csv = "a" * 64  # Hashes de 64 caracteres: la clave vieja solo veía los primeros 16 del CSV.
+    assert _clave_cache(csv + "b" * 64) != _clave_cache(csv + "c" * 64)
+    assert _clave_cache(csv + "b" * 64) == _clave_cache(csv + "b" * 64)
