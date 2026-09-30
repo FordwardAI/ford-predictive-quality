@@ -9,15 +9,15 @@
   "version_codigo": "ec502bb9f053a6e02513206ef7759f17f7b1365d",
   "entradas": {
     "eleccion": {
-      "archivo": "solucion\\resultados\\eleccion.json",
+      "archivo": "solucion/resultados/eleccion.json",
       "sha256": "b9b4eb99666d0deefe0582786a6fbeabf56c4bacd967e5cfbbe23071893b1f3a"
     },
     "p5": {
-      "archivo": "solucion\\resultados\\p5.json",
+      "archivo": "solucion/resultados/p5.json",
       "sha256": "f7a39668794e57fdbae0d417bca998260cc2b7c45e9f7ede4a3569faf0256e6f"
     },
     "p6": {
-      "archivo": "solucion\\resultados\\p6.json",
+      "archivo": "solucion/resultados/p6.json",
       "sha256": "be47d899151ada6561f26a64dd9e4d552d84d66fa6784b2fb6b153792074ed53"
     }
   },
