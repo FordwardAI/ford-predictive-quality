@@ -36,7 +36,8 @@ def test_genera_omite_y_es_determinista():
         resumen = figuras.generar(res, dest)
         generadas = {g["nombre"] for g in resumen["generadas"]}
         assert generadas == {"comparacion_alternativas", "veces_azar", "diagrama_proceso", "diagrama_solucion"}
-        assert {o["nombre"] for o in resumen["omitidas"]} == {"etiquetas_parciales", "componente", "detector"}
+        assert {o["nombre"] for o in resumen["omitidas"]} == {"etiquetas_parciales", "componente", "detector",
+                                                                  "prueba_final"}
         assert all((dest / f"{n}.{ext}").stat().st_size > 0 for n in generadas for ext in ("png", "svg"))
         assert CAL in (dest / "README.md").read_text(encoding="utf-8")
         svg, png = (dest / "veces_azar.svg").read_bytes(), (dest / "veces_azar.png").read_bytes()
@@ -51,7 +52,15 @@ def test_genera_omite_y_es_determinista():
                                                    "acierto_codigo_rango95": [0.36, 0.44], "acierto_general": 0.335}},
             "detector": {"potencia_validacion": {"codigos": 18, "sube_x2": {"deteccion": 0.9, "demora_mediana_dia": 10},
                                                  "baja_a_la_mitad": {"deteccion": 0.67}}}})
+        tramo = lambda n, v, lectura="principal": {"tramo": n, "lectura_del_tramo": lectura, "ganadora": dict(
+            _alt("tasa fija (<= 194)", "tasa_fija", [1, 0], 0.11), veces_azar=v, veces_azar_rango95=[v - 0.3, v + 0.3],
+            lectura="mejora")}
+        _escribir(res, "prueba-final", {"corridas": [{"tramos": [
+            tramo("prueba completa", 1.3), tramo("prueba ≤260", 1.4),
+            tramo("prueba >260", 0.9, "descriptiva: cupo ~8, demasiado chico para leerlo")]}]})
         resumen = figuras.generar(res, dest)
         assert not resumen["omitidas"], resumen["omitidas"]
+        leyenda = (dest / "README.md").read_text(encoding="utf-8").split("## veces_azar_prueba_final")[1]
+        assert "prueba completa" in leyenda and "prueba >260" not in leyenda  # El tramo descriptivo no se grafica.
         nombres = {g["nombre"] for g in resumen["generadas"]}
         assert {"etiquetas_parciales", "donde_mirar", "detector_potencia"} <= nombres

@@ -57,6 +57,16 @@
       ]
     },
     {
+      "nombre": "veces_azar_prueba_final",
+      "archivos": [
+        "docs/entrega/figuras/veces_azar_prueba_final.png",
+        "docs/entrega/figuras/veces_azar_prueba_final.svg"
+      ],
+      "fuentes": [
+        "prueba-final.json"
+      ]
+    },
+    {
       "nombre": "diagrama_proceso",
       "archivos": [
         "docs/entrega/figuras/diagrama_proceso.png",

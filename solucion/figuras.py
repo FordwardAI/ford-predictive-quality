@@ -294,6 +294,56 @@ def figura_veces_azar(resultados, destino):
             "fuentes": ["p3.json", "eleccion.json"], "leyenda": leyenda}, None
 
 
+def figura_prueba_final(resultados, destino):
+    """Veces el azar de la ganadora en la prueba final (corrida única), por tramo leído."""
+    registro = _leer(resultados, "prueba-final")
+    if not (registro and registro.get("corridas")):
+        return None, "falta prueba-final.json (la corrida única todavía no se hizo)"
+    corrida = registro["corridas"][-1]
+    # El tramo >260 es descriptivo (cupo ~8): no tiene rango de veces el azar que se pueda leer.
+    tramos = [t for t in corrida["tramos"] if t.get("ganadora", {}).get("veces_azar_rango95")
+              and not str(t.get("lectura_del_tramo", "")).startswith("descriptiva")]
+    if not tramos:
+        return None, "la prueba final no tiene tramos con rango"
+    filas = [(_capital(t["tramo"]), t["ganadora"]) for t in tramos]
+    principal = filas[0][1]
+    fig, ax = plt.subplots(figsize=(10, 1.9 + 0.55 * len(filas)))
+    fig.subplots_adjust(left=0.33, right=0.77, top=1 - 1.15 / (1.9 + 0.55 * len(filas)), bottom=0.25)
+    _ejes_limpios(ax)
+    for y, (texto, r) in zip(range(len(filas))[::-1], filas):
+        lo, hi = r["veces_azar_rango95"]
+        destacada = texto == filas[0][0]
+        ax.plot([lo, hi], [y, y], color=ACENTO if destacada else EJE, linewidth=2, solid_capstyle="round", zorder=2)
+        ax.plot([r["veces_azar"]], [y], marker="o", markersize=8, markerfacecolor=ACENTO if destacada else APAGADO,
+                markeredgecolor=SUPERFICIE, markeredgewidth=1.5, zorder=3)
+        ax.text(-0.012, y, texto, transform=ax.get_yaxis_transform(), ha="right", va="center", fontsize=9.5,
+                color=TINTA if destacada else TINTA_2, fontweight="bold" if destacada else "normal")
+        ax.text(1.015, y, f"{veces(r['veces_azar'])} ({veces(lo)} a {veces(hi)})",
+                transform=ax.get_yaxis_transform(), ha="left", va="center", fontsize=9,
+                color=TINTA if destacada else TINTA_2)
+    ax.axvline(1, color=TINTA_2, linewidth=1, zorder=1)
+    ax.text(1, len(filas) - 0.45, " azar esperado = 1×", ha="left", va="bottom", fontsize=8.5, color=TINTA_2)
+    ax.set_yticks([])
+    ax.set_ylim(-0.6, len(filas) - 0.1)
+    ax.set_xlim(0, max(2.5, max(f[1]["veces_azar_rango95"][1] for f in filas) + 0.1))
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda x, _: f"{x:.1f}".replace(".", ",") + "×"))
+    ax.set_xlabel("Veces el azar al mismo cupo (rango del 95 %)", fontsize=9)
+    azar = principal["azar_mismo_cupo"]
+    _encabezado(fig, f"Prueba final: de cada 100 elegidos se calibrarían "
+                     f"{pct(principal['precision_cupo']).removesuffix(' %')}, "
+                     f"contra {pct(azar).removesuffix(' %')} al azar",
+                f"Veces el azar de la ganadora, {principal['calificador']}.\nRango del 95 % por bootstrap de días; "
+                f"lectura de la prueba completa: {principal['lectura']}.")
+    _pie(fig, "Corrida única del preregistro acordado. El tramo >260 (cupo ~8) es solo descriptivo y no se grafica. "
+              "El límite inferior de la prueba completa queda cerca de 1×.")
+    leyenda = (f"Veces el azar de la ganadora ({_nombre(principal['alternativa'])}) en la prueba final, por tramo: "
+               + "; ".join(f"{t.lower()} {veces(r['veces_azar'])} ({veces(r['veces_azar_rango95'][0])} a "
+                           f"{veces(r['veces_azar_rango95'][1])})" for t, r in filas)
+               + f". {_capital(principal['calificador'])}.")
+    return {"nombre": "veces_azar_prueba_final", "archivos": _guardar(fig, destino, "veces_azar_prueba_final"),
+            "fuentes": ["prueba-final.json"], "leyenda": leyenda}, None
+
+
 # --- 3. piezas posteriores (p5, p6): se leen con tolerancia --------------------------------
 
 def _puntos(fig_nombre, titulo, filas, calificador, destino, xlabel, formato, referencia=None):
@@ -558,7 +608,7 @@ def diagrama_solucion(destino):
 # --- índice y entrada ------------------------------------------------------------------------
 
 FIGURAS_DATOS = (figura_comparacion, figura_veces_azar, figura_etiquetas_parciales, figura_componente,
-                 figura_detector)
+                 figura_detector, figura_prueba_final)
 
 
 def _indice(destino, generadas, omitidas):
@@ -567,7 +617,7 @@ def _indice(destino, generadas, omitidas):
               "quality/issues/33)); no editar a mano. Se regenera con:", "",
               "```sh", '.venv/bin/python -m solucion.run --csv "<CSV>" --catalogo "<catálogo>" --piezas p9', "```",
               "", "Las figuras de resultados usan solo los agregados de `solucion/resultados/` y cifras de "
-              "**validación** (Día del VIN 155–194), no de la prueba final. PNG a 200 dpi para el informe y la "
+              "**validación** (Día del VIN 155–194); la única con la prueba final es `veces_azar_prueba_final`. PNG a 200 dpi para el informe y la "
               "presentación; SVG para editar.", ""]
     for g in generadas:
         png, svg = (Path(a).name for a in g["archivos"])
