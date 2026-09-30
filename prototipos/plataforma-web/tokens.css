@@ -1,0 +1,83 @@
+/* Tokens de la guía de marca de Ford (brand.ford.com, extraída el 30/09/2026; copia fuera del repo).
+   Estados: extensión del tema FORD CORPORATE del template.
+   Sin Ford Oval ni Signature: la plataforma es una propuesta de FordwardAI.
+   Tipografía: FORD F-1 si está instalada (no se descarga: es propietaria); si no, la misma caída que usa el sitio.
+   Íconos: trazos simples de 2px en grilla de 24px (el sistema de íconos de la marca es solo para marketing). */
+:root {
+  /* Paleta de marca */
+  --ford-blue: #00095B;       /* primario: títulos, texto, navegación, cabeceras de tabla */
+  --ford-twilight: #00142E;   /* fondos oscuros profundos */
+  --ford-skyview: #066FEF;    /* acento: palabra destacada, CTA, bordes de botón, foco, serie principal */
+  --ford-white: #FFFFFF;
+  --ford-light-gray: #F0F0F0;
+  --ford-off-black: #0F0F0F;
+
+  /* Estados: extensión, no oficial (tema FORD CORPORATE del template). Siempre con ícono y texto. */
+  --danger: #D62C14;
+  --success: #008200;
+  --warning: #FBAE40;
+
+  /* Derivados por opacidad de la paleta (sin colores nuevos) */
+  --blue-72: rgba(0, 9, 91, .72);   /* texto secundario sobre blanco */
+  --blue-56: rgba(0, 9, 91, .56);   /* texto terciario, ejes */
+  --blue-16: rgba(0, 9, 91, .16);   /* bordes */
+  --blue-08: rgba(0, 9, 91, .06);   /* rellenos suaves */
+  --sky-12: rgba(6, 111, 239, .12); /* fila o elemento destacado */
+  --sky-28: rgba(6, 111, 239, .28); /* banda de rango en gráficos */
+  --grey-chart: #B4B6C2;            /* series de apoyo (gris) */
+
+  /* Roles que usan ui.css y las pantallas */
+  --bg: var(--ford-white);
+  --surface: var(--ford-white);
+  --surface-2: var(--ford-light-gray);
+  --ink: var(--ford-blue);
+  --ink-2: var(--blue-72);
+  --muted: var(--blue-56);
+  --line: var(--blue-16);
+  --line-2: var(--blue-16);
+  --title: var(--ford-blue);
+  --accent: var(--ford-skyview);
+  --accent-ink: var(--ford-skyview);
+  --accent-soft: var(--sky-12);
+  --accent-soft-2: var(--sky-28);
+  --ref: var(--grey-chart);
+  --ref-soft: var(--ford-light-gray);
+  --series-2: var(--ford-blue);
+  --series-2-soft: var(--blue-08);
+  --ok: var(--success);
+  --ok-soft: rgba(0, 130, 0, .10);
+  --warn: var(--ford-blue);
+  --warn-soft: rgba(251, 174, 64, .22);
+  --warn-line: var(--warning);
+  --bad: var(--danger);
+  --bad-soft: rgba(214, 44, 20, .08);
+  --neutral-soft: var(--ford-light-gray);
+
+  /* Alias usados en las pantallas */
+  --ford-accent: var(--ford-skyview);
+  --ford-dark: var(--ford-twilight);
+  --text-grey: var(--blue-56);
+  --line-grey: var(--grey-chart);
+  --bg-light: var(--ford-light-gray);
+  --white: var(--ford-white);
+  --warn-c: var(--warning);
+  --alert-c: var(--danger);
+  --ok-c: var(--success);
+
+  /* Tipografía: 4 tamaños por pantalla (40 · 24 · 16 · 14) */
+  --font: "Ford F-1", "Ford-F1", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: var(--font);
+  --fs-1: 40px;
+  --fs-2: 24px;
+  --fs-3: 16px;
+  --fs-4: 14px;
+  --ls-heading: -0.02em;
+  --ls-body: -0.03em;
+
+  /* Forma: plano, sin sombras */
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+  --radius: var(--radius-sm);
+  --shadow: none;
+}

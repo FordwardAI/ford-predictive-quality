@@ -63,6 +63,8 @@ Propuesta de implementación, no un entregable del 2/10 ([#33](https://github.co
 - **Evidencia del modelo:** la comparación de alternativas, las etiquetas parciales, la preparación de datos y el estado de la prueba final.
 - **Implementación:** el seguimiento de los días de control y la configuración del cupo diario, el mínimo por código y la carga del programa del día.
 
+**Prototipo:** galería de pantallas en [`prototipos/plataforma-web/`](../../prototipos/plataforma-web/README.md), con los tokens de la guía de marca de Ford y sin logo. Los datos (`data.js`) y las capturas se regeneran localmente y no se versionan.
+
 **Límites:** el prototipo usa la base ficticia y cifras de validación. No hay integración con QLS ni con el programa de producción; esa integración es el trabajo principal para llevarla a planta. Los riesgos de acceso y de datos se analizan en [seguridad y privacidad](02-3-seguridad-privacidad.md).
 
 [ctx]: ../../CONTEXT.md
