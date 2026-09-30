@@ -8,14 +8,17 @@ de la ganadora se informa en el bloque de confirmación (175–194), que no part
 Todo se calcula con Día < 195: la prueba final no se relee. Los resultados se guardan aparte
 (`solucion/resultados/precision.json`) para no tocar la cadena del preregistro.
 """
+import datetime
+import json
 import types
+from pathlib import Path
 
 import numpy as np
 
 from . import ml
 from .cupo import (CALIFICADOR, Diario, elegir_por_precision, diferencia, fuente_completa, metricas, remuestreos,
                    resultado, simular)
-from .datos import MARGEN, PRUEBA_DESDE
+from .datos import MARGEN, PRUEBA_DESDE, RAIZ
 from .puntaje import atributos_de
 from .referencias import (Azar, Decaimiento, Jerarquico, Movil, MovilMercado, Oraculo, PESO, TasaFija, VENTANAS,
                           VIDAS)
@@ -24,6 +27,9 @@ BLOQUES_SELECCION = ((100, 118), (119, 137), (138, 156), (157, 174))
 CONFIRMACION = (175, 194)
 VALIDACION_ORIGINAL = (155, 194)
 JERARQUICO_VENTANAS, JERARQUICO_PESOS = (60, 120, None), (10, 20, 40)
+ANCLA_PRUEBA = PRUEBA_DESDE  # El modelo reentrenado empieza a reentrenar en el primer día de la prueba final.
+RESULTADOS = RAIZ / "solucion" / "resultados"
+PREREGISTRO_SEGUNDA = RAIZ / "solucion" / "preregistro-precision.json"
 
 
 def grupos_del_bloque(tabla, fuente, a, b, con_ml=True):
@@ -201,3 +207,72 @@ def correr(tabla, opciones=None):
             "oraculo": resumen(next(r for r in resultados if r["clave"] == "oraculo")),
             "ranking": [resumen(r) for r in ranking],
             "validacion_original_155_194": sorted(validacion, key=lambda v: -v["precision_cupo"])}
+
+
+# --- Segunda lectura de la prueba final ---------------------------------------------------------------------
+
+
+def congelar(tabla, ganadora):
+    """(familia, parámetros, ajuste) de la ganadora para la prueba final, calculados solo con Día <= 194.
+
+    El modelo es el reentrenado con atributos que eligió la regla. Sus hiperparámetros y su vida media se eligen por
+    log-loss con los 55 días previos al ancla (Día <= 194), como en cada bloque de la selección; la semilla es la
+    mediana que salió en la selección. Nada de esto usa etiquetas de la prueba final.
+    """
+    assert not tabla.desbloqueada, "Congelar el modelo no requiere la prueba final"
+    familia, modo = ganadora["clave"].split("|")
+    assert familia.startswith("ml_") and familia.endswith("_atributos") and modo == "reentrenado" \
+        and familia != "ml_promedio_atributos", f"Solo se congela un ML reentrenado con atributos: {ganadora['clave']}"
+    base = familia.removeprefix("ml_").removesuffix("_atributos")
+    ajuste = ml.ajustar(base, "reentrenado", fuente_completa(tabla), ANCLA_PRUEBA, atributos_de(tabla.catalogo))
+    semilla = ganadora["semilla_mediana"] if ml.FAMILIAS[base].estocastica else None
+    parametros = {"modo": "reentrenado", "semilla": semilla, "ancla": ANCLA_PRUEBA, "vida": ajuste["vida"],
+                  "hiperparametros": ajuste["hiperparametros"]}
+    return familia, parametros, {"log_loss_interna": ajuste["log_loss_interna"], "grilla": ajuste["grilla"]}
+
+
+def preregistro_segunda_lectura(tabla, resultados=RESULTADOS, fecha=None):
+    """Preregistro propuesto para leer, una vez, la prueba final con la ganadora por precisión.
+
+    Es una SEGUNDA lectura: la prueba ya se leyó el 30/09 con la tasa fija preregistrada y el equipo vio ese resultado.
+    Se lee solo el predictor (los cuatro tramos contra el azar); las demás piezas ya se leyeron y quedan fuera.
+    """
+    from . import preregistro as pr
+    anterior = Path(resultados) / "eleccion.json"
+    assert anterior.exists(), "Faltan los resultados de la validación"
+    d, fuente_precision = pr._leer(Path(resultados) / "precision.json")
+    assert d is not None, "Falta precision.json: correr la pieza `precision`"
+    g = d["ganadora"]
+    familia, parametros, ajuste = congelar(tabla, g)
+    p = pr.generar(resultados, fecha)
+    primero = pr.PREREGISTRO if Path(resultados) == pr.RESULTADOS else Path(resultados) / "preregistro.json"
+    _, fuente_primero = pr._leer(primero)
+    p["como_acordar"] = ("Segunda lectura de la prueba final. Revisar en equipo, cambiar estado a \"acordado\", "
+                         "commitear, enlazar en #33 y correr una vez con --preregistro solucion/preregistro-precision.json "
+                         "--hash-preregistro <sha256 del archivo commiteado>. Se informan las dos lecturas.")
+    p["segunda_lectura"] = {
+        "motivo": "El equipo decidió elegir por precisión y quiere leer la prueba final con esa ganadora.",
+        "advertencia": "La prueba final ya se leyó una vez (30/09) con la tasa fija preregistrada y el equipo vio ese "
+                       "resultado: esta lectura es más débil que la primera y se informa siempre junto a ella.",
+        "preregistro_anterior": fuente_primero,
+    }
+    p["entradas"] = {"precision": fuente_precision}
+    p["ganadora"] = {"alternativa": g["alternativa"], "familia": familia, "parametros": parametros,
+                     "en_seleccion": {k: g[k] for k in ("precision_seleccion", "precision_seleccion_rango95",
+                                                       "calibrada_elegidas_seleccion", "elegidos_seleccion")},
+                     "en_confirmacion": g["confirmacion"], "ajuste_interno": ajuste}
+    p["ganadora_en_prueba"] = {"familia": familia, "parametros": parametros,
+                               "modo": "reentrenada: ancla 200, resultados de Día <= t−5, también dentro de la prueba"}
+    p["semillas"]["modelo"] = (f"semilla {parametros['semilla']}: la mediana de las semillas 1 a 5 en la selección; "
+                               "las otras cuatro no se leen")
+    p["piezas"] = {"p5": pr.FUERA, "p6": pr.FUERA, "e3": pr.FUERA}
+    p["reglas_de_lectura"] = {"predictor": pr.REGLAS["predictor"],
+                              "segunda_lectura": "Se informa junto a la primera lectura (tasa fija, 30/09). No "
+                              "reemplaza la cifra oficial de la prueba final."}
+    p["ya_visto"] = [*pr.YA_VISTO, "La prueba final ya se leyó una vez (30/09) con otra opción: esta es la segunda "
+                     "lectura y el equipo conocía el resultado de la primera.",
+                     "El modelo se eligió por precisión en Día < 195 con una ganadora casi arbitraria: los doce "
+                     "primeros modelos quedaron a pocos aciertos de diferencia."]
+    p["no_se_lee_en_prueba"] = [*pr.NO_SE_LEE, "P5, P6 y la E3: ya se leyeron en la primera lectura.",
+                                "Los demás modelos con atributos y el suavizado jerárquico: solo validación."]
+    return p

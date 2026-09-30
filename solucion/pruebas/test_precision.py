@@ -90,3 +90,46 @@ def test_todas_las_alternativas_de_un_bloque_puntuan_sin_fuga():
     for alternativa in (modelo, promedio):
         d = precision.simular(t, alternativa, 40, 44, fuente)
         assert len(d.dias) == 5 and d.k.sum() > 0
+
+
+def test_segunda_lectura_congela_sin_la_prueba_arma_el_preregistro_y_corre_de_punta_a_punta():
+    """Lo que no puede fallar en la corrida real: congelar (sin etiquetas >= 200), preregistrar y leer la prueba."""
+    import json
+    import tempfile
+    from pathlib import Path
+
+    from solucion import preregistro as pr
+    from solucion.pruebas import test_preregistro as tp
+
+    ganadora = {"alternativa": "Regresión logística con atributos del código, reentrenado cada 5 d",
+                "clave": "ml_logistica_atributos|reentrenado", "semilla_mediana": None,
+                "precision_seleccion": 0.18, "precision_seleccion_rango95": [0.15, 0.21],
+                "calibrada_elegidas_seleccion": 130, "elegidos_seleccion": 740,
+                "confirmacion": {"precision_cupo": 0.17, "calibrada_elegidas": 39, "elegidos": 225}}
+    with tempfile.TemporaryDirectory() as d:
+        tp._resultados(d)
+        Path(d, "preregistro.json").write_text("{}", encoding="utf-8", newline="\n")
+        Path(d, "precision.json").write_text(json.dumps({"ganadora": ganadora}), encoding="utf-8", newline="\n")
+        masked = tabla(dias=range(1, 271), por_dia=40)
+        assert not masked.desbloqueada
+        p = precision.preregistro_segunda_lectura(masked, d, fecha="2026-10-01")
+        assert p["estado"] == "propuesto" and not pr.pendientes(p), pr.pendientes(p)
+        assert p["piezas"] == {"p5": pr.FUERA, "p6": pr.FUERA, "e3": pr.FUERA}
+        en_prueba = p["ganadora_en_prueba"]
+        assert en_prueba["familia"] == "ml_logistica_atributos"
+        assert en_prueba["parametros"]["ancla"] == 200 and en_prueba["parametros"]["modo"] == "reentrenado"
+        assert "ya se leyó una vez" in p["segunda_lectura"]["advertencia"]  # Declara que es una segunda lectura.
+        # Acordado y corrido con el mismo camino que la corrida real.
+        p.update(estado="acordado", fuente=dict(tp.FUENTE))
+        archivo = Path(d) / "preregistro-precision.json"
+        archivo.write_text(json.dumps(p, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+        salida = Path(d) / "prueba-final.json"
+        registro = pr.correr(archivo, pr.sha256(archivo), salida=salida, git=tp._git_ok, cargar=tp._tabla,
+                             ahora=tp.AHORA)
+        corrida = registro["corridas"][0]
+        assert corrida["ganadora"]["familia"] == "ml_logistica_atributos"
+        assert corrida["piezas"]["p5"]["corrida"] is False and corrida["piezas"]["p6"]["corrida"] is False
+        assert corrida["piezas"]["e3"]["corrida"] is False
+        g = corrida["tramos"][0]["ganadora"]
+        assert g["calibrada_tramo"] > 0 and g["lectura"] in ("mejora", "inconcluso", "peor")  # Leyó la prueba.
+        assert "SYN" not in salida.read_text(encoding="utf-8")  # Sin identificadores.
