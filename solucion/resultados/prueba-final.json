@@ -1068,6 +1068,1036 @@
         "En planta solo se conocería el resultado de lo que se elige auditar.",
         "El Día del VIN es aproximado: max(Fecha Inspección, Fecha Reparación)."
       ]
+    },
+    {
+      "fecha": "2026-09-30T21:24:41+00:00",
+      "preregistro": "solucion/preregistro-precision.json",
+      "preregistro_sha256": "a11941dd45fa05260d91b7a9085bd70a8ff2ce27fb24a1dbc9d40ed4455a9941",
+      "preregistro_commit": "82af8dcfb04198414978305c015927a2f5ef921d",
+      "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4",
+      "version_codigo_preregistro": "f382c985652e280d94d2bd2eaa42858f37ba2593",
+      "fuente": {
+        "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+        "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+      },
+      "ganadora": {
+        "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+        "familia": "ml_catboost_atributos",
+        "parametros": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 200,
+          "vida": 15,
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          }
+        }
+      },
+      "tramos": [
+        {
+          "tramo": "prueba completa",
+          "dias_del_vin": [
+            200,
+            284
+          ],
+          "lectura_del_tramo": "principal",
+          "vin_esperados": 13312,
+          "vins": 13312,
+          "ganadora": {
+            "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+            "familia": "ml_catboost_atributos",
+            "parametros": {
+              "modo": "reentrenado",
+              "semilla": 1,
+              "ancla": 200,
+              "vida": 15,
+              "hiperparametros": {
+                "l2_leaf_reg": 10.0
+              }
+            },
+            "orden_simplicidad": [
+              7,
+              3,
+              1
+            ],
+            "elegible": true,
+            "tramo": "prueba completa",
+            "calificador": "entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN",
+            "dias": 68,
+            "vins": 13312,
+            "elegidos": 652,
+            "calibrada_elegidas": 78,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.1196319018404908,
+            "precision_rango95": [
+              0.09162573707704177,
+              0.1475946322603848
+            ],
+            "azar_mismo_cupo": 0.08228066604795758,
+            "veces_azar": 1.4539491181411064,
+            "veces_azar_rango95": [
+              1.143937851209665,
+              1.7606161509632392
+            ],
+            "recupero": 0.07103825136612021,
+            "recupero_rango95": [
+              0.05608321879968739,
+              0.08639531831499435
+            ],
+            "diferencia_con_azar_rango95": [
+              0.01199150896768808,
+              0.0628428517079273
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba completa",
+            "calificador": "entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN",
+            "dias": 68,
+            "vins": 13312,
+            "elegidos": 652,
+            "calibrada_elegidas": 55,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.0843558282208589,
+            "precision_rango95": [
+              0.06376811594202898,
+              0.10492870321301694
+            ],
+            "azar_mismo_cupo": 0.08228066604795758,
+            "veces_azar": 1.025220532022575,
+            "veces_azar_rango95": [
+              0.7843084554594549,
+              1.2681711947439844
+            ],
+            "recupero": 0.05009107468123861,
+            "recupero_rango95": [
+              0.03807522060181225,
+              0.06203254241526565
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.017647089110207827,
+              0.02196236352249619
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            0.007946938336782953,
+            0.06299244399781206
+          ]
+        },
+        {
+          "tramo": "prueba ≤260",
+          "dias_del_vin": [
+            200,
+            260
+          ],
+          "lectura_del_tramo": "principal",
+          "vin_esperados": 13135,
+          "vins": 13135,
+          "ganadora": {
+            "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+            "familia": "ml_catboost_atributos",
+            "parametros": {
+              "modo": "reentrenado",
+              "semilla": 1,
+              "ancla": 200,
+              "vida": 15,
+              "hiperparametros": {
+                "l2_leaf_reg": 10.0
+              }
+            },
+            "orden_simplicidad": [
+              7,
+              3,
+              1
+            ],
+            "elegible": true,
+            "tramo": "prueba ≤260",
+            "calificador": "entre auditados con actividad QLS, prueba ≤260, base ficticia, n = 13135 VIN",
+            "dias": 51,
+            "vins": 13135,
+            "elegidos": 631,
+            "calibrada_elegidas": 77,
+            "calibrada_tramo": 1094,
+            "precision_cupo": 0.12202852614896989,
+            "precision_rango95": [
+              0.09433885565270747,
+              0.1530322966507177
+            ],
+            "azar_mismo_cupo": 0.08324409192158382,
+            "veces_azar": 1.465912154629798,
+            "veces_azar_rango95": [
+              1.164109712340534,
+              1.8124929687000015
+            ],
+            "recupero": 0.07038391224862889,
+            "recupero_rango95": [
+              0.055848927120621,
+              0.08684247533472972
+            ],
+            "diferencia_con_azar_rango95": [
+              0.01359416850721395,
+              0.06851975352140223
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba ≤260",
+            "calificador": "entre auditados con actividad QLS, prueba ≤260, base ficticia, n = 13135 VIN",
+            "dias": 51,
+            "vins": 13135,
+            "elegidos": 631,
+            "calibrada_elegidas": 53,
+            "calibrada_tramo": 1094,
+            "precision_cupo": 0.08399366085578447,
+            "precision_rango95": [
+              0.0645643911256376,
+              0.10459636718273801
+            ],
+            "azar_mismo_cupo": 0.08324409192158382,
+            "veces_azar": 1.0090044700698608,
+            "veces_azar_rango95": [
+              0.780436025429013,
+              1.2460197464357787
+            ],
+            "recupero": 0.048446069469835464,
+            "recupero_rango95": [
+              0.0374866739587743,
+              0.05987516437476427
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.018003957032399674,
+              0.02057474708967699
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            0.012137774451440434,
+            0.06709291320466632
+          ]
+        },
+        {
+          "tramo": "prueba >260",
+          "dias_del_vin": [
+            261,
+            284
+          ],
+          "lectura_del_tramo": "descriptiva: cupo ~8, demasiado chico para leerlo",
+          "vin_esperados": 177,
+          "vins": 177,
+          "ganadora": {
+            "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+            "familia": "ml_catboost_atributos",
+            "parametros": {
+              "modo": "reentrenado",
+              "semilla": 1,
+              "ancla": 200,
+              "vida": 15,
+              "hiperparametros": {
+                "l2_leaf_reg": 10.0
+              }
+            },
+            "orden_simplicidad": [
+              7,
+              3,
+              1
+            ],
+            "elegible": true,
+            "tramo": "prueba >260",
+            "calificador": "entre auditados con actividad QLS, prueba >260, base ficticia, n = 177 VIN",
+            "dias": 17,
+            "vins": 177,
+            "elegidos": 21,
+            "calibrada_elegidas": 1,
+            "calibrada_tramo": 4,
+            "precision_cupo": 0.047619047619047616,
+            "precision_rango95": [
+              0.0,
+              0.17647058823529413
+            ],
+            "azar_mismo_cupo": 0.05333201241661713,
+            "veces_azar": 0.8928792569659443,
+            "veces_azar_rango95": [
+              0.0,
+              2.0
+            ],
+            "recupero": 0.25,
+            "recupero_rango95": [
+              0.0,
+              1.0
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.07374017568192326,
+              0.06571560663100191
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba >260",
+            "calificador": "entre auditados con actividad QLS, prueba >260, base ficticia, n = 177 VIN",
+            "dias": 17,
+            "vins": 177,
+            "elegidos": 21,
+            "calibrada_elegidas": 2,
+            "calibrada_tramo": 4,
+            "precision_cupo": 0.09523809523809523,
+            "precision_rango95": [
+              0.0,
+              0.23809523809523808
+            ],
+            "azar_mismo_cupo": 0.05333201241661713,
+            "veces_azar": 1.7857585139318886,
+            "veces_azar_rango95": [
+              0.0,
+              2.0
+            ],
+            "recupero": 0.5,
+            "recupero_rango95": [
+              0.0,
+              1.0
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.009114325341787199,
+              0.11764705882352941
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            -0.17647058823529413,
+            0.0
+          ]
+        },
+        {
+          "tramo": "sensibilidad con la cohorte posterior a 260",
+          "dias_del_vin": [
+            200,
+            284
+          ],
+          "lectura_del_tramo": "sensibilidad: suma la cohorte de primer evento posterior a DIA_260 (toda OK)",
+          "vin_esperados": 18222,
+          "vins": 18222,
+          "ganadora": {
+            "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+            "familia": "ml_catboost_atributos",
+            "parametros": {
+              "modo": "reentrenado",
+              "semilla": 1,
+              "ancla": 200,
+              "vida": 15,
+              "hiperparametros": {
+                "l2_leaf_reg": 10.0
+              }
+            },
+            "orden_simplicidad": [
+              7,
+              3,
+              1
+            ],
+            "elegible": true,
+            "tramo": "sensibilidad con la cohorte posterior a 260",
+            "calificador": "entre auditados con actividad QLS, sensibilidad con la cohorte posterior a 260, base ficticia, n = 18222 VIN",
+            "dias": 72,
+            "vins": 18222,
+            "elegidos": 878,
+            "calibrada_elegidas": 77,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.08769931662870159,
+            "precision_rango95": [
+              0.06334628190899001,
+              0.11255557505557505
+            ],
+            "azar_mismo_cupo": 0.06004864822987595,
+            "veces_azar": 1.4604711215642092,
+            "veces_azar_rango95": [
+              1.1460531117576243,
+              1.7671030571405104
+            ],
+            "recupero": 0.07012750455373407,
+            "recupero_rango95": [
+              0.054980198642192606,
+              0.08482945880677795
+            ],
+            "diferencia_con_azar_rango95": [
+              0.008372711268817409,
+              0.04771053109251527
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "sensibilidad con la cohorte posterior a 260",
+            "calificador": "entre auditados con actividad QLS, sensibilidad con la cohorte posterior a 260, base ficticia, n = 18222 VIN",
+            "dias": 72,
+            "vins": 18222,
+            "elegidos": 878,
+            "calibrada_elegidas": 53,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.06036446469248292,
+            "precision_rango95": [
+              0.04257523130562994,
+              0.07795579455541064
+            ],
+            "azar_mismo_cupo": 0.06004864822987595,
+            "veces_azar": 1.005259343414326,
+            "veces_azar_rango95": [
+              0.7611516626557966,
+              1.2420539115586786
+            ],
+            "recupero": 0.0482695810564663,
+            "recupero_rango95": [
+              0.03648859244483232,
+              0.059618256262042375
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.014166347448689252,
+              0.014414324300471007
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            0.00781924774389039,
+            0.04778546995864103
+          ]
+        }
+      ],
+      "piezas": {
+        "p5": {
+          "corrida": false,
+          "motivo": "Fuera del preregistro: se muestra solo con cifras de validación."
+        },
+        "p6": {
+          "corrida": false,
+          "motivo": "Fuera del preregistro: se muestra solo con cifras de validación."
+        },
+        "casi_no_se_calibran": {
+          "corrida": false,
+          "motivo": "Fuera del preregistro."
+        },
+        "e3": {
+          "corrida": false,
+          "motivo": "Fuera del preregistro: se muestra solo con cifras de validación."
+        }
+      },
+      "ya_visto": [
+        "El tramo de prueba (Día 200–260) ya lo exploraron los experimentos de modelado (research/experimentos-modelado.md), que eligieron ahí la ventana de 60 días: la cifra puede ser optimista.",
+        "Las tasas por mercado dentro de la prueba ya están publicadas en research/catalog-groups.json.",
+        "Los totales CALIBRADA de la prueba por tramo ya están publicados en research/validation-partitions.json.",
+        "Que los auditados sean una selección al azar es un supuesto de Ford.",
+        "En planta solo se conocería el resultado de lo que se elige auditar.",
+        "El Día del VIN es aproximado: max(Fecha Inspección, Fecha Reparación).",
+        "La prueba final ya se leyó una vez (30/09) con otra opción: esta es la segunda lectura y el equipo conocía el resultado de la primera.",
+        "El modelo se eligió por precisión en Día < 195 con una ganadora casi arbitraria: los doce primeros modelos quedaron a pocos aciertos de diferencia."
+      ]
+    },
+    {
+      "fecha": "2026-09-30T21:25:39+00:00",
+      "preregistro": "solucion/preregistro-precision.json",
+      "preregistro_sha256": "a11941dd45fa05260d91b7a9085bd70a8ff2ce27fb24a1dbc9d40ed4455a9941",
+      "preregistro_commit": "82af8dcfb04198414978305c015927a2f5ef921d",
+      "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4",
+      "version_codigo_preregistro": "f382c985652e280d94d2bd2eaa42858f37ba2593",
+      "fuente": {
+        "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+        "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+      },
+      "ganadora": {
+        "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+        "familia": "ml_catboost_atributos",
+        "parametros": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 200,
+          "vida": 15,
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          }
+        }
+      },
+      "tramos": [
+        {
+          "tramo": "prueba completa",
+          "dias_del_vin": [
+            200,
+            284
+          ],
+          "lectura_del_tramo": "principal",
+          "vin_esperados": 13312,
+          "vins": 13312,
+          "ganadora": {
+            "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+            "familia": "ml_catboost_atributos",
+            "parametros": {
+              "modo": "reentrenado",
+              "semilla": 1,
+              "ancla": 200,
+              "vida": 15,
+              "hiperparametros": {
+                "l2_leaf_reg": 10.0
+              }
+            },
+            "orden_simplicidad": [
+              7,
+              3,
+              1
+            ],
+            "elegible": true,
+            "tramo": "prueba completa",
+            "calificador": "entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN",
+            "dias": 68,
+            "vins": 13312,
+            "elegidos": 652,
+            "calibrada_elegidas": 78,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.1196319018404908,
+            "precision_rango95": [
+              0.09162573707704177,
+              0.1475946322603848
+            ],
+            "azar_mismo_cupo": 0.08228066604795758,
+            "veces_azar": 1.4539491181411064,
+            "veces_azar_rango95": [
+              1.143937851209665,
+              1.7606161509632392
+            ],
+            "recupero": 0.07103825136612021,
+            "recupero_rango95": [
+              0.05608321879968739,
+              0.08639531831499435
+            ],
+            "diferencia_con_azar_rango95": [
+              0.01199150896768808,
+              0.0628428517079273
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba completa",
+            "calificador": "entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN",
+            "dias": 68,
+            "vins": 13312,
+            "elegidos": 652,
+            "calibrada_elegidas": 55,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.0843558282208589,
+            "precision_rango95": [
+              0.06376811594202898,
+              0.10492870321301694
+            ],
+            "azar_mismo_cupo": 0.08228066604795758,
+            "veces_azar": 1.025220532022575,
+            "veces_azar_rango95": [
+              0.7843084554594549,
+              1.2681711947439844
+            ],
+            "recupero": 0.05009107468123861,
+            "recupero_rango95": [
+              0.03807522060181225,
+              0.06203254241526565
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.017647089110207827,
+              0.02196236352249619
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            0.007946938336782953,
+            0.06299244399781206
+          ]
+        },
+        {
+          "tramo": "prueba ≤260",
+          "dias_del_vin": [
+            200,
+            260
+          ],
+          "lectura_del_tramo": "principal",
+          "vin_esperados": 13135,
+          "vins": 13135,
+          "ganadora": {
+            "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+            "familia": "ml_catboost_atributos",
+            "parametros": {
+              "modo": "reentrenado",
+              "semilla": 1,
+              "ancla": 200,
+              "vida": 15,
+              "hiperparametros": {
+                "l2_leaf_reg": 10.0
+              }
+            },
+            "orden_simplicidad": [
+              7,
+              3,
+              1
+            ],
+            "elegible": true,
+            "tramo": "prueba ≤260",
+            "calificador": "entre auditados con actividad QLS, prueba ≤260, base ficticia, n = 13135 VIN",
+            "dias": 51,
+            "vins": 13135,
+            "elegidos": 631,
+            "calibrada_elegidas": 77,
+            "calibrada_tramo": 1094,
+            "precision_cupo": 0.12202852614896989,
+            "precision_rango95": [
+              0.09433885565270747,
+              0.1530322966507177
+            ],
+            "azar_mismo_cupo": 0.08324409192158382,
+            "veces_azar": 1.465912154629798,
+            "veces_azar_rango95": [
+              1.164109712340534,
+              1.8124929687000015
+            ],
+            "recupero": 0.07038391224862889,
+            "recupero_rango95": [
+              0.055848927120621,
+              0.08684247533472972
+            ],
+            "diferencia_con_azar_rango95": [
+              0.01359416850721395,
+              0.06851975352140223
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba ≤260",
+            "calificador": "entre auditados con actividad QLS, prueba ≤260, base ficticia, n = 13135 VIN",
+            "dias": 51,
+            "vins": 13135,
+            "elegidos": 631,
+            "calibrada_elegidas": 53,
+            "calibrada_tramo": 1094,
+            "precision_cupo": 0.08399366085578447,
+            "precision_rango95": [
+              0.0645643911256376,
+              0.10459636718273801
+            ],
+            "azar_mismo_cupo": 0.08324409192158382,
+            "veces_azar": 1.0090044700698608,
+            "veces_azar_rango95": [
+              0.780436025429013,
+              1.2460197464357787
+            ],
+            "recupero": 0.048446069469835464,
+            "recupero_rango95": [
+              0.0374866739587743,
+              0.05987516437476427
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.018003957032399674,
+              0.02057474708967699
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            0.012137774451440434,
+            0.06709291320466632
+          ]
+        },
+        {
+          "tramo": "prueba >260",
+          "dias_del_vin": [
+            261,
+            284
+          ],
+          "lectura_del_tramo": "descriptiva: cupo ~8, demasiado chico para leerlo",
+          "vin_esperados": 177,
+          "vins": 177,
+          "ganadora": {
+            "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+            "familia": "ml_catboost_atributos",
+            "parametros": {
+              "modo": "reentrenado",
+              "semilla": 1,
+              "ancla": 200,
+              "vida": 15,
+              "hiperparametros": {
+                "l2_leaf_reg": 10.0
+              }
+            },
+            "orden_simplicidad": [
+              7,
+              3,
+              1
+            ],
+            "elegible": true,
+            "tramo": "prueba >260",
+            "calificador": "entre auditados con actividad QLS, prueba >260, base ficticia, n = 177 VIN",
+            "dias": 17,
+            "vins": 177,
+            "elegidos": 21,
+            "calibrada_elegidas": 1,
+            "calibrada_tramo": 4,
+            "precision_cupo": 0.047619047619047616,
+            "precision_rango95": [
+              0.0,
+              0.17647058823529413
+            ],
+            "azar_mismo_cupo": 0.05333201241661713,
+            "veces_azar": 0.8928792569659443,
+            "veces_azar_rango95": [
+              0.0,
+              2.0
+            ],
+            "recupero": 0.25,
+            "recupero_rango95": [
+              0.0,
+              1.0
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.07374017568192326,
+              0.06571560663100191
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba >260",
+            "calificador": "entre auditados con actividad QLS, prueba >260, base ficticia, n = 177 VIN",
+            "dias": 17,
+            "vins": 177,
+            "elegidos": 21,
+            "calibrada_elegidas": 2,
+            "calibrada_tramo": 4,
+            "precision_cupo": 0.09523809523809523,
+            "precision_rango95": [
+              0.0,
+              0.23809523809523808
+            ],
+            "azar_mismo_cupo": 0.05333201241661713,
+            "veces_azar": 1.7857585139318886,
+            "veces_azar_rango95": [
+              0.0,
+              2.0
+            ],
+            "recupero": 0.5,
+            "recupero_rango95": [
+              0.0,
+              1.0
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.009114325341787199,
+              0.11764705882352941
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            -0.17647058823529413,
+            0.0
+          ]
+        },
+        {
+          "tramo": "sensibilidad con la cohorte posterior a 260",
+          "dias_del_vin": [
+            200,
+            284
+          ],
+          "lectura_del_tramo": "sensibilidad: suma la cohorte de primer evento posterior a DIA_260 (toda OK)",
+          "vin_esperados": 18222,
+          "vins": 18222,
+          "ganadora": {
+            "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1",
+            "familia": "ml_catboost_atributos",
+            "parametros": {
+              "modo": "reentrenado",
+              "semilla": 1,
+              "ancla": 200,
+              "vida": 15,
+              "hiperparametros": {
+                "l2_leaf_reg": 10.0
+              }
+            },
+            "orden_simplicidad": [
+              7,
+              3,
+              1
+            ],
+            "elegible": true,
+            "tramo": "sensibilidad con la cohorte posterior a 260",
+            "calificador": "entre auditados con actividad QLS, sensibilidad con la cohorte posterior a 260, base ficticia, n = 18222 VIN",
+            "dias": 72,
+            "vins": 18222,
+            "elegidos": 878,
+            "calibrada_elegidas": 77,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.08769931662870159,
+            "precision_rango95": [
+              0.06334628190899001,
+              0.11255557505557505
+            ],
+            "azar_mismo_cupo": 0.06004864822987595,
+            "veces_azar": 1.4604711215642092,
+            "veces_azar_rango95": [
+              1.1460531117576243,
+              1.7671030571405104
+            ],
+            "recupero": 0.07012750455373407,
+            "recupero_rango95": [
+              0.054980198642192606,
+              0.08482945880677795
+            ],
+            "diferencia_con_azar_rango95": [
+              0.008372711268817409,
+              0.04771053109251527
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "sensibilidad con la cohorte posterior a 260",
+            "calificador": "entre auditados con actividad QLS, sensibilidad con la cohorte posterior a 260, base ficticia, n = 18222 VIN",
+            "dias": 72,
+            "vins": 18222,
+            "elegidos": 878,
+            "calibrada_elegidas": 53,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.06036446469248292,
+            "precision_rango95": [
+              0.04257523130562994,
+              0.07795579455541064
+            ],
+            "azar_mismo_cupo": 0.06004864822987595,
+            "veces_azar": 1.005259343414326,
+            "veces_azar_rango95": [
+              0.7611516626557966,
+              1.2420539115586786
+            ],
+            "recupero": 0.0482695810564663,
+            "recupero_rango95": [
+              0.03648859244483232,
+              0.059618256262042375
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.014166347448689252,
+              0.014414324300471007
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "e923f00376190ea6bc51e96737ceae4720c88bb4"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            0.00781924774389039,
+            0.04778546995864103
+          ]
+        }
+      ],
+      "piezas": {
+        "p5": {
+          "corrida": false,
+          "motivo": "Fuera del preregistro: se muestra solo con cifras de validación."
+        },
+        "p6": {
+          "corrida": false,
+          "motivo": "Fuera del preregistro: se muestra solo con cifras de validación."
+        },
+        "casi_no_se_calibran": {
+          "corrida": false,
+          "motivo": "Fuera del preregistro."
+        },
+        "e3": {
+          "corrida": false,
+          "motivo": "Fuera del preregistro: se muestra solo con cifras de validación."
+        }
+      },
+      "ya_visto": [
+        "El tramo de prueba (Día 200–260) ya lo exploraron los experimentos de modelado (research/experimentos-modelado.md), que eligieron ahí la ventana de 60 días: la cifra puede ser optimista.",
+        "Las tasas por mercado dentro de la prueba ya están publicadas en research/catalog-groups.json.",
+        "Los totales CALIBRADA de la prueba por tramo ya están publicados en research/validation-partitions.json.",
+        "Que los auditados sean una selección al azar es un supuesto de Ford.",
+        "En planta solo se conocería el resultado de lo que se elige auditar.",
+        "El Día del VIN es aproximado: max(Fecha Inspección, Fecha Reparación).",
+        "La prueba final ya se leyó una vez (30/09) con otra opción: esta es la segunda lectura y el equipo conocía el resultado de la primera.",
+        "El modelo se eligió por precisión en Día < 195 con una ganadora casi arbitraria: los doce primeros modelos quedaron a pocos aciertos de diferencia."
+      ]
     }
   ]
 }

@@ -427,8 +427,16 @@ def resumen(registro):
     return "\n".join(lineas)
 
 
+def salida_utf8(stream=None):
+    """La consola de Windows usa cp1252 y el resumen lleva «≤»: sin esto la corrida falla recién al imprimir."""
+    stream = stream or sys.stdout
+    if hasattr(stream, "reconfigure"):
+        stream.reconfigure(encoding="utf-8")
+
+
 def main(argv=None):
     assert sys.version_info[:2] == (3, 13), "Usar Python 3.13 (ver .python-version y solucion/README.md)"
+    salida_utf8()
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="accion", required=True)
     g = sub.add_parser("generar", help="Arma el preregistro propuesto desde los resultados de validación")
