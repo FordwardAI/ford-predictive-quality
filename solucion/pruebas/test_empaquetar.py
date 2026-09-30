@@ -4,6 +4,7 @@ import zipfile
 from pathlib import Path
 
 from solucion import empaquetar
+from solucion.datos import RAIZ
 
 
 def _zip(d, miembros):
@@ -34,6 +35,8 @@ def test_vin_de_la_tabla_y_forma_de_vin_fallan_tambien_dentro_de_un_xlsx():
 
 
 def test_lo_versionado_incluye_codigo_y_excluye_datos_y_prototipo():
+    if not (RAIZ / ".git").exists():
+        return  # Dentro del .zip de reproducción no hay repositorio.
     archivos = empaquetar.archivos_versionados()
     assert "solucion/run.py" in archivos and "requirements.txt" in archivos and ".python-version" in archivos
     assert not [a for a in archivos if a.startswith(("prototipos/", "docs/")) or a.endswith((".csv", ".xlsx"))]
