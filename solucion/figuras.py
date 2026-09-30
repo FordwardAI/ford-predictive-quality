@@ -16,6 +16,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+from matplotlib import font_manager  # noqa: E402
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch  # noqa: E402
 from matplotlib.ticker import FuncFormatter, MaxNLocator  # noqa: E402
 
@@ -25,20 +26,25 @@ RESULTADOS = RAIZ / "solucion" / "resultados"
 FIGURAS = RAIZ / "docs" / "entrega" / "figuras"
 DPI = 200
 
-# Paleta del tema «FORD CORPORATE» del template del challenge: un solo acento, el resto neutro.
-ACENTO = "#1700F3"  # Azul de acento del template.
-ACENTO_CLARO = "#D6D2FD"
-TINTA = "#00095B"  # Ford Blue: títulos y texto principal.
-TINTA_2 = "#00142E"
-APAGADO = "#7F7F7F"
-GRILLA = "#E3E4E5"
-EJE = "#B9BCBD"
+# Paleta de la guía de marca de Ford (brand.ford.com, extraída el 30/09/2026; copia fuera del repo):
+# Ford Blue para texto y títulos, Skyview como único acento, el resto neutro. Diseño plano.
+ACENTO = "#066FEF"  # Ford Skyview.
+ACENTO_CLARO = "#D2E4FC"
+TINTA = "#00095B"  # Ford Blue.
+TINTA_2 = "#00142E"  # Ford Twilight.
+APAGADO = "#6B6B6B"  # Gris neutro para texto secundario (la marca no define grises intermedios).
+GRILLA = "#E6E6E6"
+EJE = "#B3B3B3"
 SUPERFICIE = "#FFFFFF"
-CAJA = "#F3F3F3"
+CAJA = "#F0F0F0"  # Light Gray.
+
+# La marca usa FORD F-1 (propietaria); su propio sitio cae en Helvetica/Arial. Se toma la primera
+# instalada, con DejaVu Sans (viene con matplotlib) como último respaldo.
+TIPOGRAFIA = next((f for f in ("Ford F-1", "Ford-F1", "Helvetica Neue", "Arial")
+                   if f in {x.name for x in font_manager.fontManager.ttflist}), "DejaVu Sans")
 
 ESTILO = {
-    # Tipografía del template (Avenir Next, incluida en macOS); DejaVu Sans, que trae matplotlib, si no está.
-    "font.family": ["Avenir Next", "DejaVu Sans"],
+    "font.family": TIPOGRAFIA,
     "font.size": 10,
     "axes.edgecolor": EJE,
     "axes.labelcolor": TINTA_2,
@@ -123,7 +129,7 @@ def _ejes_limpios(ax):
 
 
 def _encabezado(fig, titulo, subtitulo):
-    fig.text(0.02, 0.975, titulo, ha="left", va="top", fontsize=13, fontweight="bold", color=TINTA)
+    fig.text(0.02, 0.975, titulo, ha="left", va="top", fontsize=14, fontweight="medium", color=TINTA)  # Guía: Medium, sin negrita.
     fig.text(0.02, 0.975 - 0.045 * 8 / fig.get_figheight(), subtitulo, ha="left", va="top", fontsize=9,
              color=TINTA_2)
 
