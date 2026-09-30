@@ -109,8 +109,8 @@ def version_codigo():
     try:
         commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=RAIZ, capture_output=True, text=True,
                                 check=True).stdout.strip()
-        sucio = subprocess.run(["git", "status", "--porcelain", "--", "solucion"], cwd=RAIZ, capture_output=True,
-                               text=True).stdout.strip()
+        sucio = subprocess.run(["git", "status", "--porcelain", "--", "solucion", ":!solucion/resultados"], cwd=RAIZ,
+                               capture_output=True, text=True).stdout.strip()  # Los resultados no son código.
         return commit + ("+cambios" if sucio else "")
     except (OSError, subprocess.CalledProcessError):
         return "desconocida"
