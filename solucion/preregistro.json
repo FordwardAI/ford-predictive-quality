@@ -1,12 +1,12 @@
 {
-  "estado": "propuesto",
+  "estado": "acordado",
   "fecha": "2026-09-30",
   "como_acordar": "Revisar en equipo. Reemplazar cada \"pendiente\" por su valor o por \"fuera del preregistro\", cambiar estado a \"acordado\", commitear, enlazar en #33 y correr una vez con --hash-preregistro <sha256 del archivo commiteado>.",
   "fuente": {
     "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
     "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
   },
-  "version_codigo": "ec502bb9f053a6e02513206ef7759f17f7b1365d",
+  "version_codigo": "8127debd23640d47895a618190df41199bf13eaa",
   "entradas": {
     "eleccion": {
       "archivo": "solucion/resultados/eleccion.json",
@@ -106,18 +106,7 @@
         },
         "cerca_de_260_dia": 10
       },
-      "subcategorizacion": {
-        "perfil": "distribución de UC Nombre Incidencia por código, eventos de VIN con Día <= 149",
-        "min_vin": 30,
-        "k": 3,
-        "k_rango": [
-          3,
-          8
-        ],
-        "criterio_k": "silhouette",
-        "semilla": 20261006,
-        "n_init": 10
-      },
+      "subcategorizacion": "fuera del preregistro",
       "casi_no_se_calibran": {
         "candidatos": "Códigos cuyo rango de Wilson del 95 % con Día ≤194 queda entero por debajo de la tasa general ≤194",
         "hasta": 194
@@ -165,7 +154,7 @@
     "predictor": "En cada tramo, la ganadora congelada contra el azar al mismo cupo diario: precisión en el cupo, veces el azar y recupero con rango del 95 % (bootstrap por días). Lectura sin umbral: mejora si el rango de la diferencia con el azar queda entero sobre 0, peor si queda entero debajo, inconcluso si incluye 0. Donde no hay CALIBRADA no se calcula veces el azar: solo cuántas se encontraron.",
     "componente": "Acierto de los 3 primeros componentes por código contra los 3 primeros generales, con rango del 95 % por bootstrap, en la prueba.",
     "detector": "Detecciones reales del detector configurado hasta el final de la prueba, incluidas las cercanas a DIA_260, como observaciones: no se afirman causas.",
-    "subcategorizacion": "Orden de las subcategorías en la prueba (tabla descriptiva).",
+    "subcategorizacion": "No se lee en la prueba: fuera del preregistro por decisión del equipo; queda con cifras de validación.",
     "casi_no_se_calibran": "Un código que casi no se calibra se sostiene si su rango de Wilson del 95 % en la prueba completa queda entero por debajo de la tasa general de la prueba completa.",
     "e3": "La hoja final (E3) usa el último día de la prueba ≤260 con VIN.",
     "anexo_historial": "No se lee en la prueba: no es elegible y queda con cifras de validación."
@@ -182,6 +171,7 @@
     "Las demás alternativas de P3 y P4: solo con cifras de validación.",
     "Oráculo y versión con fuga: no elegibles.",
     "Anexo de historial: disponibilidad no probada; solo validación.",
-    "Todo lo que no figura en este preregistro."
+    "Todo lo que no figura en este preregistro.",
+    "Subcategorización: no mantuvo el orden entre grupos en validación; solo cifras de validación."
   ]
 }
