@@ -29,9 +29,9 @@ MODOS = ("fijo", "reentrenado")
 EPS = 1e-6
 
 
-def dia_reentreno(t):
-    """Último día de reentrenamiento <= t en la grilla 155, 160, 165, …"""
-    return REENTRENO_DESDE + CADA * ((t - REENTRENO_DESDE) // CADA)
+def dia_reentreno(t, ancla=REENTRENO_DESDE):
+    """Último día de reentrenamiento <= t en la grilla ancla, ancla+5, ancla+10, … (155, 160, … por defecto)."""
+    return ancla + CADA * ((t - ancla) // CADA)
 
 
 # --- Familias base -------------------------------------------------------------------------------
@@ -131,7 +131,23 @@ def _filas_por_vin(conocidas, peso):
     return codigos, np.array(ys), np.array(ws, dtype=float)
 
 
-def _matriz(familia, codigos, indice):
+class Indice(dict):
+    """Índice código → columna. Con atributos, `categorias` mapea (posición, valor) → columna extra."""
+    categorias = None
+
+
+def _matriz(familia, codigos, indice, atributos=None):
+    if atributos is not None:
+        ancho = len(indice)
+        x = np.zeros((len(codigos), ancho + len(indice.categorias)), dtype=np.float32)
+        for r, c in enumerate(codigos):
+            if c in indice:
+                x[r, indice[c]] = 1.0
+            for j, v in enumerate(atributos.get(c, ())):
+                k = indice.categorias.get((j, v))
+                if k is not None:
+                    x[r, ancho + k] = 1.0
+        return x
     pos = np.array([indice[c] for c in codigos], dtype=int)
     if familia.indice:
         return pos.reshape(-1, 1)
@@ -143,14 +159,23 @@ def _matriz(familia, codigos, indice):
 _MODELOS = {}
 
 
-def entrenar(base, hiper, semilla, conocidas, vida=None, ref=None):
-    """(modelo, índice de códigos con historial). Caché por contenido de las etiquetas y configuración."""
+def entrenar(base, hiper, semilla, conocidas, vida=None, ref=None, atributos=None):
+    """(modelo, índice de códigos con historial). Caché por contenido de las etiquetas y configuración.
+
+    Con `atributos` ({código: atributos leídos del propio código}), las columnas suman los atributos del código:
+    un código con pocos datos toma fuerza de los que se le parecen. No entra ninguna etiqueta por esa vía.
+    """
     familia = FAMILIAS[base]
     semilla = semilla if familia.estocastica else None
-    clave = (base, tuple(sorted(hiper.items())), semilla, vida, ref if vida is not None else None, _huella(conocidas))
+    assert atributos is None or not familia.indice, "Los atributos no aplican al modelo con el código como índice"
+    clave = (base, tuple(sorted(hiper.items())), semilla, vida, ref if vida is not None else None, _huella(conocidas),
+             atributos is not None)
     if clave not in _MODELOS:
         peso = _peso(vida, ref)
-        indice = {c: i for i, c in enumerate(sorted(conocidas.por_codigo(peso=peso)))}
+        indice = Indice((c, i) for i, c in enumerate(sorted(conocidas.por_codigo(peso=peso))))
+        if atributos is not None:
+            valores = sorted({(j, v) for c in indice for j, v in enumerate(atributos.get(c, ()))})
+            indice.categorias = {jv: k for k, jv in enumerate(valores)}
         if familia.por_vin:
             codigos, y, w = _filas_por_vin(conocidas, peso)
         else:
@@ -161,20 +186,20 @@ def entrenar(base, hiper, semilla, conocidas, vida=None, ref=None):
             modelo.set_params(min_categories=len(indice))
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            modelo.fit(_matriz(familia, codigos, indice), y, sample_weight=w)
+            modelo.fit(_matriz(familia, codigos, indice, atributos), y, sample_weight=w)
         if "n_jobs" in modelo.get_params() and familia.por_vin:
             modelo.set_params(n_jobs=1)  # RF: predecir en paralelo suma los árboles en orden variable.
         _MODELOS[clave] = (modelo, indice)
     return _MODELOS[clave]
 
 
-def estimar(base, hiper, semilla, conocidas, codigos, vida=None, ref=None):
-    """Tasa estimada para los códigos pedidos que tienen historial."""
-    modelo, indice = entrenar(base, hiper, semilla, conocidas, vida, ref)
-    conocidos = [c for c in codigos if c in indice]
+def estimar(base, hiper, semilla, conocidas, codigos, vida=None, ref=None, atributos=None):
+    """Tasa estimada para los códigos pedidos que tienen historial (o, con atributos, agrupación)."""
+    modelo, indice = entrenar(base, hiper, semilla, conocidas, vida, ref, atributos)
+    conocidos = [c for c in codigos if c in indice or (atributos is not None and c in atributos)]
     if not conocidos:
         return {}
-    p = modelo.predict_proba(_matriz(FAMILIAS[base], conocidos, indice))[:, 1]
+    p = modelo.predict_proba(_matriz(FAMILIAS[base], conocidos, indice, atributos))[:, 1]
     return dict(zip(conocidos, p.astype(float)))
 
 
@@ -200,19 +225,20 @@ class ModeloML(Puntaje):
     orden_familia = (99, 0)
     nombre_familia = "ML"
 
-    def __init__(self, modo, semilla=None, hasta=ENTRENAMIENTO_HASTA, detalle_vida=""):
+    def __init__(self, modo, semilla=None, hasta=ENTRENAMIENTO_HASTA, detalle_vida="", ancla=REENTRENO_DESDE):
         assert modo in MODOS
-        self.modo, self.semilla, self.hasta = modo, semilla, hasta
+        self.modo, self.semilla, self.hasta, self.ancla = modo, semilla, hasta, ancla
         self.orden = (*self.orden_familia, MODOS.index(modo))
         detalle = f"fijo (<= {hasta})" if modo == "fijo" else f"reentrenado cada {CADA} d, {detalle_vida}"
         self.nombre = f"{self.nombre_familia} {detalle}" + ("" if semilla is None else f", semilla {semilla}")
-        self.parametros = {"modo": modo, **({"hasta": hasta} if modo == "fijo" else {}), "semilla": semilla}
+        self.parametros = {"modo": modo, **({"hasta": hasta} if modo == "fijo" else {}), "semilla": semilla,
+                           **({"ancla": ancla} if ancla != REENTRENO_DESDE else {})}
 
     def entrenamiento(self, ctx):
         """(conocidas, día de referencia del peso) según el modo."""
         if self.modo == "fijo":
             return ctx.conocidas(self.hasta), None
-        r = dia_reentreno(ctx.t)
+        r = dia_reentreno(ctx.t, self.ancla)
         return ctx.conocidas(r - MARGEN), r
 
     def puntuar(self, ctx, codigos):
@@ -229,20 +255,32 @@ class ModeloML(Puntaje):
 class ModeloBase(ModeloML):
     base = None
 
-    def __init__(self, modo, hiperparametros, semilla=None, hasta=ENTRENAMIENTO_HASTA, vida=None):
+    def __init__(self, modo, hiperparametros, semilla=None, hasta=ENTRENAMIENTO_HASTA, vida=None,
+                 ancla=REENTRENO_DESDE, atributos=None):
         assert (vida is None) == (modo == "fijo"), "La vida media solo aplica al modo reentrenado"
         if not FAMILIAS[self.base].estocastica:
             semilla = None
-        super().__init__(modo, semilla, hasta, f"vida media {vida} d")
-        self.hiper, self.vida = dict(hiperparametros), vida
+        super().__init__(modo, semilla, hasta, f"vida media {vida} d", ancla)
+        self.hiper, self.vida, self.atributos = dict(hiperparametros), vida, atributos
         self.parametros = {**self.parametros, **({} if vida is None else {"vida": vida}),
                            "hiperparametros": self.hiper}
 
     def estimar(self, conocidas, codigos, ref):
-        return estimar(self.base, self.hiper, self.semilla, conocidas, codigos, self.vida, ref)
+        return estimar(self.base, self.hiper, self.semilla, conocidas, codigos, self.vida, ref, self.atributos)
 
     def general(self, conocidas, ref):
         return conocidas.general(peso=_peso(self.vida, ref))
+
+
+ATRIBUTOS_FAMILIAS = ("logistica", "rf", "xgboost", "lightgbm", "catboost", "mlp")  # NB usa el código como índice.
+
+
+def _base_atributos(clave):
+    familia = FAMILIAS[clave]
+    return type(f"MLA_{clave}", (ModeloBase,), {
+        "familia": f"ml_{clave}_atributos", "base": clave, "orden_familia": familia.orden,
+        "nombre_familia": f"{familia.nombre} con atributos del código", "necesita_atributos": True,
+        "__doc__": f"{familia.nombre} sobre el código y sus atributos (mercado, motor, tracción, versión)"})
 
 
 def _base(clave):
@@ -252,21 +290,25 @@ def _base(clave):
 
 
 BASES = {clave: registrar(_base(clave)) for clave in FAMILIAS}
+BASES_ATRIBUTOS = {clave: registrar(_base_atributos(clave)) for clave in ATRIBUTOS_FAMILIAS}
 
 
 class Combinado(ModeloML):
     """Combina las 7 bases, cada una con su configuración (y su vida media) para el modo."""
 
-    def __init__(self, modo, bases, semilla=None, hasta=ENTRENAMIENTO_HASTA):
-        assert set(bases) == set(FAMILIAS)
-        super().__init__(modo, semilla, hasta, "vida media de cada base")
+    familias = tuple(FAMILIAS)
+
+    def __init__(self, modo, bases, semilla=None, hasta=ENTRENAMIENTO_HASTA, ancla=REENTRENO_DESDE, atributos=None):
+        assert set(bases) == set(self.familias)
+        super().__init__(modo, semilla, hasta, "vida media de cada base", ancla)
+        self.atributos = atributos
         self.bases = {b: {"hiperparametros": dict(bases[b]["hiperparametros"]), "vida": bases[b]["vida"]}
-                      for b in FAMILIAS}
+                      for b in self.familias}
         self.parametros = {**self.parametros, "bases": self.bases}
 
     def predicciones(self, conocidas, codigos, ref):
         """{base: {código: tasa}} para los códigos con historial (los mismos en todas las bases)."""
-        return {b: estimar(b, c["hiperparametros"], self.semilla, conocidas, codigos, c["vida"], ref)
+        return {b: estimar(b, c["hiperparametros"], self.semilla, conocidas, codigos, c["vida"], ref, self.atributos)
                 for b, c in self.bases.items()}
 
     def general(self, conocidas, ref):
@@ -288,13 +330,20 @@ class Stacking(Combinado):
     """Meta-modelo logístico sobre el logit de las 7 bases, ajustado en 125–149 y congelado."""
     familia, orden_familia, nombre_familia = "ml_stacking", (10, 0), "stacking"
 
-    def __init__(self, modo, bases, meta, semilla=None, hasta=ENTRENAMIENTO_HASTA):
-        super().__init__(modo, bases, semilla, hasta)
+    def __init__(self, modo, bases, meta, semilla=None, hasta=ENTRENAMIENTO_HASTA, ancla=REENTRENO_DESDE):
+        super().__init__(modo, bases, semilla, hasta, ancla)
         self.meta = {"coeficientes": [float(x) for x in meta["coeficientes"]], "intercepto": float(meta["intercepto"])}
         self.parametros = {**self.parametros, "meta": self.meta}
 
     def estimar(self, conocidas, codigos, ref):
         return apilar(self.meta, self.predicciones(conocidas, codigos, ref))
+
+
+@registrar
+class PromedioAtributos(Promedio):
+    """Promedio simple de las 6 bases con atributos del código."""
+    familia, orden_familia, nombre_familia = "ml_promedio_atributos", (9, 1), "promedio de modelos con atributos"
+    familias, necesita_atributos = ATRIBUTOS_FAMILIAS, True
 
 
 def promediar(pred):
@@ -314,44 +363,54 @@ def combinar(meta, tasas):
 
 # --- Ajuste interno (<= 119 contra 125–149) --------------------------------------------------------
 
-def tramos_internos(fuente):
-    """(ajuste <= 119, evaluación 125–149) vistos desde un día que admite ambas por el margen."""
-    ctx = Contexto(fuente, t=EVALUACION_INTERNA[1] + MARGEN)
-    return ctx.conocidas(AJUSTE_HASTA), ctx.conocidas(EVALUACION_INTERNA[1], desde=EVALUACION_INTERNA[0])
+def fin_interno(ancla=REENTRENO_DESDE):
+    """Último día de la evaluación interna para un bloque que empieza en `ancla` (149 para 155)."""
+    return ancla - 1 - MARGEN
 
 
-def _tasas_internas(ajuste, prueba, estimador, vida):
+def tramos_internos(fuente, ancla=REENTRENO_DESDE):
+    """(ajuste <= 119, evaluación 125–149) para el ancla 155; se corren con el ancla para otros bloques."""
+    fin = fin_interno(ancla)
+    assert ancla != REENTRENO_DESDE or (fin - 30, fin - 24, fin) == (AJUSTE_HASTA, *EVALUACION_INTERNA)
+    ctx = Contexto(fuente, t=fin + MARGEN)
+    return ctx.conocidas(fin - 30), ctx.conocidas(fin, desde=fin - 24)
+
+
+def _tasas_internas(ajuste, prueba, estimador, vida, ref=AJUSTE_HASTA):
     codigos = sorted(prueba.por_codigo())
-    general = ajuste.general(peso=_peso(vida, AJUSTE_HASTA))
-    return completar(estimador(ajuste, codigos, AJUSTE_HASTA), codigos, general)
+    general = ajuste.general(peso=_peso(vida, ref))
+    return completar(estimador(ajuste, codigos, ref), codigos, general)
 
 
-def ajustar(base, modo, fuente):
+def ajustar(base, modo, fuente, ancla=REENTRENO_DESDE, atributos=None):
     """Configuración de menor log-loss interna; las estocásticas se ajustan con la primera semilla."""
-    ajuste, prueba = tramos_internos(fuente)
+    ajuste, prueba = tramos_internos(fuente, ancla)
+    ref = fin_interno(ancla) - 30
     semilla = SEMILLAS[0] if FAMILIAS[base].estocastica else None
     grilla = []
     for hiper in FAMILIAS[base].grilla:
         for vida in ((None,) if modo == "fijo" else VIDAS):
-            tasas = _tasas_internas(ajuste, prueba, lambda a, c, r: estimar(base, hiper, semilla, a, c, vida, r), vida)
+            tasas = _tasas_internas(ajuste, prueba,
+                                    lambda a, c, r: estimar(base, hiper, semilla, a, c, vida, r, atributos), vida, ref)
             grilla.append({"hiperparametros": hiper, "vida": vida, "log_loss": log_loss(tasas, prueba)})
     mejor = min(grilla, key=lambda g: g["log_loss"])  # Empates: el primero de la grilla.
     return {"hiperparametros": mejor["hiperparametros"], "vida": mejor["vida"], "log_loss_interna": mejor["log_loss"],
             "grilla": grilla, "semilla_ajuste": semilla}
 
 
-def ajustar_meta(bases, modo, semilla, fuente):
+def ajustar_meta(bases, modo, semilla, fuente, ancla=REENTRENO_DESDE):
     """Meta logístico: las bases entrenadas con <= 119 predicen 125–149 y el meta se congela.
 
     Se ajusta solo sobre códigos con historial en <= 119, los únicos que combina después.
     Devuelve (meta, log-loss interna del stacking, log-loss interna del promedio).
     """
     from sklearn.linear_model import LogisticRegression
-    ajuste, prueba = tramos_internos(fuente)
+    ajuste, prueba = tramos_internos(fuente, ancla)
+    ref = fin_interno(ancla) - 30
     codigos = sorted(prueba.por_codigo())
     combinado = Promedio(modo, bases, semilla)
-    pred = combinado.predicciones(ajuste, codigos, AJUSTE_HASTA)
-    general = combinado.general(ajuste, AJUSTE_HASTA)
+    pred = combinado.predicciones(ajuste, codigos, ref)
+    general = combinado.general(ajuste, ref)
     filas = [f for f in prueba.filas() if f[0] in pred["logistica"]]
     x = np.array([[_logit(p[f[0]]) for p in pred.values()] for f in filas])
     modelo = LogisticRegression(C=1.0, max_iter=2000).fit(x, [f[1] for f in filas], sample_weight=[f[2] for f in filas])
@@ -362,24 +421,40 @@ def ajustar_meta(bases, modo, semilla, fuente):
 
 # --- Corrida de la pieza ---------------------------------------------------------------------------
 
-def alternativas(fuente):
-    """{(familia, modo): [(instancia, extra)]}, una instancia por semilla, con la configuración ya ajustada."""
-    ajustes = {(b, m): ajustar(b, m, fuente) for b in FAMILIAS for m in MODOS}
+def alternativas(fuente, ancla=REENTRENO_DESDE, atributos=None):
+    """{(familia, modo): [(instancia, extra)]}, una instancia por semilla, con la configuración ya ajustada.
+
+    `ancla` es el primer día del bloque evaluado (155 en la validación): el modo fijo entrena con Día <= ancla−6, el
+    reentrenado empieza a reentrenar en `ancla`, y los hiperparámetros se eligen con los 55 días anteriores.
+    Con `atributos` se arman las variantes que suman los atributos del código (sin Naive Bayes ni stacking).
+    """
+    claves = ATRIBUTOS_FAMILIAS if atributos else tuple(FAMILIAS)
+    clases = BASES_ATRIBUTOS if atributos else BASES
+    sufijo = "_atributos" if atributos else ""
+    hasta = fin_interno(ancla)
+    opciones = {"atributos": atributos} if atributos else {}
+    ajustes = {(b, m): ajustar(b, m, fuente, ancla, atributos) for b in claves for m in MODOS}
     grupos = {}
     for (b, m), a in ajustes.items():
         semillas = SEMILLAS if FAMILIAS[b].estocastica else (None,)
         extra = {"log_loss_interna": a["log_loss_interna"],
                  "ajuste_interno": {"grilla": a["grilla"], "semilla_ajuste": a["semilla_ajuste"]}}
-        grupos[(f"ml_{b}", m)] = [(BASES[b](m, a["hiperparametros"], s, vida=a["vida"]), extra) for s in semillas]
+        grupos[(f"ml_{b}{sufijo}", m)] = [
+            (clases[b](m, a["hiperparametros"], s, hasta=hasta, vida=a["vida"], ancla=ancla, **opciones), extra)
+            for s in semillas]
     for m in MODOS:
         bases = {b: {"hiperparametros": ajustes[(b, m)]["hiperparametros"], "vida": ajustes[(b, m)]["vida"]}
-                 for b in FAMILIAS}
+                 for b in claves}
+        if atributos:
+            grupos[("ml_promedio_atributos", m)] = [
+                (PromedioAtributos(m, bases, s, hasta=hasta, ancla=ancla, atributos=atributos), {}) for s in SEMILLAS]
+            continue
         promedio, stacking = [], []
         for s in SEMILLAS:
-            meta, ll_stacking, ll_promedio = ajustar_meta(bases, m, s, fuente)
-            promedio.append((Promedio(m, bases, s), {"log_loss_interna": ll_promedio}))
-            stacking.append((Stacking(m, bases, meta, s), {"log_loss_interna": ll_stacking,
-                                                           "log_loss_interna_nota": "en la misma muestra del meta"}))
+            meta, ll_stacking, ll_promedio = ajustar_meta(bases, m, s, fuente, ancla)
+            promedio.append((Promedio(m, bases, s, hasta=hasta, ancla=ancla), {"log_loss_interna": ll_promedio}))
+            stacking.append((Stacking(m, bases, meta, s, hasta=hasta, ancla=ancla),
+                             {"log_loss_interna": ll_stacking, "log_loss_interna_nota": "en la misma muestra del meta"}))
         grupos[("ml_promedio", m)], grupos[("ml_stacking", m)] = promedio, stacking
     return grupos
 

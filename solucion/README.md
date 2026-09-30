@@ -23,10 +23,29 @@ Los datos quedan fuera del repo y se pasan por argumento. El código verifica su
 ```
 
 - `--piezas preparacion,p3,p4,eleccion,p6,p5,p8,p9` corre un subconjunto, en ese orden de dependencias.
+- `--piezas precision` corre la elección por mayor precisión en origen móvil (opcional, unos 30 minutos; no entra en el
+  comando por defecto). Escribe `solucion/resultados/precision.json` y usa solo Día < 195.
 - `--cache` (por defecto `~/.cache/ford-predictive-quality`) guarda la tabla por VIN ya enmascarada, fuera del repo.
 - `--salida` (por defecto `~/.cache/ford-predictive-quality/salida`) recibe la hoja de códigos prioritarios, que tiene tasas por código y no se versiona.
 
 Cada pieza escribe `solucion/resultados/<pieza>.json`: solo agregados por alternativa y por día, sin VIN ni tasas por código.
+
+## Segunda lectura de la prueba final (propuesta)
+
+La prueba final ya se leyó una vez (30/09) con la tasa fija. Si el equipo quiere leerla con la ganadora por precisión,
+es una **segunda lectura**, más débil que la primera: se acuerda un preregistro nuevo y se informan las dos.
+
+```sh
+# 1. Propuesta (no lee la prueba: tabla enmascarada). Genera solucion/preregistro-precision.json.
+.venv/bin/python -m solucion.preregistro generar-segunda --csv "<CSV>" --catalogo "<catálogo>"
+# 2. En equipo: cambiar "estado" a "acordado", commitear e integrar a main.
+# 3. Una sola corrida, en sesión conjunta:
+.venv/bin/python -m solucion.preregistro correr --preregistro solucion/preregistro-precision.json \
+  --hash-preregistro "$(shasum -a 256 solucion/preregistro-precision.json | cut -d' ' -f1)" \
+  --csv "<CSV>" --catalogo "<catálogo>"
+```
+
+Lee solo el predictor (P5, P6 y la E3 ya se leyeron) y agrega la corrida 2 a `solucion/resultados/prueba-final.json`.
 
 ## Pruebas
 
@@ -46,4 +65,5 @@ python3 research/test_audit_dataset.py
 | `referencias.py` | P3 | Azar, tasa fija, móviles, mercado, decaimiento, oráculo y fuga |
 | `eleccion.py` | P3/P4 | Ganadora en validación |
 | `run.py` | P2 | Comando único |
+| `precision.py` | propuesta 30/09 | Elección por mayor precisión en bloques de tiempo (selección 100–174, confirmación 175–194), con suavizado jerárquico y ML con atributos del código; sin desempate por simplicidad |
 | `empaquetar.py` | P13 | .zip de reproducción (código, entorno, resultados, hoja); falla si entra un CSV o un VIN |

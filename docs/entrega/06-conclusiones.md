@@ -21,6 +21,7 @@ Siempre se agregan los límites fijos: el tramo de prueba y la tasa por mercado 
 - El detector dio 16 alarmas en 85 días de la prueba (15 a la baja, en 10 códigos), frente a 7 en 40 días de validación; se muestran como observaciones, sin causa.
 - «Dónde mirar» acertó el componente en 36 de las 59 CALIBRADA que eligió la tasa fija (61,0 %), contra 18 de 59 (30,5 %) con la lista general, en validación ([`p6.json`][p6]).
 - El techo con el código como predictor (oráculo) es 20,2 % en el mismo cupo y la misma base ([`p3.json`][p3]).
+- Elegida por precisión en cinco bloques de tiempo (Día < 195, prueba final no releída), la mejor es CatBoost con los atributos del código (18,4 % en los días 100–174, 740 elegidos), contra 12,7 % de la tasa fija reajustada; los modelos que usan mercado y versión rinden 17–18 % y los que usan solo el código, 13–15 %. En el último bloque (175–194, 225 elegidos) no se confirmó: 17,3 % contra 20,4 % de la tasa fija, dentro del ruido ([`precision.json`][prec]).
 - La señal del código se explica sobre todo por el mercado de destino ([agrupación del catálogo][cat]).
 
 ### Hipótesis
@@ -29,8 +30,11 @@ Siempre se agregan los límites fijos: el tramo de prueba y la tasa por mercado 
 
 - La caída de la precisión desde validación puede deberse a optimismo de haber elegido la mejor alternativa en validación y a un azar más bajo en la prueba (8,2 % contra 9,9 %). No lo verificamos.
 
+- Usar el mercado y la versión del código suma unos 3 a 4 puntos en selección porque un código con pocos resultados toma fuerza de los que se le parecen. No se probó qué atributo aporta más.
+
 ### Decisiones acordadas
 
+- El criterio de elección pasó de «la más simple entre las que empatan» a «la de mayor precisión» (propuesta aprobada por Mateo Serebrinsky el 30/09; la corrida única de la prueba final conserva la regla preregistrada).
 - El código de catálogo es el único predictor; el historial queda fuera hasta que se pruebe su disponibilidad al elegir ([admisibilidad][adm]).
 - La hoja prioriza códigos, no vehículos, y no muestra «probabilidad de la unidad» ([salida para Calidad][sal]).
 
@@ -68,4 +72,5 @@ Ordenados por dependencias; las fechas las define Ford.
 [alt]: https://github.com/FordwardAI/ford-predictive-quality/issues/10#issuecomment-5820794998
 [sal]: https://github.com/FordwardAI/ford-predictive-quality/issues/11#issuecomment-5817130432
 [final]: ../../solucion/resultados/prueba-final.json
+[prec]: ../../solucion/resultados/precision.json
 [ope]: https://github.com/FordwardAI/ford-predictive-quality/issues/23#issuecomment-5896188950

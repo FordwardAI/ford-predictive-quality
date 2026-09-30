@@ -144,6 +144,20 @@ def wilson(cal, n, z=1.959964):
     return (max(0.0, centro - medio), min(1.0, centro + medio))
 
 
+def atributos_de(catalogo):
+    """{código: (mercado, motor, tracción, versión, mercado|versión)}, leídos de la agrupación del catálogo.
+
+    Son atributos del propio código, que se conoce al elegir (#27): no traen ninguna etiqueta. Los códigos sin
+    agrupación no figuran y las alternativas los tratan como códigos nuevos (tasa general).
+    """
+    salida = {}
+    for codigo, a in catalogo.items():
+        if all(k in a for k in ("mercado", "motor_dominante", "traccion", "traccion_dominante")):
+            salida[codigo] = (a["mercado"], a["motor_dominante"], a["traccion"], a["traccion_dominante"],
+                              f"{a['mercado']}|{a['traccion_dominante']}")
+    return salida
+
+
 def completar(tasas, codigos, respaldo):
     """Garantiza una tasa para cada código pedido; los códigos sin historial usan el respaldo."""
     return {c: float(tasas.get(c, respaldo)) for c in codigos}
@@ -174,4 +188,6 @@ def crear(familia, parametros, tabla=None):
     clase = REGISTRO[familia]
     if getattr(clase, "necesita_catalogo", False):
         parametros = {**parametros, "mercados": {c: a.get("mercado") for c, a in tabla.catalogo.items()}}
+    if getattr(clase, "necesita_atributos", False):
+        parametros = {**parametros, "atributos": atributos_de(tabla.catalogo)}
     return clase(**parametros)

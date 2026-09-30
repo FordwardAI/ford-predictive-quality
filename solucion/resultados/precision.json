@@ -1,0 +1,3031 @@
+{
+  "pieza": "Elección por precisión en origen móvil (propuesta del 30/09)",
+  "regla": "mayor precisión acumulada en los bloques de selección; sin desempate por simplicidad. La cifra de la ganadora se lee en el bloque de confirmación, que no participó en la elección.",
+  "protocolo": {
+    "bloques_seleccion": [
+      [
+        100,
+        118
+      ],
+      [
+        119,
+        137
+      ],
+      [
+        138,
+        156
+      ],
+      [
+        157,
+        174
+      ]
+    ],
+    "confirmacion": [
+      175,
+      194
+    ],
+    "validacion_original": [
+      155,
+      194
+    ],
+    "margen_dias": 5,
+    "predictores": "código de catálogo y atributos leídos del propio código (mercado, motor, tracción, versión); nunca el resultado ni el componente de Auditoría Adicional",
+    "prueba_final": "no releída: todo con Día < 195"
+  },
+  "calificador_seleccion": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+  "calificador_confirmacion": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN",
+  "ganadora": {
+    "alternativa": "CatBoost con atributos del código, reentrenado cada 5 d",
+    "clave": "ml_catboost_atributos|reentrenado",
+    "familia": "ml_catboost_atributos",
+    "precision_seleccion": 0.1837837837837838,
+    "precision_seleccion_rango95": [
+      0.1555847967856204,
+      0.2121631478959065
+    ],
+    "calibrada_elegidas_seleccion": 136,
+    "elegidos_seleccion": 740,
+    "precision_por_bloque": [
+      0.17777777777777778,
+      0.17194570135746606,
+      0.22110552763819097,
+      0.15714285714285714
+    ],
+    "diferencia_con_tasa_fija_seleccion_rango95": [
+      0.018756088563012665,
+      0.09452326314683109
+    ],
+    "confirmacion": {
+      "precision_cupo": 0.17333333333333334,
+      "precision_rango95": [
+        0.13389121338912133,
+        0.21457582311944243
+      ],
+      "calibrada_elegidas": 39,
+      "elegidos": 225,
+      "azar_mismo_cupo": 0.08784774865474905,
+      "veces_azar": 1.9731107055976094,
+      "veces_azar_rango95": [
+        1.5428930792987565,
+        2.461813608189181
+      ],
+      "lectura": "mejora",
+      "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+    },
+    "diferencia_con_tasa_fija_confirmacion_rango95": [
+      -0.06797266223811957,
+      0.0
+    ],
+    "semilla_mediana": 1,
+    "elegible": true
+  },
+  "tasa_fija": {
+    "alternativa": "tasa fija (reajustada al inicio de cada bloque)",
+    "clave": "tasa_fija",
+    "familia": "tasa_fija",
+    "precision_seleccion": 0.12702702702702703,
+    "precision_seleccion_rango95": [
+      0.10296093250152782,
+      0.15202834168431562
+    ],
+    "calibrada_elegidas_seleccion": 94,
+    "elegidos_seleccion": 740,
+    "precision_por_bloque": [
+      0.15555555555555556,
+      0.11312217194570136,
+      0.11557788944723618,
+      0.12857142857142856
+    ],
+    "diferencia_con_tasa_fija_seleccion_rango95": null,
+    "confirmacion": {
+      "precision_cupo": 0.20444444444444446,
+      "precision_rango95": [
+        0.1522383027284988,
+        0.25471698113207547
+      ],
+      "calibrada_elegidas": 46,
+      "elegidos": 225,
+      "azar_mismo_cupo": 0.08784774865474905,
+      "veces_azar": 2.327258780961283,
+      "veces_azar_rango95": [
+        1.7920081145725308,
+        2.860496602847134
+      ],
+      "lectura": "mejora",
+      "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+    },
+    "diferencia_con_tasa_fija_confirmacion_rango95": null,
+    "semilla_mediana": null,
+    "elegible": true
+  },
+  "azar": {
+    "alternativa": "azar",
+    "clave": "azar",
+    "familia": "azar",
+    "precision_seleccion": 0.11216216216216217,
+    "precision_seleccion_rango95": [
+      0.0911430027173913,
+      0.13205069667568625
+    ],
+    "calibrada_elegidas_seleccion": 83,
+    "elegidos_seleccion": 740,
+    "precision_por_bloque": [
+      0.13333333333333333,
+      0.1085972850678733,
+      0.12562814070351758,
+      0.07142857142857142
+    ],
+    "diferencia_con_tasa_fija_seleccion_rango95": [
+      -0.04089980245982885,
+      0.011457090887404544
+    ],
+    "confirmacion": {
+      "precision_cupo": 0.09333333333333334,
+      "precision_rango95": [
+        0.054455445544554455,
+        0.13333333333333333
+      ],
+      "calibrada_elegidas": 21,
+      "elegidos": 225,
+      "azar_mismo_cupo": 0.08784774865474905,
+      "veces_azar": 1.0624442260910205,
+      "veces_azar_rango95": [
+        0.62392000470047,
+        1.5168527961677563
+      ],
+      "lectura": "inconcluso",
+      "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+    },
+    "diferencia_con_tasa_fija_confirmacion_rango95": [
+      -0.1720103448275862,
+      -0.0452628516494637
+    ],
+    "semilla_mediana": null,
+    "elegible": false
+  },
+  "oraculo": {
+    "alternativa": "oráculo (tasa real del tramo)",
+    "clave": "oraculo",
+    "familia": "oraculo",
+    "precision_seleccion": 0.22837837837837838,
+    "precision_seleccion_rango95": [
+      0.1963471976831023,
+      0.2601689532520325
+    ],
+    "calibrada_elegidas_seleccion": 169,
+    "elegidos_seleccion": 740,
+    "precision_por_bloque": [
+      0.21666666666666667,
+      0.22624434389140272,
+      0.24623115577889448,
+      0.22142857142857142
+    ],
+    "diferencia_con_tasa_fija_seleccion_rango95": [
+      0.06774104230563263,
+      0.13385909135835009
+    ],
+    "confirmacion": {
+      "precision_cupo": 0.21333333333333335,
+      "precision_rango95": [
+        0.1558395613820142,
+        0.2719753997310221
+      ],
+      "calibrada_elegidas": 48,
+      "elegidos": 225,
+      "azar_mismo_cupo": 0.08784774865474905,
+      "veces_azar": 2.428443945350904,
+      "veces_azar_rango95": [
+        1.7763890241088196,
+        3.0396575882506793
+      ],
+      "lectura": "mejora",
+      "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+    },
+    "diferencia_con_tasa_fija_confirmacion_rango95": [
+      -0.03415475189234651,
+      0.04694986156253761
+    ],
+    "semilla_mediana": null,
+    "elegible": false
+  },
+  "ranking": [
+    {
+      "alternativa": "CatBoost con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_catboost_atributos|reentrenado",
+      "familia": "ml_catboost_atributos",
+      "precision_seleccion": 0.1837837837837838,
+      "precision_seleccion_rango95": [
+        0.1555847967856204,
+        0.2121631478959065
+      ],
+      "calibrada_elegidas_seleccion": 136,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.17194570135746606,
+        0.22110552763819097,
+        0.15714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.018756088563012665,
+        0.09452326314683109
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.17333333333333334,
+        "precision_rango95": [
+          0.13389121338912133,
+          0.21457582311944243
+        ],
+        "calibrada_elegidas": 39,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 1.9731107055976094,
+        "veces_azar_rango95": [
+          1.5428930792987565,
+          2.461813608189181
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06797266223811957,
+        0.0
+      ],
+      "semilla_mediana": 1,
+      "elegible": true
+    },
+    {
+      "alternativa": "Random Forest con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_rf_atributos|fijo",
+      "familia": "ml_rf_atributos",
+      "precision_seleccion": 0.18243243243243243,
+      "precision_seleccion_rango95": [
+        0.15633212601078167,
+        0.2081660802251935
+      ],
+      "calibrada_elegidas_seleccion": 135,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.167420814479638,
+        0.22613065326633167,
+        0.15
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.020052139037433154,
+        0.08735875706214685
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.1522383027284988,
+          0.25471698113207547
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.7920081145725308,
+          2.860496602847134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        0.0,
+        0.0
+      ],
+      "semilla_mediana": 2,
+      "elegible": true
+    },
+    {
+      "alternativa": "XGBoost con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_xgboost_atributos|reentrenado",
+      "familia": "ml_xgboost_atributos",
+      "precision_seleccion": 0.1810810810810811,
+      "precision_seleccion_rango95": [
+        0.14805064935064935,
+        0.21418835703004413
+      ],
+      "calibrada_elegidas_seleccion": 134,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.18888888888888888,
+        0.14027149321266968,
+        0.22110552763819097,
+        0.17857142857142858
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.010531410555143231,
+        0.09867592348326065
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.1472043893699612,
+          0.2420657164210976
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.720202692074746,
+          2.7260938496174507
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.027906976744186046,
+        0.00803293820443062
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico 60 d, peso 40",
+      "clave": "jerarquico_60_40",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.1783783783783784,
+      "precision_seleccion_rango95": [
+        0.14603318233527526,
+        0.20946207283232599
+      ],
+      "calibrada_elegidas_seleccion": 132,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17222222222222222,
+        0.15384615384615385,
+        0.22110552763819097,
+        0.16428571428571428
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.011062354345478316,
+        0.08760341330629018
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.13692946058091288,
+          0.23706896551724138
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.575845755285952,
+          2.6726839682555177
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06046558514628657,
+        0.017167381974248927
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 60 d hacia el mercado, peso 20",
+      "clave": "movil_mercado_60",
+      "familia": "movil_mercado",
+      "precision_seleccion": 0.17702702702702702,
+      "precision_seleccion_rango95": [
+        0.14323557442384335,
+        0.2100159479495358
+      ],
+      "calibrada_elegidas_seleccion": 131,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.18333333333333332,
+        0.1493212669683258,
+        0.21608040201005024,
+        0.15714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.009328161668839636,
+        0.08734877026812904
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14084153160167032,
+          0.23414853878268513
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6594760400993516,
+          2.635138443029249
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06132802020924618,
+        0.012879735025191245
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico 60 d, peso 20",
+      "clave": "jerarquico_60_20",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.17702702702702702,
+      "precision_seleccion_rango95": [
+        0.14483716682121467,
+        0.20887772444807273
+      ],
+      "calibrada_elegidas_seleccion": 131,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17222222222222222,
+        0.15384615384615385,
+        0.22110552763819097,
+        0.15714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.011016652948936218,
+        0.08582880798755314
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18222222222222223,
+        "precision_rango95": [
+          0.13478260869565217,
+          0.23113334347737877
+        ],
+        "calibrada_elegidas": 41,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.0742958699872305,
+        "veces_azar_rango95": [
+          1.5424079981354917,
+          2.5932707117352023
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.0646621697268249,
+        0.013515042191512772
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "Random Forest con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_rf_atributos|reentrenado",
+      "familia": "ml_rf_atributos",
+      "precision_seleccion": 0.17702702702702702,
+      "precision_seleccion_rango95": [
+        0.14747037132369398,
+        0.2081821146164506
+      ],
+      "calibrada_elegidas_seleccion": 131,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.14479638009049775,
+        0.22110552763819097,
+        0.16428571428571428
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.011250184414741377,
+        0.08964105173319326
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.2,
+        "precision_rango95": [
+          0.15246181511916415,
+          0.2463072035410866
+        ],
+        "calibrada_elegidas": 45,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.2766661987664722,
+        "veces_azar_rango95": [
+          1.786636616259729,
+          2.784574074329514
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.024755553913600317,
+        0.0143557922340817
+      ],
+      "semilla_mediana": 4,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico 120 d, peso 40",
+      "clave": "jerarquico_120_40",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.17432432432432432,
+      "precision_seleccion_rango95": [
+        0.1420701595177238,
+        0.2058462626458934
+      ],
+      "calibrada_elegidas_seleccion": 129,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.15384615384615385,
+        0.22613065326633167,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.008071375050160336,
+        0.0843415917189886
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14082635912090904,
+          0.23479539641943728
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6586414604963418,
+          2.5902787466993566
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06087364768320066,
+        0.008929572389493908
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "LightGBM con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_lightgbm_atributos|fijo",
+      "familia": "ml_lightgbm_atributos",
+      "precision_seleccion": 0.17432432432432432,
+      "precision_seleccion_rango95": [
+        0.14398468297647637,
+        0.20804597593432544
+      ],
+      "calibrada_elegidas_seleccion": 129,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17222222222222222,
+        0.11764705882352941,
+        0.24120603015075376,
+        0.17142857142857143
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.01353088665245919,
+        0.08432611479151587
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.2,
+        "precision_rango95": [
+          0.1485056839017235,
+          0.2511045767235954
+        ],
+        "calibrada_elegidas": 45,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.2766661987664722,
+        "veces_azar_rango95": [
+          1.724387536770989,
+          2.8290167232790866
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.01951267149390244,
+        0.009479801399232674
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico todo el historial, peso 40",
+      "clave": "jerarquico_None_40",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.17297297297297298,
+      "precision_seleccion_rango95": [
+        0.14131747122325858,
+        0.2039514239365537
+      ],
+      "calibrada_elegidas_seleccion": 128,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.1493212669683258,
+        0.22613065326633167,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.007551174086871575,
+        0.08269849469503121
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18222222222222223,
+        "precision_rango95": [
+          0.13674242424242425,
+          0.23076923076923078
+        ],
+        "calibrada_elegidas": 41,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.0742958699872305,
+        "veces_azar_rango95": [
+          1.6162707803149887,
+          2.5549236817109278
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06532898135537502,
+        0.005076142131979695
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "promedio de modelos con atributos, reentrenado cada 5 d",
+      "clave": "ml_promedio_atributos|reentrenado",
+      "familia": "ml_promedio_atributos",
+      "precision_seleccion": 0.17162162162162162,
+      "precision_seleccion_rango95": [
+        0.1434170865994774,
+        0.20082528998844323
+      ],
+      "calibrada_elegidas_seleccion": 127,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.1493212669683258,
+        0.20603015075376885,
+        0.16428571428571428
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.008095809228164245,
+        0.08021513509710104
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.1445708205958161,
+          0.23729200526275054
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.7054470304796925,
+          2.67466683679866
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.033521900380263835,
+        0.004367291044204394
+      ],
+      "semilla_mediana": 3,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 30 d hacia el mercado, peso 20",
+      "clave": "movil_mercado_30",
+      "familia": "movil_mercado",
+      "precision_seleccion": 0.17162162162162162,
+      "precision_seleccion_rango95": [
+        0.1426648721399731,
+        0.20052118148395723
+      ],
+      "calibrada_elegidas_seleccion": 127,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16111111111111112,
+        0.14027149321266968,
+        0.22613065326633167,
+        0.15714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.0064817882022555244,
+        0.08219224236605989
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.14096606068126824,
+          0.24092084639498426
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.655157624869565,
+          2.7169247756087884
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.028113863906329542,
+        0.0
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico 120 d, peso 10",
+      "clave": "jerarquico_120_10",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.17027027027027028,
+      "precision_seleccion_rango95": [
+        0.13843874281926644,
+        0.20253414390406393
+      ],
+      "calibrada_elegidas_seleccion": 126,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16111111111111112,
+        0.15384615384615385,
+        0.21608040201005024,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.004108200666419844,
+        0.07961195832704211
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14082635912090904,
+          0.23479539641943728
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6586414604963418,
+          2.5902787466993566
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06087364768320066,
+        0.008929572389493908
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 120 d hacia el mercado, peso 20",
+      "clave": "movil_mercado_120",
+      "familia": "movil_mercado",
+      "precision_seleccion": 0.17027027027027028,
+      "precision_seleccion_rango95": [
+        0.13725423593350386,
+        0.20217247728644716
+      ],
+      "calibrada_elegidas_seleccion": 126,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.1493212669683258,
+        0.21608040201005024,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.003983931647415642,
+        0.07926065116860162
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.15565014646334108,
+          0.2511854065068571
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.83274390262428,
+          2.800351358236589
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.014927238805970149,
+        0.012396694214876033
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "promedio de modelos con atributos, fijo (reajustado por bloque)",
+      "clave": "ml_promedio_atributos|fijo",
+      "familia": "ml_promedio_atributos",
+      "precision_seleccion": 0.17027027027027028,
+      "precision_seleccion_rango95": [
+        0.14047947348057657,
+        0.2018235178924802
+      ],
+      "calibrada_elegidas_seleccion": 126,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.11312217194570136,
+        0.22110552763819097,
+        0.17857142857142858
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.003903052188287154,
+        0.08016177720078735
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.14418499895244083,
+          0.24577627953577685
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.6901927852514014,
+          2.786794828161558
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.021739130434782608,
+        0.0
+      ],
+      "semilla_mediana": 1,
+      "elegible": true
+    },
+    {
+      "alternativa": "XGBoost con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_xgboost_atributos|fijo",
+      "familia": "ml_xgboost_atributos",
+      "precision_seleccion": 0.17027027027027028,
+      "precision_seleccion_rango95": [
+        0.138704701832935,
+        0.20416402624392122
+      ],
+      "calibrada_elegidas_seleccion": 126,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.09954751131221719,
+        0.24120603015075376,
+        0.17142857142857143
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.010269901785825711,
+        0.07754209586927796
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.14418499895244083,
+          0.24577627953577685
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.6901927852514014,
+          2.786794828161558
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.021739130434782608,
+        0.0
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico 60 d, peso 10",
+      "clave": "jerarquico_60_10",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.16891891891891891,
+      "precision_seleccion_rango95": [
+        0.137883696949962,
+        0.20117870778267252
+      ],
+      "calibrada_elegidas_seleccion": 125,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15,
+        0.15384615384615385,
+        0.21105527638190955,
+        0.15714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.0038152500183029512,
+        0.07806454128922956
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18222222222222223,
+        "precision_rango95": [
+          0.134774388016076,
+          0.2322298817559481
+        ],
+        "calibrada_elegidas": 41,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.0742958699872305,
+        "veces_azar_rango95": [
+          1.5363729733530485,
+          2.588969104649134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06667364016736402,
+        0.016129032258064516
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico todo el historial, peso 10",
+      "clave": "jerarquico_None_10",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.16891891891891891,
+      "precision_seleccion_rango95": [
+        0.13754988697934228,
+        0.20127450574902805
+      ],
+      "calibrada_elegidas_seleccion": 125,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16111111111111112,
+        0.15384615384615385,
+        0.21105527638190955,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.0029108917157141955,
+        0.0779425077830575
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14082635912090904,
+          0.23479539641943728
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6586414604963418,
+          2.5902787466993566
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06087364768320066,
+        0.008929572389493908
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico 120 d, peso 20",
+      "clave": "jerarquico_120_20",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.16891891891891891,
+      "precision_seleccion_rango95": [
+        0.1378797799895233,
+        0.19948449307492427
+      ],
+      "calibrada_elegidas_seleccion": 125,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15555555555555556,
+        0.14479638009049775,
+        0.22110552763819097,
+        0.15
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.0040569960118679955,
+        0.0771411376696429
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14082635912090904,
+          0.23479539641943728
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6586414604963418,
+          2.5902787466993566
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06087364768320066,
+        0.008929572389493908
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "jerárquico todo el historial, peso 20",
+      "clave": "jerarquico_None_20",
+      "familia": "jerarquico",
+      "precision_seleccion": 0.16756756756756758,
+      "precision_seleccion_rango95": [
+        0.13598871914204774,
+        0.19835896697441807
+      ],
+      "calibrada_elegidas_seleccion": 124,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15555555555555556,
+        0.1493212669683258,
+        0.21608040201005024,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        0.002678791861827716,
+        0.07555002174444128
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14082635912090904,
+          0.23479539641943728
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6586414604963418,
+          2.5902787466993566
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06087364768320066,
+        0.008929572389493908
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "logística con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_logistica_atributos|fijo",
+      "familia": "ml_logistica_atributos",
+      "precision_seleccion": 0.16486486486486487,
+      "precision_seleccion_rango95": [
+        0.13694995057489204,
+        0.19402985074626866
+      ],
+      "calibrada_elegidas_seleccion": 122,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.12217194570135746,
+        0.21608040201005024,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.0025361659427739435,
+        0.07534287540145507
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.14418499895244083,
+          0.24577627953577685
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.6901927852514014,
+          2.786794828161558
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.021739130434782608,
+        0.0
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "decaimiento, vida media 15 d",
+      "clave": "decaimiento_15",
+      "familia": "decaimiento",
+      "precision_seleccion": 0.16216216216216217,
+      "precision_seleccion_rango95": [
+        0.13199483695652175,
+        0.19131676242959908
+      ],
+      "calibrada_elegidas_seleccion": 120,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.1388888888888889,
+        0.1493212669683258,
+        0.20100502512562815,
+        0.15714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.0014494335801531549,
+        0.0706771266211802
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.17333333333333334,
+        "precision_rango95": [
+          0.13145539906103287,
+          0.21775051475634863
+        ],
+        "calibrada_elegidas": 39,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 1.9731107055976094,
+        "veces_azar_rango95": [
+          1.5409064909149401,
+          2.424119576217084
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.07442535945189617,
+        0.0
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "XGBoost, reentrenado cada 5 d",
+      "clave": "ml_xgboost|reentrenado",
+      "familia": "ml_xgboost",
+      "precision_seleccion": 0.1581081081081081,
+      "precision_seleccion_rango95": [
+        0.13064971800997366,
+        0.18698089093079295
+      ],
+      "calibrada_elegidas_seleccion": 117,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.13122171945701358,
+        0.18592964824120603,
+        0.15
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.0029920515506221775,
+        0.06619888002715084
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.14582599765258217,
+          0.23628883774453394
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.7138046353124357,
+          2.644434936266502
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.03465777547904044,
+        0.004367291044204394
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "MLP con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_mlp_atributos|reentrenado",
+      "familia": "ml_mlp_atributos",
+      "precision_seleccion": 0.1554054054054054,
+      "precision_seleccion_rango95": [
+        0.12724621460289728,
+        0.1866111111111111
+      ],
+      "calibrada_elegidas_seleccion": 115,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.13333333333333333,
+        0.12217194570135746,
+        0.20100502512562815,
+        0.17142857142857143
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.008121301200091075,
+        0.06464514471052328
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.14864864864864866,
+          0.24056848430282626
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.748764135279444,
+          2.737782058905607
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.030466356582213378,
+        0.011631326949384386
+      ],
+      "semilla_mediana": 3,
+      "elegible": true
+    },
+    {
+      "alternativa": "CatBoost con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_catboost_atributos|fijo",
+      "familia": "ml_catboost_atributos",
+      "precision_seleccion": 0.15405405405405406,
+      "precision_seleccion_rango95": [
+        0.13064780423858424,
+        0.17778077268643305
+      ],
+      "calibrada_elegidas_seleccion": 114,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17222222222222222,
+        0.12217194570135746,
+        0.1658291457286432,
+        0.16428571428571428
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.002766347513246974,
+        0.05706134094151213
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18222222222222223,
+        "precision_rango95": [
+          0.1355104477002816,
+          0.2321473665223665
+        ],
+        "calibrada_elegidas": 41,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.0742958699872305,
+        "veces_azar_rango95": [
+          1.6017215277022634,
+          2.5784615450004464
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06639004149377593,
+        0.013044902221378385
+      ],
+      "semilla_mediana": 3,
+      "elegible": true
+    },
+    {
+      "alternativa": "LightGBM con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_lightgbm_atributos|reentrenado",
+      "familia": "ml_lightgbm_atributos",
+      "precision_seleccion": 0.15405405405405406,
+      "precision_seleccion_rango95": [
+        0.12719112399643176,
+        0.1822199032041033
+      ],
+      "calibrada_elegidas_seleccion": 114,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.20555555555555555,
+        0.13574660633484162,
+        0.11557788944723618,
+        0.17142857142857143
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.004498779587898052,
+        0.05811617335198299
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.1445708205958161,
+          0.23729200526275054
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.7054470304796925,
+          2.67466683679866
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.033521900380263835,
+        0.004367291044204394
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 30 d, peso 0",
+      "clave": "movil_30_0",
+      "familia": "movil",
+      "precision_seleccion": 0.1527027027027027,
+      "precision_seleccion_rango95": [
+        0.12326739565481387,
+        0.18262577252520862
+      ],
+      "calibrada_elegidas_seleccion": 113,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.12777777777777777,
+        0.13574660633484162,
+        0.20603015075376885,
+        0.1357142857142857
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.011494988741224777,
+        0.06148755929347401
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.1416627358490566,
+          0.23859711918087542
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.6614149938426794,
+          2.7059051793304714
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.03187250996015936,
+        0.0045050140638375905
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "decaimiento, vida media 30 d",
+      "clave": "decaimiento_30",
+      "familia": "decaimiento",
+      "precision_seleccion": 0.15135135135135136,
+      "precision_seleccion_rango95": [
+        0.12307262569832403,
+        0.18133416149068324
+      ],
+      "calibrada_elegidas_seleccion": 112,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.1388888888888889,
+        0.13574660633484162,
+        0.19597989949748743,
+        0.12857142857142856
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.013442220626006704,
+        0.05995251265816289
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.17333333333333334,
+        "precision_rango95": [
+          0.13145539906103287,
+          0.21775051475634863
+        ],
+        "calibrada_elegidas": 39,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 1.9731107055976094,
+        "veces_azar_rango95": [
+          1.5409064909149401,
+          2.424119576217084
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.07442535945189617,
+        0.0
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "logística con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_logistica_atributos|reentrenado",
+      "familia": "ml_logistica_atributos",
+      "precision_seleccion": 0.14864864864864866,
+      "precision_seleccion_rango95": [
+        0.12158339108214046,
+        0.17774762550881953
+      ],
+      "calibrada_elegidas_seleccion": 110,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.16111111111111112,
+        0.12669683257918551,
+        0.1708542713567839,
+        0.1357142857142857
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.01581448713967674,
+        0.0591563194959229
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.1445708205958161,
+          0.23729200526275054
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.7054470304796925,
+          2.67466683679866
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.033521900380263835,
+        0.004367291044204394
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "promedio de modelos, reentrenado cada 5 d",
+      "clave": "ml_promedio|reentrenado",
+      "familia": "ml_promedio",
+      "precision_seleccion": 0.14864864864864866,
+      "precision_seleccion_rango95": [
+        0.12205187784614248,
+        0.17672022511808383
+      ],
+      "calibrada_elegidas_seleccion": 110,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.1388888888888889,
+        0.12669683257918551,
+        0.18090452261306533,
+        0.15
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.011068493787556517,
+        0.0569070468719113
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.1472043893699612,
+          0.2420657164210976
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.720202692074746,
+          2.7260938496174507
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.027906976744186046,
+        0.00803293820443062
+      ],
+      "semilla_mediana": 4,
+      "elegible": true
+    },
+    {
+      "alternativa": "decaimiento, vida media 60 d",
+      "clave": "decaimiento_60",
+      "familia": "decaimiento",
+      "precision_seleccion": 0.14864864864864866,
+      "precision_seleccion_rango95": [
+        0.1188782991202346,
+        0.1795238411684673
+      ],
+      "calibrada_elegidas_seleccion": 110,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.1388888888888889,
+        0.13122171945701358,
+        0.20603015075376885,
+        0.10714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.016240368948662008,
+        0.057220069354139556
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.17777777777777778,
+        "precision_rango95": [
+          0.13389121338912133,
+          0.22357852217762683
+        ],
+        "calibrada_elegidas": 40,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.02370328779242,
+        "veces_azar_rango95": [
+          1.5838557248548197,
+          2.4721645784622317
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06957027300303337,
+        0.004203021634185582
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 30 d, peso 20",
+      "clave": "movil_30_20",
+      "familia": "movil",
+      "precision_seleccion": 0.1472972972972973,
+      "precision_seleccion_rango95": [
+        0.11956372431915911,
+        0.17592777777777777
+      ],
+      "calibrada_elegidas_seleccion": 109,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.12777777777777777,
+        0.13574660633484162,
+        0.20100502512562815,
+        0.11428571428571428
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.01712334265829273,
+        0.055883657009870795
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.1416627358490566,
+          0.23859711918087542
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.6614149938426794,
+          2.7059051793304714
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.03187250996015936,
+        0.0045050140638375905
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "LightGBM, reentrenado cada 5 d",
+      "clave": "ml_lightgbm|reentrenado",
+      "familia": "ml_lightgbm",
+      "precision_seleccion": 0.14594594594594595,
+      "precision_seleccion_rango95": [
+        0.1196687206963364,
+        0.17251036842340395
+      ],
+      "calibrada_elegidas_seleccion": 108,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15555555555555556,
+        0.1085972850678733,
+        0.17587939698492464,
+        0.15
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.015805736360926168,
+        0.05502223556291235
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14427741102181402,
+          0.2304156947526123
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6955066956942122,
+          2.5796771464012473
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.041666666666666664,
+        0.0045050140638375905
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 60 d, peso 20",
+      "clave": "movil_60_20",
+      "familia": "movil",
+      "precision_seleccion": 0.14594594594594595,
+      "precision_seleccion_rango95": [
+        0.11609409661763502,
+        0.17529398905878657
+      ],
+      "calibrada_elegidas_seleccion": 108,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.14444444444444443,
+        0.13122171945701358,
+        0.18592964824120603,
+        0.11428571428571428
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.017264945979769682,
+        0.05202355968459557
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14018465844959138,
+          0.23661868842364525
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6467970724883711,
+          2.6234304173379877
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06279304081285123,
+        0.016738159699026044
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 120 d, peso 20",
+      "clave": "movil_120_20",
+      "familia": "movil",
+      "precision_seleccion": 0.14594594594594595,
+      "precision_seleccion_rango95": [
+        0.11727358063399985,
+        0.17513568947392477
+      ],
+      "calibrada_elegidas_seleccion": 108,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.14444444444444443,
+        0.13122171945701358,
+        0.19095477386934673,
+        0.10714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.016012087912087913,
+        0.05233787966321781
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.15565014646334108,
+          0.2511854065068571
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.83274390262428,
+          2.800351358236589
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.014927238805970149,
+        0.012396694214876033
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "stacking, reentrenado cada 5 d",
+      "clave": "ml_stacking|reentrenado",
+      "familia": "ml_stacking",
+      "precision_seleccion": 0.1445945945945946,
+      "precision_seleccion_rango95": [
+        0.11966804284315552,
+        0.17161312118570182
+      ],
+      "calibrada_elegidas_seleccion": 107,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.13333333333333333,
+        0.1085972850678733,
+        0.17587939698492464,
+        0.17142857142857143
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.02061988864913823,
+        0.0567936664458629
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.14678088221666205,
+          0.2366130169172932
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.7140599858668935,
+          2.6488643332203305
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.03608950328022493,
+        0.008439712508045477
+      ],
+      "semilla_mediana": 4,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 60 d, peso 0",
+      "clave": "movil_60_0",
+      "familia": "movil",
+      "precision_seleccion": 0.14324324324324325,
+      "precision_seleccion_rango95": [
+        0.11605189752624238,
+        0.17086900180633
+      ],
+      "calibrada_elegidas_seleccion": 106,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.12222222222222222,
+        0.13574660633484162,
+        0.19095477386934673,
+        0.11428571428571428
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.017738949609627505,
+        0.04812172031641603
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18222222222222223,
+        "precision_rango95": [
+          0.1355912402977982,
+          0.23076923076923078
+        ],
+        "calibrada_elegidas": 41,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.0742958699872305,
+        "veces_azar_rango95": [
+          1.545898189501681,
+          2.633927522765222
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06668067226890756,
+        0.018786049631120016
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "móvil 120 d, peso 0",
+      "clave": "movil_120_0",
+      "familia": "movil",
+      "precision_seleccion": 0.14324324324324325,
+      "precision_seleccion_rango95": [
+        0.11543325351691111,
+        0.17193426042983564
+      ],
+      "calibrada_elegidas_seleccion": 106,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.12222222222222222,
+        0.13122171945701358,
+        0.20100502512562815,
+        0.10714285714285714
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.018945161373129293,
+        0.049033445477933896
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14082635912090904,
+          0.23479539641943728
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6586414604963418,
+          2.5902787466993566
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.06087364768320066,
+        0.008929572389493908
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "Random Forest, reentrenado cada 5 d",
+      "clave": "ml_rf|reentrenado",
+      "familia": "ml_rf",
+      "precision_seleccion": 0.14189189189189189,
+      "precision_seleccion_rango95": [
+        0.11730053594903429,
+        0.1680330691414894
+      ],
+      "calibrada_elegidas_seleccion": 105,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.14444444444444443,
+        0.11764705882352941,
+        0.1658291457286432,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.019909789256538055,
+        0.05096175625843742
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.15565014646334108,
+          0.2511854065068571
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.83274390262428,
+          2.800351358236589
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.014927238805970149,
+        0.012396694214876033
+      ],
+      "semilla_mediana": 1,
+      "elegible": true
+    },
+    {
+      "alternativa": "MLP, reentrenado cada 5 d",
+      "clave": "ml_mlp|reentrenado",
+      "familia": "ml_mlp",
+      "precision_seleccion": 0.14189189189189189,
+      "precision_seleccion_rango95": [
+        0.11509549587230192,
+        0.1685704796371799
+      ],
+      "calibrada_elegidas_seleccion": 105,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.12222222222222222,
+        0.12217194570135746,
+        0.18592964824120603,
+        0.1357142857142857
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.019106865497915824,
+        0.05070780615898781
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.15565014646334108,
+          0.2511854065068571
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.83274390262428,
+          2.800351358236589
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.014927238805970149,
+        0.012396694214876033
+      ],
+      "semilla_mediana": 2,
+      "elegible": true
+    },
+    {
+      "alternativa": "MLP con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_mlp_atributos|fijo",
+      "familia": "ml_mlp_atributos",
+      "precision_seleccion": 0.13918918918918918,
+      "precision_seleccion_rango95": [
+        0.11483823592747319,
+        0.16434540389972144
+      ],
+      "calibrada_elegidas_seleccion": 103,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.11312217194570136,
+        0.1306532663316583,
+        0.14285714285714285
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.004231911892686733,
+        0.030045449687533383
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.1522383027284988,
+          0.25471698113207547
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.7920081145725308,
+          2.860496602847134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        0.0,
+        0.0
+      ],
+      "semilla_mediana": 2,
+      "elegible": true
+    },
+    {
+      "alternativa": "logística, reentrenado cada 5 d",
+      "clave": "ml_logistica|reentrenado",
+      "familia": "ml_logistica",
+      "precision_seleccion": 0.13783783783783785,
+      "precision_seleccion_rango95": [
+        0.10913863435221006,
+        0.16762499021912874
+      ],
+      "calibrada_elegidas_seleccion": 102,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.12777777777777777,
+        0.12217194570135746,
+        0.1658291457286432,
+        0.1357142857142857
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.027491437824638372,
+        0.04961281193244912
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14107750824555804,
+          0.2347891118543292
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6460640832246378,
+          2.634270897328168
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.04455445544554455,
+        0.008066155258326768
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "Naive Bayes, reentrenado cada 5 d",
+      "clave": "ml_nb|reentrenado",
+      "familia": "ml_nb",
+      "precision_seleccion": 0.13243243243243244,
+      "precision_seleccion_rango95": [
+        0.10714060813242172,
+        0.15789473684210525
+      ],
+      "calibrada_elegidas_seleccion": 98,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15555555555555556,
+        0.12217194570135746,
+        0.12562814070351758,
+        0.12857142857142856
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.025570917358319286,
+        0.03634142173615857
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.14846352903121462,
+          0.2431223654847508
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.7223909772048442,
+          2.7339432925389935
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.034482758620689655,
+        0.013333333333333334
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "LightGBM, fijo (reajustado por bloque)",
+      "clave": "ml_lightgbm|fijo",
+      "familia": "ml_lightgbm",
+      "precision_seleccion": 0.13108108108108107,
+      "precision_seleccion_rango95": [
+        0.10921479911800923,
+        0.15429008940460334
+      ],
+      "calibrada_elegidas_seleccion": 97,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.14444444444444443,
+        0.11764705882352941,
+        0.1306532663316583,
+        0.1357142857142857
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.017543859649122806,
+        0.02567241087093666
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.14592051144492132,
+          0.24402194667205784
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.7214755661232723,
+          2.7564255645525995
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.026089232870475754,
+        0.008199272158356561
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "XGBoost, fijo (reajustado por bloque)",
+      "clave": "ml_xgboost|fijo",
+      "familia": "ml_xgboost",
+      "precision_seleccion": 0.13108108108108107,
+      "precision_seleccion_rango95": [
+        0.10956955461359848,
+        0.15274335183642612
+      ],
+      "calibrada_elegidas_seleccion": 97,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.14444444444444443,
+        0.13122171945701358,
+        0.1306532663316583,
+        0.11428571428571428
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.01470736281089617,
+        0.024692205942205937
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.14083799988687143,
+          0.24066582142308282
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.6479746205560843,
+          2.7073555762784824
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.0282277084601339,
+        0.0
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "Random Forest, fijo (reajustado por bloque)",
+      "clave": "ml_rf|fijo",
+      "familia": "ml_rf",
+      "precision_seleccion": 0.13108108108108107,
+      "precision_seleccion_rango95": [
+        0.10526315789473684,
+        0.15706821976973395
+      ],
+      "calibrada_elegidas_seleccion": 97,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15555555555555556,
+        0.09954751131221719,
+        0.1306532663316583,
+        0.15
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.01602346320227849,
+        0.026466234894139806
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.1522383027284988,
+          0.25471698113207547
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.7920081145725308,
+          2.860496602847134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        0.0,
+        0.0
+      ],
+      "semilla_mediana": 2,
+      "elegible": true
+    },
+    {
+      "alternativa": "tasa fija (reajustada al inicio de cada bloque)",
+      "clave": "tasa_fija",
+      "familia": "tasa_fija",
+      "precision_seleccion": 0.12702702702702703,
+      "precision_seleccion_rango95": [
+        0.10296093250152782,
+        0.15202834168431562
+      ],
+      "calibrada_elegidas_seleccion": 94,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15555555555555556,
+        0.11312217194570136,
+        0.11557788944723618,
+        0.12857142857142856
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": null,
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.1522383027284988,
+          0.25471698113207547
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.7920081145725308,
+          2.860496602847134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": null,
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "promedio de modelos, fijo (reajustado por bloque)",
+      "clave": "ml_promedio|fijo",
+      "familia": "ml_promedio",
+      "precision_seleccion": 0.12702702702702703,
+      "precision_seleccion_rango95": [
+        0.10109011795001495,
+        0.15365457342813482
+      ],
+      "calibrada_elegidas_seleccion": 94,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15555555555555556,
+        0.10407239819004525,
+        0.12562814070351758,
+        0.12857142857142856
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.011095700416088766,
+        0.011321021968036771
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.1522383027284988,
+          0.25471698113207547
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.7920081145725308,
+          2.860496602847134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        0.0,
+        0.0
+      ],
+      "semilla_mediana": 4,
+      "elegible": true
+    },
+    {
+      "alternativa": "MLP, fijo (reajustado por bloque)",
+      "clave": "ml_mlp|fijo",
+      "familia": "ml_mlp",
+      "precision_seleccion": 0.12567567567567567,
+      "precision_seleccion_rango95": [
+        0.10306380105892109,
+        0.14928025074764203
+      ],
+      "calibrada_elegidas_seleccion": 93,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.14444444444444443,
+        0.11764705882352941,
+        0.11055276381909548,
+        0.1357142857142857
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.012180276711496506,
+        0.00990222156544012
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.1522383027284988,
+          0.25471698113207547
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.7920081145725308,
+          2.860496602847134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        0.0,
+        0.0
+      ],
+      "semilla_mediana": 1,
+      "elegible": true
+    },
+    {
+      "alternativa": "stacking, fijo (reajustado por bloque)",
+      "clave": "ml_stacking|fijo",
+      "familia": "ml_stacking",
+      "precision_seleccion": 0.12162162162162163,
+      "precision_seleccion_rango95": [
+        0.09660556650858777,
+        0.14804684697611017
+      ],
+      "calibrada_elegidas_seleccion": 90,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.17222222222222222,
+        0.09502262443438914,
+        0.08542713567839195,
+        0.15
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.03778601691304541,
+        0.025318241059791816
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.14485673880964092,
+          0.23730351284855106
+        ],
+        "calibrada_elegidas": 43,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.6944974173593703,
+          2.654473970705758
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.029130275825648942,
+        0.0
+      ],
+      "semilla_mediana": 5,
+      "elegible": true
+    },
+    {
+      "alternativa": "CatBoost, reentrenado cada 5 d",
+      "clave": "ml_catboost|reentrenado",
+      "familia": "ml_catboost",
+      "precision_seleccion": 0.11756756756756757,
+      "precision_seleccion_rango95": [
+        0.09440983756192549,
+        0.14185554747597043
+      ],
+      "calibrada_elegidas_seleccion": 87,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.12222222222222222,
+        0.12217194570135746,
+        0.10050251256281408,
+        0.12857142857142856
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.04075839942964085,
+        0.02139180800275264
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14158132315158437,
+          0.23113266805726748
+        ],
+        "calibrada_elegidas": 42,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6644346786229718,
+          2.6011369351558056
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.039603960396039604,
+        0.0
+      ],
+      "semilla_mediana": 4,
+      "elegible": true
+    },
+    {
+      "alternativa": "logística, fijo (reajustado por bloque)",
+      "clave": "ml_logistica|fijo",
+      "familia": "ml_logistica",
+      "precision_seleccion": 0.11621621621621622,
+      "precision_seleccion_rango95": [
+        0.09351596657706383,
+        0.13885627264924658
+      ],
+      "calibrada_elegidas_seleccion": 86,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.14444444444444443,
+        0.09502262443438914,
+        0.10552763819095477,
+        0.12857142857142856
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.04371806971829541,
+        0.019846670759994512
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.1522383027284988,
+          0.25471698113207547
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.7920081145725308,
+          2.860496602847134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        0.0,
+        0.0
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    },
+    {
+      "alternativa": "CatBoost, fijo (reajustado por bloque)",
+      "clave": "ml_catboost|fijo",
+      "familia": "ml_catboost",
+      "precision_seleccion": 0.10810810810810811,
+      "precision_seleccion_rango95": [
+        0.08652175878488337,
+        0.12983515103680848
+      ],
+      "calibrada_elegidas_seleccion": 80,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.1111111111111111,
+        0.11312217194570136,
+        0.09045226130653267,
+        0.12142857142857143
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.05026621465363187,
+        0.013143215183924936
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.1428430265386787,
+          0.2500280269058294
+        ],
+        "calibrada_elegidas": 44,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.6626446740422012,
+          2.8186688464730896
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        -0.03320196531189778,
+        0.014021997883971063
+      ],
+      "semilla_mediana": 4,
+      "elegible": true
+    },
+    {
+      "alternativa": "Naive Bayes, fijo (reajustado por bloque)",
+      "clave": "ml_nb|fijo",
+      "familia": "ml_nb",
+      "precision_seleccion": 0.10810810810810811,
+      "precision_seleccion_rango95": [
+        0.08485119928376368,
+        0.12978409194981225
+      ],
+      "calibrada_elegidas_seleccion": 80,
+      "elegidos_seleccion": 740,
+      "precision_por_bloque": [
+        0.15555555555555556,
+        0.10407239819004525,
+        0.05025125628140704,
+        0.1357142857142857
+      ],
+      "diferencia_con_tasa_fija_seleccion_rango95": [
+        -0.04058147755390597,
+        -0.0012851011227112965
+      ],
+      "confirmacion": {
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.1522383027284988,
+          0.25471698113207547
+        ],
+        "calibrada_elegidas": 46,
+        "elegidos": 225,
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.7920081145725308,
+          2.860496602847134
+        ],
+        "lectura": "mejora",
+        "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+      },
+      "diferencia_con_tasa_fija_confirmacion_rango95": [
+        0.0,
+        0.0
+      ],
+      "semilla_mediana": null,
+      "elegible": true
+    }
+  ],
+  "validacion_original_155_194": [
+    {
+      "alternativa": "oráculo (tasa real del tramo)",
+      "clave": "oraculo",
+      "precision_cupo": 0.2020460358056266,
+      "calibrada_elegidas": 79,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "Random Forest con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_rf_atributos|reentrenado",
+      "precision_cupo": 0.1867007672634271,
+      "calibrada_elegidas": 73,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "XGBoost con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_xgboost_atributos|fijo",
+      "precision_cupo": 0.1815856777493606,
+      "calibrada_elegidas": 71,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "LightGBM con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_lightgbm_atributos|fijo",
+      "precision_cupo": 0.17902813299232737,
+      "calibrada_elegidas": 70,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "CatBoost con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_catboost_atributos|fijo",
+      "precision_cupo": 0.17902813299232737,
+      "calibrada_elegidas": 70,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 120 d hacia el mercado, peso 20",
+      "clave": "movil_mercado_120",
+      "precision_cupo": 0.17647058823529413,
+      "calibrada_elegidas": 69,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "logística con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_logistica_atributos|reentrenado",
+      "precision_cupo": 0.17647058823529413,
+      "calibrada_elegidas": 69,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "XGBoost con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_xgboost_atributos|reentrenado",
+      "precision_cupo": 0.17647058823529413,
+      "calibrada_elegidas": 69,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "promedio de modelos con atributos, fijo (reajustado por bloque)",
+      "clave": "ml_promedio_atributos|fijo",
+      "precision_cupo": 0.17647058823529413,
+      "calibrada_elegidas": 69,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 30 d hacia el mercado, peso 20",
+      "clave": "movil_mercado_30",
+      "precision_cupo": 0.17391304347826086,
+      "calibrada_elegidas": 68,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico 60 d, peso 40",
+      "clave": "jerarquico_60_40",
+      "precision_cupo": 0.17391304347826086,
+      "calibrada_elegidas": 68,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "Random Forest, reentrenado cada 5 d",
+      "clave": "ml_rf|reentrenado",
+      "precision_cupo": 0.17391304347826086,
+      "calibrada_elegidas": 68,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "stacking, reentrenado cada 5 d",
+      "clave": "ml_stacking|reentrenado",
+      "precision_cupo": 0.17391304347826086,
+      "calibrada_elegidas": 68,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "MLP con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_mlp_atributos|reentrenado",
+      "precision_cupo": 0.17391304347826086,
+      "calibrada_elegidas": 68,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "promedio de modelos con atributos, reentrenado cada 5 d",
+      "clave": "ml_promedio_atributos|reentrenado",
+      "precision_cupo": 0.17391304347826086,
+      "calibrada_elegidas": 68,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 60 d hacia el mercado, peso 20",
+      "clave": "movil_mercado_60",
+      "precision_cupo": 0.17135549872122763,
+      "calibrada_elegidas": 67,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "MLP, reentrenado cada 5 d",
+      "clave": "ml_mlp|reentrenado",
+      "precision_cupo": 0.17135549872122763,
+      "calibrada_elegidas": 67,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "MLP con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_mlp_atributos|fijo",
+      "precision_cupo": 0.17135549872122763,
+      "calibrada_elegidas": 67,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico 60 d, peso 10",
+      "clave": "jerarquico_60_10",
+      "precision_cupo": 0.16879795396419436,
+      "calibrada_elegidas": 66,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico 60 d, peso 20",
+      "clave": "jerarquico_60_20",
+      "precision_cupo": 0.16879795396419436,
+      "calibrada_elegidas": 66,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico 120 d, peso 20",
+      "clave": "jerarquico_120_20",
+      "precision_cupo": 0.16879795396419436,
+      "calibrada_elegidas": 66,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "stacking, fijo (reajustado por bloque)",
+      "clave": "ml_stacking|fijo",
+      "precision_cupo": 0.16879795396419436,
+      "calibrada_elegidas": 66,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 30 d, peso 0",
+      "clave": "movil_30_0",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico 120 d, peso 10",
+      "clave": "jerarquico_120_10",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico 120 d, peso 40",
+      "clave": "jerarquico_120_40",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico todo el historial, peso 10",
+      "clave": "jerarquico_None_10",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico todo el historial, peso 20",
+      "clave": "jerarquico_None_20",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "logística, reentrenado cada 5 d",
+      "clave": "ml_logistica|reentrenado",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "LightGBM, reentrenado cada 5 d",
+      "clave": "ml_lightgbm|reentrenado",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "CatBoost, reentrenado cada 5 d",
+      "clave": "ml_catboost|reentrenado",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "LightGBM con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_lightgbm_atributos|reentrenado",
+      "precision_cupo": 0.16624040920716113,
+      "calibrada_elegidas": 65,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 120 d, peso 20",
+      "clave": "movil_120_20",
+      "precision_cupo": 0.1636828644501279,
+      "calibrada_elegidas": 64,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "decaimiento, vida media 15 d",
+      "clave": "decaimiento_15",
+      "precision_cupo": 0.1636828644501279,
+      "calibrada_elegidas": 64,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "jerárquico todo el historial, peso 40",
+      "clave": "jerarquico_None_40",
+      "precision_cupo": 0.1636828644501279,
+      "calibrada_elegidas": 64,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "XGBoost, reentrenado cada 5 d",
+      "clave": "ml_xgboost|reentrenado",
+      "precision_cupo": 0.16112531969309463,
+      "calibrada_elegidas": 63,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "promedio de modelos, reentrenado cada 5 d",
+      "clave": "ml_promedio|reentrenado",
+      "precision_cupo": 0.16112531969309463,
+      "calibrada_elegidas": 63,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "logística con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_logistica_atributos|fijo",
+      "precision_cupo": 0.16112531969309463,
+      "calibrada_elegidas": 63,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "Random Forest con atributos del código, fijo (reajustado por bloque)",
+      "clave": "ml_rf_atributos|fijo",
+      "precision_cupo": 0.16112531969309463,
+      "calibrada_elegidas": 63,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "CatBoost con atributos del código, reentrenado cada 5 d",
+      "clave": "ml_catboost_atributos|reentrenado",
+      "precision_cupo": 0.16112531969309463,
+      "calibrada_elegidas": 63,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "logística, fijo (reajustado por bloque)",
+      "clave": "ml_logistica|fijo",
+      "precision_cupo": 0.1585677749360614,
+      "calibrada_elegidas": 62,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "CatBoost, fijo (reajustado por bloque)",
+      "clave": "ml_catboost|fijo",
+      "precision_cupo": 0.1585677749360614,
+      "calibrada_elegidas": 62,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "promedio de modelos, fijo (reajustado por bloque)",
+      "clave": "ml_promedio|fijo",
+      "precision_cupo": 0.1585677749360614,
+      "calibrada_elegidas": 62,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 30 d, peso 20",
+      "clave": "movil_30_20",
+      "precision_cupo": 0.15601023017902813,
+      "calibrada_elegidas": 61,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 60 d, peso 20",
+      "clave": "movil_60_20",
+      "precision_cupo": 0.15601023017902813,
+      "calibrada_elegidas": 61,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "XGBoost, fijo (reajustado por bloque)",
+      "clave": "ml_xgboost|fijo",
+      "precision_cupo": 0.15601023017902813,
+      "calibrada_elegidas": 61,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "LightGBM, fijo (reajustado por bloque)",
+      "clave": "ml_lightgbm|fijo",
+      "precision_cupo": 0.15601023017902813,
+      "calibrada_elegidas": 61,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 60 d, peso 0",
+      "clave": "movil_60_0",
+      "precision_cupo": 0.1534526854219949,
+      "calibrada_elegidas": 60,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "móvil 120 d, peso 0",
+      "clave": "movil_120_0",
+      "precision_cupo": 0.1534526854219949,
+      "calibrada_elegidas": 60,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "Random Forest, fijo (reajustado por bloque)",
+      "clave": "ml_rf|fijo",
+      "precision_cupo": 0.1534526854219949,
+      "calibrada_elegidas": 60,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "tasa fija (reajustada al inicio de cada bloque)",
+      "clave": "tasa_fija",
+      "precision_cupo": 0.15089514066496162,
+      "calibrada_elegidas": 59,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "decaimiento, vida media 30 d",
+      "clave": "decaimiento_30",
+      "precision_cupo": 0.15089514066496162,
+      "calibrada_elegidas": 59,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "MLP, fijo (reajustado por bloque)",
+      "clave": "ml_mlp|fijo",
+      "precision_cupo": 0.15089514066496162,
+      "calibrada_elegidas": 59,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "decaimiento, vida media 60 d",
+      "clave": "decaimiento_60",
+      "precision_cupo": 0.1483375959079284,
+      "calibrada_elegidas": 58,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "Naive Bayes, fijo (reajustado por bloque)",
+      "clave": "ml_nb|fijo",
+      "precision_cupo": 0.14578005115089515,
+      "calibrada_elegidas": 57,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "Naive Bayes, reentrenado cada 5 d",
+      "clave": "ml_nb|reentrenado",
+      "precision_cupo": 0.10485933503836317,
+      "calibrada_elegidas": 41,
+      "elegidos": 391
+    },
+    {
+      "alternativa": "azar",
+      "clave": "azar",
+      "precision_cupo": 0.08951406649616368,
+      "calibrada_elegidas": 35,
+      "elegidos": 391
+    }
+  ]
+}

@@ -434,6 +434,10 @@ def main(argv=None):
     g = sub.add_parser("generar", help="Arma el preregistro propuesto desde los resultados de validación")
     g.add_argument("--salida", type=Path, default=PREREGISTRO)
     g.add_argument("--resultados", type=Path, default=RESULTADOS)
+    s = sub.add_parser("generar-segunda", help="Preregistro propuesto de la segunda lectura, con la ganadora por precisión")
+    s.add_argument("--csv", required=True, type=Path)
+    s.add_argument("--catalogo", required=True, type=Path)
+    s.add_argument("--salida", type=Path, default=None)
     c = sub.add_parser("correr", help="Corrida única de la prueba final (sesión conjunta)")
     c.add_argument("--preregistro", type=Path, default=PREREGISTRO)
     c.add_argument("--hash-preregistro", required=True)
@@ -442,7 +446,15 @@ def main(argv=None):
     c.add_argument("--salida", type=Path, default=PRUEBA_FINAL)
     opciones = parser.parse_args(argv)
     try:
-        if opciones.accion == "generar":
+        if opciones.accion == "generar-segunda":
+            from . import precision
+            tabla = datos.cargar(opciones.csv, opciones.catalogo, cache=None)  # Enmascarada: no lee la prueba final.
+            preregistro = precision.preregistro_segunda_lectura(tabla)
+            salida = opciones.salida or precision.PREREGISTRO_SEGUNDA
+            sha = escribir(preregistro, salida)
+            print(f"Preregistro propuesto (segunda lectura): {salida} (sha256 {sha})")
+            print("Pendientes: " + (", ".join(pendientes(preregistro)) or "ninguno"))
+        elif opciones.accion == "generar":
             preregistro = generar(opciones.resultados)
             sha = escribir(preregistro, opciones.salida)
             faltan = pendientes(preregistro)

@@ -121,6 +121,21 @@ Mismo calificador y mismo cupo: entre auditados con actividad QLS, validación 1
 | Stacking fijo (≤149) | 66 / 391 | 16,9 % (13,0–20,7) | 1,71 (1,32–2,08) | mejora | sí | 16,9–18,4 % |
 | Stacking reentrenado cada 5 d | 67 / 391 | 17,1 % (13,4–20,9) | 1,73 (1,35–2,13) | mejora | sí | 16,6–17,4 % |
 
+### Elección por precisión en bloques de tiempo (propuesta del 30/09)
+
+La regla de la sección anterior desempata por simplicidad. El equipo prefiere elegir por **precisión**, pero con la validación de 35 días el ruido es de unos ±4 puntos y cualquier ganadora sería casi un sorteo. Por eso se midió en cinco bloques consecutivos de días, siempre entrenando con el pasado (Día ≤ t−5): **selección** en los días 100–174 (cuatro bloques) y **confirmación** en 175–194, que no participa en la elección. Además de las 31 alternativas anteriores compiten un suavizado jerárquico (código → mercado y versión → mercado → general) y modelos de ML que usan, junto al código, los atributos que se leen de él (mercado, motor, tracción y versión). El resultado y el componente de Auditoría Adicional siguen sin usarse. Todo con Día < 195: la prueba final no se relee ([`precision.json`][prec]).
+
+**Observaciones** (entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15.279 VIN; 740 elegidos).
+- La de mayor precisión es **CatBoost con atributos del código, reentrenado cada 5 días**: 18,4 % (136 de 740), contra 12,7 % de la tasa fija reajustada en cada bloque y 11,2 % al azar. El oráculo llega a 22,8 %. La diferencia con la tasa fija tiene un rango del 95 % de +1,9 a +9,5 puntos.
+- Es casi un empate con Random Forest y XGBoost con atributos (18,2 % y 18,1 %) y con el suavizado jerárquico de 60 días (17,8 %): entre los 12 primeros hay 8 aciertos de diferencia sobre 740 elegidos.
+- Por grupo, la mediana en selección es 17,0 % para los modelos con atributos, 17,0 % para el jerárquico y 17,2 % para la móvil suavizada hacia el mercado, contra 14,7 % de las tasas simples y 13,1 % de los modelos de ML que usan solo el código.
+- **No se confirmó en el último bloque** (días 175–194, 225 elegidos, n = 4.626 VIN): la ganadora tiene 17,3 % (39 de 225) y la tasa fija 20,4 % (46 de 225); la diferencia va de −6,8 a 0,0 puntos. Con tan pocos elegidos el rango es de unos ±5 puntos.
+- Sobre los 965 elegidos de 100 a 194, la ganadora tiene 18,1 % y la tasa fija 14,5 %.
+
+**Hipótesis.** Usar el mercado y la versión aporta unos 3 a 4 puntos porque un código con pocos resultados toma fuerza de los que se le parecen; coincide con que la señal del código se explica sobre todo por el mercado de destino ([agrupación del catálogo][cat]). No se probó por separado qué atributo aporta más.
+
+**Lectura.** La ganadora es una familia, no un modelo: varios que usan mercado y versión rinden igual. La mejora sobre la tasa fija se ve en cuatro de los cinco bloques, pero no se confirmó en el último. Se presenta como **evaluada en validación ampliada; prueba final no releída**. La cifra oficial de la prueba final sigue siendo la de la tasa fija preregistrada.
+
 ### Anexo de historial (no elegible)
 
 Evalúa lo que piden la ficha y el resumen del challenge (historial de incidencias y reparaciones, tiempos entre inspección y reparación) con la misma partición y la misma métrica. Rótulo: «disponibilidad no probada». Rasgos: cantidad de eventos, incidencias distintas, tiempo entre inspección y reparación, días entre el primer y el último evento y las 20 incidencias más frecuentes, entrenado con ≤149 ([plan][plan-par]; [`p6.json`][p6]). Entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN, 391 elegidos.
@@ -266,3 +281,4 @@ La cifra principal supone que se conoce el resultado de todos los auditados. En 
 [qls]: https://github.com/FordwardAI/ford-predictive-quality/issues/29#issuecomment-5896631478
 [reu]: https://github.com/FordwardAI/ford-predictive-quality/issues/5#issuecomment-5800841330
 [final]: ../../solucion/resultados/prueba-final.json
+[prec]: ../../solucion/resultados/precision.json
