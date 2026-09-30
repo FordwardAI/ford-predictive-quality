@@ -1,0 +1,1073 @@
+{
+  "pieza": "P7 prueba final",
+  "corridas": [
+    {
+      "fecha": "2026-09-30T19:16:18+00:00",
+      "preregistro": "solucion/preregistro.json",
+      "preregistro_sha256": "485af08db180cfd4d2391ad1d2d5b6f3d285f5a548894413e1c0ab25e2eb2b93",
+      "preregistro_commit": "f4c39e89737662ab37eec3f6fb832cc000aef2af",
+      "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3",
+      "version_codigo_preregistro": "8127debd23640d47895a618190df41199bf13eaa",
+      "fuente": {
+        "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+        "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+      },
+      "ganadora": {
+        "alternativa": "tasa fija (<= 194)",
+        "familia": "tasa_fija",
+        "parametros": {
+          "hasta": 194,
+          "peso": 0
+        }
+      },
+      "tramos": [
+        {
+          "tramo": "prueba completa",
+          "dias_del_vin": [
+            200,
+            284
+          ],
+          "lectura_del_tramo": "principal",
+          "vin_esperados": 13312,
+          "vins": 13312,
+          "ganadora": {
+            "alternativa": "tasa fija (<= 194)",
+            "familia": "tasa_fija",
+            "parametros": {
+              "hasta": 194,
+              "peso": 0
+            },
+            "orden_simplicidad": [
+              1,
+              0
+            ],
+            "elegible": true,
+            "tramo": "prueba completa",
+            "calificador": "entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN",
+            "dias": 68,
+            "vins": 13312,
+            "elegidos": 652,
+            "calibrada_elegidas": 71,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.10889570552147239,
+            "precision_rango95": [
+              0.08274629051053826,
+              0.13609099666968646
+            ],
+            "azar_mismo_cupo": 0.08228066604795758,
+            "veces_azar": 1.3234665049745966,
+            "veces_azar_rango95": [
+              1.0078349707617178,
+              1.6396184187210794
+            ],
+            "recupero": 0.06466302367941712,
+            "recupero_rango95": [
+              0.049079612588048174,
+              0.08019677399793824
+            ],
+            "diferencia_con_azar_rango95": [
+              0.0006670068465509677,
+              0.05240521976371789
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba completa",
+            "calificador": "entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN",
+            "dias": 68,
+            "vins": 13312,
+            "elegidos": 652,
+            "calibrada_elegidas": 55,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.0843558282208589,
+            "precision_rango95": [
+              0.06376811594202898,
+              0.10492870321301694
+            ],
+            "azar_mismo_cupo": 0.08228066604795758,
+            "veces_azar": 1.025220532022575,
+            "veces_azar_rango95": [
+              0.7843084554594549,
+              1.2681711947439844
+            ],
+            "recupero": 0.05009107468123861,
+            "recupero_rango95": [
+              0.03807522060181225,
+              0.06203254241526565
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.017647089110207827,
+              0.02196236352249619
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            -0.0059277028152590365,
+            0.05505984730848861
+          ]
+        },
+        {
+          "tramo": "prueba ≤260",
+          "dias_del_vin": [
+            200,
+            260
+          ],
+          "lectura_del_tramo": "principal",
+          "vin_esperados": 13135,
+          "vins": 13135,
+          "ganadora": {
+            "alternativa": "tasa fija (<= 194)",
+            "familia": "tasa_fija",
+            "parametros": {
+              "hasta": 194,
+              "peso": 0
+            },
+            "orden_simplicidad": [
+              1,
+              0
+            ],
+            "elegible": true,
+            "tramo": "prueba ≤260",
+            "calificador": "entre auditados con actividad QLS, prueba ≤260, base ficticia, n = 13135 VIN",
+            "dias": 51,
+            "vins": 13135,
+            "elegidos": 631,
+            "calibrada_elegidas": 70,
+            "calibrada_tramo": 1094,
+            "precision_cupo": 0.1109350237717908,
+            "precision_rango95": [
+              0.0859375,
+              0.13884555382215288
+            ],
+            "azar_mismo_cupo": 0.08324409192158382,
+            "veces_azar": 1.3326474132998163,
+            "veces_azar_rango95": [
+              1.0379116931670418,
+              1.6497148437697722
+            ],
+            "recupero": 0.06398537477148081,
+            "recupero_rango95": [
+              0.04990754604872252,
+              0.0792389333294336
+            ],
+            "diferencia_con_azar_rango95": [
+              0.0031372994283818687,
+              0.054468775500858546
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba ≤260",
+            "calificador": "entre auditados con actividad QLS, prueba ≤260, base ficticia, n = 13135 VIN",
+            "dias": 51,
+            "vins": 13135,
+            "elegidos": 631,
+            "calibrada_elegidas": 53,
+            "calibrada_tramo": 1094,
+            "precision_cupo": 0.08399366085578447,
+            "precision_rango95": [
+              0.0645643911256376,
+              0.10459636718273801
+            ],
+            "azar_mismo_cupo": 0.08324409192158382,
+            "veces_azar": 1.0090044700698608,
+            "veces_azar_rango95": [
+              0.780436025429013,
+              1.2460197464357787
+            ],
+            "recupero": 0.048446069469835464,
+            "recupero_rango95": [
+              0.0374866739587743,
+              0.05987516437476427
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.018003957032399674,
+              0.02057474708967699
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            -0.0033912926872876796,
+            0.05683853213841865
+          ]
+        },
+        {
+          "tramo": "prueba >260",
+          "dias_del_vin": [
+            261,
+            284
+          ],
+          "lectura_del_tramo": "descriptiva: cupo ~8, demasiado chico para leerlo",
+          "vin_esperados": 177,
+          "vins": 177,
+          "ganadora": {
+            "alternativa": "tasa fija (<= 194)",
+            "familia": "tasa_fija",
+            "parametros": {
+              "hasta": 194,
+              "peso": 0
+            },
+            "orden_simplicidad": [
+              1,
+              0
+            ],
+            "elegible": true,
+            "tramo": "prueba >260",
+            "calificador": "entre auditados con actividad QLS, prueba >260, base ficticia, n = 177 VIN",
+            "dias": 17,
+            "vins": 177,
+            "elegidos": 21,
+            "calibrada_elegidas": 1,
+            "calibrada_tramo": 4,
+            "precision_cupo": 0.047619047619047616,
+            "precision_rango95": [
+              0.0,
+              0.17647058823529413
+            ],
+            "azar_mismo_cupo": 0.05333201241661713,
+            "veces_azar": 0.8928792569659443,
+            "veces_azar_rango95": [
+              0.0,
+              2.0
+            ],
+            "recupero": 0.25,
+            "recupero_rango95": [
+              0.0,
+              1.0
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.07374017568192326,
+              0.06571560663100191
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "prueba >260",
+            "calificador": "entre auditados con actividad QLS, prueba >260, base ficticia, n = 177 VIN",
+            "dias": 17,
+            "vins": 177,
+            "elegidos": 21,
+            "calibrada_elegidas": 2,
+            "calibrada_tramo": 4,
+            "precision_cupo": 0.09523809523809523,
+            "precision_rango95": [
+              0.0,
+              0.23809523809523808
+            ],
+            "azar_mismo_cupo": 0.05333201241661713,
+            "veces_azar": 1.7857585139318886,
+            "veces_azar_rango95": [
+              0.0,
+              2.0
+            ],
+            "recupero": 0.5,
+            "recupero_rango95": [
+              0.0,
+              1.0
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.009114325341787199,
+              0.11764705882352941
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            -0.17647058823529413,
+            0.0
+          ]
+        },
+        {
+          "tramo": "sensibilidad con la cohorte posterior a 260",
+          "dias_del_vin": [
+            200,
+            284
+          ],
+          "lectura_del_tramo": "sensibilidad: suma la cohorte de primer evento posterior a DIA_260 (toda OK)",
+          "vin_esperados": 18222,
+          "vins": 18222,
+          "ganadora": {
+            "alternativa": "tasa fija (<= 194)",
+            "familia": "tasa_fija",
+            "parametros": {
+              "hasta": 194,
+              "peso": 0
+            },
+            "orden_simplicidad": [
+              1,
+              0
+            ],
+            "elegible": true,
+            "tramo": "sensibilidad con la cohorte posterior a 260",
+            "calificador": "entre auditados con actividad QLS, sensibilidad con la cohorte posterior a 260, base ficticia, n = 18222 VIN",
+            "dias": 72,
+            "vins": 18222,
+            "elegidos": 878,
+            "calibrada_elegidas": 70,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.07972665148063782,
+            "precision_rango95": [
+              0.05841801398791952,
+              0.10416666666666667
+            ],
+            "azar_mismo_cupo": 0.06004864822987595,
+            "veces_azar": 1.3277010196038266,
+            "veces_azar_rango95": [
+              1.0288789893704098,
+              1.649199035850841
+            ],
+            "recupero": 0.06375227686703097,
+            "recupero_rango95": [
+              0.04951199314677327,
+              0.07914157191991707
+            ],
+            "diferencia_con_azar_rango95": [
+              0.0018736184881480518,
+              0.03987415383968087
+            ],
+            "lectura": "mejora",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3"
+          },
+          "azar_simulado": {
+            "alternativa": "azar",
+            "familia": "azar",
+            "parametros": {},
+            "orden_simplicidad": [
+              0,
+              0
+            ],
+            "elegible": false,
+            "tramo": "sensibilidad con la cohorte posterior a 260",
+            "calificador": "entre auditados con actividad QLS, sensibilidad con la cohorte posterior a 260, base ficticia, n = 18222 VIN",
+            "dias": 72,
+            "vins": 18222,
+            "elegidos": 878,
+            "calibrada_elegidas": 53,
+            "calibrada_tramo": 1098,
+            "precision_cupo": 0.06036446469248292,
+            "precision_rango95": [
+              0.04257523130562994,
+              0.07795579455541064
+            ],
+            "azar_mismo_cupo": 0.06004864822987595,
+            "veces_azar": 1.005259343414326,
+            "veces_azar_rango95": [
+              0.7611516626557966,
+              1.2420539115586786
+            ],
+            "recupero": 0.0482695810564663,
+            "recupero_rango95": [
+              0.03648859244483232,
+              0.059618256262042375
+            ],
+            "diferencia_con_azar_rango95": [
+              -0.014166347448689252,
+              0.014414324300471007
+            ],
+            "lectura": "inconcluso",
+            "semillas": {
+              "desempate": 20261002,
+              "bootstrap": 20261003,
+              "remuestreos": 2000
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3"
+          },
+          "diferencia_con_azar_simulado_rango95": [
+            -0.0022453703703703707,
+            0.04302599450941054
+          ]
+        }
+      ],
+      "piezas": {
+        "p5": {
+          "corrida": true,
+          "resultado": {
+            "resultados": [
+              {
+                "alternativa": "mínimo por código, P = 40",
+                "familia": "politica",
+                "parametros": {
+                  "P": 40
+                },
+                "orden_simplicidad": [
+                  1,
+                  -40
+                ],
+                "elegible": true,
+                "tramo": "prueba final >= 200, etiquetas parciales",
+                "calificador": "entre auditados con actividad QLS, prueba final >= 200, etiquetas parciales, base ficticia, n = 13312 VIN",
+                "dias": 68,
+                "vins": 13312,
+                "elegidos": 652,
+                "calibrada_elegidas": 69,
+                "calibrada_tramo": 1098,
+                "precision_cupo": 0.1058282208588957,
+                "precision_rango95": [
+                  0.08005891238670695,
+                  0.132655318764674
+                ],
+                "azar_mismo_cupo": 0.08228066604795758,
+                "veces_azar": 1.286185758355594,
+                "veces_azar_rango95": [
+                  0.9799746414542645,
+                  1.599466810089388
+                ],
+                "recupero": 0.06284153005464481,
+                "recupero_rango95": [
+                  0.04787047099643064,
+                  0.07820989260613231
+                ],
+                "diferencia_con_azar_rango95": [
+                  -0.0016875793740275884,
+                  0.0497321106277088
+                ],
+                "lectura": "inconcluso",
+                "semillas": {
+                  "desempate": 20261002,
+                  "bootstrap": 20261003,
+                  "remuestreos": 2000
+                },
+                "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+                "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+                "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3",
+                "politica": "minimo",
+                "parametros_politica": {
+                  "P": 40
+                }
+              },
+              {
+                "alternativa": "ε = 0 (solo el ranking)",
+                "familia": "politica",
+                "parametros": {},
+                "orden_simplicidad": [
+                  9
+                ],
+                "elegible": false,
+                "tramo": "prueba final >= 200, etiquetas parciales",
+                "calificador": "entre auditados con actividad QLS, prueba final >= 200, etiquetas parciales, base ficticia, n = 13312 VIN",
+                "dias": 68,
+                "vins": 13312,
+                "elegidos": 652,
+                "calibrada_elegidas": 71,
+                "calibrada_tramo": 1098,
+                "precision_cupo": 0.10889570552147239,
+                "precision_rango95": [
+                  0.08274629051053826,
+                  0.13609099666968646
+                ],
+                "azar_mismo_cupo": 0.08228066604795758,
+                "veces_azar": 1.3234665049745966,
+                "veces_azar_rango95": [
+                  1.0078349707617178,
+                  1.6396184187210794
+                ],
+                "recupero": 0.06466302367941712,
+                "recupero_rango95": [
+                  0.049079612588048174,
+                  0.08019677399793824
+                ],
+                "diferencia_con_azar_rango95": [
+                  0.0006670068465509677,
+                  0.05240521976371789
+                ],
+                "lectura": "mejora",
+                "semillas": {
+                  "desempate": 20261002,
+                  "bootstrap": 20261003,
+                  "remuestreos": 2000
+                },
+                "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+                "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+                "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3",
+                "politica": "voraz",
+                "parametros_politica": {}
+              },
+              {
+                "alternativa": "azar",
+                "familia": "politica",
+                "parametros": {},
+                "orden_simplicidad": [
+                  9
+                ],
+                "elegible": false,
+                "tramo": "prueba final >= 200, etiquetas parciales",
+                "calificador": "entre auditados con actividad QLS, prueba final >= 200, etiquetas parciales, base ficticia, n = 13312 VIN",
+                "dias": 68,
+                "vins": 13312,
+                "elegidos": 652,
+                "calibrada_elegidas": 55,
+                "calibrada_tramo": 1098,
+                "precision_cupo": 0.0843558282208589,
+                "precision_rango95": [
+                  0.06376811594202898,
+                  0.10492870321301694
+                ],
+                "azar_mismo_cupo": 0.08228066604795758,
+                "veces_azar": 1.025220532022575,
+                "veces_azar_rango95": [
+                  0.7843084554594549,
+                  1.2681711947439844
+                ],
+                "recupero": 0.05009107468123861,
+                "recupero_rango95": [
+                  0.03807522060181225,
+                  0.06203254241526565
+                ],
+                "diferencia_con_azar_rango95": [
+                  -0.017647089110207827,
+                  0.02196236352249619
+                ],
+                "lectura": "inconcluso",
+                "semillas": {
+                  "desempate": 20261002,
+                  "bootstrap": 20261003,
+                  "remuestreos": 2000
+                },
+                "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+                "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+                "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3",
+                "politica": "azar",
+                "parametros_politica": {}
+              }
+            ]
+          }
+        },
+        "p6": {
+          "corrida": true,
+          "resultado": {
+            "configuracion": {
+              "componente": {
+                "peso": 20,
+                "top": 3,
+                "margen": 5,
+                "desempate": "nombre del componente",
+                "referencia_fija_hasta": "fin del tramo anterior (149 en validación, 194 en prueba)",
+                "bootstrap": {
+                  "semilla": 20261003,
+                  "remuestreos": 2000
+                }
+              },
+              "detector": {
+                "metodo": "CUSUM de Bernoulli por código, dos lados, reinicio a 0 tras cada alarma",
+                "factor": 2.0,
+                "tope_p1": 0.99,
+                "peso_p0": 20,
+                "p0": "tasa del código hasta el fin del tramo anterior (149 en validación, 194 en prueba), suavizada hacia la general",
+                "h": 4.4,
+                "falsas_alarmas_cada_30_dia_max": 1.0,
+                "rejilla_h": [
+                  0.5,
+                  20.0,
+                  0.1
+                ],
+                "permutaciones": 100,
+                "semilla_permutacion": 20261004,
+                "potencia": {
+                  "dia_cambio": 165,
+                  "min_vin": 100,
+                  "replicas": 200,
+                  "semilla": 20261005
+                },
+                "cerca_de_260_dia": 10
+              },
+              "subcategorizacion": "fuera del preregistro",
+              "casi_no_se_calibran": {
+                "candidatos": "Códigos cuyo rango de Wilson del 95 % con Día ≤194 queda entero por debajo de la tasa general ≤194",
+                "hasta": 194
+              },
+              "preregistro": {
+                "estado": "acordado",
+                "fecha": "2026-09-30",
+                "como_acordar": "Revisar en equipo. Reemplazar cada \"pendiente\" por su valor o por \"fuera del preregistro\", cambiar estado a \"acordado\", commitear, enlazar en #33 y correr una vez con --hash-preregistro <sha256 del archivo commiteado>.",
+                "fuente": {
+                  "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+                  "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+                },
+                "version_codigo": "8127debd23640d47895a618190df41199bf13eaa",
+                "entradas": {
+                  "eleccion": {
+                    "archivo": "solucion/resultados/eleccion.json",
+                    "sha256": "b9b4eb99666d0deefe0582786a6fbeabf56c4bacd967e5cfbbe23071893b1f3a"
+                  },
+                  "p5": {
+                    "archivo": "solucion/resultados/p5.json",
+                    "sha256": "f7a39668794e57fdbae0d417bca998260cc2b7c45e9f7ede4a3569faf0256e6f"
+                  },
+                  "p6": {
+                    "archivo": "solucion/resultados/p6.json",
+                    "sha256": "be47d899151ada6561f26a64dd9e4d552d84d66fa6784b2fb6b153792074ed53"
+                  }
+                },
+                "ganadora": {
+                  "alternativa": "tasa fija (<= 149)",
+                  "familia": "tasa_fija",
+                  "parametros": {
+                    "hasta": 149,
+                    "peso": 0
+                  },
+                  "en_validacion": {
+                    "precision_cupo": 0.15089514066496162,
+                    "precision_rango95": [
+                      0.11573925307055127,
+                      0.1876652842676362
+                    ],
+                    "veces_azar": 1.5276023653648838,
+                    "veces_azar_rango95": [
+                      1.175831221511182,
+                      1.8955464017615562
+                    ],
+                    "recupero": 0.07564102564102564,
+                    "lectura": "mejora",
+                    "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN"
+                  }
+                },
+                "ganadora_en_prueba": {
+                  "familia": "tasa_fija",
+                  "parametros": {
+                    "hasta": 194,
+                    "peso": 0
+                  },
+                  "modo": "fijo: reentrenada con Día ≤194"
+                },
+                "semillas": {
+                  "desempate": 20261002,
+                  "bootstrap": 20261003,
+                  "remuestreos": 2000,
+                  "modelo": "no aplica: la ganadora es determinista"
+                },
+                "piezas": {
+                  "p5": {
+                    "politica": {
+                      "nombre": "mínimo por código, P = 40",
+                      "tipo": "minimo",
+                      "parametros": {
+                        "P": 40
+                      }
+                    },
+                    "minimo_por_codigo": {
+                      "P": 40
+                    }
+                  },
+                  "p6": {
+                    "componente": {
+                      "peso": 20,
+                      "top": 3,
+                      "margen": 5,
+                      "desempate": "nombre del componente",
+                      "referencia_fija_hasta": "fin del tramo anterior (149 en validación, 194 en prueba)",
+                      "bootstrap": {
+                        "semilla": 20261003,
+                        "remuestreos": 2000
+                      }
+                    },
+                    "detector": {
+                      "metodo": "CUSUM de Bernoulli por código, dos lados, reinicio a 0 tras cada alarma",
+                      "factor": 2.0,
+                      "tope_p1": 0.99,
+                      "peso_p0": 20,
+                      "p0": "tasa del código hasta el fin del tramo anterior (149 en validación, 194 en prueba), suavizada hacia la general",
+                      "h": 4.4,
+                      "falsas_alarmas_cada_30_dia_max": 1.0,
+                      "rejilla_h": [
+                        0.5,
+                        20.0,
+                        0.1
+                      ],
+                      "permutaciones": 100,
+                      "semilla_permutacion": 20261004,
+                      "potencia": {
+                        "dia_cambio": 165,
+                        "min_vin": 100,
+                        "replicas": 200,
+                        "semilla": 20261005
+                      },
+                      "cerca_de_260_dia": 10
+                    },
+                    "subcategorizacion": "fuera del preregistro",
+                    "casi_no_se_calibran": {
+                      "candidatos": "Códigos cuyo rango de Wilson del 95 % con Día ≤194 queda entero por debajo de la tasa general ≤194",
+                      "hasta": 194
+                    }
+                  },
+                  "e3": {
+                    "dia": "último día de la prueba ≤260 con VIN (se cuenta sin etiquetas al correr)"
+                  }
+                },
+                "tramos": [
+                  {
+                    "nombre": "prueba completa",
+                    "desde": 200,
+                    "hasta": null,
+                    "cohorte": false,
+                    "lectura": "principal",
+                    "vin_esperados": 13312
+                  },
+                  {
+                    "nombre": "prueba ≤260",
+                    "desde": 200,
+                    "hasta": 260,
+                    "cohorte": false,
+                    "lectura": "principal",
+                    "vin_esperados": 13135
+                  },
+                  {
+                    "nombre": "prueba >260",
+                    "desde": 261,
+                    "hasta": null,
+                    "cohorte": false,
+                    "lectura": "descriptiva: cupo ~8, demasiado chico para leerlo",
+                    "vin_esperados": 177
+                  },
+                  {
+                    "nombre": "sensibilidad con la cohorte posterior a 260",
+                    "desde": 200,
+                    "hasta": null,
+                    "cohorte": true,
+                    "lectura": "sensibilidad: suma la cohorte de primer evento posterior a DIA_260 (toda OK)",
+                    "vin_esperados": 18222
+                  }
+                ],
+                "reglas_de_lectura": {
+                  "predictor": "En cada tramo, la ganadora congelada contra el azar al mismo cupo diario: precisión en el cupo, veces el azar y recupero con rango del 95 % (bootstrap por días). Lectura sin umbral: mejora si el rango de la diferencia con el azar queda entero sobre 0, peor si queda entero debajo, inconcluso si incluye 0. Donde no hay CALIBRADA no se calcula veces el azar: solo cuántas se encontraron.",
+                  "componente": "Acierto de los 3 primeros componentes por código contra los 3 primeros generales, con rango del 95 % por bootstrap, en la prueba.",
+                  "detector": "Detecciones reales del detector configurado hasta el final de la prueba, incluidas las cercanas a DIA_260, como observaciones: no se afirman causas.",
+                  "subcategorizacion": "No se lee en la prueba: fuera del preregistro por decisión del equipo; queda con cifras de validación.",
+                  "casi_no_se_calibran": "Un código que casi no se calibra se sostiene si su rango de Wilson del 95 % en la prueba completa queda entero por debajo de la tasa general de la prueba completa.",
+                  "e3": "La hoja final (E3) usa el último día de la prueba ≤260 con VIN.",
+                  "anexo_historial": "No se lee en la prueba: no es elegible y queda con cifras de validación."
+                },
+                "ya_visto": [
+                  "El tramo de prueba (Día 200–260) ya lo exploraron los experimentos de modelado (research/experimentos-modelado.md), que eligieron ahí la ventana de 60 días: la cifra puede ser optimista.",
+                  "Las tasas por mercado dentro de la prueba ya están publicadas en research/catalog-groups.json.",
+                  "Los totales CALIBRADA de la prueba por tramo ya están publicados en research/validation-partitions.json.",
+                  "Que los auditados sean una selección al azar es un supuesto de Ford.",
+                  "En planta solo se conocería el resultado de lo que se elige auditar.",
+                  "El Día del VIN es aproximado: max(Fecha Inspección, Fecha Reparación)."
+                ],
+                "no_se_lee_en_prueba": [
+                  "Las demás alternativas de P3 y P4: solo con cifras de validación.",
+                  "Oráculo y versión con fuga: no elegibles.",
+                  "Anexo de historial: disponibilidad no probada; solo validación.",
+                  "Todo lo que no figura en este preregistro.",
+                  "Subcategorización: no mantuvo el orden entre grupos en validación; solo cifras de validación."
+                ]
+              }
+            },
+            "componente": {
+              "prueba_final": {
+                "todas_las_calibrada": {
+                  "calibrada_evaluadas": 1098,
+                  "dias": 68,
+                  "aciertos_codigo": 515,
+                  "acierto_codigo": 0.4690346083788707,
+                  "acierto_codigo_rango95": [
+                    0.43923373740012106,
+                    0.5008768284071421
+                  ],
+                  "aciertos_general": 437,
+                  "acierto_general": 0.39799635701275043,
+                  "acierto_general_rango95": [
+                    0.36781154277742395,
+                    0.4274840475699254
+                  ],
+                  "aciertos_general_fija": 437,
+                  "acierto_general_fija": 0.39799635701275043,
+                  "acierto_general_fija_rango95": [
+                    0.36781154277742395,
+                    0.4274840475699254
+                  ],
+                  "diferencia_con_general_rango95": [
+                    0.04882754139691235,
+                    0.09282397445971687
+                  ],
+                  "lectura_contra_general": "mejora",
+                  "diferencia_con_general_fija_rango95": [
+                    0.04882754139691235,
+                    0.09282397445971687
+                  ],
+                  "lectura_contra_general_fija": "mejora",
+                  "calificador": "entre auditados con actividad QLS, prueba final 200–284, base ficticia, n = 1098 VIN CALIBRADA"
+                },
+                "calibrada_elegidas_por_la_ganadora": {
+                  "ganadora": {
+                    "alternativa": "tasa fija (<= 194)",
+                    "parametros": {
+                      "hasta": 194,
+                      "peso": 0
+                    }
+                  },
+                  "calibrada_evaluadas": 71,
+                  "dias": 68,
+                  "aciertos_codigo": 45,
+                  "acierto_codigo": 0.6338028169014085,
+                  "acierto_codigo_rango95": [
+                    0.5322427521437321,
+                    0.7313432835820896
+                  ],
+                  "aciertos_general": 25,
+                  "acierto_general": 0.352112676056338,
+                  "acierto_general_rango95": [
+                    0.25756493506493505,
+                    0.45588235294117646
+                  ],
+                  "aciertos_general_fija": 25,
+                  "acierto_general_fija": 0.352112676056338,
+                  "acierto_general_fija_rango95": [
+                    0.25756493506493505,
+                    0.45588235294117646
+                  ],
+                  "diferencia_con_general_rango95": [
+                    0.13636363636363635,
+                    0.408466709346991
+                  ],
+                  "lectura_contra_general": "mejora",
+                  "diferencia_con_general_fija_rango95": [
+                    0.13636363636363635,
+                    0.408466709346991
+                  ],
+                  "lectura_contra_general_fija": "mejora",
+                  "calificador": "entre auditados con actividad QLS, prueba final 200–284, base ficticia, n = 71 VIN CALIBRADA elegidos"
+                }
+              },
+              "prueba_final_hasta_260": {
+                "todas_las_calibrada": {
+                  "calibrada_evaluadas": 1094,
+                  "dias": 51,
+                  "aciertos_codigo": 514,
+                  "acierto_codigo": 0.46983546617915906,
+                  "acierto_codigo_rango95": [
+                    0.43999514563106795,
+                    0.5009583094601476
+                  ],
+                  "aciertos_general": 436,
+                  "acierto_general": 0.39853747714808047,
+                  "acierto_general_rango95": [
+                    0.3693648525462564,
+                    0.4281972250709709
+                  ],
+                  "aciertos_general_fija": 436,
+                  "acierto_general_fija": 0.39853747714808047,
+                  "acierto_general_fija_rango95": [
+                    0.3693648525462564,
+                    0.4281972250709709
+                  ],
+                  "diferencia_con_general_rango95": [
+                    0.048967170084071976,
+                    0.0942910007140111
+                  ],
+                  "lectura_contra_general": "mejora",
+                  "diferencia_con_general_fija_rango95": [
+                    0.048967170084071976,
+                    0.0942910007140111
+                  ],
+                  "lectura_contra_general_fija": "mejora",
+                  "calificador": "entre auditados con actividad QLS, prueba final 200–260, base ficticia, n = 1094 VIN CALIBRADA"
+                },
+                "calibrada_elegidas_por_la_ganadora": {
+                  "ganadora": {
+                    "alternativa": "tasa fija (<= 194)",
+                    "parametros": {
+                      "hasta": 194,
+                      "peso": 0
+                    }
+                  },
+                  "calibrada_evaluadas": 70,
+                  "dias": 51,
+                  "aciertos_codigo": 45,
+                  "acierto_codigo": 0.6428571428571429,
+                  "acierto_codigo_rango95": [
+                    0.5352112676056338,
+                    0.7419477028347995
+                  ],
+                  "aciertos_general": 25,
+                  "acierto_general": 0.35714285714285715,
+                  "acierto_general_rango95": [
+                    0.254537750385208,
+                    0.45835040983606545
+                  ],
+                  "aciertos_general_fija": 25,
+                  "acierto_general_fija": 0.35714285714285715,
+                  "acierto_general_fija_rango95": [
+                    0.254537750385208,
+                    0.45835040983606545
+                  ],
+                  "diferencia_con_general_rango95": [
+                    0.14285714285714285,
+                    0.4177262422066881
+                  ],
+                  "lectura_contra_general": "mejora",
+                  "diferencia_con_general_fija_rango95": [
+                    0.14285714285714285,
+                    0.4177262422066881
+                  ],
+                  "lectura_contra_general_fija": "mejora",
+                  "calificador": "entre auditados con actividad QLS, prueba final 200–260, base ficticia, n = 70 VIN CALIBRADA elegidos"
+                }
+              }
+            },
+            "detector": {
+              "alarmas": 16,
+              "sube": 1,
+              "baja": 15,
+              "codigos_con_alarma": 10,
+              "alarmas_cada_30_dia": 5.647058823529411,
+              "dias_calendario": 85,
+              "hasta_260": 16,
+              "despues_de_260": 0,
+              "a_10_dia_de_260": 4,
+              "lectura": "Observaciones, no causas."
+            },
+            "subcategorizacion": {
+              "corrida": false,
+              "motivo": "Fuera del preregistro."
+            }
+          }
+        },
+        "casi_no_se_calibran": {
+          "corrida": true,
+          "resultado": {
+            "candidatos": 16,
+            "con_vin_en_prueba": 12,
+            "se_sostienen": 2,
+            "codigos_que_se_sostienen": [
+              "ABD6",
+              "AJEA"
+            ]
+          }
+        },
+        "e3": {
+          "corrida": true,
+          "resultado": {
+            "pieza": "P8 hoja de códigos prioritarios",
+            "dia": 260,
+            "programa": "simulado con las unidades del Día del VIN (ids ficticios)",
+            "unidades_programadas": 298,
+            "codigos_programados": 30,
+            "cupo": 14,
+            "cupo_5": 14,
+            "sugeridas_total": 14,
+            "codigos_con_cantidad": 6,
+            "filas_minimo_por_codigo": 0,
+            "sin_cubrir": 0,
+            "minimo_por_codigo": {
+              "P": 40,
+              "origen": "preregistrado (P5)"
+            },
+            "predictor": "tasa fija (<= 194)",
+            "ventana_tasa": [
+              null,
+              194
+            ],
+            "ventana_mercado": [
+              155,
+              255
+            ],
+            "archivos": [
+              "hoja-dia-260.csv",
+              "hoja-dia-260.xlsx",
+              "hoja-dia-260.html",
+              "programa-dia-260.csv"
+            ],
+            "vin_en_salidas": 0,
+            "semillas": {
+              "programa": 20261008,
+              "desempate": 20261002
+            },
+            "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+            "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+            "version_codigo": "f8dab1e952cc3bdbb206b04cb92349d9521365c3",
+            "carpeta": "fuera del repo"
+          }
+        }
+      },
+      "ya_visto": [
+        "El tramo de prueba (Día 200–260) ya lo exploraron los experimentos de modelado (research/experimentos-modelado.md), que eligieron ahí la ventana de 60 días: la cifra puede ser optimista.",
+        "Las tasas por mercado dentro de la prueba ya están publicadas en research/catalog-groups.json.",
+        "Los totales CALIBRADA de la prueba por tramo ya están publicados en research/validation-partitions.json.",
+        "Que los auditados sean una selección al azar es un supuesto de Ford.",
+        "En planta solo se conocería el resultado de lo que se elige auditar.",
+        "El Día del VIN es aproximado: max(Fecha Inspección, Fecha Reparación)."
+      ]
+    }
+  ]
+}
