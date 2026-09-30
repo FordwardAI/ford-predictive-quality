@@ -120,7 +120,11 @@ def test_correr_lee_la_prueba_y_agrega_corridas():
     with tempfile.TemporaryDirectory() as d:
         salida = Path(d) / "prueba-final.json"
         semillas = {"desempate": 20261002, "bootstrap": 20261003, "remuestreos": 200, "modelo": "no aplica"}
-        archivo, sha = _preregistro(d, semillas=semillas)
+        archivo, _ = _preregistro(d, semillas=semillas)
+        p = json.loads(archivo.read_text())
+        p["piezas"]["e3"]["salida"] = str(Path(d) / "e3")  # La E3 final de prueba no pisa la carpeta real.
+        archivo.write_text(json.dumps(p, ensure_ascii=False, indent=2) + "\n")
+        sha = pr.sha256(archivo)
         registro = pr.correr(archivo, sha, salida=salida, git=_git_ok, cargar=_tabla, ahora=AHORA)
         corrida = registro["corridas"][0]
         assert corrida["preregistro_sha256"] == sha and corrida["preregistro_commit"] == "commit-sintetico"
@@ -131,7 +135,9 @@ def test_correr_lee_la_prueba_y_agrega_corridas():
         assert g["semillas"]["remuestreos"] == 200 and g["calibrada_tramo"] > 0  # Leyó etiquetas de la prueba.
         assert hasta_260["dias_del_vin"] == [200, 260] and despues["vins"] == 3
         assert sensibilidad["vins"] == completa["vins"] + 400, (sensibilidad["vins"], completa["vins"])
-        assert corrida["piezas"]["e3"]["corrida"] is False and corrida["piezas"]["e3"]["motivo"]
+        e3 = corrida["piezas"]["e3"]
+        assert e3["corrida"] is True and e3["resultado"]["vin_en_salidas"] == 0, e3
+        assert e3["resultado"]["dia"] == 260 and (Path(d) / "e3" / "hoja-dia-260.html").exists()
         assert corrida["piezas"]["casi_no_se_calibran"]["corrida"] is True
         assert "SYN" not in salida.read_text() and "TARDE" not in salida.read_text()  # Sin identificadores.
         pr.correr(archivo, sha, salida=salida, git=_git_ok, cargar=_tabla, ahora=AHORA)

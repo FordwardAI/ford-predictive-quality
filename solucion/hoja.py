@@ -660,6 +660,25 @@ def correr(tabla, opciones):
     return resumen(h, archivos, tabla)
 
 
+def prueba(tabla, config):
+    """Hook de P7: la E3 final con la ganadora preregistrada, el último día de la prueba <= 260 y su cifra.
+
+    `config`: sección e3 del preregistro con "dia", "evaluacion" (la ganadora en el tramo <= 260) y "salida"
+    (carpeta fuera del repo; por defecto la caché). Solo con la tabla desbloqueada.
+    """
+    from .puntaje import crear
+    assert tabla.desbloqueada, "La E3 final solo se arma con el preregistro acordado"
+    preregistro = config["preregistro"]
+    g = preregistro["ganadora_en_prueba"]
+    p = (preregistro.get("piezas", {}).get("p5") or {}).get("minimo_por_codigo", {}).get("P")
+    minimo = (int(p), "preregistrado (P5)") if isinstance(p, (int, float)) else None
+    carpeta = Path(config.get("salida") or Path.home() / ".cache" / "ford-predictive-quality" / "e3-final")
+    assert datos.RAIZ not in carpeta.resolve().parents, "La hoja tiene tasas por código: va fuera del repo"
+    h, archivos = construir_hoja(tabla, config["dia"], carpeta, predictor=crear(g["familia"], g["parametros"], tabla),
+                                 minimo=minimo, evaluacion=config.get("evaluacion"))
+    return {**resumen(h, archivos, tabla), "carpeta": str(carpeta)}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--csv", required=True, type=Path)

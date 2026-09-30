@@ -317,6 +317,16 @@ def casi_no_se_calibran(tabla, config, desde=PRUEBA_DESDE):
             "codigos_que_se_sostienen": sostenidos}
 
 
+def _evaluacion_e3(tramos):
+    """Cifra de la caja de evaluación de la E3 final: la ganadora en el tramo <= 260."""
+    t = next((t for t in tramos if t.get("tramo") == "prueba ≤260" and "ganadora" in t), None)
+    if t is None:
+        return None
+    g = t["ganadora"]
+    return {"alternativa": g["alternativa"], "precision": g["precision_cupo"], "rango": g["precision_rango95"],
+            "azar": g["azar_mismo_cupo"], "lectura": g["lectura"], "calificador": g["calificador"]}
+
+
 def correr_pieza(nombre, tabla, config, preregistro):
     if config == FUERA:
         return {"corrida": False, "motivo": "Fuera del preregistro: se muestra solo con cifras de validación."}
@@ -349,7 +359,8 @@ def correr(preregistro_path, hash_pasado, csv_path=None, catalogo_path=None, sal
 
     piezas = preregistro["piezas"]
     dias_260 = tabla.por_dia(PRUEBA_DESDE, CUTOFF)
-    e3 = {**piezas["e3"], "dia": max(dias_260) if dias_260 else None} if piezas["e3"] != FUERA else FUERA
+    e3 = {**piezas["e3"], "dia": max(dias_260) if dias_260 else None,
+          "evaluacion": _evaluacion_e3(tramos)} if piezas["e3"] != FUERA else FUERA
     config_casi = piezas["p6"].get("casi_no_se_calibran", FUERA) if isinstance(piezas["p6"], dict) else FUERA
     corrida = {
         "fecha": (ahora or datetime.datetime.now(datetime.timezone.utc)).isoformat(timespec="seconds"),
