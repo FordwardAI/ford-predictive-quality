@@ -46,3 +46,4 @@ python3 research/test_audit_dataset.py
 | `referencias.py` | P3 | Azar, tasa fija, móviles, mercado, decaimiento, oráculo y fuga |
 | `eleccion.py` | P3/P4 | Ganadora en validación |
 | `run.py` | P2 | Comando único |
+| `empaquetar.py` | P13 | .zip de reproducción (código, entorno, resultados, hoja); falla si entra un CSV o un VIN |
