@@ -8,7 +8,7 @@ Borrador para la sección 3 del Informe (E2) y el separador 03 de la presentaci�
 
 Un script de Python con bibliotecas de código abierto (versiones fijadas en `requirements.txt`) que lee una exportación de QLS, el catálogo, el programa del día y el cupo, y produce una planilla y un imprimible. **No usa LLM ni servicios pagos**, no necesita GPU y no requiere nube ([plan][plan-fact]; [seguridad y privacidad](02-3-seguridad-privacidad.md)). No tiene costo de licencias.
 
-Tiempo del recálculo diario en una notebook (Apple M1 Pro, medido el 29/09/2026): unos 2,2 s para leer el CSV completo y verificar su hash, y 0,2 s para armar la hoja del día (ranking, cantidades, planilla, imprimible y control de que no salga ningún VIN). El plan lo estima en segundos, porque con el código como predictor el cálculo es una tabla de tasas por código ([plan][plan-fact]).
+Tiempo de una corrida diaria (hoja del día con la tasa vigente) en una notebook (Apple M1 Pro, medido el 29/09/2026): unos 2,2 s para leer el CSV completo y verificar su hash, y 0,2 s para armar la hoja del día (ranking, cantidades, planilla, imprimible y control de que no salga ningún VIN). El plan lo estima en segundos, porque con el código como predictor el cálculo es una tabla de tasas por código ([plan][plan-fact]).
 
 ## 1. Implementación
 
@@ -25,7 +25,7 @@ Fórmula para Ford: **costo de implementación = horas de integración × costo 
 
 | Qué | Consumo |
 | --- | --- |
-| Cómputo del recálculo diario | Una corrida por día: unos 2,4 s en una notebook (lectura del CSV 2,2 s + hoja 0,2 s) |
+| Cómputo de la hoja del día y de la revisión de la tasa | Una corrida por día: unos 2,4 s en una notebook (lectura del CSV 2,2 s + hoja 0,2 s) |
 | Almacenamiento | La exportación de QLS y la hoja del día. La base de todo el período ocupa 54,6 MB en CSV ([población y etiquetas][pob]) |
 | Impresión o planilla | Una hoja de una página por día |
 | Auditorías | **Ninguna adicional**: el cupo lo sigue fijando Calidad de Planta |

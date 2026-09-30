@@ -50,7 +50,7 @@ Tomadas por Mateo Serebrinsky y Facundo Lanusse, sin el tercer integrante; detal
 5. **Alarmas del detector:** observaciones sin causa, junto a la tasa esperada de falsas alarmas.
 6. **Hoja del día mostrado:** se explica antes que el cupo se concentra en un código.
 7. **Días de control:** el rango ancho es el motivo para medir en planta y calcular allí la duración de la etapa.
-8. **Operación con tasa fija:** tasa fija revisada periódicamente, con el detector avisando entre revisiones. **La periodicidad de la revisión sigue sin fijarse.** El [glosario][ctx] y otros borradores todavía dicen «tasa reciente» o «recálculo diario» en algunos lugares: pendiente de ajustar.
+8. **Operación con tasa fija:** tasa fija revisada periódicamente, con el detector avisando entre revisiones. **La periodicidad de la revisión sigue sin fijarse.** Ajustado el texto de `CONTEXT.md` y de los borradores. Siguen diciendo «tasa reciente» / «recálculo diario» lo que genera el código: la columna «Tasa reciente» de la hoja, el texto de las figuras `diagrama_proceso` y `diagrama_solucion`, y `docs/plan-de-accion.md` (especificación original); cambiarlos implica tocar `solucion/` y regenerar.
 
 [plan-piezas]: ../plan-de-accion.md#piezas-de-trabajo
 [plan-inc]: ../plan-de-accion.md#incompatibilidades-y-cómo-se-resuelven

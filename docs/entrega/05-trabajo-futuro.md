@@ -23,7 +23,7 @@ Según la decisión de [base QLS][qls], punto 7:
 
 ## 2. Escalado
 
-- **Recálculo diario** de la tasa reciente de cada código con los resultados que se van conociendo, con 5 días de margen.
+- **Revisión periódica de la tasa** de cada código con los resultados que se van conociendo, con 5 días de margen; la periodicidad se fija con Ford. El detector de cambios avisa entre revisiones.
 - **Detector de cambios** activo por código, con alertas a quien designe Ford (sección 4).
 - **Revisión periódica** de la opción elegida con el mismo protocolo sin fuga: partición temporal, cupo diario y bootstrap por días ([`solucion/README.md`][sol]).
 - **Hoja para todas las unidades** de la playa, porque el código se lee en el parabrisas. La variante restringida a unidades con actividad QLS queda como opción si Ford confirma que QLS se puede consultar desde la playa ([base QLS][qls], punto 4).
@@ -35,7 +35,7 @@ Lo que se necesita para replicar:
 | Requisito | Por qué |
 | --- | --- |
 | Un código de catálogo (o equivalente) visible en la unidad | Es el único predictor y lo que el analista lee |
-| Resultados de las auditorías con la fecha y el código | Alimentan la tasa reciente |
+| Resultados de las auditorías con la fecha y el código | Alimentan la revisión de la tasa |
 | Un cupo diario definido | La hoja llena ese cupo |
 | Un histórico de auditorías elegidas al azar para arrancar | Da tasas iniciales que no dependen de lo que la hoja elija |
 

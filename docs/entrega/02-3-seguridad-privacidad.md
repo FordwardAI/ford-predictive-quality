@@ -23,7 +23,7 @@ Fuentes oficiales consultadas el 29/09/2026.
 | Dato | Para qué | ¿Refiere a personas? |
 | --- | --- | --- |
 | Código de catálogo | Único predictor ([admisibilidad][adm], punto 3) | No: describe versión y mercado del vehículo |
-| Resultado de la Auditoría Adicional (OK / CALIBRADA) y Día del VIN | Calcular la tasa reciente del código con 5 días de margen | No |
+| Resultado de la Auditoría Adicional (OK / CALIBRADA) y Día del VIN | Calcular la tasa del código con 5 días de margen | No |
 | Componente de la Auditoría Adicional | Solo para «dónde mirar», como lo que se predice | No |
 | Agrupación del catálogo (mercado, versión, motor, tracción) | Columnas legibles y suavizado hacia el mercado | No |
 | Programa de producción del día y cupo diario | Entradas de la hoja | No |

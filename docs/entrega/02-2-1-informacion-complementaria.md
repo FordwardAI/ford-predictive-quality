@@ -9,7 +9,7 @@ La ficha valora «un dashboard o reporte accionable» que presente las prediccio
 ### Cómo se usa
 
 1. **Al inicio del día**, un script recibe el programa de producción (qué códigos y cuántas unidades) y el cupo que fija Calidad de Planta ([plan][plan-inc], incompatibilidad 7).
-2. Recalcula la tasa reciente de cada código con los resultados de auditoría ya conocidos (Día ≤ t−5) y arma la hoja.
+2. Toma la tasa vigente de cada código (la de la última revisión, con resultados de auditoría ya conocidos: Día ≤ t−5) y arma la hoja.
 3. El **equipo de analistas** la lleva en sus rondas por la playa de despacho. En cada ronda toma unidades de los códigos con cantidad pendiente, leyendo el código en el parabrisas ([operación][ope], decisiones 1 y 2).
 4. Si un código no llega a la playa, la cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron. Solo se completa al azar si se agota el ranking ([CONTEXT.md][ctx], «Hoja de códigos prioritarios»).
 
@@ -18,7 +18,7 @@ La ficha valora «un dashboard o reporte accionable» que presente las prediccio
 | Bloque | Contenido | Fuente de la decisión |
 | --- | --- | --- |
 | Caja de evaluación, arriba | La frase permitida con el calificador «entre auditados con actividad QLS, [tramo], base ficticia, n = …» y los límites fijos | [Salida para Calidad][sal], punto 2; [base QLS][qls], punto 2 |
-| Tabla de códigos | Código (primero, porque es lo que se lee en el parabrisas), cantidad sugerida, tasa reciente del código con rango del 95 % y n, veces la tasa general, acumulado, y columnas legibles: mercado de destino, versión, motor y tracción (motor y versión marcados «dominante») | [Uso de la agrupación][agr], punto 2; [operación][ope], decisión 1 |
+| Tabla de códigos | Código (primero, porque es lo que se lee en el parabrisas), cantidad sugerida, tasa del código con rango del 95 % y n, veces la tasa general, acumulado, y columnas legibles: mercado de destino, versión, motor y tracción (motor y versión marcados «dominante») | [Uso de la agrupación][agr], punto 2; [operación][ope], decisión 1 |
 | Filas de exploración, aparte | Los códigos que reciben auditoría por el **mínimo por código** | [Base QLS][qls], punto 5; [plan][plan-piezas], P8 |
 | «Por qué este código» | Mercado de destino y la comparación entre agrupaciones | [Plan][plan-inc], incompatibilidad 8 |
 | Lista de unidades sugeridas | Si el programa trae identificadores de unidad. En la demo son ficticios, nunca VIN | [Plan][plan-piezas], P8 |
@@ -38,7 +38,7 @@ Nunca muestra «probabilidad de la unidad» ni un score por vehículo: dentro de
 
 ![Proceso y punto donde entra la hoja](figuras/diagrama_proceso.png)
 
-*Figura: verificación de calidad (QLS) → Gate Release → playa de despacho (0 a 5 días; aquí los analistas eligen con la hoja) → Auditoría Adicional → OK o CALIBRADA. El resultado vuelve, con 5 días de margen, a la tasa reciente del código.*
+*Figura: verificación de calidad (QLS) → Gate Release → playa de despacho (0 a 5 días; aquí los analistas eligen con la hoja) → Auditoría Adicional → OK o CALIBRADA. El resultado vuelve, con 5 días de margen, a la siguiente revisión de la tasa del código.*
 
 ## Diagrama de la solución
 
