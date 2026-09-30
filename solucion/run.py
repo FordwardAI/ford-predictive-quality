@@ -30,8 +30,9 @@ PIEZAS = {  # Orden de dependencias del plan de acción.
     "historial_vin": "solucion.historial_vin",  # Opcional: experimento de validación sobre el historial del VIN.
     "ensemble": "solucion.ensemble",  # Opcional: CatBoost + tasa móvil, solo Día <195.
     "busqueda": "solucion.busqueda",  # Opcional: individuales, columnas, aumento y combinaciones amplias.
+    "semillas_busqueda": "solucion.semillas_busqueda",  # Estabilidad, sin elegir otra mezcla.
 }
-OPCIONALES = ("precision", "historial_vin", "ensemble", "busqueda")
+OPCIONALES = ("precision", "historial_vin", "ensemble", "busqueda", "semillas_busqueda")
 CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 
 

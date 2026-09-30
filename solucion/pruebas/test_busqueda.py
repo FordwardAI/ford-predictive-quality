@@ -77,3 +77,33 @@ def test_eleccion_adaptativa_no_mira_el_bloque_futuro_ni_el_margen():
     assert solo_catalogo("conjunto|catboost") and solo_catalogo("historial|ranker|sin")
     assert not solo_catalogo("campos_A|logistica|todas|natural")
     assert not solo_catalogo("historial|catboost|B")
+
+
+def test_semillas_evalua_vin_originales_y_entrena_con_margen():
+    import types
+    from unittest.mock import patch
+    from solucion import semillas_busqueda as s
+    t = tabla(dias=range(1, 51), por_dia=40)
+    modelo = types.SimpleNamespace(parametros={}, puntuar=lambda ctx, codigos: {c: .1 for c in codigos})
+    cortes = []
+    espacio = columnas.espacio
+
+    def observar(tabla_, eventos, campos, train, evaluados, margen):
+        cortes.append((max(v.dia for v in train), min(v.dia for v in evaluados)))
+        return espacio(tabla_, eventos, campos, train, evaluados, margen)
+
+    with patch.object(s, "BLOQUES_SELECCION", ((40, 44),)), patch.object(s, "CONFIRMACION", (45, 49)), \
+         patch.object(s.ml, "SEMILLAS", (1, 2)), \
+         patch.object(s.ml, "ajustar", return_value={"vida": 5, "hiperparametros": {}}), \
+         patch.object(s.ml, "ajustar_meta", return_value=(None, None, None)), \
+         patch.object(s.ml, "Stacking", return_value=modelo), \
+         patch.dict(s.ml.BASES_ATRIBUTOS, {"rf": lambda *a, **kw: modelo}), \
+         patch.object(s.columnas, "espacio", side_effect=observar), \
+         patch.object(s.columnas, "ajustar_predecir", side_effect=lambda f, X, Z, *a: np.full(Z.shape[0], .1)):
+        r = s.correr(t)
+    assert cortes == [(34, 40), (39, 45)]
+    assert [x["semilla"] for x in r["resultados"]] == [1, 2]
+    for fila in r["resultados"]:
+        for tramo in ("seleccion", "confirmacion"):
+            assert fila[tramo]["mezcla"]["vins"] == 200
+            assert fila[tramo]["mezcla"]["elegidos"] == 10

@@ -86,6 +86,7 @@ def espacio(tabla, eventos, columnas, train, evaluados, retraso):
 
 def aumentar(X, y, codigos, numericas, politica, semilla):
     """Entrenamiento solamente: ponderación, bootstrap o interpolación numérica entre positivos del mismo código."""
+    # ponytail: resúmenes interpolados sin validación física; usar un generador de eventos validado si se dispone de él.
     if politica not in POLITICAS:
         raise ValueError("Política de aumento desconocida")
     y = np.asarray(y)
