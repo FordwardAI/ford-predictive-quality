@@ -28,3 +28,15 @@ Desde esta carpeta, con el entorno del repo (Python 3.13, ver `solucion/README.m
 - Cifras solo de validación (155–194), con el calificador «entre auditados con actividad QLS, [tramo], base ficticia, n = …». La prueba final figura como «pendiente de la sesión conjunta».
 - Nunca un VIN: las unidades usan ids ficticios del programa simulado.
 - Sin Ford Oval ni Signature; la tipografía FORD F-1 se usa solo si está instalada (no se descarga).
+
+## Supuestos del prototipo (para revisar en equipo)
+
+No salen de ninguna fuente; son propuestas de diseño:
+
+- **Sin resultados de QLS:** la plataforma no arma la hoja (no puede verificar la huella de la fuente ni qué códigos vencen el mínimo por código). Propone un sorteo al azar con semilla registrada y marca el día como «sin hoja».
+- **Rondas:** cinco rondas «cada 2 h aprox.»; el estado de la ronda 2 (unidades tomadas) es de ejemplo.
+- **Importación del programa:** además de las validaciones que ya hace `solucion/hoja.leer_programa` (columnas y unidad repetida), se muestran código desconocido y fila vacía.
+- **Roles:** Calidad de Planta, equipo de analistas y responsable técnico.
+- **Días de control:** «alternar hoja y azar» u «otro patrón, a acordar con Ford»; el seguimiento reproduce la simulación de P5 en validación.
+- **Detector el Día 190:** se muestran las alarmas conocidas ese día; las posteriores de la validación van aparte, como evidencia.
+- **Selector de día:** solo el Día 190.
