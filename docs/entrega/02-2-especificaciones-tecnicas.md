@@ -19,7 +19,7 @@ Las cifras de validación salen de [`solucion/resultados/p3.json`][p3], [`elecci
 
 1. **La decisión es qué unidades auditar dentro de un cupo diario fijo.** No se trata de clasificar cada vehículo como OK o CALIBRADA: se trata de ordenar lo que se produce en el día y llenar el cupo con lo que tenga más chances de necesitar calibración ([mejora útil][mej], puntos 1 y 3).
 2. **La única información admisible al momento de elegir es el código de catálogo** ([admisibilidad][adm], punto 3; apartado B). Todas las unidades de un mismo código reciben entonces la misma estimación. Por eso se priorizan **códigos**, no vehículos ([salida para Calidad][sal], punto 1).
-3. **La estimación es la tasa reciente del código**: la proporción CALIBRADA entre los VIN auditados de ese código cuyo resultado ya se conoce, con 5 días de margen. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo ([CONTEXT.md][ctx]).
+3. **La estimación es la tasa del código**: la proporción CALIBRADA entre los VIN auditados de ese código cuyo resultado ya se conoce, con 5 días de margen. Se revisa periódicamente y el detector de cambios avisa entre revisiones. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo ([CONTEXT.md][ctx]).
 4. **La salida es una hoja diaria**, armada al inicio del día con el programa de producción y el cupo que fija Calidad de Planta. Ordena los códigos y dice cuántas unidades de cada uno derivar ([operación][ope], decisiones 1 y 2).
 
 ### Observaciones
@@ -35,7 +35,7 @@ Las cifras de validación salen de [`solucion/resultados/p3.json`][p3], [`elecci
 ### Decisiones acordadas
 
 - Una fila por VIN, con código, Día del VIN y etiqueta ([representación][rep], punto 1).
-- Se priorizan códigos. La cifra que se muestra es la tasa reciente del código con su rango del 95 %, su n y cuántas veces supera la tasa general. Nunca «probabilidad de la unidad» ([salida para Calidad][sal], puntos 1 y 2).
+- Se priorizan códigos. La cifra que se muestra es la tasa del código con su rango del 95 %, su n y cuántas veces supera la tasa general. Nunca «probabilidad de la unidad» ([salida para Calidad][sal], puntos 1 y 2).
 - La hoja explica la prioridad por el mercado de destino y muestra versión, motor y tracción como columnas legibles ([uso de la agrupación][agr], puntos 1 y 2). Así responde a lo que la ficha llama «variables de mayor impacto».
 
 ---

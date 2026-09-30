@@ -45,11 +45,11 @@ Atributo del código de catálogo que indica el país o mercado al que va el veh
 _Avoid_: «País», «location» o «región» como sinónimos sueltos.
 
 **Hoja de códigos prioritarios**:
-Forma diaria de la recomendación de auditoría, armada al inicio del día con los códigos programados: los códigos de catálogo ordenados por su tasa reciente del código, con rango, vehículos programados, acumulado y cantidad sugerida por código para llenar el cupo diario. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes. El equipo de analistas la consume en sus rondas. Si un código no llega a la playa de despacho, la cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron, y solo se completa al azar si se agota el ranking.
+Forma diaria de la recomendación de auditoría, armada al inicio del día con los códigos programados: los códigos de catálogo ordenados por la tasa del código vigente, con rango, vehículos programados, acumulado y cantidad sugerida por código para llenar el cupo diario. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes. El equipo de analistas la consume en sus rondas. Si un código no llega a la playa de despacho, la cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron, y solo se completa al azar si se agota el ranking.
 _Avoid_: Ranking de VIN; leer la cantidad sugerida como una elección de VIN concretos.
 
 **Tasa reciente del código**:
-Proporción CALIBRADA entre los VIN auditados de un código de catálogo en una ventana cuyos resultados ya se conocen según el margen de disponibilidad. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo.
+Proporción CALIBRADA entre los VIN auditados de un código de catálogo en una ventana cuyos resultados ya se conocen según el margen de disponibilidad. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo. En la opción elegida (tasa fija) no se recalcula a diario: se revisa periódicamente y el detector de cambios avisa entre revisiones (decisión del 30/09, [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)); la periodicidad está por fijar. El nombre «reciente» y la columna «Tasa reciente» de la hoja se conservan hasta ajustar el código.
 _Avoid_: Probabilidad de la unidad, score.
 
 **VIN elegible para Auditoría Adicional**:
