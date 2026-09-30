@@ -13,3 +13,8 @@ dataset.md
 .claude/settings.local.json
 CLAUDE.local.md
 .ipynb_checkpoints/
+.claude/worktrees/
+
+# Prototipo de la plataforma: los datos reales y las capturas se regeneran localmente.
+prototipos/plataforma-web/data.js
+prototipos/plataforma-web/shots/

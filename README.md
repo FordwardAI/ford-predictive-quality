@@ -17,7 +17,8 @@ Las [convenciones compartidas](AGENTS.md) rigen para Codex y Claude Code. La [gu
 1. Leer el [plan de acción](docs/plan-de-accion.md) y el issue [Construir la prueba de concepto y los entregables para el Trials Day](https://github.com/FordwardAI/ford-predictive-quality/issues/33).
 2. Tomar una pieza cuyas dependencias estén terminadas, marcarla en el issue y trabajarla en una rama propia.
 3. Respetar las reglas del plan: el código de catálogo es el único predictor del análisis principal, todo se elige en validación y la prueba final se corre una sola vez, en conjunto y sobre el preregistro.
-4. Dejar en GitHub toda la información de trabajo (código, agregados revisados y borradores). Los .docx y .pptx finales, los templates y los datos crudos quedan fuera del repo.
+4. El código de la prueba de concepto está en `solucion/` y se corre con un solo comando ([reproducción](solucion/README.md)); los borradores de los entregables, en `docs/entrega/`; el prototipo de la plataforma web propuesta, en `prototipos/plataforma-web/`.
+5. Dejar en GitHub toda la información de trabajo (código, agregados revisados y borradores). Los .docx y .pptx finales, los templates y los datos crudos quedan fuera del repo.
 
 ## Decisiones
 

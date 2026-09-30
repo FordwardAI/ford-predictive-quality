@@ -1,0 +1,129 @@
+{
+  "fuente": {
+    "csv": "Dataset QLS Inspección Adicional.csv",
+    "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+    "catalogo": "Códigos de catálogo.csv",
+    "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+  },
+  "unidad": "VIN",
+  "poblacion": "auditados con actividad QLS, primera Fecha Inspección <= DIA_260, base ficticia",
+  "eventos": {
+    "filas": 195808,
+    "duplicados_exactos_conservados": 477,
+    "na_en_fecha_reparacion": 9,
+    "descripciones_desalineadas_38_40": [
+      [
+        38,
+        "Resultado OK (no tuvo calibraciones adicionales) y CALIBRADA (necesitó calibración adicional)",
+        "Rep Respuesta a Pregunta Desensamblar"
+      ],
+      [
+        39,
+        "",
+        "Código de Catálogo"
+      ],
+      [
+        40,
+        "Código de Catálogo del vehículo",
+        "Auditoría Adicional"
+      ]
+    ],
+    "nota": "Se usan los nombres técnicos (segundo registro), no las descripciones."
+  },
+  "control_particiones": {
+    "entrenamiento_comparacion": {
+      "vins": 31279,
+      "vins_publicados": 31279,
+      "coincide_vins": true,
+      "calibrada": 3998,
+      "calibrada_publicada": 3998,
+      "coincide_calibrada": true
+    },
+    "validacion": {
+      "vins": 8038,
+      "vins_publicados": 8038,
+      "coincide_vins": true,
+      "calibrada": 780,
+      "calibrada_publicada": 780,
+      "coincide_calibrada": true
+    },
+    "entrenamiento_final": {
+      "vins": 40359,
+      "vins_publicados": 40359,
+      "coincide_vins": true,
+      "calibrada": 4898,
+      "calibrada_publicada": 4898,
+      "coincide_calibrada": true
+    },
+    "prueba_final": {
+      "vins": 13312,
+      "vins_publicados": 13312,
+      "coincide_vins": true
+    },
+    "prueba_final_hasta_260": {
+      "vins": 13135,
+      "vins_publicados": 13135,
+      "coincide_vins": true
+    },
+    "prueba_final_despues_260": {
+      "vins": 177,
+      "vins_publicados": 177,
+      "coincide_vins": true
+    },
+    "cohorte_posterior_260": {
+      "vins": 4910,
+      "vins_publicados": 4910,
+      "coincide_vins": true
+    },
+    "poblacion_principal": {
+      "vins": 54771,
+      "vins_publicados": 54771,
+      "coincide_vins": true
+    }
+  },
+  "todo_coincide": true,
+  "cupo_diario": {
+    "validacion": {
+      "dias_con_vin": 35,
+      "suma_k_d": 391,
+      "vin_por_dia_mediana": 265,
+      "cupo_de_dias_con_menos_de_20_vin_pct": 1.0
+    },
+    "prueba_final_sin_etiquetas": {
+      "dias_con_vin": 68,
+      "suma_k_d": 652,
+      "vin_por_dia_mediana": 258,
+      "cupo_de_dias_con_menos_de_20_vin_pct": 2.5
+    },
+    "despues_260_sin_etiquetas": {
+      "dias_con_vin": 17,
+      "suma_k_d": 21,
+      "vin_por_dia_mediana": 2,
+      "cupo_de_dias_con_menos_de_20_vin_pct": 71.4
+    }
+  },
+  "codigos_nuevos": {
+    "validacion": {
+      "codigos_sin_historial_en_149": 3,
+      "vins_de_esos_codigos": 119,
+      "mercados_sin_historial_en_149": 0
+    },
+    "prueba_final": {
+      "codigos_sin_historial_en_149": 4,
+      "vins_de_esos_codigos": 79,
+      "mercados_sin_historial_en_149": 0
+    }
+  },
+  "componente_como_fuga_hasta_194": {
+    "calibrada_con_componente": 4898,
+    "calibrada_sin_componente": 0,
+    "ok_con_componente": 0,
+    "ok_sin_componente": 35461,
+    "lectura": "El componente solo existe cuando el resultado es CALIBRADA: usarlo como predictor es fuga."
+  },
+  "cohorte_posterior_260": {
+    "vins": 4910,
+    "nota": "Todos OK según research/audit-csv.json; aquí no se leen sus etiquetas."
+  },
+  "etiquetas_prueba_final": "enmascaradas"
+}

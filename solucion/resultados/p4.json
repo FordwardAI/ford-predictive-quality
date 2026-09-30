@@ -1,0 +1,5454 @@
+{
+  "pieza": "P4 ML sobre el código",
+  "tramo": "validación 155–194",
+  "resultados": [
+    {
+      "alternativa": "logística fijo (<= 149)",
+      "familia": "ml_logistica",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": null,
+        "hiperparametros": {
+          "C": 0.1
+        }
+      },
+      "orden_simplicidad": [
+        5,
+        0,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 62,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.1585677749360614,
+      "precision_rango95": [
+        0.1259366732908877,
+        0.19259308120785693
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.6052770619088612,
+      "veces_azar_rango95": [
+        1.2770067197818187,
+        1.9428968842153063
+      ],
+      "recupero": 0.07948717948717948,
+      "recupero_rango95": [
+        0.06335329979186811,
+        0.09650213280641103
+      ],
+      "diferencia_con_azar_rango95": [
+        0.027257753985782063,
+        0.09237278343563392
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          3,
+          0,
+          1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          2,
+          2,
+          2,
+          0,
+          2,
+          2,
+          0,
+          3,
+          1,
+          1,
+          1,
+          1,
+          3,
+          0,
+          1,
+          2,
+          4,
+          4,
+          4,
+          1,
+          3,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.32701720235064113,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "C": 0.01
+            },
+            "vida": null,
+            "log_loss": 0.3285380811623266
+          },
+          {
+            "hiperparametros": {
+              "C": 0.1
+            },
+            "vida": null,
+            "log_loss": 0.32701720235064113
+          },
+          {
+            "hiperparametros": {
+              "C": 1.0
+            },
+            "vida": null,
+            "log_loss": 0.32838695324097616
+          },
+          {
+            "hiperparametros": {
+              "C": 10.0
+            },
+            "vida": null,
+            "log_loss": 0.3320323742807279
+          }
+        ],
+        "semilla_ajuste": null
+      }
+    },
+    {
+      "alternativa": "logística reentrenado cada 5 d, vida media 60 d",
+      "familia": "ml_logistica",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": null,
+        "vida": 60,
+        "hiperparametros": {
+          "C": 0.1
+        }
+      },
+      "orden_simplicidad": [
+        5,
+        0,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 65,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.16624040920716113,
+      "precision_rango95": [
+        0.126780342507935,
+        0.20558500750697076
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.6829517584528384,
+      "veces_azar_rango95": [
+        1.2838215252166947,
+        2.073225620246015
+      ],
+      "recupero": 0.08333333333333333,
+      "recupero_rango95": [
+        0.06312716775083227,
+        0.10280507343124165
+      ],
+      "diferencia_con_azar_rango95": [
+        0.028401176580571105,
+        0.10646464835218171
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          3,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          5,
+          2,
+          2,
+          3,
+          1,
+          0,
+          3,
+          0,
+          0,
+          4,
+          1,
+          3,
+          5,
+          1,
+          2,
+          0,
+          1,
+          2,
+          4,
+          4,
+          3,
+          1,
+          3,
+          4,
+          1,
+          0,
+          3,
+          1
+        ]
+      },
+      "log_loss_interna": 0.3272841300675338,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "C": 0.01
+            },
+            "vida": 15,
+            "log_loss": 0.3286454352931342
+          },
+          {
+            "hiperparametros": {
+              "C": 0.01
+            },
+            "vida": 30,
+            "log_loss": 0.3287161186248862
+          },
+          {
+            "hiperparametros": {
+              "C": 0.01
+            },
+            "vida": 60,
+            "log_loss": 0.3287007985727426
+          },
+          {
+            "hiperparametros": {
+              "C": 0.1
+            },
+            "vida": 15,
+            "log_loss": 0.3274434881021394
+          },
+          {
+            "hiperparametros": {
+              "C": 0.1
+            },
+            "vida": 30,
+            "log_loss": 0.32738158019832814
+          },
+          {
+            "hiperparametros": {
+              "C": 0.1
+            },
+            "vida": 60,
+            "log_loss": 0.3272841300675338
+          },
+          {
+            "hiperparametros": {
+              "C": 1.0
+            },
+            "vida": 15,
+            "log_loss": 0.32822622042704686
+          },
+          {
+            "hiperparametros": {
+              "C": 1.0
+            },
+            "vida": 30,
+            "log_loss": 0.3281336912296439
+          },
+          {
+            "hiperparametros": {
+              "C": 1.0
+            },
+            "vida": 60,
+            "log_loss": 0.3281865900520656
+          },
+          {
+            "hiperparametros": {
+              "C": 10.0
+            },
+            "vida": 15,
+            "log_loss": 0.3326749064186815
+          },
+          {
+            "hiperparametros": {
+              "C": 10.0
+            },
+            "vida": 30,
+            "log_loss": 0.33205020607613944
+          },
+          {
+            "hiperparametros": {
+              "C": 10.0
+            },
+            "vida": 60,
+            "log_loss": 0.33161551148942003
+          }
+        ],
+        "semilla_ajuste": null
+      }
+    },
+    {
+      "alternativa": "Naive Bayes fijo (<= 149)",
+      "familia": "ml_nb",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": null,
+        "hiperparametros": {
+          "alpha": 1.0
+        }
+      },
+      "orden_simplicidad": [
+        6,
+        0,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 57,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.14578005115089515,
+      "precision_rango95": [
+        0.10929929597784062,
+        0.18281764318630667
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.475819234335566,
+      "veces_azar_rango95": [
+        1.1114077651525445,
+        1.8549013034184605
+      ],
+      "recupero": 0.07307692307692308,
+      "recupero_rango95": [
+        0.055219741742850985,
+        0.09203400765900766
+      ],
+      "diferencia_con_azar_rango95": [
+        0.01157428454560023,
+        0.08343905995383662
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          2,
+          0,
+          1,
+          0,
+          1,
+          1,
+          3,
+          2,
+          2,
+          1,
+          1,
+          0,
+          2,
+          2,
+          0,
+          3,
+          2,
+          0,
+          1,
+          1,
+          3,
+          0,
+          0,
+          3,
+          4,
+          4,
+          3,
+          0,
+          4,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.3319772126186848,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "alpha": 0.1
+            },
+            "vida": null,
+            "log_loss": 0.33689116143403014
+          },
+          {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": null,
+            "log_loss": 0.3319772126186848
+          },
+          {
+            "hiperparametros": {
+              "alpha": 10.0
+            },
+            "vida": null,
+            "log_loss": 0.34105638312865805
+          },
+          {
+            "hiperparametros": {
+              "alpha": 100.0
+            },
+            "vida": null,
+            "log_loss": 0.34034085795816077
+          }
+        ],
+        "semilla_ajuste": null
+      }
+    },
+    {
+      "alternativa": "Naive Bayes reentrenado cada 5 d, vida media 15 d",
+      "familia": "ml_nb",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": null,
+        "vida": 15,
+        "hiperparametros": {
+          "alpha": 100.0
+        }
+      },
+      "orden_simplicidad": [
+        6,
+        0,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 41,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.10485933503836317,
+      "precision_rango95": [
+        0.07374540671000848,
+        0.1372044596202597
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.0615541861010211,
+      "veces_azar_rango95": [
+        0.7513919336832914,
+        1.382372563097839
+      ],
+      "recupero": 0.052564102564102565,
+      "recupero_rango95": [
+        0.03689433507432704,
+        0.06933852573018078
+      ],
+      "diferencia_con_azar_rango95": [
+        -0.024755149135885057,
+        0.03731006401760647
+      ],
+      "lectura": "inconcluso",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          2,
+          0,
+          1,
+          0,
+          0,
+          3,
+          4,
+          1,
+          2,
+          0,
+          1,
+          0,
+          2,
+          1,
+          1,
+          4,
+          2,
+          0,
+          2,
+          1,
+          3,
+          0,
+          0,
+          2,
+          3,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0,
+          1,
+          0
+        ]
+      },
+      "log_loss_interna": 0.3258772123478659,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "alpha": 0.1
+            },
+            "vida": 15,
+            "log_loss": 0.3352770640731587
+          },
+          {
+            "hiperparametros": {
+              "alpha": 0.1
+            },
+            "vida": 30,
+            "log_loss": 0.3361014348516728
+          },
+          {
+            "hiperparametros": {
+              "alpha": 0.1
+            },
+            "vida": 60,
+            "log_loss": 0.3365101561162298
+          },
+          {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": 15,
+            "log_loss": 0.3295342128727372
+          },
+          {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": 30,
+            "log_loss": 0.33084891409643324
+          },
+          {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": 60,
+            "log_loss": 0.3314961725647064
+          },
+          {
+            "hiperparametros": {
+              "alpha": 10.0
+            },
+            "vida": 15,
+            "log_loss": 0.3278121957960741
+          },
+          {
+            "hiperparametros": {
+              "alpha": 10.0
+            },
+            "vida": 30,
+            "log_loss": 0.33167650952511707
+          },
+          {
+            "hiperparametros": {
+              "alpha": 10.0
+            },
+            "vida": 60,
+            "log_loss": 0.3358899018743041
+          },
+          {
+            "hiperparametros": {
+              "alpha": 100.0
+            },
+            "vida": 15,
+            "log_loss": 0.3258772123478659
+          },
+          {
+            "hiperparametros": {
+              "alpha": 100.0
+            },
+            "vida": 30,
+            "log_loss": 0.32741859733341766
+          },
+          {
+            "hiperparametros": {
+              "alpha": 100.0
+            },
+            "vida": 60,
+            "log_loss": 0.3307616688899645
+          }
+        ],
+        "semilla_ajuste": null
+      }
+    },
+    {
+      "alternativa": "Random Forest fijo (<= 149), semilla 3",
+      "familia": "ml_rf",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": 3,
+        "hiperparametros": {
+          "min_samples_leaf": 50
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        0,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 60,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.1534526854219949,
+      "precision_rango95": [
+        0.12351490284177088,
+        0.18567897817146473
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.553493930879543,
+      "veces_azar_rango95": [
+        1.2620285000618792,
+        1.8746496398166173
+      ],
+      "recupero": 0.07692307692307693,
+      "recupero_rango95": [
+        0.0625781119551742,
+        0.09288433684153881
+      ],
+      "diferencia_con_azar_rango95": [
+        0.025809056949920053,
+        0.08551684365542495
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          3,
+          0,
+          1,
+          0,
+          1,
+          2,
+          3,
+          1,
+          2,
+          1,
+          3,
+          0,
+          2,
+          2,
+          1,
+          2,
+          1,
+          2,
+          1,
+          1,
+          3,
+          0,
+          1,
+          2,
+          4,
+          4,
+          4,
+          1,
+          2,
+          4,
+          1,
+          0,
+          3,
+          1
+        ]
+      },
+      "log_loss_interna": 0.327718524513682,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": null,
+            "log_loss": 0.33351831096327
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": null,
+            "log_loss": 0.327718524513682
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": null,
+            "log_loss": 0.3296670721229966
+          }
+        ],
+        "semilla_ajuste": 1
+      },
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.1534526854219949,
+          0.15089514066496162,
+          0.1534526854219949,
+          0.1534526854219949,
+          0.15601023017902813
+        ],
+        "mediana": 0.1534526854219949,
+        "min": 0.15089514066496162,
+        "max": 0.15601023017902813
+      }
+    },
+    {
+      "alternativa": "Random Forest reentrenado cada 5 d, vida media 15 d, semilla 1",
+      "familia": "ml_rf",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": 1,
+        "vida": 15,
+        "hiperparametros": {
+          "min_samples_leaf": 50
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        0,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 67,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.17135549872122763,
+      "precision_rango95": [
+        0.13520235797021513,
+        0.20844163378974237
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.7347348894821564,
+      "veces_azar_rango95": [
+        1.3708433639618403,
+        2.1043240701713146
+      ],
+      "recupero": 0.0858974358974359,
+      "recupero_rango95": [
+        0.06800756002911316,
+        0.10463832141500552
+      ],
+      "diferencia_con_azar_rango95": [
+        0.036765343042867535,
+        0.10894026818297224
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          2,
+          1,
+          0,
+          1,
+          2,
+          0,
+          1,
+          5,
+          2,
+          2,
+          3,
+          0,
+          0,
+          2,
+          1,
+          1,
+          4,
+          2,
+          3,
+          5,
+          1,
+          2,
+          0,
+          1,
+          2,
+          4,
+          4,
+          3,
+          1,
+          3,
+          4,
+          1,
+          0,
+          3,
+          1
+        ]
+      },
+      "log_loss_interna": 0.3273296913518885,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": 15,
+            "log_loss": 0.33783276392577793
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": 30,
+            "log_loss": 0.338397415310903
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": 60,
+            "log_loss": 0.33658193811971543
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": 15,
+            "log_loss": 0.3273296913518885
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": 30,
+            "log_loss": 0.3279944913777179
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": 60,
+            "log_loss": 0.32797979607629435
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": 15,
+            "log_loss": 0.3285933632481752
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": 30,
+            "log_loss": 0.32896738298968886
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": 60,
+            "log_loss": 0.32908152631566495
+          }
+        ],
+        "semilla_ajuste": 1
+      },
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.17135549872122763,
+          0.16879795396419436,
+          0.17391304347826086,
+          0.17135549872122763,
+          0.16879795396419436
+        ],
+        "mediana": 0.17135549872122763,
+        "min": 0.16879795396419436,
+        "max": 0.17391304347826086
+      }
+    },
+    {
+      "alternativa": "XGBoost fijo (<= 149)",
+      "familia": "ml_xgboost",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": null,
+        "hiperparametros": {
+          "reg_lambda": 10.0
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        1,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 61,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.15601023017902813,
+      "precision_rango95": [
+        0.12239080034289276,
+        0.18832999198075379
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.579385496394202,
+      "veces_azar_rango95": [
+        1.228896128178843,
+        1.9257295106157248
+      ],
+      "recupero": 0.0782051282051282,
+      "recupero_rango95": [
+        0.06119951040391677,
+        0.09546205204425885
+      ],
+      "diferencia_con_azar_rango95": [
+        0.022971171612487715,
+        0.088962116263044
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          0,
+          3,
+          0,
+          1,
+          0,
+          2,
+          2,
+          2,
+          2,
+          1,
+          0,
+          2,
+          0,
+          3,
+          1,
+          0,
+          2,
+          2,
+          2,
+          2,
+          1,
+          3,
+          0,
+          2,
+          2,
+          4,
+          4,
+          4,
+          1,
+          3,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.32737038154950204,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "reg_lambda": 1.0
+            },
+            "vida": null,
+            "log_loss": 0.32793067096266976
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 10.0
+            },
+            "vida": null,
+            "log_loss": 0.32737038154950204
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 100.0
+            },
+            "vida": null,
+            "log_loss": 0.3284355706971828
+          }
+        ],
+        "semilla_ajuste": null
+      }
+    },
+    {
+      "alternativa": "XGBoost reentrenado cada 5 d, vida media 60 d",
+      "familia": "ml_xgboost",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": null,
+        "vida": 60,
+        "hiperparametros": {
+          "reg_lambda": 10.0
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        1,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 63,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.16112531969309463,
+      "precision_rango95": [
+        0.12194953043713262,
+        0.20052883852091538
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.6311686274235202,
+      "veces_azar_rango95": [
+        1.2430880540659435,
+        2.0118593023833466
+      ],
+      "recupero": 0.08076923076923077,
+      "recupero_rango95": [
+        0.06178108999048439,
+        0.09973761780425115
+      ],
+      "diferencia_con_azar_rango95": [
+        0.02472256825614183,
+        0.100158525118501
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          0,
+          3,
+          0,
+          1,
+          0,
+          0,
+          1,
+          4,
+          2,
+          2,
+          3,
+          1,
+          0,
+          3,
+          0,
+          0,
+          4,
+          1,
+          3,
+          5,
+          1,
+          2,
+          0,
+          1,
+          2,
+          4,
+          4,
+          3,
+          1,
+          3,
+          4,
+          1,
+          0,
+          3,
+          1
+        ]
+      },
+      "log_loss_interna": 0.3275801027167436,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "reg_lambda": 1.0
+            },
+            "vida": 15,
+            "log_loss": 0.32765615502947687
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 1.0
+            },
+            "vida": 30,
+            "log_loss": 0.3279536931381722
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 1.0
+            },
+            "vida": 60,
+            "log_loss": 0.32800804223346325
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 10.0
+            },
+            "vida": 15,
+            "log_loss": 0.32760264461109057
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 10.0
+            },
+            "vida": 30,
+            "log_loss": 0.32775631645031367
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 10.0
+            },
+            "vida": 60,
+            "log_loss": 0.3275801027167436
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 100.0
+            },
+            "vida": 15,
+            "log_loss": 0.3279713618657581
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 100.0
+            },
+            "vida": 30,
+            "log_loss": 0.32832983821320666
+          },
+          {
+            "hiperparametros": {
+              "reg_lambda": 100.0
+            },
+            "vida": 60,
+            "log_loss": 0.32841879296751963
+          }
+        ],
+        "semilla_ajuste": null
+      }
+    },
+    {
+      "alternativa": "LightGBM fijo (<= 149)",
+      "familia": "ml_lightgbm",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": null,
+        "hiperparametros": {
+          "min_child_weight": 1.0
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        2,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 61,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.15601023017902813,
+      "precision_rango95": [
+        0.12533299232736572,
+        0.18886335774970878
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.579385496394202,
+      "veces_azar_rango95": [
+        1.27616079262856,
+        1.9064527706544185
+      ],
+      "recupero": 0.0782051282051282,
+      "recupero_rango95": [
+        0.06329113924050633,
+        0.09448962061560486
+      ],
+      "diferencia_con_azar_rango95": [
+        0.027849636579564532,
+        0.08788431693194657
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          3,
+          0,
+          1,
+          0,
+          1,
+          2,
+          3,
+          1,
+          2,
+          1,
+          3,
+          0,
+          2,
+          2,
+          1,
+          2,
+          1,
+          2,
+          1,
+          1,
+          3,
+          0,
+          1,
+          2,
+          4,
+          4,
+          4,
+          1,
+          3,
+          4,
+          1,
+          0,
+          3,
+          1
+        ]
+      },
+      "log_loss_interna": 0.32684815413942986,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_child_weight": 1.0
+            },
+            "vida": null,
+            "log_loss": 0.32684815413942986
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 10.0
+            },
+            "vida": null,
+            "log_loss": 0.32704294049645044
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 100.0
+            },
+            "vida": null,
+            "log_loss": 0.32882446584924635
+          }
+        ],
+        "semilla_ajuste": null
+      }
+    },
+    {
+      "alternativa": "LightGBM reentrenado cada 5 d, vida media 60 d",
+      "familia": "ml_lightgbm",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": null,
+        "vida": 60,
+        "hiperparametros": {
+          "min_child_weight": 1.0
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        2,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 65,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.16624040920716113,
+      "precision_rango95": [
+        0.1281954887218045,
+        0.2037516758828234
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.6829517584528384,
+      "veces_azar_rango95": [
+        1.3072658805091522,
+        2.0590815208075437
+      ],
+      "recupero": 0.08333333333333333,
+      "recupero_rango95": [
+        0.06480261803948435,
+        0.10276800789546252
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03013066019661878,
+        0.1047187739623685
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          5,
+          2,
+          2,
+          3,
+          0,
+          0,
+          2,
+          1,
+          1,
+          4,
+          2,
+          3,
+          5,
+          1,
+          2,
+          0,
+          1,
+          2,
+          4,
+          4,
+          3,
+          1,
+          3,
+          4,
+          1,
+          0,
+          3,
+          1
+        ]
+      },
+      "log_loss_interna": 0.3272663242417647,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_child_weight": 1.0
+            },
+            "vida": 15,
+            "log_loss": 0.32744861881638365
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 1.0
+            },
+            "vida": 30,
+            "log_loss": 0.3279389503391115
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 1.0
+            },
+            "vida": 60,
+            "log_loss": 0.3272663242417647
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 10.0
+            },
+            "vida": 15,
+            "log_loss": 0.32792860613193264
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 10.0
+            },
+            "vida": 30,
+            "log_loss": 0.3277338852924045
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 10.0
+            },
+            "vida": 60,
+            "log_loss": 0.32780906336174725
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 100.0
+            },
+            "vida": 15,
+            "log_loss": 0.3290502698834975
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 100.0
+            },
+            "vida": 30,
+            "log_loss": 0.3292716950352606
+          },
+          {
+            "hiperparametros": {
+              "min_child_weight": 100.0
+            },
+            "vida": 60,
+            "log_loss": 0.32924212369832534
+          }
+        ],
+        "semilla_ajuste": null
+      }
+    },
+    {
+      "alternativa": "CatBoost fijo (<= 149), semilla 3",
+      "familia": "ml_catboost",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": 3,
+        "hiperparametros": {
+          "l2_leaf_reg": 1.0
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        3,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 62,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.1585677749360614,
+      "precision_rango95": [
+        0.12437676482452602,
+        0.1931239379999171
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.6052770619088612,
+      "veces_azar_rango95": [
+        1.2719662860006415,
+        1.948266909973817
+      ],
+      "recupero": 0.07948717948717948,
+      "recupero_rango95": [
+        0.06310771117152349,
+        0.09654203517837623
+      ],
+      "diferencia_con_azar_rango95": [
+        0.027290258488281142,
+        0.09278088833096311
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          3,
+          0,
+          1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          2,
+          2,
+          1,
+          0,
+          2,
+          2,
+          0,
+          3,
+          1,
+          1,
+          1,
+          1,
+          3,
+          0,
+          1,
+          3,
+          4,
+          4,
+          3,
+          1,
+          4,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.32922912635083074,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 1.0
+            },
+            "vida": null,
+            "log_loss": 0.32922912635083074
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 10.0
+            },
+            "vida": null,
+            "log_loss": 0.32941170308810325
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 100.0
+            },
+            "vida": null,
+            "log_loss": 0.3295270852773724
+          }
+        ],
+        "semilla_ajuste": 1
+      },
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.1534526854219949,
+          0.1636828644501279,
+          0.1585677749360614,
+          0.1534526854219949,
+          0.17135549872122763
+        ],
+        "mediana": 0.1585677749360614,
+        "min": 0.1534526854219949,
+        "max": 0.17135549872122763
+      }
+    },
+    {
+      "alternativa": "CatBoost reentrenado cada 5 d, vida media 15 d, semilla 2",
+      "familia": "ml_catboost",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": 2,
+        "vida": 15,
+        "hiperparametros": {
+          "l2_leaf_reg": 10.0
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        3,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 66,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.16879795396419436,
+      "precision_rango95": [
+        0.1326530612244898,
+        0.20442161171656495
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.7088433239674972,
+      "veces_azar_rango95": [
+        1.3406103478315206,
+        2.0640144469504786
+      ],
+      "recupero": 0.08461538461538462,
+      "recupero_rango95": [
+        0.06657615657349979,
+        0.10195683976487273
+      ],
+      "diferencia_con_azar_rango95": [
+        0.034011213514140735,
+        0.10406606737770341
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          2,
+          1,
+          0,
+          1,
+          2,
+          0,
+          1,
+          5,
+          1,
+          3,
+          1,
+          1,
+          0,
+          4,
+          0,
+          1,
+          3,
+          2,
+          3,
+          5,
+          1,
+          2,
+          0,
+          1,
+          2,
+          4,
+          4,
+          3,
+          1,
+          3,
+          4,
+          1,
+          0,
+          3,
+          1
+        ]
+      },
+      "log_loss_interna": 0.32777566407453673,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 1.0
+            },
+            "vida": 15,
+            "log_loss": 0.33002978877167904
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 1.0
+            },
+            "vida": 30,
+            "log_loss": 0.32971334728399554
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 1.0
+            },
+            "vida": 60,
+            "log_loss": 0.3290234896932821
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 10.0
+            },
+            "vida": 15,
+            "log_loss": 0.32777566407453673
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 10.0
+            },
+            "vida": 30,
+            "log_loss": 0.32900379190842893
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 10.0
+            },
+            "vida": 60,
+            "log_loss": 0.32864712994607875
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 100.0
+            },
+            "vida": 15,
+            "log_loss": 0.3290224729163059
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 100.0
+            },
+            "vida": 30,
+            "log_loss": 0.32946160993267143
+          },
+          {
+            "hiperparametros": {
+              "l2_leaf_reg": 100.0
+            },
+            "vida": 60,
+            "log_loss": 0.3298116106717684
+          }
+        ],
+        "semilla_ajuste": 1
+      },
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.16879795396419436,
+          0.16879795396419436,
+          0.1636828644501279,
+          0.17135549872122763,
+          0.17135549872122763
+        ],
+        "mediana": 0.16879795396419436,
+        "min": 0.1636828644501279,
+        "max": 0.17135549872122763
+      }
+    },
+    {
+      "alternativa": "MLP fijo (<= 149), semilla 5",
+      "familia": "ml_mlp",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": 5,
+        "hiperparametros": {
+          "alpha": 0.0001
+        }
+      },
+      "orden_simplicidad": [
+        8,
+        0,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 57,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.14578005115089515,
+      "precision_rango95": [
+        0.10972568578553615,
+        0.1825407972177635
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.475819234335566,
+      "veces_azar_rango95": [
+        1.1208242513405666,
+        1.8443740578104637
+      ],
+      "recupero": 0.07307692307692308,
+      "recupero_rango95": [
+        0.05527605130917747,
+        0.09125062919463087
+      ],
+      "diferencia_con_azar_rango95": [
+        0.012271742771565864,
+        0.08302459555143163
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          2,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          3,
+          2,
+          2,
+          1,
+          2,
+          0,
+          2,
+          2,
+          0,
+          3,
+          1,
+          0,
+          1,
+          1,
+          3,
+          0,
+          0,
+          3,
+          4,
+          4,
+          3,
+          0,
+          4,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.3331778150861693,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "alpha": 0.0001
+            },
+            "vida": null,
+            "log_loss": 0.3331778150861693
+          },
+          {
+            "hiperparametros": {
+              "alpha": 0.01
+            },
+            "vida": null,
+            "log_loss": 0.3339977089578577
+          },
+          {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": null,
+            "log_loss": 0.3346566115898266
+          }
+        ],
+        "semilla_ajuste": 1
+      },
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.14578005115089515,
+          0.1534526854219949,
+          0.14578005115089515,
+          0.1483375959079284,
+          0.14578005115089515
+        ],
+        "mediana": 0.14578005115089515,
+        "min": 0.14578005115089515,
+        "max": 0.1534526854219949
+      }
+    },
+    {
+      "alternativa": "MLP reentrenado cada 5 d, vida media 60 d, semilla 4",
+      "familia": "ml_mlp",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": 4,
+        "vida": 60,
+        "hiperparametros": {
+          "alpha": 0.01
+        }
+      },
+      "orden_simplicidad": [
+        8,
+        0,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 67,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.17135549872122763,
+      "precision_rango95": [
+        0.13114520573536967,
+        0.21025974025974023
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.7347348894821564,
+      "veces_azar_rango95": [
+        1.332060379703911,
+        2.1320239724200105
+      ],
+      "recupero": 0.0858974358974359,
+      "recupero_rango95": [
+        0.06609405235172464,
+        0.10558311761876431
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03295536425497628,
+        0.11098222923467972
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          4,
+          2,
+          3,
+          1,
+          1,
+          0,
+          5,
+          0,
+          0,
+          4,
+          1,
+          3,
+          5,
+          1,
+          2,
+          0,
+          1,
+          3,
+          4,
+          4,
+          3,
+          1,
+          4,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.33027538893152375,
+      "ajuste_interno": {
+        "grilla": [
+          {
+            "hiperparametros": {
+              "alpha": 0.0001
+            },
+            "vida": 15,
+            "log_loss": 0.3392566325641083
+          },
+          {
+            "hiperparametros": {
+              "alpha": 0.0001
+            },
+            "vida": 30,
+            "log_loss": 0.33619816803157027
+          },
+          {
+            "hiperparametros": {
+              "alpha": 0.0001
+            },
+            "vida": 60,
+            "log_loss": 0.33366455515038373
+          },
+          {
+            "hiperparametros": {
+              "alpha": 0.01
+            },
+            "vida": 15,
+            "log_loss": 0.3377255632925011
+          },
+          {
+            "hiperparametros": {
+              "alpha": 0.01
+            },
+            "vida": 30,
+            "log_loss": 0.3370338381088505
+          },
+          {
+            "hiperparametros": {
+              "alpha": 0.01
+            },
+            "vida": 60,
+            "log_loss": 0.33027538893152375
+          },
+          {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": 15,
+            "log_loss": 0.3313736638485227
+          },
+          {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": 30,
+            "log_loss": 0.33280557901156166
+          },
+          {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": 60,
+            "log_loss": 0.33401870480212753
+          }
+        ],
+        "semilla_ajuste": 1
+      },
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.16879795396419436,
+          0.16879795396419436,
+          0.17391304347826086,
+          0.17135549872122763,
+          0.17647058823529413
+        ],
+        "mediana": 0.17135549872122763,
+        "min": 0.16879795396419436,
+        "max": 0.17647058823529413
+      }
+    },
+    {
+      "alternativa": "promedio de modelos fijo (<= 149), semilla 3",
+      "familia": "ml_promedio",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": 3,
+        "bases": {
+          "logistica": {
+            "hiperparametros": {
+              "C": 0.1
+            },
+            "vida": null
+          },
+          "nb": {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": null
+          },
+          "rf": {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": null
+          },
+          "xgboost": {
+            "hiperparametros": {
+              "reg_lambda": 10.0
+            },
+            "vida": null
+          },
+          "lightgbm": {
+            "hiperparametros": {
+              "min_child_weight": 1.0
+            },
+            "vida": null
+          },
+          "catboost": {
+            "hiperparametros": {
+              "l2_leaf_reg": 1.0
+            },
+            "vida": null
+          },
+          "mlp": {
+            "hiperparametros": {
+              "alpha": 0.0001
+            },
+            "vida": null
+          }
+        }
+      },
+      "orden_simplicidad": [
+        9,
+        0,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 62,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.1585677749360614,
+      "precision_rango95": [
+        0.12562697206965057,
+        0.19230769230769232
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.6052770619088612,
+      "veces_azar_rango95": [
+        1.2784963208340787,
+        1.9396638586384003
+      ],
+      "recupero": 0.07948717948717948,
+      "recupero_rango95": [
+        0.0633788881043517,
+        0.09592825229960578
+      ],
+      "diferencia_con_azar_rango95": [
+        0.027557064419309885,
+        0.09230224586285389
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          3,
+          0,
+          1,
+          0,
+          1,
+          2,
+          3,
+          2,
+          2,
+          1,
+          2,
+          0,
+          2,
+          2,
+          0,
+          3,
+          1,
+          1,
+          1,
+          1,
+          3,
+          0,
+          1,
+          3,
+          4,
+          4,
+          3,
+          1,
+          4,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.32749929152888874,
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.1585677749360614,
+          0.16112531969309463,
+          0.1585677749360614,
+          0.1534526854219949,
+          0.16112531969309463
+        ],
+        "mediana": 0.1585677749360614,
+        "min": 0.1534526854219949,
+        "max": 0.16112531969309463
+      }
+    },
+    {
+      "alternativa": "promedio de modelos reentrenado cada 5 d, vida media de cada base, semilla 2",
+      "familia": "ml_promedio",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": 2,
+        "bases": {
+          "logistica": {
+            "hiperparametros": {
+              "C": 0.1
+            },
+            "vida": 60
+          },
+          "nb": {
+            "hiperparametros": {
+              "alpha": 100.0
+            },
+            "vida": 15
+          },
+          "rf": {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": 15
+          },
+          "xgboost": {
+            "hiperparametros": {
+              "reg_lambda": 10.0
+            },
+            "vida": 60
+          },
+          "lightgbm": {
+            "hiperparametros": {
+              "min_child_weight": 1.0
+            },
+            "vida": 60
+          },
+          "catboost": {
+            "hiperparametros": {
+              "l2_leaf_reg": 10.0
+            },
+            "vida": 15
+          },
+          "mlp": {
+            "hiperparametros": {
+              "alpha": 0.01
+            },
+            "vida": 60
+          }
+        }
+      },
+      "orden_simplicidad": [
+        9,
+        0,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 65,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.16624040920716113,
+      "precision_rango95": [
+        0.129576370137926,
+        0.2010592942411124
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.6829517584528384,
+      "veces_azar_rango95": [
+        1.3224529362863802,
+        2.0406119984550437
+      ],
+      "recupero": 0.08333333333333333,
+      "recupero_rango95": [
+        0.06505076115812179,
+        0.10145414960681093
+      ],
+      "diferencia_con_azar_rango95": [
+        0.031703851798644773,
+        0.10186373241184905
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          1,
+          0,
+          1,
+          2,
+          0,
+          1,
+          4,
+          2,
+          3,
+          1,
+          1,
+          0,
+          4,
+          0,
+          0,
+          3,
+          2,
+          3,
+          5,
+          1,
+          2,
+          0,
+          1,
+          2,
+          4,
+          4,
+          3,
+          1,
+          3,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.325657729357921,
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.16624040920716113,
+          0.16624040920716113,
+          0.1636828644501279,
+          0.16624040920716113,
+          0.16624040920716113
+        ],
+        "mediana": 0.16624040920716113,
+        "min": 0.1636828644501279,
+        "max": 0.16624040920716113
+      }
+    },
+    {
+      "alternativa": "stacking fijo (<= 149), semilla 3",
+      "familia": "ml_stacking",
+      "parametros": {
+        "modo": "fijo",
+        "hasta": 149,
+        "semilla": 3,
+        "bases": {
+          "logistica": {
+            "hiperparametros": {
+              "C": 0.1
+            },
+            "vida": null
+          },
+          "nb": {
+            "hiperparametros": {
+              "alpha": 1.0
+            },
+            "vida": null
+          },
+          "rf": {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": null
+          },
+          "xgboost": {
+            "hiperparametros": {
+              "reg_lambda": 10.0
+            },
+            "vida": null
+          },
+          "lightgbm": {
+            "hiperparametros": {
+              "min_child_weight": 1.0
+            },
+            "vida": null
+          },
+          "catboost": {
+            "hiperparametros": {
+              "l2_leaf_reg": 1.0
+            },
+            "vida": null
+          },
+          "mlp": {
+            "hiperparametros": {
+              "alpha": 0.0001
+            },
+            "vida": null
+          }
+        },
+        "meta": {
+          "coeficientes": [
+            0.26123671644748875,
+            -0.3620482385959845,
+            0.028840797591007442,
+            0.6123704097266197,
+            -0.03737730867405818,
+            0.7774231263230893,
+            0.20633870123834316
+          ],
+          "intercepto": 0.5482121816254057
+        }
+      },
+      "orden_simplicidad": [
+        10,
+        0,
+        0
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 66,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.16879795396419436,
+      "precision_rango95": [
+        0.1295774647887324,
+        0.20681474955952678
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.7088433239674972,
+      "veces_azar_rango95": [
+        1.3185691449996055,
+        2.0805043561517342
+      ],
+      "recupero": 0.08461538461538462,
+      "recupero_rango95": [
+        0.06524745605920444,
+        0.10301119304923986
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03160791120668703,
+        0.1059477281743025
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          0,
+          3,
+          0,
+          1,
+          1,
+          2,
+          2,
+          5,
+          3,
+          1,
+          0,
+          1,
+          0,
+          4,
+          0,
+          0,
+          3,
+          1,
+          2,
+          2,
+          1,
+          2,
+          0,
+          1,
+          3,
+          4,
+          4,
+          5,
+          2,
+          3,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.3209397084059889,
+      "log_loss_interna_nota": "en la misma muestra del meta",
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.16879795396419436,
+          0.16879795396419436,
+          0.16879795396419436,
+          0.16879795396419436,
+          0.18414322250639387
+        ],
+        "mediana": 0.16879795396419436,
+        "min": 0.16879795396419436,
+        "max": 0.18414322250639387
+      }
+    },
+    {
+      "alternativa": "stacking reentrenado cada 5 d, vida media de cada base, semilla 2",
+      "familia": "ml_stacking",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": 2,
+        "bases": {
+          "logistica": {
+            "hiperparametros": {
+              "C": 0.1
+            },
+            "vida": 60
+          },
+          "nb": {
+            "hiperparametros": {
+              "alpha": 100.0
+            },
+            "vida": 15
+          },
+          "rf": {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": 15
+          },
+          "xgboost": {
+            "hiperparametros": {
+              "reg_lambda": 10.0
+            },
+            "vida": 60
+          },
+          "lightgbm": {
+            "hiperparametros": {
+              "min_child_weight": 1.0
+            },
+            "vida": 60
+          },
+          "catboost": {
+            "hiperparametros": {
+              "l2_leaf_reg": 10.0
+            },
+            "vida": 15
+          },
+          "mlp": {
+            "hiperparametros": {
+              "alpha": 0.01
+            },
+            "vida": 60
+          }
+        },
+        "meta": {
+          "coeficientes": [
+            0.36000824540191273,
+            0.25809413542076287,
+            0.686407449850217,
+            -0.04144332368091446,
+            0.4121112612114904,
+            -0.7904011079074729,
+            0.1147505791934276
+          ],
+          "intercepto": -0.268437835823771
+        }
+      },
+      "orden_simplicidad": [
+        10,
+        0,
+        1
+      ],
+      "elegible": true,
+      "tramo": "validación 155–194",
+      "calificador": "entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN",
+      "dias": 35,
+      "vins": 8038,
+      "elegidos": 391,
+      "calibrada_elegidas": 67,
+      "calibrada_tramo": 780,
+      "precision_cupo": 0.17135549872122763,
+      "precision_rango95": [
+        0.13352202406692215,
+        0.20923913043478262
+      ],
+      "azar_mismo_cupo": 0.09877906979341364,
+      "veces_azar": 1.7347348894821564,
+      "veces_azar_rango95": [
+        1.349343807766988,
+        2.1301497578545314
+      ],
+      "recupero": 0.0858974358974359,
+      "recupero_rango95": [
+        0.067163906743654,
+        0.10580118053556001
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03479494595043429,
+        0.11009110467432591
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3",
+      "diario": {
+        "dias": [
+          155,
+          156,
+          157,
+          158,
+          159,
+          160,
+          162,
+          163,
+          166,
+          167,
+          168,
+          170,
+          171,
+          172,
+          173,
+          174,
+          175,
+          177,
+          178,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          193,
+          194
+        ],
+        "n": [
+          265,
+          278,
+          114,
+          1,
+          277,
+          262,
+          270,
+          281,
+          279,
+          297,
+          123,
+          262,
+          2,
+          287,
+          267,
+          147,
+          261,
+          251,
+          301,
+          285,
+          268,
+          265,
+          19,
+          296,
+          261,
+          281,
+          247,
+          257,
+          260,
+          263,
+          297,
+          278,
+          1,
+          277,
+          258
+        ],
+        "k": [
+          13,
+          13,
+          5,
+          1,
+          13,
+          13,
+          13,
+          14,
+          13,
+          14,
+          6,
+          13,
+          1,
+          14,
+          13,
+          7,
+          13,
+          12,
+          15,
+          14,
+          13,
+          13,
+          1,
+          14,
+          13,
+          14,
+          12,
+          12,
+          13,
+          13,
+          14,
+          13,
+          1,
+          13,
+          12
+        ],
+        "cal": [
+          28,
+          39,
+          8,
+          1,
+          30,
+          29,
+          28,
+          35,
+          28,
+          34,
+          14,
+          23,
+          0,
+          30,
+          30,
+          15,
+          32,
+          13,
+          31,
+          25,
+          16,
+          25,
+          2,
+          27,
+          26,
+          18,
+          28,
+          27,
+          18,
+          22,
+          29,
+          22,
+          0,
+          25,
+          22
+        ],
+        "cal_elegidas": [
+          1,
+          1,
+          0,
+          1,
+          2,
+          2,
+          2,
+          3,
+          2,
+          2,
+          3,
+          1,
+          0,
+          2,
+          0,
+          2,
+          6,
+          3,
+          1,
+          2,
+          1,
+          2,
+          0,
+          1,
+          2,
+          4,
+          4,
+          3,
+          0,
+          4,
+          4,
+          1,
+          0,
+          4,
+          1
+        ]
+      },
+      "log_loss_interna": 0.3203230224784549,
+      "log_loss_interna_nota": "en la misma muestra del meta",
+      "semillas_modelo": {
+        "semillas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "precisiones": [
+          0.17135549872122763,
+          0.17135549872122763,
+          0.16624040920716113,
+          0.17391304347826086,
+          0.17391304347826086
+        ],
+        "mediana": 0.17135549872122763,
+        "min": 0.16624040920716113,
+        "max": 0.17391304347826086
+      }
+    }
+  ]
+}

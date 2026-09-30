@@ -1,0 +1,81 @@
+{
+  "pieza": "P9 figuras",
+  "destino": "docs/entrega/figuras",
+  "indice": "docs/entrega/figuras/README.md",
+  "generadas": [
+    {
+      "nombre": "comparacion_alternativas",
+      "archivos": [
+        "docs/entrega/figuras/comparacion_alternativas.png",
+        "docs/entrega/figuras/comparacion_alternativas.svg"
+      ],
+      "fuentes": [
+        "p3.json",
+        "p4.json",
+        "eleccion.json"
+      ]
+    },
+    {
+      "nombre": "veces_azar",
+      "archivos": [
+        "docs/entrega/figuras/veces_azar.png",
+        "docs/entrega/figuras/veces_azar.svg"
+      ],
+      "fuentes": [
+        "p3.json",
+        "eleccion.json"
+      ]
+    },
+    {
+      "nombre": "etiquetas_parciales",
+      "archivos": [
+        "docs/entrega/figuras/etiquetas_parciales.png",
+        "docs/entrega/figuras/etiquetas_parciales.svg"
+      ],
+      "fuentes": [
+        "p5.json"
+      ]
+    },
+    {
+      "nombre": "donde_mirar",
+      "archivos": [
+        "docs/entrega/figuras/donde_mirar.png",
+        "docs/entrega/figuras/donde_mirar.svg"
+      ],
+      "fuentes": [
+        "p6.json"
+      ]
+    },
+    {
+      "nombre": "detector_potencia",
+      "archivos": [
+        "docs/entrega/figuras/detector_potencia.png",
+        "docs/entrega/figuras/detector_potencia.svg"
+      ],
+      "fuentes": [
+        "p6.json"
+      ]
+    },
+    {
+      "nombre": "diagrama_proceso",
+      "archivos": [
+        "docs/entrega/figuras/diagrama_proceso.png",
+        "docs/entrega/figuras/diagrama_proceso.svg"
+      ],
+      "fuentes": [
+        "docs/plan-de-accion.md (revisión de fuentes y operación de selección)"
+      ]
+    },
+    {
+      "nombre": "diagrama_solucion",
+      "archivos": [
+        "docs/entrega/figuras/diagrama_solucion.png",
+        "docs/entrega/figuras/diagrama_solucion.svg"
+      ],
+      "fuentes": [
+        "docs/plan-de-accion.md (contrato común, P5, P6 y P8)"
+      ]
+    }
+  ],
+  "omitidas": []
+}

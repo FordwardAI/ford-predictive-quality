@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Configuración · FordwardAI</title>
+<link rel="stylesheet" href="ui.css">
+</head>
+<body data-role="desk" data-active="config" data-title="Configuración" data-sub="Cupo diario, mínimo por código, días de control, programa del día y roles · todo es propuesta">
+<div id="act"></div>
+<div id="page"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+window.render = U => {
+  const { B, QS, I, num, dec, prop } = U;
+  const h = B.hoja, X = B.exploracion, err = QS.get('estado') === 'error-archivo';
+  const prox = []; for (let i = 1; i <= 10; i++) prox.push(h.dia + i);
+  const muestra = h.programa_muestra;
+  const programa = err ? `
+      <div class="drop err" style="text-align:left">
+        <div style="display:flex;align-items:center;gap:10px"><span style="color:var(--bad)">${I('alert')}</span><b>No se pudo cargar «programa-dia-${h.dia + 1}.csv»</b><span class="sp" style="flex:1"></span><button class="btn sm">${I('upload')}Subir otro archivo</button></div>
+        <ul class="small" style="margin:10px 0 6px;padding-left:22px;color:#7d1a0c">
+          <li>La primera fila tiene <b>unidad;cod</b>: se esperan las columnas <b>unidad,codigo</b>.</li>
+          <li>Unidad repetida en el programa: <b>U-0042</b> (filas 43 y 118).</li>
+          <li>Fila 77: el código <b>ZZZ9</b> no está en el catálogo.</li>
+          <li>Fila 203: falta el código.</li>
+        </ul>
+        <div class="xs" style="color:#7d1a0c">No se cargó nada. Se mantiene el programa del Día ${h.dia} y la hoja no cambia hasta que se suba un archivo válido.</div>
+      </div>`
+    : `<div class="drop">${I('upload')}<div style="margin:6px 0 8px"><b>Arrastrá el programa del día</b> (CSV con columnas unidad,codigo) o</div><button class="btn pri sm">${I('file')}Elegir archivo</button></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:10px" class="small"><span class="tag ok">${I('check')}cargado</span><b>programa-dia-${h.dia}.csv</b><span class="muted">${num(h.programadas)} unidades · ${h.codigos} códigos · al inicio del Día ${h.dia}</span></div>
+      <table class="t" style="margin-top:8px"><thead><tr><th>unidad</th><th>codigo</th></tr></thead><tbody>${muestra.slice(0, 3).map(([u, c]) => `<tr><td>${u}</td><td class="cod">${c}</td></tr>`).join('')}<tr class="dim"><td colspan="2">… ${num(h.programadas - 3)} filas más</td></tr></tbody></table>`;
+  document.getElementById('act').innerHTML = `<button class="btn ghost">Descartar cambios</button><button class="btn pri">${I('check')}Guardar configuración</button>`;
+  document.getElementById('page').innerHTML = `
+  ${err ? `<div class="note bad">${I('x')}<div><b>El archivo del programa tiene errores.</b> Revisá el detalle en «Programa del día»: la plataforma no arma la hoja con un programa incompleto.</div></div>` : `<div class="note">${I('info')}<div>Pantalla de la propuesta de implementación: define quién fija cada parámetro. Los valores que salen de la evaluación (P del mínimo por código, umbral del detector) no se cambian acá sin volver a evaluarlos.</div></div>`}
+  <div class="grid g3">
+    <div class="card">
+      <div class="hd"><h2>Cupo diario</h2>${prop()}</div>
+      <div class="bd">
+        <div class="field"><label>Unidades a auditar por día</label><div class="in"><b style="font-size:16px">${h.cupo}</b><span class="muted small">unidades · Día ${h.dia}</span></div><div class="help">Lo fija <b>Calidad de Planta</b> según el programa de producción. Hoy es el 5 % y no se busca ampliarlo.</div></div>
+        <label class="small" style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" checked> Sugerir el 5 % del programa cargado (${h.cupo_5} para el Día ${h.dia})</label>
+        <div class="xs muted" style="margin-top:8px">El cupo del 5 % es el único corte con cifra evaluada.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="hd"><h2>Mínimo por código</h2><span class="tag ok">${I('check')}elegido en validación</span></div>
+      <div class="bd">
+        <div class="field"><label>Una auditoría cada P días a cada código que se produce</label>
+          <div class="seg">${X.periodos.map(p => `<a class="${p === X.P ? 'on' : ''}">P = ${p}</a>`).join('')}</div>
+          <div class="help">P = ${X.P}: empata con la mejor precisión y, entre empatadas, gana el período más largo.</div></div>
+        <div class="note" style="margin-top:10px">${I('lock')}<div class="xs">Cambiar P exige repetir la evaluación con etiquetas parciales. Queda bloqueado para el equipo de analistas.</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="hd"><h2>Días de control</h2>${prop()}</div>
+      <div class="bd">
+        <div class="field"><label>Patrón durante la implementación inicial</label><div class="seg"><a class="on">Alternar hoja y azar</a><a>Otro patrón, a acordar con Ford</a></div><div class="help">Duración: se calcula con datos reales de planta. Terminada la etapa, la hoja orienta todo el cupo.</div></div>
+        <div class="cal" style="margin-top:12px;grid-template-columns:repeat(5,minmax(0,1fr))">${prox.map((d, i) => `<div class="d ${i % 2 ? 'c' : 'h'}"><b>${d}</b>${i % 2 ? 'control' : 'hoja'}</div>`).join('')}</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid g-3-2">
+    <div class="card">
+      <div class="hd"><h2>Programa del día</h2><span class="xs muted">importación CSV: unidad,codigo</span><div class="sp"></div>${prop()}</div>
+      <div class="bd">${programa}<div class="xs muted" style="margin-top:8px">Se valida: columnas, unidades repetidas, códigos que no están en el catálogo y filas vacías. Los identificadores son del programa, nunca VIN.</div></div>
+    </div>
+    <div class="card">
+      <div class="hd"><h2>Usuarios y roles</h2>${prop()}</div>
+      <table class="t"><thead><tr><th>Rol</th><th>Qué hace en la plataforma</th></tr></thead><tbody>
+        <tr><td><b>Calidad de Planta</b></td><td class="wrap">Fija el cupo diario, carga el programa del día, define el calendario de días de control y ve la evidencia.</td></tr>
+        <tr><td><b>Equipo de analistas</b></td><td class="wrap">Consulta la hoja al inicio del día, registra cada ronda en la playa de despacho y recibe las alertas.</td></tr>
+        <tr><td><b>Responsable técnico</b></td><td class="wrap">Conecta la exportación de QLS, verifica las huellas de las fuentes y corre la revisión periódica.</td></tr>
+      </tbody></table>
+      <div class="ft">Los accesos y su registro se analizan en seguridad y privacidad (sección 2.3 del informe).</div>
+    </div>
+  </div>`;
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Panel del día · FordwardAI</title>
+<link rel="stylesheet" href="ui.css">
+</head>
+<body data-role="desk" data-active="inicio" data-title="Panel del día" data-sub="Resumen al inicio del día para Calidad de Planta y el equipo de analistas">
+<div id="act"></div>
+<div id="page"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+window.render = U => {
+  const { B, I, num, dec, pct, rng, rngx, Q, lect, pend } = U;
+  const h = B.hoja, e = B.evaluacion;
+  const prior = h.filas.filter(f => f.sugerida);
+  const totalSug = prior.reduce((s, f) => s + f.sugerida, 0) + h.exploracion.length;
+  const alertas = U.alertasConocidas();
+  const fila = c => h.filas.find(f => f.codigo === c);
+  document.getElementById('act').innerHTML = `<a class="btn" href="d-hoja.html">${I('hoja')}Abrir hoja del día</a><a class="btn pri" href="d-ronda.html">${I('pin')}Iniciar ronda</a>`;
+  document.getElementById('page').innerHTML = `
+  <div class="note info">${I('info')}<div><b>Día ${h.dia}: la hoja está lista.</b> Se armó al inicio del día con el programa de producción (${num(h.programadas)} unidades, ${h.codigos} códigos) y el cupo que fijó Calidad de Planta. Usa solo resultados de auditoría ya conocidos (Día ≤ ${h.dia - B.meta.margen}). El programa de este prototipo está simulado con las unidades de ese día en la base, con identificadores ficticios.</div></div>
+
+  <div class="grid g5">
+    <div class="card kpi"><div class="lb">${I('users')}Cupo del día</div><div class="v">${h.cupo}<small>unidades</small></div><div class="d">Lo fija Calidad de Planta. En la simulación, el 5 % del programa.</div></div>
+    <div class="card kpi"><div class="lb">${I('car')}Unidades programadas</div><div class="v">${num(h.programadas)}</div><div class="d">Programa del día, cargado al inicio</div></div>
+    <div class="card kpi"><div class="lb">${I('grid')}Códigos programados</div><div class="v">${h.codigos}</div><div class="d">Código de catálogo, leído en el parabrisas</div></div>
+    <div class="card kpi"><div class="lb">${I('hoja')}Cantidad sugerida</div><div class="v">${totalSug}<small>de ${h.cupo}</small></div><div class="d">${prior.reduce((s, f) => s + f.sugerida, 0)} por prioridad · ${h.exploracion.length} por mínimo por código</div></div>
+    <div class="card kpi"><div class="lb">${I('bell')}Alertas activas</div><div class="v" style="color:${alertas.length ? 'var(--warn)' : 'inherit'}">${alertas.length}</div><div class="d">Detector de cambios, conocidas al Día ${h.dia}</div></div>
+  </div>
+
+  <div class="grid g-3-2">
+    <div class="card">
+      <div class="hd"><h2>Reparto del cupo</h2><span class="tag info">${h.cupo} unidades</span><div class="sp"></div><a class="small" href="d-hoja.html">Ver hoja completa ${I('right', 'x')}</a></div>
+      <div class="bd" style="padding:0">
+        <table class="t">
+          <thead><tr><th>Código</th><th>Motivo</th><th class="num">Cantidad sugerida</th><th class="num">Tasa (rango 95 %)</th><th class="num">Veces la<br>tasa general</th><th>Mercado de destino</th></tr></thead>
+          <tbody>
+          ${prior.map(f => `<tr class="hl"><td class="cod">${f.codigo}</td><td><span class="tag info">Prioridad</span></td><td class="num"><b>${f.sugerida}</b></td><td class="num">${pct(f.tasa)} <span class="muted">(${rng(f.rango)})</span></td><td class="num">${dec(f.veces)}</td><td>${f.mercado}</td></tr>`).join('')}
+          ${h.exploracion.map(x => { const f = fila(x.codigo); return `<tr><td class="cod">${f.codigo}</td><td><span class="tag gray">Mínimo por código</span></td><td class="num"><b>1</b></td><td class="num">${pct(f.tasa)} <span class="muted">(${rng(f.rango)})</span></td><td class="num">${dec(f.veces)}</td><td>${f.mercado}</td></tr>`; }).join('')}
+          </tbody>
+        </table>
+        <div style="padding:12px 16px" class="grid g2">
+          <div class="note">${I('info')}<div>Un solo código concentra la cantidad por prioridad: su tasa se destaca (<b>${dec(prior[0].veces)} veces</b> la tasa general). Las filas de <b>mínimo por código</b> mantienen al día la tasa de los códigos poco elegidos: una unidad a cada código sin resultado conocido en los últimos ${h.P} días.</div></div>
+          <div class="note">${I('car')}<div>Dentro de un código, cualquier unidad sirve. Si un código no llega a la playa de despacho, lo pendiente pasa a los códigos siguientes del ranking que sí llegaron; solo se completa al azar si se agota el ranking.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" style="gap:16px">
+      <div class="card accent">
+        <div class="hd"><h2>Evaluación</h2>${lect(e.lectura)}<div class="sp"></div><a class="small" href="d-evaluacion.html">Detalle</a></div>
+        <div class="bd">
+          <div class="grid g2" style="gap:12px">
+            <div><div class="muted small">Precisión en el cupo, ${e.ganadora}</div><div class="big">${pct(e.precision)}</div><div class="small ink2">rango 95 %: ${rng(e.rango)}</div></div>
+            <div><div class="muted small">Al azar, mismo cupo</div><div class="big" style="color:var(--text-grey)">${pct(e.azar_mismo_cupo)}</div><div class="small ink2"><b>${dec(e.veces)} veces el azar</b> (${rngx(e.veces_rango)})</div></div>
+          </div>
+          <p class="small ink2" style="margin:10px 0 6px">De cada 100 unidades que elige la hoja se calibrarían unas ${dec(100 * e.precision, 0)}, contra ${dec(100 * e.azar_mismo_cupo, 0)} al azar.</p>
+          <div class="q-line">${U.Qs()} · ${e.cal_ganadora} CALIBRADA en ${num(e.elegidos)} elegidos, ${e.dias} días.</div>
+          <hr class="sep">
+          <div style="display:flex;align-items:center;gap:10px"><span class="small"><b>Prueba final</b> (Día ≥ 200)</span><div class="sp" style="flex:1"></div>${pend()}</div>
+          <div class="xs muted" style="margin-top:4px">Preregistro ${B.preregistro.estado}; la cifra de la prueba se lee una sola vez, en la sesión conjunta.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="hd"><h2>Alertas activas</h2><span class="tag warn">${I('bell')}${alertas.length}</span><div class="sp"></div><a class="small" href="d-alertas.html">Ver todas</a></div>
+        <div class="bd" style="padding:4px 16px">
+          <ul class="list">
+          ${alertas.map(a => `<li>${I(a.sentido === 'sube' ? 'up' : 'dn', '')}<div style="flex:1"><div><span class="cod">${a.codigo}</span> · la tasa <b>${a.sentido === 'sube' ? 'subió' : 'bajó'}</b> <span class="muted">(${a.mercado})</span></div><div class="xs muted">Cambio detectado el Día ${a.dia}; se conoce el Día ${a.conocida}. ${a.programado_hoy ? 'Programado hoy.' : 'No está programado hoy.'}</div></div><span class="tag gray">observación</span></li>`).join('')}
+          </ul>
+        </div>
+        <div class="ft">Una alerta es una observación, no una causa: el detector no dice por qué cambió un código ni modifica la hoja.</div>
+      </div>
+    </div>
+  </div>`;
+};
+</script>
+</body>
+</html>

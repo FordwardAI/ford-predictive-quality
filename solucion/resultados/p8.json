@@ -1,0 +1,40 @@
+{
+  "pieza": "P8 hoja de códigos prioritarios",
+  "dia": 190,
+  "programa": "simulado con las unidades del Día del VIN (ids ficticios)",
+  "unidades_programadas": 297,
+  "codigos_programados": 28,
+  "cupo": 14,
+  "cupo_5": 14,
+  "sugeridas_total": 14,
+  "codigos_con_cantidad": 1,
+  "filas_minimo_por_codigo": 2,
+  "sin_cubrir": 0,
+  "minimo_por_codigo": {
+    "P": 40,
+    "origen": "elegido en validación (P5)"
+  },
+  "predictor": "tasa fija (<= 149)",
+  "ventana_tasa": [
+    null,
+    149
+  ],
+  "ventana_mercado": [
+    155,
+    185
+  ],
+  "archivos": [
+    "hoja-dia-190.csv",
+    "hoja-dia-190.xlsx",
+    "hoja-dia-190.html",
+    "programa-dia-190.csv"
+  ],
+  "vin_en_salidas": 0,
+  "semillas": {
+    "programa": 20261008,
+    "desempate": 20261002
+  },
+  "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+  "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+  "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3"
+}

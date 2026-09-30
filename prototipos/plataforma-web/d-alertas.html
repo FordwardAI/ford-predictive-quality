@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1440">
+<title>Alertas de cambio · FordwardAI</title>
+<link rel="stylesheet" href="ui.css">
+</head>
+<body data-role="desk" data-active="alertas" data-title="Alertas de cambio por código" data-sub="Detector de cambios (CUSUM): avisa cuando la tasa de un código se aparta de la esperada">
+<div id="act"></div>
+<div id="page"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+window.render = U => {
+  const { B, QS, I, num, dec, pct, esc, tramoV } = U;
+  const D = B.detector, h = B.hoja, V = B.meta.tramo_validacion, R = D.reales, Pw = D.potencia;
+  const vacio = QS.get('estado') === 'sin-alertas';
+  const conocidas = vacio ? [] : D.alertas.filter(a => a.conocida <= h.dia);
+  const despues = D.alertas.filter(a => a.conocida > h.dia);
+  const esperables = D.falsas_30 * R.dias_calendario / 30;
+  const sel = D.alertas.find(a => a.codigo === QS.get('c')) || conocidas[conocidas.length - 1] || D.alertas[0];
+  const fila = a => `<tr class="${a.conocida <= h.dia ? '' : 'dim'} ${sel && a.codigo === sel.codigo && !vacio ? 'hl' : ''}"><td class="cod"><a href="?c=${a.codigo}">${a.codigo}</a></td>
+    <td>${a.sentido === 'sube' ? `<span class="tag bad">${I('up')}subió</span>` : `<span class="tag warn">${I('dn')}bajó</span>`}</td>
+    <td class="num">Día ${a.dia}</td><td class="num"><b>Día ${a.conocida}</b></td><td>${a.mercado}</td>
+    <td class="num">${pct(a.p0)} <span class="muted">(n ${num(a.n_149)})</span></td><td class="num">${pct(a.cal_desde_155 / a.n_desde_155)} <span class="muted">(${a.cal_desde_155} de ${num(a.n_desde_155)})</span></td>
+    <td>${a.programado_hoy ? 'programado' : '<span class="muted">no</span>'}</td></tr>`;
+  const head = `<thead><tr><th>Código</th><th>Sentido</th><th class="num">Detectado</th><th class="num">Se conoce</th><th>Mercado</th><th class="num">Esperada<br>(≤ ${D.p0_hasta})</th><th class="num">Observada<br>desde ${V[0]}</th><th>Hoy</th></tr></thead>`;
+  const cus = sel ? (D.cusum[sel.codigo] || []) : [];
+  const cusChart = sel && cus.length ? U.lineChart({
+    w: 400, h: 220, x0: V[0], x1: V[1], y1: Math.max(D.h * 1.3, ...cus.flat()), yt: [0, 2, 4, 6], yf: v => dec(v, 0), xt: [V[0], V[0] + 10, V[0] + 20, V[0] + 30], xf: v => 'Día ' + v, m: { l: 30, r: 46, t: 16, b: 26 },
+    shade: [{ a: h.dia - B.meta.margen, b: V[1], label: 'después del ' + h.dia }],
+    series: [{ pts: cus.map((p, i) => ({ x: V[0] + i, y: p[0] })), color: 'var(--ford-blue)', step: true, label: 'suba' },
+      { pts: cus.map((p, i) => ({ x: V[0] + i, y: p[1] })), color: 'var(--accent)', step: true, label: 'baja' }],
+    hlines: [{ y: D.h, label: `umbral h = ${dec(D.h, 1)}`, dash: '4 3', color: 'var(--bad)', left: true }],
+    marks: D.alertas.filter(a => a.codigo === sel.codigo).map(a => ({ x: a.dia, y: D.h, label: `Día ${a.dia}`, tip: `Alarma el Día ${a.dia}; se conoce el Día ${a.conocida}` })),
+  }) : '';
+  document.getElementById('act').innerHTML = `<button class="btn">${I('users')}Destinatarios</button><button class="btn">${I('download')}Exportar</button>`;
+  const cfg = `<div class="card"><div class="hd"><h2>Configuración del detector</h2><span class="tag ok">${I('check')}calibrado</span></div><div class="bd">
+      <dl class="kv"><dt>Método</dt><dd>CUSUM de Bernoulli por código, dos lados; se reinicia tras cada alarma</dd>
+      <dt>Umbral h</dt><dd><b>${dec(D.h, 1)}</b>: ${dec(D.falsas_30, 2)} falsas alarmas cada 30 días en todo el catálogo</dd>
+      <dt>Calibración</dt><dd>con resultados hasta el Día ${D.p0_hasta}, ${D.codigos_calibracion} códigos, ${D.permutaciones} permutaciones de días</dd>
+      <dt>Disponibilidad</dt><dd>una alarma del Día d se conoce el Día d + ${B.meta.margen}, cuando llegan los resultados</dd>
+      <dt>Efecto en la hoja</dt><dd>ninguno: avisa, no cambia el orden de los códigos</dd></dl></div></div>`;
+  const pot = `<div class="card"><div class="hd"><h2>Potencia medida en validación</h2></div><div class="bd">
+      <table class="t"><thead><tr><th>Cambio sintético (Día ${Pw.dia_cambio})</th><th class="num">Detectados</th><th class="num">Demora mediana</th></tr></thead><tbody>
+      <tr><td>La tasa se duplica</td><td class="num">${num(Pw.sube_x2.detectadas)} de ${num(Pw.sube_x2.casos)}: <b>${pct(Pw.sube_x2.deteccion)}</b></td><td class="num">${Pw.sube_x2.demora_mediana_dia} días (${Pw.sube_x2.demora_p25_p75_dia.join('–')})</td></tr>
+      <tr><td>La tasa baja a la mitad</td><td class="num">${num(Pw.baja_a_la_mitad.detectadas)} de ${num(Pw.baja_a_la_mitad.casos)}: <b>${pct(Pw.baja_a_la_mitad.deteccion)}</b></td><td class="num">${Pw.baja_a_la_mitad.demora_mediana_dia} días (${Pw.baja_a_la_mitad.demora_p25_p75_dia.join('–')})</td></tr>
+      <tr><td>Sin cambio</td><td class="num" colspan="2">${dec(Pw.sin_cambio.falsas_alarmas_cada_30_dia, 2)} falsas alarmas cada 30 días</td></tr></tbody></table>
+      <div class="q-line" style="margin-top:6px">${Pw.codigos} códigos con al menos ${Pw.min_vin_en_validacion} VIN en validación (${num(Pw.vins)} VIN), ${Pw.replicas} réplicas; ${U.Q()}.</div></div></div>`;
+
+  if (vacio) {
+    document.getElementById('page').innerHTML = `
+    <div class="card"><div class="bd"><div class="empty"><div class="ic" style="color:var(--ok)">${I('check')}</div><h3>Sin alertas activas al Día ${h.dia}</h3>
+      <p>Ningún código programado se apartó de su tasa esperada con los resultados conocidos hasta el Día ${h.dia - B.meta.margen}. El detector sigue revisando todos los códigos a medida que llegan los resultados de auditoría.</p>
+      <div class="small muted">Esperable por azar con este umbral: ~${dec(D.falsas_30, 1)} falsa alarma cada 30 días en todo el catálogo.</div></div></div></div>
+    <div class="grid g2">${cfg}${pot}</div>`;
+    return;
+  }
+  document.getElementById('page').innerHTML = `
+  <div class="grid g4">
+    <div class="card kpi"><div class="lb">${I('bell')}Activas al Día ${h.dia}</div><div class="v">${conocidas.length}</div><div class="d">conocidas con resultados hasta el Día ${h.dia - B.meta.margen}</div></div>
+    <div class="card kpi"><div class="lb">Alarmas en validación</div><div class="v">${R.alarmas}<small>en ${R.dias_calendario} días</small></div><div class="d">${R.sube} de suba, ${R.baja} de baja, en ${R.codigos_con_alarma} de ${R.codigos_evaluados} códigos</div></div>
+    <div class="card kpi"><div class="lb">Esperables por falsa alarma</div><div class="v">${dec(esperables, 1)}</div><div class="d">con ${dec(D.falsas_30, 2)} cada 30 días en todo el catálogo</div></div>
+    <div class="card kpi"><div class="lb">${I('clock')}Se conocen</div><div class="v">${B.meta.margen}<small>días después</small></div><div class="d">el margen hasta tener el resultado de auditoría</div></div>
+  </div>
+  <div class="note">${I('info')}<div>Las alarmas son <b>observaciones, no causas</b>: el detector no dice por qué cambió un código. Que haya más que las esperables por azar es compatible con una deriva de la tasa en la base, sin probarla (${U.Q(tramoV, B.meta.n_validacion, 'VIN')}, ${R.codigos_evaluados} códigos).</div></div>
+  <div class="grid" style="align-items:start;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)">
+    <div class="card">
+      <div class="hd"><h2>Alertas del detector</h2><span class="tag gray">observaciones, no causas</span><div class="sp"></div><span class="xs muted">clic en un código para ver su CUSUM</span></div>
+      <table class="t">${head}<tbody>
+        <tr class="cut"><td colspan="8">Conocidas al Día ${h.dia} (${conocidas.length})</td></tr>${conocidas.map(fila).join('')}
+        <tr class="cut"><td colspan="8" style="color:var(--text-grey);border-bottom-color:var(--line-grey)">Resto de la ${tramoV}: se conocen después del Día ${h.dia} (${despues.length}), se muestran como evidencia</td></tr>${despues.map(fila).join('')}
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="hd"><h2>CUSUM de <span class="cod">${sel.codigo}</span></h2><div class="sp"></div><span class="legend"><span><i style="background:var(--ford-blue)"></i>suba</span><span><i></i>baja</span></span></div>
+      <div class="bd"><div class="xs muted" style="margin-bottom:6px">${sel.mercado} · ${tramoV}</div>${cusChart}<div class="xs muted">Acumula la diferencia entre lo observado cada día y la tasa esperada del código (${pct(sel.p0)}). Cuando supera h, avisa y vuelve a cero.</div></div>
+    </div>
+  </div>
+  <div class="grid g2">${cfg}${pot}</div>`;
+};
+</script>
+</body>
+</html>

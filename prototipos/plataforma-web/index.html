@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plataforma web · FordwardAI</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ford-white); color: var(--ford-blue); font: 400 16px/1.5 var(--font); letter-spacing: -0.03em; }
+  a { color: var(--ford-skyview); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  b { font-weight: 500; }
+  .wrap { max-width: 1840px; margin: 0 auto; padding: 0 36px; }
+  header.g { padding: 48px 0 32px; }
+  .ey { font-size: 14px; color: var(--ford-skyview); font-weight: 500; }
+  h1 { font-size: 48px; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; color: var(--ford-blue); margin: 8px 0 0; }
+  h1 em { font-style: normal; color: var(--ford-skyview); }
+  .lead { max-width: 1060px; margin: 16px 0 0; }
+  .pills { display: flex; gap: 8px; flex-wrap: wrap; margin: 24px 0 16px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 9999px; padding: 4px 14px; font-size: 14px; background: var(--ford-light-gray); color: var(--ford-blue); }
+  .pill.w { background: rgba(251, 174, 64, .22); box-shadow: inset 0 0 0 1px var(--warning); font-weight: 500; }
+  .pill.p { background: transparent; box-shadow: inset 0 0 0 1px var(--ford-skyview); }
+  .pill.l { background: rgba(251, 174, 64, .22); box-shadow: inset 0 0 0 1px var(--warning); }
+  nav.n { display: flex; gap: 8px; flex-wrap: wrap; }
+  nav.n a { border: 2px solid var(--ford-skyview); color: var(--ford-blue); border-radius: 9999px; padding: 6px 16px; font-size: 14px; transition: background-color .4s; }
+  nav.n a:hover { background: var(--ford-skyview); color: #fff; text-decoration: none; }
+  main { background: var(--ford-light-gray); border-radius: 16px; padding-top: 8px; padding-bottom: 32px; }
+  section { padding: 32px 0 8px; }
+  section h2 { margin: 0; font-size: 32px; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; color: var(--ford-blue); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .chip { font-size: 14px; font-weight: 400; letter-spacing: -0.03em; border-radius: 9999px; padding: 2px 12px; color: var(--ford-blue); box-shadow: inset 0 0 0 1px var(--ford-skyview); }
+  .chip.g { box-shadow: inset 0 0 0 1px rgba(0, 9, 91, .16); }
+  .desc { max-width: 1180px; margin: 12px 0 8px; }
+  .states { font-size: 14px; color: rgba(0, 9, 91, .72); margin-bottom: 16px; }
+  .frames { display: flex; flex-wrap: wrap; gap: 32px 32px; }
+  figure { margin: 0; }
+  .desk { width: 864px; background: var(--ford-twilight); border-radius: 16px; padding: 28px 12px 12px; position: relative; }
+  .desk::before { content: ""; position: absolute; top: 11px; left: 16px; width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, .35); box-shadow: 14px 0 0 rgba(255, 255, 255, .35), 28px 0 0 rgba(255, 255, 255, .35); }
+  .vp { width: 840px; height: 580px; overflow: hidden; background: #fff; border-radius: 8px; }
+  .vp iframe { width: 1440px; height: 994px; border: 0; transform: scale(.58334); transform-origin: 0 0; display: block; background: #fff; }
+  figcaption { margin-top: 12px; font-size: 16px; color: var(--ford-blue); font-weight: 500; max-width: 864px; }
+  figcaption a { font-weight: 400; margin-left: 8px; font-size: 14px; }
+  figcaption small { display: block; font-weight: 400; color: rgba(0, 9, 91, .72); font-size: 14px; margin-top: 2px; }
+  footer.g { padding: 24px 0 40px; color: rgba(0, 9, 91, .72); font-size: 14px; }
+  body.bare header.g, body.bare footer.g { display: none; }
+  body.bare main { border-radius: 0; }
+</style>
+</head>
+<body>
+<header class="g"><div class="wrap">
+  <div class="ey">Ford Innovation Challenge III · FordwardAI · Calidad predictiva</div>
+  <h1><em>Plataforma web</em> · propuestas de pantallas v1</h1>
+  <p class="lead">Prototipo de la plataforma web que se propone para la <b>implementación y el escalado</b> de la solución: reúne en un solo lugar la hoja del día, las rondas en la playa de despacho, los códigos y su mercado de destino, la evidencia del modelo y el seguimiento de los días de control. <b>No es un entregable del 2/10:</b> la E3 sigue siendo la hoja de códigos prioritarios (planilla e imprimible), que queda además como piso si la plataforma no está disponible. Nada de esto está construido como aplicación: cada pantalla es una propuesta.</p>
+  <p class="lead" style="margin-top:12px">Las cifras son <b>reales de la base ficticia</b>, generadas con el código de la solución, <b>solo de validación (<span data-v="tramo"></span>)</b>. La hoja es la del Día <span data-v="meta.dia"></span> con un programa simulado de identificadores ficticios; ningún VIN aparece en las pantallas. La prueba final no se leyó: donde iría su cifra dice «pendiente de la sesión conjunta».</p>
+  <div class="pills"><span class="pill w">Base ficticia</span><span class="pill">entre auditados con actividad QLS, <span data-v="tramo"></span>, n = <span data-v="meta.n_validacion|num"></span> VIN</span><span class="pill l">Prueba final: pendiente de la sesión conjunta</span><span class="pill p">Todo es propuesta</span></div>
+  <nav class="n"><a href="#operacion">1 · Operación diaria</a><a href="#codigos">2 · Códigos y mercado</a><a href="#evidencia">3 · Evidencia del modelo</a><a href="#implementacion">4 · Implementación</a></nav>
+</div></header>
+
+<main class="wrap">
+<section id="operacion">
+  <h2>1 · Operación diaria <span class="chip">propuesta</span><span class="chip g">#33</span></h2>
+  <p class="desc">Al inicio del día la plataforma arma la hoja con el programa de producción y el cupo que fija Calidad de Planta, usando solo resultados ya conocidos (Día ≤ t − 5). Prioriza códigos, no vehículos: dentro de un código las unidades son equivalentes. El equipo de analistas la lleva en sus rondas (cada 2 h aprox.) y lee el código en la etiqueta del parabrisas. Si un código no llega, lo pendiente baja por el ranking; solo se completa al azar si se agota. Sin programa no hay hoja; sin la exportación de resultados, la plataforma propone seleccionar al azar, como hoy.</p>
+  <div class="states">Estados: <a href="d-hoja.html?estado=sin-programa">sin programa</a> · <a href="d-hoja.html?estado=qls-caido">resultados no disponibles</a> · <a href="d-ronda.html?estado=no-llego">un código no llegó</a></div>
+  <div class="frames" data-frames="
+    d|d-inicio.html|Panel del día|Cupo, programa, cantidad sugerida, mínimo por código, alertas y caja de evaluación.
+    d|d-hoja.html|Hoja de códigos prioritarios|Columnas en el orden acordado, línea del cupo, filas de mínimo por código, por qué este código y unidades sugeridas.
+    d|d-hoja.html?estado=sin-programa|Hoja · sin programa del día|Estado vacío: cargar el programa (unidad,codigo).
+    d|d-hoja.html?estado=qls-caido|Hoja · resultados no disponibles|Sin la exportación de QLS no se arma la hoja: sorteo al azar como hoy, con semilla registrada.
+    d|d-ronda.html|Ronda en la playa|El equipo de analistas marca qué llegó y qué tomó.
+    d|d-ronda.html?estado=no-llego|Ronda · un código no llegó|Reasignación real calculada con la regla de la hoja; caso extremo con el ranking agotado."></div>
+</section>
+
+<section id="codigos">
+  <h2>2 · Códigos y mercado <span class="chip">propuesta</span><span class="chip g">#27</span><span class="chip g">#33</span></h2>
+  <p class="desc">Todos los códigos programados con su tasa, rango del 95 % y n; filtro por mercado de destino, que es la agrupación del catálogo que más separa las tasas en validación (asociación, no causa). El detalle de un código muestra su tasa en el tiempo con resultados ya conocidos, «dónde mirar» (se activa solo si se sostiene en la prueba final) y el estado del detector de cambios. Las alarmas son observaciones, se conocen 5 días después y no cambian la hoja.</p>
+  <div class="states">Estados: <a href="d-codigos.html?mercado=primero">filtro por mercado</a> · <a href="d-codigo.html?c=alerta">código con alerta</a> · <a href="d-alertas.html?estado=sin-alertas">sin alertas</a></div>
+  <div class="frames" data-frames="
+    d|d-codigos.html|Códigos programados|Tabla con rango, detector y señal por mercado de destino (χ² en validación).
+    d|d-codigos.html?mercado=primero|Códigos · filtro por mercado|Solo los códigos del mercado de destino del primero del ranking.
+    d|d-codigo.html?c=primero|Detalle de código · el primero del ranking|Tasa en el tiempo con banda, mercado frente a general, dónde mirar y CUSUM.
+    d|d-codigo.html?c=alerta|Detalle de código · con alerta|Código con alarma de baja conocida el Día de la hoja.
+    d|d-alertas.html|Alertas de cambio|Alarmas reales de validación, conocidas y posteriores; umbral h, falsas alarmas y potencia.
+    d|d-alertas.html?estado=sin-alertas|Alertas · sin alertas activas|Estado vacío con la configuración del detector."></div>
+</section>
+
+<section id="evidencia">
+  <h2>3 · Evidencia del modelo <span class="chip">propuesta</span><span class="chip g">#10</span><span class="chip g">#33</span></h2>
+  <p class="desc">La comparación de las <span data-v="evaluacion.elegibles"></span> alternativas elegibles frente al azar con el mismo cupo, con el oráculo como techo y la fuga como ejemplo didáctico. Gana <span data-v="evaluacion.ganadora"></span> porque <span data-v="evaluacion.empatan"></span> de <span data-v="evaluacion.elegibles"></span> empatan con la mejor y la regla elige la más simple. También: etiquetas parciales y mínimo por código, días de control estimados frente a reales, preparación de datos, particiones y el preregistro, todavía «propuesto».</p>
+  <div class="states">Estados: <a href="d-evaluacion.html?vista=ml">pestaña de familias de aprendizaje automático</a></div>
+  <div class="frames" data-frames="
+    d|d-evaluacion.html|Evaluación de alternativas|Punto y rango de cada alternativa, regla de elección y referencias.
+    d|d-evaluacion.html?vista=ml|Evaluación · familias de aprendizaje automático|Fijo frente a reentrenado y dispersión por semillas.
+    d|d-exploracion.html|Exploración con etiquetas parciales|Políticas de la hoja cuando solo se conoce lo auditado; días de control estimados frente a reales.
+    d|d-datos.html|Datos y prueba final|Fuentes con huella, particiones (CALIBRADA solo hasta el Día 194), fuga del componente y prueba pendiente."></div>
+</section>
+
+<section id="implementacion">
+  <h2>4 · Implementación <span class="chip">propuesta</span><span class="chip g">#33</span></h2>
+  <p class="desc">La etapa inicial en planta alterna días con hoja y días al azar para medir la hoja en las mismas condiciones; la pantalla de seguimiento se muestra con la simulación sobre la base (validación), rotulada así. La configuración define quién fija cada parámetro: el cupo lo fija Calidad de Planta, el P del mínimo por código sale de la validación y no se cambia sin volver a evaluar, y el programa del día se importa con validaciones.</p>
+  <div class="states">Estados: <a href="d-config.html?estado=error-archivo">error al importar el programa</a></div>
+  <div class="frames" data-frames="
+    d|d-control.html|Seguimiento de días de control|Simulación sobre la base: precisión por tipo de día, veces el azar estimadas con rango y calendario.
+    d|d-config.html|Configuración|Cupo diario, mínimo por código, días de control, programa del día y roles.
+    d|d-config.html?estado=error-archivo|Configuración · error en el archivo|El programa no se carga si tiene columnas mal, unidades repetidas o códigos fuera del catálogo."></div>
+</section>
+</main>
+<footer class="g"><div class="wrap">FordwardAI · prototipo de pantallas, sin conexión a QLS. Datos: base ficticia entregada para el desafío, fuente verificada por huella (<span data-v="meta.fuente.csv_sha"></span>…). Sin logos de Ford: es una propuesta del equipo.</div></footer>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  const Q = new URLSearchParams(location.search);
+  const B = window.B;
+  const get = p => p.split('.').reduce((o, k) => o && o[k], B);
+  const fmt = { num: n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.') };
+  document.querySelectorAll('[data-v]').forEach(el => {
+    const [p, f] = el.dataset.v.split('|');
+    let v = p === 'tramo' ? `validación ${B.meta.tramo_validacion[0]}–${B.meta.tramo_validacion[1]}` : get(p);
+    if (typeof v === 'string') v = v.replace(/<= /g, '≤ ');
+    el.textContent = f ? fmt[f](v) : v;
+  });
+  if (Q.get('bare')) document.body.classList.add('bare');
+  if (Q.get('s')) document.querySelectorAll('main section').forEach(s => { if (s.id !== Q.get('s')) s.remove(); });
+  const full = !!Q.get('full');
+  const parse = s => s.trim().split('\n').map(l => l.trim().split('|'));
+  document.querySelectorAll('[data-frames]').forEach(el => {
+    el.innerHTML = parse(el.dataset.frames).map(([k, src, t, d]) =>
+      `<figure><div class="desk"><div class="vp"><iframe src="${src}" title="${t}" loading="eager"></iframe></div></div><figcaption>${t} <a href="${src}" target="_blank">abrir</a><small>${d || ''}</small></figcaption></figure>`).join('');
+  });
+  const S = 0.58334;
+  const pend = new Set([...document.querySelectorAll('iframe')]);
+  const ajustar = (ifr, h) => {
+    ifr.style.height = h + 'px';
+    ifr.parentElement.style.height = Math.ceil(h * S) + 'px';
+  };
+  addEventListener('message', e => {
+    if (!e.data || !e.data.collageH) return;
+    document.querySelectorAll('iframe').forEach(ifr => {
+      if (ifr.contentWindow === e.source) { if (full) ajustar(ifr, Math.max(994, e.data.collageH)); pend.delete(ifr); }
+    });
+    medir();
+  });
+  // Sin postMessage (algunos navegadores con file://), se intenta leer la altura directamente.
+  document.querySelectorAll('iframe').forEach(ifr => ifr.addEventListener('load', () => {
+    try { const d = ifr.contentDocument; if (d && full) ajustar(ifr, Math.max(994, d.documentElement.scrollHeight)); pend.delete(ifr); } catch (err) { /* otro origen */ }
+    medir();
+  }));
+  function medir() {
+    if (!Q.get('measure')) return;
+    document.title = 'H=' + Math.ceil(document.documentElement.scrollHeight) + (pend.size ? ' pendientes=' + pend.size : '');
+  }
+  medir();
+})();
+</script>
+</body>
+</html>

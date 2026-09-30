@@ -44,6 +44,17 @@ python3 research/test_catalog_groups.py
 
 La [salida](../research/catalog-groups.json) publica solo agregados por grupo, sin el diccionario por código. Los hallazgos están en el [registro de la agrupación](../research/catalogo-agrupacion.md).
 
+## Prueba de concepto
+
+El código de [Construir la prueba de concepto y los entregables para el Trials Day](https://github.com/FordwardAI/ford-predictive-quality/issues/33) vive en `solucion/` y verifica los dos hashes de arriba antes de calcular. Las etiquetas de Día ≥200 quedan enmascaradas al cargar; solo las desbloquea el preregistro acordado. Entorno y detalle en [solucion/README.md](../solucion/README.md).
+
+```sh
+.venv/bin/python -m solucion.run --csv "/ruta/al/Dataset QLS Inspección Adicional.csv" --catalogo "/ruta/a/Códigos de catálogo.csv"
+.venv/bin/python -m solucion.pruebas
+```
+
+Los resultados versionados (`solucion/resultados/`) son agregados por alternativa y por día, sin VIN ni tasas por código. La hoja de códigos prioritarios se genera fuera del repo (`--salida`).
+
 ## Planilla original
 
 `QLTY Download Sept 24/table.xlsx` (30,4 MB, en la carpeta de Ford del 24/09, fuera del repo) es la planilla Excel de la que se exportó el CSV vigente: una hoja con la tabla A2:AO195810, las mismas descripciones y los mismos 41 nombres técnicos, y 195.808 filas con las mismas claves (VIN, fechas, código, resultado y componente). Las horas están como números y hay 9 errores en Fecha Reparación, que son los `#N/A` del CSV. No trae diccionario ni otras hojas. No es una fuente nueva: se sigue usando el CSV. Revisión del 29/09/2026 en [¿La especificación permite repartir el trabajo sin decisiones críticas pendientes?](https://github.com/FordwardAI/ford-predictive-quality/issues/13); no se compararon celda por celda las horas ni el texto libre.
