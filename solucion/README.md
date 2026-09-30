@@ -32,10 +32,24 @@ Los datos quedan fuera del repo y se pasan por argumento. El código verifica su
   conjuntos de familias, pesos discretos/continuos, mediana, rangos y stacking temporal. Usa Día <195 y
   predicciones previas de 70–94 para arrancar el meta-modelo. Guarda predicciones solo en la caché externa y
   publica agregados en `solucion/resultados/busqueda.json`. Es exploratorio y no modifica el preregistro.
+- `--piezas semillas_busqueda` comprueba con semillas 1–5 la mezcla de catálogo elegida, con pesos
+  congelados: 60 % stacking fijo + 40 % jerárquico 60 días, peso 20. Compara sus componentes,
+  CatBoost conjunto y RF con atributos; escribe `solucion/resultados/semillas_busqueda.json`.
 - `--cache` (por defecto `~/.cache/ford-predictive-quality`) guarda la tabla por VIN ya enmascarada, fuera del repo.
 - `--salida` (por defecto `~/.cache/ford-predictive-quality/salida`) recibe la hoja de códigos prioritarios, que tiene tasas por código y no se versiona.
 
 Cada pieza escribe `solucion/resultados/<pieza>.json`: solo agregados por alternativa y por día, sin VIN ni tasas por código.
+
+La revisión de catálogo y elección adaptativa reutiliza la caché de predicciones de `busqueda`, sin entrenar
+ni releer la prueba final. Usar únicamente la caché local propia (pickle no es un formato seguro para archivos externos):
+
+```sh
+.venv/bin/python -m solucion.robustez_busqueda \
+  --predicciones '<cache>/busqueda-<hash>.pickle' \
+  --salida solucion/resultados/robustez_busqueda.json
+```
+
+Cobertura, resultados y límites de estos experimentos en [búsqueda amplia](../research/busqueda-amplia.md).
 
 ## Segunda lectura de la prueba final (propuesta)
 
