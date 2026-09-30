@@ -28,6 +28,10 @@ Los datos quedan fuera del repo y se pasan por argumento. El código verifica su
 - `--piezas ensemble` compara CatBoost con atributos y la tasa móvil suavizada hacia mercado, solos y mezclados
   (pesos 25/50/75 %, ventanas 30/60/120 días). Elige en 100–174 y comprueba en 175–194, ya visto: exploratorio.
   Escribe `solucion/resultados/ensemble.json`; no modifica el preregistro ni lee la prueba final.
+- `--piezas busqueda` amplía los individuales, columnas y datos sintéticos de entrenamiento; prueba parejas,
+  conjuntos de familias, pesos discretos/continuos, mediana, rangos y stacking temporal. Usa Día <195 y
+  predicciones previas de 70–94 para arrancar el meta-modelo. Guarda predicciones solo en la caché externa y
+  publica agregados en `solucion/resultados/busqueda.json`. Es exploratorio y no modifica el preregistro.
 - `--cache` (por defecto `~/.cache/ford-predictive-quality`) guarda la tabla por VIN ya enmascarada, fuera del repo.
 - `--salida` (por defecto `~/.cache/ford-predictive-quality/salida`) recibe la hoja de códigos prioritarios, que tiene tasas por código y no se versiona.
 
