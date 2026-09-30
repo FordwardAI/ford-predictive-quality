@@ -200,6 +200,7 @@ class Hoja:
     agrupaciones: dict
     ventana_mercado: tuple
     programa_simulado: bool
+    prueba_final: bool = False  # La E3 final: la prueba ya se leyó una sola vez.
 
 
 def ventana(predictor, t):
@@ -258,7 +259,7 @@ def evaluacion_ganadora():
 
 
 def armar(tabla, programa, t, cupo_dia=None, predictor=None, minimo=None, evaluacion="eleccion",
-          programa_simulado=False):
+          programa_simulado=False, prueba_final=False):
     """Arma la hoja del día t. Las tasas usan solo resultados de Día <= t−5."""
     predictor = predictor or ganadora(tabla)
     assert not getattr(predictor, "por_vin", False), "La hoja prioriza códigos, no unidades"
@@ -327,7 +328,7 @@ def armar(tabla, programa, t, cupo_dia=None, predictor=None, minimo=None, evalua
                 suavizada=not (predictor.familia in ("tasa_fija", "movil") and not predictor.parametros.get("peso")),
                 ventana=(desde, hasta), general=general, n_ventana=n_ventana, minimo=minimo, evaluacion=evaluacion,
                 por_que=por_que, agrupaciones=agrupaciones(tabla), ventana_mercado=(desde_m, hasta_m),
-                programa_simulado=programa_simulado)
+                programa_simulado=programa_simulado, prueba_final=prueba_final)
 
 
 # --- Textos --------------------------------------------------------------------------------------------------
@@ -360,7 +361,9 @@ def textos(h):
         evaluacion = (f"Con el cupo del 5 %, {calificador}: de cada 100 unidades elegidas se calibrarían "
                       f"{_decimal(100 * e['precision'], 1)} (rango del 95 %: {_decimal(100 * e['rango'][0], 1)} a "
                       f"{_decimal(100 * e['rango'][1], 1)}), contra {_decimal(100 * e['azar'], 1)} al azar. "
-                      f"Resultado: {_lectura(e['lectura'])}. La prueba final todavía no se corrió.")
+                      f"Resultado: {_lectura(e['lectura'])}. "
+                      + ("Cifra de la prueba final, leída una sola vez." if h.prueba_final
+                         else "La prueba final todavía no se corrió."))
     corte = (f"El cupo del 5 % ({h.cupo_5} de {h.programadas} unidades) es el único corte con cifra evaluada; "
              "por debajo del cupo, sin cifra evaluada.")
     tasa = (f"Tasa reciente: proporción calibrada del código entre sus auditados con resultado conocido "
@@ -399,6 +402,12 @@ def _agrupaciones_txt(h):
 
 PENDIENTES = ["Dónde mirar (componente más probable): pendiente de prueba final. Entra solo si se sostiene.",
               "Códigos que casi no se calibran: pendiente de prueba final. Entran solo si se sostienen."]
+PENDIENTES_FINAL = ["Dónde mirar y los códigos que casi no se calibran ya se evaluaron en la prueba final: sus cifras "
+                    "están en el informe (sección 4), no en esta hoja."]
+
+
+def pendientes(h):
+    return PENDIENTES_FINAL if h.prueba_final else PENDIENTES
 
 
 # --- Salidas -------------------------------------------------------------------------------------------------
@@ -483,7 +492,7 @@ def escribir_xlsx(h, destino):
         fila += 1
     texto(fila, _agrupaciones_txt(h), Font(size=9), 30)
     fila += 2
-    for linea in PENDIENTES:
+    for linea in pendientes(h):
         texto(fila, linea, gris)
         fila += 1
     fila += 1
@@ -586,7 +595,7 @@ equivalentes. No es la probabilidad de una unidad.</p>
 <h2>Mínimo por código (filas aparte)</h2><p class="chico">{e(tx['minimo'])}</p><ul class="chico">{exploracion}</ul>
 <h2>Por qué este código</h2><ul class="chico">{''.join(f'<li>{e(_por_que_txt(h, p))}</li>' for p in h.por_que)}</ul>
 <p class="chico suave">{e(_agrupaciones_txt(h))}</p>
-{''.join(f'<p class="pendiente chico">{e(x)}</p>' for x in PENDIENTES)}
+{''.join(f'<p class="pendiente chico">{e(x)}</p>' for x in pendientes(h))}
 <h2>Límites</h2><ul class="chico suave">{''.join(f'<li>{e(x)}</li>' for x in LIMITES)}</ul>
 </div></div></body></html>
 """
@@ -675,7 +684,7 @@ def prueba(tabla, config):
     carpeta = Path(config.get("salida") or Path.home() / ".cache" / "ford-predictive-quality" / "e3-final")
     assert datos.RAIZ not in carpeta.resolve().parents, "La hoja tiene tasas por código: va fuera del repo"
     h, archivos = construir_hoja(tabla, config["dia"], carpeta, predictor=crear(g["familia"], g["parametros"], tabla),
-                                 minimo=minimo, evaluacion=config.get("evaluacion"))
+                                 minimo=minimo, evaluacion=config.get("evaluacion"), prueba_final=True)
     return {**resumen(h, archivos, tabla), "carpeta": str(carpeta)}
 
 

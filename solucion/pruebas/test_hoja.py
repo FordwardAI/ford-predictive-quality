@@ -74,3 +74,17 @@ def test_ninguna_salida_contiene_un_vin():
                                    minimo=MINIMO, evaluacion=None)[0]
         assert [(f.codigo, f.sugerida) for f in otra.filas] == [(f.codigo, f.sugerida) for f in h.filas]
         assert sum(f.sugerida for f in h.filas) + len(h.exploracion) == h.cupo == 2
+
+
+def test_la_hoja_final_no_dice_que_la_prueba_final_no_se_corrio():
+    t = tabla()
+    evaluacion = {"alternativa": "x", "precision": 0.11, "rango": [0.08, 0.14], "azar": 0.08, "lectura": "mejora",
+                  "calificador": "entre auditados con actividad QLS, prueba ≤260, base ficticia, n = 13135 VIN"}
+    with tempfile.TemporaryDirectory() as carpeta:
+        for final, esperado, ausente in ((False, "todavía no se corrió", "leída una sola vez"),
+                                         (True, "leída una sola vez", "todavía no se corrió")):
+            _, archivos = hoja.construir_hoja(t, 190, Path(carpeta) / str(final), predictor=Movil(60, 20),
+                                              minimo=MINIMO, evaluacion=evaluacion, prueba_final=final)
+            pagina = next(Path(a) for a in archivos if Path(a).suffix == ".html").read_text(encoding="utf-8")
+            assert esperado in pagina and ausente not in pagina
+            assert ("pendiente de prueba final" in pagina) == (not final)
