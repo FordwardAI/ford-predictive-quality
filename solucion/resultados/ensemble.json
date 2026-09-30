@@ -1,0 +1,2851 @@
+{
+  "pieza": "CatBoost + tasa móvil suavizada hacia mercado",
+  "fuente": {
+    "csv": "Dataset QLS Inspección Adicional.csv",
+    "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+    "catalogo": "Códigos de catálogo.csv",
+    "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+  },
+  "entorno": {
+    "python": "3.13.15",
+    "plataforma": "macOS-15.7.7-arm64-arm-64bit-Mach-O",
+    "catboost": "1.2.10",
+    "numpy": "2.5.3"
+  },
+  "protocolo": {
+    "bloques_seleccion": [
+      [
+        100,
+        118
+      ],
+      [
+        119,
+        137
+      ],
+      [
+        138,
+        156
+      ],
+      [
+        157,
+        174
+      ]
+    ],
+    "confirmacion": [
+      175,
+      194
+    ],
+    "pesos_catboost": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "ventanas": [
+      30,
+      60,
+      120
+    ],
+    "peso_suavizado": 20,
+    "semilla_primaria": 1,
+    "semillas_estabilidad": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "eleccion": "mayor precisión en selección; desempate por varianza y nombre",
+    "limites": "Exploratorio: selección y confirmación ya vistas; rangos sin ajuste por comparaciones múltiples; base ficticia, auditados con actividad QLS. Prueba final no releída; no cambia la solución ni el preregistro."
+  },
+  "mezcla_elegida": "mezcla_30_0.25",
+  "mejor_individual": "movil_60",
+  "ajustes_por_bloque": [
+    {
+      "bloque": [
+        100,
+        118
+      ],
+      "hiperparametros": {
+        "l2_leaf_reg": 1.0
+      },
+      "vida": 60,
+      "log_loss_interna": 0.39358767112351867,
+      "grilla": [
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 15,
+          "log_loss": 0.3941994599531769
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 30,
+          "log_loss": 0.3939262882394274
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 60,
+          "log_loss": 0.39358767112351867
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 15,
+          "log_loss": 0.39445669904676905
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 30,
+          "log_loss": 0.3940503160599159
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 60,
+          "log_loss": 0.3941184338477708
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 15,
+          "log_loss": 0.39466212504187975
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 30,
+          "log_loss": 0.39440609984049385
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 60,
+          "log_loss": 0.394458046000453
+        }
+      ],
+      "semilla_ajuste": 1
+    },
+    {
+      "bloque": [
+        119,
+        137
+      ],
+      "hiperparametros": {
+        "l2_leaf_reg": 100.0
+      },
+      "vida": 60,
+      "log_loss_interna": 0.39978700908378095,
+      "grilla": [
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 15,
+          "log_loss": 0.4039987875188951
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 30,
+          "log_loss": 0.40289652370578405
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 60,
+          "log_loss": 0.40162439414341516
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 15,
+          "log_loss": 0.4008280359993205
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 30,
+          "log_loss": 0.40059926728210415
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 60,
+          "log_loss": 0.4005042154612258
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 15,
+          "log_loss": 0.4001512841789513
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 30,
+          "log_loss": 0.39988057272779504
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 60,
+          "log_loss": 0.39978700908378095
+        }
+      ],
+      "semilla_ajuste": 1
+    },
+    {
+      "bloque": [
+        138,
+        156
+      ],
+      "hiperparametros": {
+        "l2_leaf_reg": 100.0
+      },
+      "vida": 30,
+      "log_loss_interna": 0.3692773292881878,
+      "grilla": [
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 15,
+          "log_loss": 0.42017778662151517
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 30,
+          "log_loss": 0.39163319554886883
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 60,
+          "log_loss": 0.3790125797377632
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 15,
+          "log_loss": 0.3705410400601309
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 30,
+          "log_loss": 0.3695495233161379
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 60,
+          "log_loss": 0.36969200913932543
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 15,
+          "log_loss": 0.3692961968145378
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 30,
+          "log_loss": 0.3692773292881878
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 60,
+          "log_loss": 0.3694408743891737
+        }
+      ],
+      "semilla_ajuste": 1
+    },
+    {
+      "bloque": [
+        157,
+        174
+      ],
+      "hiperparametros": {
+        "l2_leaf_reg": 10.0
+      },
+      "vida": 15,
+      "log_loss_interna": 0.326116772776475,
+      "grilla": [
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 15,
+          "log_loss": 0.3268339728589383
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 30,
+          "log_loss": 0.32731908902799134
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 60,
+          "log_loss": 0.3278572201767613
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 15,
+          "log_loss": 0.326116772776475
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 30,
+          "log_loss": 0.3264990551818354
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 60,
+          "log_loss": 0.32726306122437465
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 15,
+          "log_loss": 0.3268813553043903
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 30,
+          "log_loss": 0.3270957194082235
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 60,
+          "log_loss": 0.3278236955748753
+        }
+      ],
+      "semilla_ajuste": 1
+    },
+    {
+      "bloque": [
+        175,
+        194
+      ],
+      "hiperparametros": {
+        "l2_leaf_reg": 10.0
+      },
+      "vida": 15,
+      "log_loss_interna": 0.3406747523559942,
+      "grilla": [
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 15,
+          "log_loss": 0.3408308286995394
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 30,
+          "log_loss": 0.3407968844270913
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": 60,
+          "log_loss": 0.3410228070681951
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 15,
+          "log_loss": 0.3406747523559942
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 30,
+          "log_loss": 0.3411573376347473
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 10.0
+          },
+          "vida": 60,
+          "log_loss": 0.34188224724130983
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 15,
+          "log_loss": 0.3417131518162024
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 30,
+          "log_loss": 0.3429286979026664
+        },
+        {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": 60,
+          "log_loss": 0.34381980450314886
+        }
+      ],
+      "semilla_ajuste": 1
+    }
+  ],
+  "resultados": [
+    {
+      "alternativa": "CatBoost con atributos del código reentrenado cada 5 d, vida media 60 d, semilla 1",
+      "familia": "ml_catboost_atributos",
+      "parametros": {
+        "modo": "reentrenado",
+        "semilla": 1,
+        "ancla": 100,
+        "vida": 60,
+        "hiperparametros": {
+          "l2_leaf_reg": 1.0
+        }
+      },
+      "orden_simplicidad": [
+        7,
+        3,
+        1
+      ],
+      "elegible": true,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 128,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17297297297297298,
+      "precision_rango95": [
+        0.14565424059131798,
+        0.1976598580226252
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5427833028963123,
+      "veces_azar_rango95": [
+        1.287090817834246,
+        1.785877544405197
+      ],
+      "recupero": 0.07520564042303172,
+      "recupero_rango95": [
+        0.06246457234452043,
+        0.08731614947636897
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03225038935820184,
+        0.08658991895005895
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "catboost",
+      "precision_por_bloque": [
+        0.17222222222222222,
+        0.17194570135746606,
+        0.18592964824120603,
+        0.15714285714285714
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 39,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.17333333333333334,
+        "precision_rango95": [
+          0.13389121338912133,
+          0.21457582311944243
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 1.9731107055976094,
+        "veces_azar_rango95": [
+          1.5428930792987565,
+          2.461813608189181
+        ],
+        "recupero": 0.09558823529411764,
+        "recupero_rango95": [
+          0.07488960182170296,
+          0.11917500340064548
+        ],
+        "diferencia_con_azar_rango95": [
+          0.047361235873643354,
+          0.12563763082355286
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            0.0,
+            0.0
+          ],
+          "confirmacion_rango95": [
+            0.0,
+            0.0
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.03329957107135656,
+            0.023113687794678876
+          ],
+          "confirmacion_rango95": [
+            -0.03773783098144918,
+            0.008232160237692732
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "móvil 30 d hacia el mercado, peso 20",
+      "familia": "movil_mercado",
+      "parametros": {
+        "ventana": 30,
+        "peso": 20
+      },
+      "orden_simplicidad": [
+        3,
+        1
+      ],
+      "elegible": true,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 127,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17162162162162162,
+      "precision_rango95": [
+        0.1426648721399731,
+        0.20052118148395723
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5307303083424346,
+      "veces_azar_rango95": [
+        1.2617424351172892,
+        1.8177169030826208
+      ],
+      "recupero": 0.0746180963572268,
+      "recupero_rango95": [
+        0.061469873690530454,
+        0.08871441557073581
+      ],
+      "diferencia_con_azar_rango95": [
+        0.029876363455916162,
+        0.08984816112460886
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "movil_30",
+      "precision_por_bloque": [
+        0.16111111111111112,
+        0.14027149321266968,
+        0.22613065326633167,
+        0.15714285714285714
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 43,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.14096606068126824,
+          0.24092084639498426
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.655157624869565,
+          2.7169247756087884
+        ],
+        "recupero": 0.1053921568627451,
+        "recupero_rango95": [
+          0.07979823990747768,
+          0.132503149867374
+        ],
+        "diferencia_con_azar_rango95": [
+          0.056209922272558985,
+          0.1518200928838262
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.024657931884605442,
+            0.02446410548070293
+          ],
+          "confirmacion_rango95": [
+            -0.009217656596688854,
+            0.05172820429407935
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.02130492676431425,
+            0.010959656781574586
+          ],
+          "confirmacion_rango95": [
+            -0.031818181818181815,
+            0.05172413793103448
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 25% + móvil mercado 75%, 30 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.25,
+        "movil": {
+          "ventana": 30,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 132,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.1783783783783784,
+      "precision_rango95": [
+        0.14804835823364437,
+        0.2091566113624937
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.590995281111822,
+      "veces_azar_rango95": [
+        1.310082230365276,
+        1.8908132339664583
+      ],
+      "recupero": 0.07755581668625147,
+      "recupero_rango95": [
+        0.06360230514089767,
+        0.09209255069450649
+      ],
+      "diferencia_con_azar_rango95": [
+        0.035190677033808716,
+        0.09813245302341884
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_30_0.25",
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.15384615384615385,
+        0.23115577889447236,
+        0.15714285714285714
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 43,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.1411235337243402,
+          0.23932411674347154
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.6468347538554935,
+          2.7145062216629805
+        ],
+        "recupero": 0.1053921568627451,
+        "recupero_rango95": [
+          0.07952197073966458,
+          0.13140412256331366
+        ],
+        "diferencia_con_azar_rango95": [
+          0.05682101256686003,
+          0.1497085156987924
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.018547979077508322,
+            0.03240104818954088
+          ],
+          "confirmacion_rango95": [
+            -0.005588170312154784,
+            0.048458149779735685
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.01540436456996149,
+            0.018494667058075245
+          ],
+          "confirmacion_rango95": [
+            -0.029288702928870293,
+            0.04979253112033195
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 50% + móvil mercado 50%, 30 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.5,
+        "movil": {
+          "ventana": 30,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 132,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.1783783783783784,
+      "precision_rango95": [
+        0.1513993643745628,
+        0.20527325716171665
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.590995281111822,
+      "veces_azar_rango95": [
+        1.3331652336301456,
+        1.8680184020034833
+      ],
+      "recupero": 0.07755581668625147,
+      "recupero_rango95": [
+        0.06503419831991694,
+        0.09091042466922748
+      ],
+      "diferencia_con_azar_rango95": [
+        0.037871489387297445,
+        0.09499328303292225
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_30_0.5",
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.15384615384615385,
+        0.23115577889447236,
+        0.15714285714285714
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 44,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.14864864864864866,
+          0.24056848430282626
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.748764135279444,
+          2.737782058905607
+        ],
+        "recupero": 0.10784313725490197,
+        "recupero_rango95": [
+          0.08430074570273002,
+          0.13257316776974915
+        ],
+        "diferencia_con_azar_rango95": [
+          0.064862554915964,
+          0.15073775749266152
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.016715432691182322,
+            0.02965198185747118
+          ],
+          "confirmacion_rango95": [
+            0.0,
+            0.05106630380999504
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.0192155028070521,
+            0.020749728153554005
+          ],
+          "confirmacion_rango95": [
+            -0.022727272727272728,
+            0.052402186927736294
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 75% + móvil mercado 25%, 30 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.75,
+        "movil": {
+          "ventana": 30,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 130,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17567567567567569,
+      "precision_rango95": [
+        0.14907523096258296,
+        0.20357758810879045
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5668892920040671,
+      "veces_azar_rango95": [
+        1.3083820270499755,
+        1.8423636458769248
+      ],
+      "recupero": 0.07638072855464159,
+      "recupero_rango95": [
+        0.06374695426524696,
+        0.08987502817156898
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03523724281497646,
+        0.09269550996155108
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_30_0.75",
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.14479638009049775,
+        0.23115577889447236,
+        0.15714285714285714
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 43,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.19111111111111112,
+        "precision_rango95": [
+          0.1445708205958161,
+          0.23729200526275054
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.1754810343768516,
+        "veces_azar_rango95": [
+          1.7054470304796925,
+          2.67466683679866
+        ],
+        "recupero": 0.1053921568627451,
+        "recupero_rango95": [
+          0.08239090301429162,
+          0.12987337662337659
+        ],
+        "diferencia_con_azar_rango95": [
+          0.059466216449106345,
+          0.1470285714554018
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.01854759648544711,
+            0.026950450192120206
+          ],
+          "confirmacion_rango95": [
+            -0.0048320961470484265,
+            0.0484635101945343
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.02194983774768405,
+            0.019616879009668332
+          ],
+          "confirmacion_rango95": [
+            -0.02894087596331555,
+            0.04979771784232362
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "móvil 60 d hacia el mercado, peso 20",
+      "familia": "movil_mercado",
+      "parametros": {
+        "ventana": 60,
+        "peso": 20
+      },
+      "orden_simplicidad": [
+        3,
+        1
+      ],
+      "elegible": true,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 131,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17702702702702702,
+      "precision_rango95": [
+        0.14323557442384335,
+        0.2100159479495358
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5789422865579446,
+      "veces_azar_rango95": [
+        1.26817054106839,
+        1.8872220769647883
+      ],
+      "recupero": 0.07696827262044653,
+      "recupero_rango95": [
+        0.06165846847168112,
+        0.0919332907395031
+      ],
+      "diferencia_con_azar_rango95": [
+        0.030236467040191606,
+        0.09841424255470547
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "movil_60",
+      "precision_por_bloque": [
+        0.18333333333333332,
+        0.1493212669683258,
+        0.21608040201005024,
+        0.15714285714285714
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 42,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.18666666666666668,
+        "precision_rango95": [
+          0.14084153160167032,
+          0.23414853878268513
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.124888452182041,
+        "veces_azar_rango95": [
+          1.6594760400993516,
+          2.635138443029249
+        ],
+        "recupero": 0.10294117647058823,
+        "recupero_rango95": [
+          0.0801954887218045,
+          0.12776412776412777
+        ],
+        "diferencia_con_azar_rango95": [
+          0.056398029710972845,
+          0.144170374718329
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.02311368779467888,
+            0.03329957107135651
+          ],
+          "confirmacion_rango95": [
+            -0.008232160237692741,
+            0.03773783098144917
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            0.0,
+            0.0
+          ],
+          "confirmacion_rango95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 25% + móvil mercado 75%, 60 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.25,
+        "movil": {
+          "ventana": 60,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 131,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17702702702702702,
+      "precision_rango95": [
+        0.14657043502121284,
+        0.20612813370473537
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5789422865579446,
+      "veces_azar_rango95": [
+        1.2973784031260334,
+        1.8591092697618594
+      ],
+      "recupero": 0.07696827262044653,
+      "recupero_rango95": [
+        0.06306037647985957,
+        0.09096015071602562
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03425052991627688,
+        0.0951070835843324
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_60_0.25",
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.1583710407239819,
+        0.22613065326633167,
+        0.15
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 41,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.18222222222222223,
+        "precision_rango95": [
+          0.13806831285210688,
+          0.227277604369879
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.0742958699872305,
+        "veces_azar_rango95": [
+          1.6165370661248832,
+          2.5565090732606595
+        ],
+        "recupero": 0.10049019607843138,
+        "recupero_rango95": [
+          0.07817185298126457,
+          0.12381008010680908
+        ],
+        "diferencia_con_azar_rango95": [
+          0.052660291436133225,
+          0.1378786087073805
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.02019115716010687,
+            0.030433695598123638
+          ],
+          "confirmacion_rango95": [
+            -0.009302325581395349,
+            0.03225806451612903
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.009235133477168242,
+            0.009138679840952917
+          ],
+          "confirmacion_rango95": [
+            -0.014150943396226415,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 50% + móvil mercado 50%, 60 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.5,
+        "movil": {
+          "ventana": 60,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 130,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17567567567567569,
+      "precision_rango95": [
+        0.14671398615364134,
+        0.20554872495446266
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5668892920040671,
+      "veces_azar_rango95": [
+        1.2945651218533343,
+        1.8565379244443596
+      ],
+      "recupero": 0.07638072855464159,
+      "recupero_rango95": [
+        0.06297894429458815,
+        0.09069331074756996
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03361598386664971,
+        0.09449005532723365
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_60_0.5",
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.14479638009049775,
+        0.23115577889447236,
+        0.14285714285714285
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 40,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.17777777777777778,
+        "precision_rango95": [
+          0.13488372093023257,
+          0.22110552763819097
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.02370328779242,
+        "veces_azar_rango95": [
+          1.5838571176334402,
+          2.4842435462770527
+        ],
+        "recupero": 0.09803921568627451,
+        "recupero_rango95": [
+          0.07673830245266702,
+          0.12051724137931032
+        ],
+        "diferencia_con_azar_rango95": [
+          0.04912525725086773,
+          0.13000786223220545
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.01981901718008749,
+            0.029917007730786708
+          ],
+          "confirmacion_rango95": [
+            -0.009666595273791675,
+            0.020663300298343668
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.017700020524212535,
+            0.013718235596707814
+          ],
+          "confirmacion_rango95": [
+            -0.025753847861476987,
+            0.008197564595560949
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 75% + móvil mercado 25%, 60 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.75,
+        "movil": {
+          "ventana": 60,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 126,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17027027027027028,
+      "precision_rango95": [
+        0.1449627562861859,
+        0.19518622707044936
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5186773137885574,
+      "veces_azar_rango95": [
+        1.2809489780148835,
+        1.7715233304383757
+      ],
+      "recupero": 0.07403055229142186,
+      "recupero_rango95": [
+        0.06228110009376571,
+        0.08639181126747733
+      ],
+      "diferencia_con_azar_rango95": [
+        0.03199063977772518,
+        0.08430366589438355
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_60_0.75",
+      "precision_por_bloque": [
+        0.17222222222222222,
+        0.1493212669683258,
+        0.22613065326633167,
+        0.12142857142857143
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 44,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.14864864864864866,
+          0.24056848430282626
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.748764135279444,
+          2.737782058905607
+        ],
+        "recupero": 0.10784313725490197,
+        "recupero_rango95": [
+          0.08430074570273002,
+          0.13257316776974915
+        ],
+        "diferencia_con_azar_rango95": [
+          0.064862554915964,
+          0.15073775749266152
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.02405177672716181,
+            0.01974408860937386
+          ],
+          "confirmacion_rango95": [
+            0.0,
+            0.05106630380999504
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.0307060226068527,
+            0.016375286823642924
+          ],
+          "confirmacion_rango95": [
+            -0.022727272727272728,
+            0.052402186927736294
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "móvil 120 d hacia el mercado, peso 20",
+      "familia": "movil_mercado",
+      "parametros": {
+        "ventana": 120,
+        "peso": 20
+      },
+      "orden_simplicidad": [
+        3,
+        1
+      ],
+      "elegible": true,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 126,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17027027027027028,
+      "precision_rango95": [
+        0.13725423593350386,
+        0.20217247728644716
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5186773137885574,
+      "veces_azar_rango95": [
+        1.2148939441487427,
+        1.8226288425363357
+      ],
+      "recupero": 0.07403055229142186,
+      "recupero_rango95": [
+        0.059178743961352656,
+        0.08876719327346284
+      ],
+      "diferencia_con_azar_rango95": [
+        0.024657210756406416,
+        0.09107137333015235
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "movil_120",
+      "precision_por_bloque": [
+        0.16666666666666666,
+        0.1493212669683258,
+        0.21608040201005024,
+        0.14285714285714285
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 46,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.15565014646334108,
+          0.2511854065068571
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.83274390262428,
+          2.800351358236589
+        ],
+        "recupero": 0.11274509803921569,
+        "recupero_rango95": [
+          0.08845038220038219,
+          0.13608673840519725
+        ],
+        "diferencia_con_azar_rango95": [
+          0.07200153385571212,
+          0.15990111799568335
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.029248096070645407,
+            0.026994215525244572
+          ],
+          "confirmacion_rango95": [
+            0.0,
+            0.06373235294117643
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.014288283658787254,
+            0.0
+          ],
+          "confirmacion_rango95": [
+            -0.009262519561815336,
+            0.05634086778736936
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 25% + móvil mercado 75%, 120 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.25,
+        "movil": {
+          "ventana": 120,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 128,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17297297297297298,
+      "precision_rango95": [
+        0.1422763642481913,
+        0.2025494359102452
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5427833028963123,
+      "veces_azar_rango95": [
+        1.2580609829908695,
+        1.8312812222030135
+      ],
+      "recupero": 0.07520564042303172,
+      "recupero_rango95": [
+        0.061145970797326636,
+        0.08916976117071901
+      ],
+      "diferencia_con_azar_rango95": [
+        0.029735578338972942,
+        0.09108526937283891
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_120_0.25",
+      "precision_por_bloque": [
+        0.16111111111111112,
+        0.15384615384615385,
+        0.22613065326633167,
+        0.14285714285714285
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 46,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.20444444444444446,
+        "precision_rango95": [
+          0.15565014646334108,
+          0.2511854065068571
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.327258780961283,
+        "veces_azar_rango95": [
+          1.83274390262428,
+          2.800351358236589
+        ],
+        "recupero": 0.11274509803921569,
+        "recupero_rango95": [
+          0.08845038220038219,
+          0.13608673840519725
+        ],
+        "diferencia_con_azar_rango95": [
+          0.07200153385571212,
+          0.15990111799568335
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.02544960347401711,
+            0.02676435382835253
+          ],
+          "confirmacion_rango95": [
+            0.0,
+            0.06373235294117643
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.01383221781642601,
+            0.005449777146659429
+          ],
+          "confirmacion_rango95": [
+            -0.009262519561815336,
+            0.05634086778736936
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 50% + móvil mercado 50%, 120 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.5,
+        "movil": {
+          "ventana": 120,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 126,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17027027027027028,
+      "precision_rango95": [
+        0.1420742275299916,
+        0.19922891489131184
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5186773137885574,
+      "veces_azar_rango95": [
+        1.2503137769030055,
+        1.8109317534093798
+      ],
+      "recupero": 0.07403055229142186,
+      "recupero_rango95": [
+        0.060805303747113106,
+        0.08847521783610258
+      ],
+      "diferencia_con_azar_rango95": [
+        0.028562884943502925,
+        0.08886146097619144
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_120_0.5",
+      "precision_por_bloque": [
+        0.16111111111111112,
+        0.14027149321266968,
+        0.23115577889447236,
+        0.14285714285714285
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 45,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.2,
+        "precision_rango95": [
+          0.15207373271889402,
+          0.2470293139369128
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.2766661987664722,
+        "veces_azar_rango95": [
+          1.7752533847265024,
+          2.766980190982319
+        ],
+        "recupero": 0.11029411764705882,
+        "recupero_rango95": [
+          0.085995085995086,
+          0.1346592663761452
+        ],
+        "diferencia_con_azar_rango95": [
+          0.06634351752759285,
+          0.1571021718150483
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.02546916890080429,
+            0.024423439225622016
+          ],
+          "confirmacion_rango95": [
+            0.0,
+            0.059831029185867884
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.025674949569044564,
+            0.01043225428818648
+          ],
+          "confirmacion_rango95": [
+            -0.01702127659574468,
+            0.05500114678899082
+          ]
+        }
+      }
+    },
+    {
+      "alternativa": "CatBoost 75% + móvil mercado 25%, 120 d",
+      "familia": "ensemble_experimental",
+      "parametros": {
+        "peso_catboost": 0.75,
+        "movil": {
+          "ventana": 120,
+          "peso": 20
+        },
+        "catboost": {
+          "modo": "reentrenado",
+          "semilla": 1,
+          "ancla": 100,
+          "vida": 60,
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          }
+        }
+      },
+      "orden_simplicidad": [
+        99
+      ],
+      "elegible": false,
+      "tramo": "selección 100–174",
+      "calificador": "entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15279 VIN",
+      "dias": 67,
+      "vins": 15279,
+      "elegidos": 740,
+      "calibrada_elegidas": 129,
+      "calibrada_tramo": 1702,
+      "precision_cupo": 0.17432432432432432,
+      "precision_rango95": [
+        0.1485000294174968,
+        0.2000063371356147
+      ],
+      "azar_mismo_cupo": 0.11211747796871133,
+      "veces_azar": 1.5548362974501895,
+      "veces_azar_rango95": [
+        1.3090965137847441,
+        1.8139359715800252
+      ],
+      "recupero": 0.07579318448883667,
+      "recupero_rango95": [
+        0.06373006984858587,
+        0.08824155016515962
+      ],
+      "diferencia_con_azar_rango95": [
+        0.035301366240500835,
+        0.08916686221770945
+      ],
+      "lectura": "mejora",
+      "semillas": {
+        "desempate": 20261002,
+        "bootstrap": 20261003,
+        "remuestreos": 2000
+      },
+      "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+      "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+      "version_codigo": "b429bb4ab8977857448925efa899fecc0e1be66e",
+      "clave": "mezcla_120_0.75",
+      "precision_por_bloque": [
+        0.17777777777777778,
+        0.1493212669683258,
+        0.23115577889447236,
+        0.12857142857142856
+      ],
+      "confirmacion": {
+        "dias": 19,
+        "vins": 4626,
+        "elegidos": 225,
+        "calibrada_elegidas": 44,
+        "calibrada_tramo": 408,
+        "precision_cupo": 0.19555555555555557,
+        "precision_rango95": [
+          0.1472043893699612,
+          0.2420657164210976
+        ],
+        "azar_mismo_cupo": 0.08784774865474905,
+        "veces_azar": 2.226073616571662,
+        "veces_azar_rango95": [
+          1.720202692074746,
+          2.7260938496174507
+        ],
+        "recupero": 0.10784313725490197,
+        "recupero_rango95": [
+          0.08351604657767679,
+          0.13246834415584413
+        ],
+        "diferencia_con_azar_rango95": [
+          0.062208828352185816,
+          0.15220468176377522
+        ],
+        "lectura": "mejora"
+      },
+      "diferencias": {
+        "catboost": {
+          "seleccion_rango95": [
+            -0.020637029801570873,
+            0.02424611973392459
+          ],
+          "confirmacion_rango95": [
+            -0.004273962804005723,
+            0.05214517335994007
+          ]
+        },
+        "movil_60": {
+          "seleccion_rango95": [
+            -0.026585377305337488,
+            0.020381823095604778
+          ],
+          "confirmacion_rango95": [
+            -0.02262443438914027,
+            0.051892940177054425
+          ]
+        }
+      }
+    }
+  ],
+  "estabilidad_peso_y_ventana_congelados": [
+    {
+      "semilla": 1,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 132,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.1783783783783784,
+          "precision_rango95": [
+            0.14804835823364437,
+            0.2091566113624937
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.590995281111822,
+          "veces_azar_rango95": [
+            1.310082230365276,
+            1.8908132339664583
+          ],
+          "recupero": 0.07755581668625147,
+          "recupero_rango95": [
+            0.06360230514089767,
+            0.09209255069450649
+          ],
+          "diferencia_con_azar_rango95": [
+            0.035190677033808716,
+            0.09813245302341884
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14323557442384335,
+            0.2100159479495358
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.26817054106839,
+            1.8872220769647883
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06165846847168112,
+            0.0919332907395031
+          ],
+          "diferencia_con_azar_rango95": [
+            0.030236467040191606,
+            0.09841424255470547
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 128,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17297297297297298,
+          "precision_rango95": [
+            0.14565424059131798,
+            0.1976598580226252
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5427833028963123,
+          "veces_azar_rango95": [
+            1.287090817834246,
+            1.785877544405197
+          ],
+          "recupero": 0.07520564042303172,
+          "recupero_rango95": [
+            0.06246457234452043,
+            0.08731614947636897
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03225038935820184,
+            0.08658991895005895
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.01540436456996149,
+          0.018494667058075245
+        ]
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 43,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19111111111111112,
+          "precision_rango95": [
+            0.1411235337243402,
+            0.23932411674347154
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.1754810343768516,
+          "veces_azar_rango95": [
+            1.6468347538554935,
+            2.7145062216629805
+          ],
+          "recupero": 0.1053921568627451,
+          "recupero_rango95": [
+            0.07952197073966458,
+            0.13140412256331366
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05682101256686003,
+            0.1497085156987924
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.14084153160167032,
+            0.23414853878268513
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.6594760400993516,
+            2.635138443029249
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.0801954887218045,
+            0.12776412776412777
+          ],
+          "diferencia_con_azar_rango95": [
+            0.056398029710972845,
+            0.144170374718329
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 39,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.17333333333333334,
+          "precision_rango95": [
+            0.13389121338912133,
+            0.21457582311944243
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 1.9731107055976094,
+          "veces_azar_rango95": [
+            1.5428930792987565,
+            2.461813608189181
+          ],
+          "recupero": 0.09558823529411764,
+          "recupero_rango95": [
+            0.07488960182170296,
+            0.11917500340064548
+          ],
+          "diferencia_con_azar_rango95": [
+            0.047361235873643354,
+            0.12563763082355286
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.029288702928870293,
+          0.04979253112033195
+        ]
+      }
+    },
+    {
+      "semilla": 2,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 132,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.1783783783783784,
+          "precision_rango95": [
+            0.14763107160829841,
+            0.2098265703639179
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.590995281111822,
+          "veces_azar_rango95": [
+            1.310088406822391,
+            1.9037130225944232
+          ],
+          "recupero": 0.07755581668625147,
+          "recupero_rango95": [
+            0.06378069969998652,
+            0.09275188726275684
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03496397294865525,
+            0.09862223851393359
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14323557442384335,
+            0.2100159479495358
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.26817054106839,
+            1.8872220769647883
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06165846847168112,
+            0.0919332907395031
+          ],
+          "diferencia_con_azar_rango95": [
+            0.030236467040191606,
+            0.09841424255470547
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 127,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17162162162162162,
+          "precision_rango95": [
+            0.14322164854244723,
+            0.19889577021327154
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5307303083424346,
+          "veces_azar_rango95": [
+            1.2647211755560688,
+            1.807655773199795
+          ],
+          "recupero": 0.0746180963572268,
+          "recupero_rango95": [
+            0.06155545292269797,
+            0.0881573351153451
+          ],
+          "diferencia_con_azar_rango95": [
+            0.029979412083766737,
+            0.08844391526795485
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.014085864803215178,
+          0.017680053964300523
+        ]
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 43,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19111111111111112,
+          "precision_rango95": [
+            0.1411235337243402,
+            0.23932411674347154
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.1754810343768516,
+          "veces_azar_rango95": [
+            1.6468347538554935,
+            2.7145062216629805
+          ],
+          "recupero": 0.1053921568627451,
+          "recupero_rango95": [
+            0.07952197073966458,
+            0.13140412256331366
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05682101256686003,
+            0.1497085156987924
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.14084153160167032,
+            0.23414853878268513
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.6594760400993516,
+            2.635138443029249
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.0801954887218045,
+            0.12776412776412777
+          ],
+          "diferencia_con_azar_rango95": [
+            0.056398029710972845,
+            0.144170374718329
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 43,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19111111111111112,
+          "precision_rango95": [
+            0.1445708205958161,
+            0.23729200526275054
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.1754810343768516,
+          "veces_azar_rango95": [
+            1.7054470304796925,
+            2.67466683679866
+          ],
+          "recupero": 0.1053921568627451,
+          "recupero_rango95": [
+            0.08239090301429162,
+            0.12987337662337659
+          ],
+          "diferencia_con_azar_rango95": [
+            0.059466216449106345,
+            0.1470285714554018
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.029288702928870293,
+          0.04979253112033195
+        ]
+      }
+    },
+    {
+      "semilla": 3,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 130,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17567567567567569,
+          "precision_rango95": [
+            0.14496070293182622,
+            0.20661519991065444
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5668892920040671,
+          "veces_azar_rango95": [
+            1.2843445827139386,
+            1.8677468649836708
+          ],
+          "recupero": 0.07638072855464159,
+          "recupero_rango95": [
+            0.06260500430786904,
+            0.09125266766385261
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03233907198537007,
+            0.09541937778210864
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14323557442384335,
+            0.2100159479495358
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.26817054106839,
+            1.8872220769647883
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06165846847168112,
+            0.0919332907395031
+          ],
+          "diferencia_con_azar_rango95": [
+            0.030236467040191606,
+            0.09841424255470547
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 122,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.16486486486486487,
+          "precision_rango95": [
+            0.1402106844664648,
+            0.18984392962833851
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.4704653355730477,
+          "veces_azar_rango95": [
+            1.250510941989601,
+            1.695231230265865
+          ],
+          "recupero": 0.07168037602820211,
+          "recupero_rango95": [
+            0.06104148431503984,
+            0.08255309606170637
+          ],
+          "diferencia_con_azar_rango95": [
+            0.02832289430531199,
+            0.07730935823847758
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.017291545950260365,
+          0.015453319282301523
+        ]
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 43,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19111111111111112,
+          "precision_rango95": [
+            0.1411235337243402,
+            0.23932411674347154
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.1754810343768516,
+          "veces_azar_rango95": [
+            1.6468347538554935,
+            2.7145062216629805
+          ],
+          "recupero": 0.1053921568627451,
+          "recupero_rango95": [
+            0.07952197073966458,
+            0.13140412256331366
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05682101256686003,
+            0.1497085156987924
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.14084153160167032,
+            0.23414853878268513
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.6594760400993516,
+            2.635138443029249
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.0801954887218045,
+            0.12776412776412777
+          ],
+          "diferencia_con_azar_rango95": [
+            0.056398029710972845,
+            0.144170374718329
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.14158132315158437,
+            0.23113266805726748
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.6644346786229718,
+            2.6011369351558056
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.08084998925424458,
+            0.12629078395830973
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05699686030505475,
+            0.13968033920615527
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.029288702928870293,
+          0.04979253112033195
+        ]
+      }
+    },
+    {
+      "semilla": 4,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 132,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.1783783783783784,
+          "precision_rango95": [
+            0.1470976432652686,
+            0.21
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.590995281111822,
+          "veces_azar_rango95": [
+            1.305837187540973,
+            1.8950988366919599
+          ],
+          "recupero": 0.07755581668625147,
+          "recupero_rango95": [
+            0.06331191481549477,
+            0.09261527102216317
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03408439193636222,
+            0.0990266066551428
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14323557442384335,
+            0.2100159479495358
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.26817054106839,
+            1.8872220769647883
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06165846847168112,
+            0.0919332907395031
+          ],
+          "diferencia_con_azar_rango95": [
+            0.030236467040191606,
+            0.09841424255470547
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 126,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17027027027027028,
+          "precision_rango95": [
+            0.1442145503734635,
+            0.19585021460949095
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5186773137885574,
+          "veces_azar_rango95": [
+            1.2736488690170849,
+            1.759921613257279
+          ],
+          "recupero": 0.07403055229142186,
+          "recupero_rango95": [
+            0.062169962250866725,
+            0.08580065085226213
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03123036886664909,
+            0.08409824928261253
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.014807858419879071,
+          0.018233459271632755
+        ]
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.13579723791588197,
+            0.2358490566037736
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.603316279538717,
+            2.6569118833540504
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.07736350108439266,
+            0.1293379317921434
+          ],
+          "diferencia_con_azar_rango95": [
+            0.0517030611777866,
+            0.1454686362656818
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.14084153160167032,
+            0.23414853878268513
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.6594760400993516,
+            2.635138443029249
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.0801954887218045,
+            0.12776412776412777
+          ],
+          "diferencia_con_azar_rango95": [
+            0.056398029710972845,
+            0.144170374718329
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 39,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.17333333333333334,
+          "precision_rango95": [
+            0.13274231430608566,
+            0.216
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 1.9731107055976094,
+          "veces_azar_rango95": [
+            1.5431163023120453,
+            2.4683056618843504
+          ],
+          "recupero": 0.09558823529411764,
+          "recupero_rango95": [
+            0.07478582554517134,
+            0.1195665175785313
+          ],
+          "diferencia_con_azar_rango95": [
+            0.04719952298786679,
+            0.1261355435040462
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.03404619021640298,
+          0.04564315352697095
+        ]
+      }
+    },
+    {
+      "semilla": 5,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 130,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17567567567567569,
+          "precision_rango95": [
+            0.14555972591017202,
+            0.2065833926031294
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5668892920040671,
+          "veces_azar_rango95": [
+            1.2895182949256065,
+            1.8694697398244378
+          ],
+          "recupero": 0.07638072855464159,
+          "recupero_rango95": [
+            0.06277399447384198,
+            0.09133663783166103
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03259191234699984,
+            0.09518598135904231
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14323557442384335,
+            0.2100159479495358
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.26817054106839,
+            1.8872220769647883
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06165846847168112,
+            0.0919332907395031
+          ],
+          "diferencia_con_azar_rango95": [
+            0.030236467040191606,
+            0.09841424255470547
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.15046455674277115,
+            0.20225014395606017
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.3270216480125794,
+            1.8229127466316708
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06477659977281333,
+            0.08921169401719821
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03733983541847015,
+            0.0904555395348843
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.017142857142857144,
+          0.01536648810368265
+        ]
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.13579723791588197,
+            0.2358490566037736
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.603316279538717,
+            2.6569118833540504
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.07736350108439266,
+            0.1293379317921434
+          ],
+          "diferencia_con_azar_rango95": [
+            0.0517030611777866,
+            0.1454686362656818
+          ],
+          "lectura": "mejora"
+        },
+        "mejor_individual": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.14084153160167032,
+            0.23414853878268513
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.6594760400993516,
+            2.635138443029249
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.0801954887218045,
+            0.12776412776412777
+          ],
+          "diferencia_con_azar_rango95": [
+            0.056398029710972845,
+            0.144170374718329
+          ],
+          "lectura": "mejora"
+        },
+        "catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 43,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19111111111111112,
+          "precision_rango95": [
+            0.14582599765258217,
+            0.23501342975206602
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.1754810343768516,
+          "veces_azar_rango95": [
+            1.716712159823539,
+            2.6578713832402387
+          ],
+          "recupero": 0.1053921568627451,
+          "recupero_rango95": [
+            0.08310471044187306,
+            0.12887235187492915
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06181405818668823,
+            0.14444466638865572
+          ],
+          "lectura": "mejora"
+        },
+        "diferencia_con_individual_rango95": [
+          -0.03404619021640298,
+          0.04564315352697095
+        ]
+      }
+    }
+  ]
+}
