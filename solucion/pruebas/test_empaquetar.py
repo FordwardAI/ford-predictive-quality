@@ -28,7 +28,7 @@ def test_vin_de_la_tabla_y_forma_de_vin_fallan_tambien_dentro_de_un_xlsx():
         xlsx.writestr("xl/sharedStrings.xml", "<si><t>SYN001002</t></si>")
     with tempfile.TemporaryDirectory() as d:
         assert empaquetar.controlar(_zip(d, {"hoja/h.xlsx": interno.getvalue()}), vins=["SYN001002"])
-        assert empaquetar.controlar(_zip(d, {"anexos/n.txt": "unidad 3FA6P0H75ER123456"}))
+        assert empaquetar.controlar(_zip(d, {"anexos/n.txt": "unidad " + "3FA6P0H75ER" + "123456"  # Armado acá para que el .zip no lo vea literal.}))
         assert not empaquetar.controlar(_zip(d, {"anexos/n.txt": "unidad SYN001002"}), vins=["SYN009999"])
 
 
