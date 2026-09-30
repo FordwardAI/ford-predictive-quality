@@ -9,6 +9,7 @@ empaquetada con matplotlib, sal fija del SVG y sin fechas en los metadatos.
     .venv/bin/python -m solucion.run --csv ... --catalogo ... --piezas p9
 """
 import json
+import re
 from pathlib import Path
 
 import matplotlib
@@ -24,19 +25,20 @@ RESULTADOS = RAIZ / "solucion" / "resultados"
 FIGURAS = RAIZ / "docs" / "entrega" / "figuras"
 DPI = 200
 
-# Paleta de referencia (skill dataviz): un solo acento, el resto en tintas neutras.
-ACENTO = "#2a78d6"
-ACENTO_CLARO = "#cde2fb"
-TINTA = "#0b0b0b"
-TINTA_2 = "#52514e"
-APAGADO = "#898781"
-GRILLA = "#e1e0d9"
-EJE = "#c3c2b7"
-SUPERFICIE = "#fcfcfb"
-CAJA = "#f0efec"
+# Paleta del tema «FORD CORPORATE» del template del challenge: un solo acento, el resto neutro.
+ACENTO = "#1700F3"  # Azul de acento del template.
+ACENTO_CLARO = "#D6D2FD"
+TINTA = "#00095B"  # Ford Blue: títulos y texto principal.
+TINTA_2 = "#00142E"
+APAGADO = "#7F7F7F"
+GRILLA = "#E3E4E5"
+EJE = "#B9BCBD"
+SUPERFICIE = "#FFFFFF"
+CAJA = "#F3F3F3"
 
 ESTILO = {
-    "font.family": "DejaVu Sans",  # Viene con matplotlib: mismo resultado en cualquier equipo.
+    # Tipografía del template (Avenir Next, incluida en macOS); DejaVu Sans, que trae matplotlib, si no está.
+    "font.family": ["Avenir Next", "DejaVu Sans"],
     "font.size": 10,
     "axes.edgecolor": EJE,
     "axes.labelcolor": TINTA_2,
@@ -56,6 +58,15 @@ FAMILIAS = {
     "movil": "Tasa móvil",
     "movil_mercado": "Suavizado hacia el mercado",
     "decaimiento": "Decaimiento exponencial",
+    "ml_logistica": "Logística",
+    "ml_nb": "Naive Bayes",
+    "ml_rf": "Random Forest",
+    "ml_xgboost": "XGBoost",
+    "ml_lightgbm": "LightGBM",
+    "ml_catboost": "CatBoost",
+    "ml_mlp": "red neuronal (MLP)",
+    "ml_promedio": "promedio de modelos",
+    "ml_stacking": "stacking",
 }
 REFERENCIAS = ("oraculo", "fuga")
 
@@ -149,6 +160,11 @@ def _etiqueta(r):
         return "Oráculo: tasa real del tramo (techo)"
     if r["familia"] == "fuga":
         return _capital(r["alternativa"].removeprefix("con fuga: ")) + " (con fuga, didáctica)"
+    if r.get("pieza") == "p4":  # Rótulo corto: la semilla y la vida media van en el JSON.
+        texto = re.sub(r", semilla \d+", "", r["alternativa"])
+        texto = re.sub(r" reentrenado cada 5 d, vida media (?:de cada base|(\d+) d)",
+                       lambda m: f" reentrenado (vida {m[1]} d)" if m[1] else " reentrenado", texto)
+        return _capital(texto)
     return _capital(r["alternativa"])
 
 
@@ -165,7 +181,7 @@ def figura_comparacion(resultados, destino):
 
     alto = 1.9 + 0.3 * len(filas)
     fig, ax = plt.subplots(figsize=(10, alto))
-    fig.subplots_adjust(left=0.37, right=0.80, top=1 - 1.05 / alto, bottom=0.95 / alto)
+    fig.subplots_adjust(left=0.37, right=0.80, top=1 - 1.45 / alto, bottom=0.95 / alto)
     _ejes_limpios(ax)
     ys = list(range(len(filas)))[::-1]
     for y, (tipo, r) in zip(ys, filas):
