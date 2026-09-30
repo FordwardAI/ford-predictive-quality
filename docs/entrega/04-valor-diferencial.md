@@ -33,7 +33,7 @@ Cada pieza se configura y se evalúa en validación. Llega a la prueba final sol
 | Todas las de validación (n = 780) | 312 de 780: 40,0 % (36,4–43,5) | 261 de 780: 33,5 % (30,1–37,0) | mejora |
 | Las que eligió la tasa fija (n = 59) | 36 de 59: 61,0 % (49,2–73,1) | 18 de 59: 30,5 % (20,9–42,9) | mejora |
 
-Entre auditados con actividad QLS, validación 155–194, base ficticia. En las unidades que la hoja elige, mirar primero los 3 componentes de su código acierta en unas 6 de cada 10 CALIBRADA, contra 3 de cada 10 con la lista general. En la prueba final: [pendiente: P7].
+Entre auditados con actividad QLS, validación 155–194, base ficticia. En las unidades que la hoja elige, mirar primero los 3 componentes de su código acierta en unas 6 de cada 10 CALIBRADA, contra 3 de cada 10 con la lista general. En la prueba final (corrida única, entre auditados con actividad QLS, prueba final 200–284, base ficticia): sobre todas las CALIBRADA (n = 1.098 VIN), los 3 primeros del código aciertan 515 (46,9 %; 43,9–50,1) contra 437 (39,8 %; 36,8–42,7) de la lista general, y sobre las 71 que eligió la tasa fija, 45 (63,4 %; 53,2–73,1) contra 25 (35,2 %; 25,8–45,6): mejora en ambas ([`prueba-final.json`](../../solucion/resultados/prueba-final.json)).
 
 ![Dónde mirar](figuras/donde_mirar.png)
 

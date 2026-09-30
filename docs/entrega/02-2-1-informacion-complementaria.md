@@ -28,7 +28,7 @@ Nunca muestra «probabilidad de la unidad» ni un score por vehículo: dentro de
 
 **Formatos:** planilla (CSV/XLSX) e imprimible de una página. El informe la presenta como «formato adaptable a la operación», porque no se sabe cómo la usaría Ford ([uso de la agrupación][agr], punto 2).
 
-**Día que se muestra:** el último día de la prueba ≤260, generado después de la corrida única ([plan][plan-piezas], P8). Captura: [pendiente: P7 — hoja del último día ≤260].
+**Día que se muestra:** el último día de la prueba ≤260, generado después de la corrida única ([plan][plan-piezas], P8). Captura: [pendiente: C3 — hoja del Día 260, que se toma de la salida local fuera de Git].
 
 **Hoja de desarrollo (Día 190, validación).** Con un programa simulado a partir de las unidades de ese día (identificadores ficticios): 297 unidades de 28 códigos, cupo de 14 y 14 unidades sugeridas, toda la cantidad sugerida en un solo código, más 2 filas de mínimo por código (P = 40), sin cupo sin cubrir y sin ningún VIN en las salidas ([`p8.json`][p8]). Entre auditados con actividad QLS, validación 155–194, base ficticia. Que un solo código concentre el cupo es lo esperable cuando su tasa se destaca: por eso existen las filas de mínimo por código.
 
@@ -56,9 +56,9 @@ Todo lo que no entra en el informe y permite reproducir sus números. **Sin dato
 | `solucion/pruebas/` | Pruebas con datos sintéticos, que no necesitan el CSV |
 | `requirements.txt` y `.python-version` | Entorno fijado: Python 3.13 y versiones exactas de cada paquete |
 | `solucion/resultados/*.json` | Agregados por alternativa y por día, sin VIN ni tasas por código |
-| `solucion/preregistro.json` | Preregistro de la prueba final ([pendiente: P7]) |
+| `solucion/preregistro.json` | Preregistro de la prueba final, acordado el 30/09 en sesión conjunta ([#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)) |
 | `research/` | Auditoría del CSV, particiones y agrupación del catálogo, con sus pruebas |
-| Hoja completa del día mostrado | Planilla (CSV/XLSX) e imprimible (HTML) del último día ≤260 ([pendiente: P7]) |
+| Hoja completa del día mostrado | Planilla (CSV/XLSX) e imprimible (HTML) del último día ≤260 (Día 260, generada por la corrida única; queda fuera de Git y entra al .zip) |
 | Figuras | Todas las de [`figuras/`](figuras/) (PNG y SVG), regeneradas con el comando único |
 | README de reproducción | Cómo correr todo desde cero con las rutas del CSV y del catálogo, que se verifican por SHA-256 |
 
