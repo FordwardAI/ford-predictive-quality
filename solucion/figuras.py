@@ -97,6 +97,8 @@ def _guardar(fig, destino, nombre):
     png, svg = destino / f"{nombre}.png", destino / f"{nombre}.svg"
     fig.savefig(png, dpi=DPI, metadata={"Software": None})
     fig.savefig(svg, metadata={"Date": None, "Creator": None})
+    # matplotlib deja espacios al final de las líneas del SVG; se quitan para que `git diff --check` pase.
+    svg.write_text("\n".join(linea.rstrip() for linea in svg.read_text().splitlines()) + "\n")
     plt.close(fig)
     return [png, svg]
 
