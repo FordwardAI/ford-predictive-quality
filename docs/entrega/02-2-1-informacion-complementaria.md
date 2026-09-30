@@ -28,7 +28,7 @@ Nunca muestra «probabilidad de la unidad» ni un score por vehículo: dentro de
 
 **Formatos:** planilla (CSV/XLSX) e imprimible de una página. El informe la presenta como «formato adaptable a la operación», porque no se sabe cómo la usaría Ford ([uso de la agrupación][agr], punto 2).
 
-**Día que se muestra:** el último día de la prueba ≤260, generado después de la corrida única ([plan][plan-piezas], P8). Captura: [pendiente: C3 — hoja del Día 260, que se toma de la salida local fuera de Git].
+**Día que se muestra:** el último día de la prueba ≤260, generado después de la corrida única ([plan][plan-piezas], P8). Captura: se toma de la salida local fuera de Git (`captura-hoja-dia-260.png`, junto a la hoja); no se versiona porque muestra tasas por código.
 
 **Hoja de desarrollo (Día 190, validación).** Con un programa simulado a partir de las unidades de ese día (identificadores ficticios): 297 unidades de 28 códigos, cupo de 14 y 14 unidades sugeridas, toda la cantidad sugerida en un solo código, más 2 filas de mínimo por código (P = 40), sin cupo sin cubrir y sin ningún VIN en las salidas ([`p8.json`][p8]). Entre auditados con actividad QLS, validación 155–194, base ficticia. Que un solo código concentre el cupo es lo esperable cuando su tasa se destaca: por eso existen las filas de mínimo por código.
 

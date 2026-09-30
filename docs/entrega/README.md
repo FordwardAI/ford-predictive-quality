@@ -27,17 +27,13 @@ Reglas que siguen todos los archivos:
 | [preguntas-jurado.md](preguntas-jurado.md) | 30 preguntas probables con respuesta corta y fuente | Preparación de preguntas |
 | [guion-presentacion.md](guion-presentacion.md) | Diapositiva por diapositiva, ~20 minutos más versión núcleo de 12 a 15 | Presentación |
 
-Las figuras se referencian con los nombres que genera P9 en [`figuras/`](figuras/) (PNG y SVG): `comparacion_alternativas`, `veces_azar`, `etiquetas_parciales`, `donde_mirar`, `detector_potencia`, `diagrama_proceso` y `diagrama_solucion`. Esa carpeta la mantiene P9 y no forma parte de este commit.
+Las figuras se referencian con los nombres que genera P9 en [`figuras/`](figuras/) (PNG y SVG): `comparacion_alternativas`, `veces_azar`, `veces_azar_prueba_final`, `etiquetas_parciales`, `donde_mirar`, `detector_potencia`, `diagrama_proceso` y `diagrama_solucion`. Esa carpeta la mantiene P9 y no forma parte de este commit.
 
 ## Estado de las cifras pendientes
 
-Las cifras de validación de P3 a P6, la hoja de desarrollo de P8 y las de la prueba final (corrida única del 30/09, **mejora**) ya están en los borradores. Queda:
+Las cifras de validación de P3 a P6, la hoja de desarrollo de P8 y las de la prueba final (corrida única del 30/09, **mejora**) ya están en los borradores. No quedan marcas `[pendiente: …]` con cifras.
 
-| Marca | Qué falta | Archivos |
-| --- | --- | --- |
-| `[pendiente: C3]` | Captura de la hoja del Día 260 (sale de la salida local, fuera de Git) | 02-2-1 |
-
-Para listar todas las marcas: `grep -n "pendiente:" docs/entrega/*.md`.
+Para listar cualquier marca que se agregue: `grep -n "pendiente:" docs/entrega/*.md`.
 
 ## Decisiones de la sesión conjunta (30/09)
 

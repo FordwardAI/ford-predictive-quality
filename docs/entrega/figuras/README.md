@@ -6,7 +6,7 @@ Generado por `solucion/figuras.py` (P9, [#33](https://github.com/FordwardAI/ford
 .venv/bin/python -m solucion.run --csv "<CSV>" --catalogo "<catálogo>" --piezas p9
 ```
 
-Las figuras de resultados usan solo los agregados de `solucion/resultados/` y cifras de **validación** (Día del VIN 155–194), no de la prueba final. PNG a 200 dpi para el informe y la presentación; SVG para editar.
+Las figuras de resultados usan solo los agregados de `solucion/resultados/` y cifras de **validación** (Día del VIN 155–194); la única con la prueba final es `veces_azar_prueba_final`. PNG a 200 dpi para el informe y la presentación; SVG para editar.
 
 ## comparacion_alternativas
 
@@ -47,6 +47,14 @@ Las figuras de resultados usan solo los agregados de `solucion/resultados/` y ci
 - Archivos: [`detector_potencia.png`](detector_potencia.png), [`detector_potencia.svg`](detector_potencia.svg)
 - Fuente: p6.json
 - Leyenda: Detección del CUSUM de Bernoulli por código (umbral calibrado con ≤149 para ≤1 falsa alarma cada 30 días) ante cambios sintéticos inyectados en validación en 18 códigos, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN, 43 códigos.
+
+## veces_azar_prueba_final
+
+![veces_azar_prueba_final](veces_azar_prueba_final.png)
+
+- Archivos: [`veces_azar_prueba_final.png`](veces_azar_prueba_final.png), [`veces_azar_prueba_final.svg`](veces_azar_prueba_final.svg)
+- Fuente: prueba-final.json
+- Leyenda: Veces el azar de la ganadora (tasa fija (≤ 194)) en la prueba final, por tramo: prueba completa 1,32× (1,01× a 1,64×); prueba ≤260 1,33× (1,04× a 1,65×); sensibilidad con la cohorte posterior a 260 1,33× (1,03× a 1,65×). Entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN.
 
 ## diagrama_proceso
 
