@@ -48,6 +48,10 @@ catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: hay que ten
    `p8` y `p9` salvo nombres de archivo y `version_codigo`; en `p4` y `eleccion` (modelos de ML) y en `p6` puede variar
    la 3.ª cifra decimal o la semilla mediana según la plataforma, sin cambiar la alternativa ganadora.
 
+5. **La prueba final no se vuelve a correr.** Fue una corrida única, con el preregistro acordado (`solucion/preregistro.json`);
+   su registro agregado está en `solucion/resultados/prueba-final.json`. Reproducir E1 a E3 es recalcular la validación y
+   regenerar la hoja (pasos 3 y 4); las cifras de la prueba final se leen de ese registro.
+
 Contenido: `solucion/` (código y pruebas), `research/` (auditoría y particiones), `solucion/resultados/` (solo
 agregados), `{hoja}` (hoja de códigos prioritarios, sin VIN) y `{anexos}` (material de apoyo).
 Todas las cifras valen entre auditados con actividad QLS, base ficticia.
