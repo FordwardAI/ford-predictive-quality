@@ -44,7 +44,9 @@ catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: hay que ten
    .venv/bin/python -m solucion.run --csv "/ruta/Dataset QLS Inspección Adicional.csv" \\
      --catalogo "/ruta/Códigos de catálogo.csv" --salida ../salida
    ```
-4. Comparar `solucion/resultados/*.json` (incluidos acá) con los recién escritos: deben coincidir.
+4. Comparar `solucion/resultados/*.json` (incluidos acá) con los recién escritos. Coinciden `preparacion`, `p3`, `p5`,
+   `p8` y `p9` salvo nombres de archivo y `version_codigo`; en `p4` y `eleccion` (modelos de ML) y en `p6` puede variar
+   la 3.ª cifra decimal o la semilla mediana según la plataforma, sin cambiar la alternativa ganadora.
 
 Contenido: `solucion/` (código y pruebas), `research/` (auditoría y particiones), `solucion/resultados/` (solo
 agregados), `{hoja}` (hoja de códigos prioritarios, sin VIN) y `{anexos}` (material de apoyo).
