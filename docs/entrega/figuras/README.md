@@ -13,8 +13,8 @@ Las figuras de resultados usan solo los agregados de `solucion/resultados/` y ci
 ![comparacion_alternativas](comparacion_alternativas.png)
 
 - Archivos: [`comparacion_alternativas.png`](comparacion_alternativas.png), [`comparacion_alternativas.svg`](comparacion_alternativas.svg)
-- Fuente: p3.json, eleccion.json
-- Leyenda: Precisión en el cupo por alternativa, con rango del 95 % (bootstrap por días), entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN. La ganadora (tasa fija (≤ 149)) es la más simple entre las que empatan con la mejor (móvil 120 d hacia el mercado, peso 20). El oráculo (techo) y la versión con fuga (didáctica) no son elegibles. La línea vertical es el azar al mismo cupo. Todavía sin los modelos de aprendizaje automático (p4.json).
+- Fuente: p3.json, p4.json, eleccion.json
+- Leyenda: Precisión en el cupo por alternativa, con rango del 95 % (bootstrap por días), entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8038 VIN. La ganadora (tasa fija (≤ 149)) es la más simple entre las que empatan con la mejor (móvil 120 d hacia el mercado, peso 20). El oráculo (techo) y la versión con fuga (didáctica) no son elegibles. La línea vertical es el azar al mismo cupo.
 
 ## veces_azar
 

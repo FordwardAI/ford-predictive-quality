@@ -5,6 +5,15 @@
     "azar",
     "decaimiento",
     "fuga",
+    "ml_catboost",
+    "ml_lightgbm",
+    "ml_logistica",
+    "ml_mlp",
+    "ml_nb",
+    "ml_promedio",
+    "ml_rf",
+    "ml_stacking",
+    "ml_xgboost",
     "movil",
     "movil_mercado",
     "oraculo",
@@ -149,6 +158,168 @@
         -0.002849002849002849
       ],
       "empata": false
+    },
+    {
+      "alternativa": "logística fijo (<= 149)",
+      "precision_cupo": 0.1585677749360614,
+      "diferencia_con_mejor_rango95": [
+        -0.05352538047074393,
+        0.017814779611770467
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "logística reentrenado cada 5 d, vida media 60 d",
+      "precision_cupo": 0.16624040920716113,
+      "diferencia_con_mejor_rango95": [
+        -0.032500508130081304,
+        0.016998028714597848
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "Naive Bayes fijo (<= 149)",
+      "precision_cupo": 0.14578005115089515,
+      "diferencia_con_mejor_rango95": [
+        -0.06636232174711576,
+        0.002787510675148244
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "Naive Bayes reentrenado cada 5 d, vida media 15 d",
+      "precision_cupo": 0.10485933503836317,
+      "diferencia_con_mejor_rango95": [
+        -0.11421501087744743,
+        -0.02646327379119191
+      ],
+      "empata": false
+    },
+    {
+      "alternativa": "Random Forest fijo (<= 149), semilla 3",
+      "precision_cupo": 0.1534526854219949,
+      "diferencia_con_mejor_rango95": [
+        -0.06044755877034358,
+        0.015318206229860298
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "Random Forest reentrenado cada 5 d, vida media 15 d, semilla 1",
+      "precision_cupo": 0.17135549872122763,
+      "diferencia_con_mejor_rango95": [
+        -0.03133570444686581,
+        0.02507261985784749
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "XGBoost fijo (<= 149)",
+      "precision_cupo": 0.15601023017902813,
+      "diferencia_con_mejor_rango95": [
+        -0.05735947487602832,
+        0.012567621269613347
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "XGBoost reentrenado cada 5 d, vida media 60 d",
+      "precision_cupo": 0.16112531969309463,
+      "diferencia_con_mejor_rango95": [
+        -0.039445022407170294,
+        0.0109021850909391
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "LightGBM fijo (<= 149)",
+      "precision_cupo": 0.15601023017902813,
+      "diferencia_con_mejor_rango95": [
+        -0.05701797907506063,
+        0.01675977653631285
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "LightGBM reentrenado cada 5 d, vida media 60 d",
+      "precision_cupo": 0.16624040920716113,
+      "diferencia_con_mejor_rango95": [
+        -0.033557914087022876,
+        0.01737026647966339
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "CatBoost fijo (<= 149), semilla 3",
+      "precision_cupo": 0.1585677749360614,
+      "diferencia_con_mejor_rango95": [
+        -0.05238721804511278,
+        0.01657988526306024
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "CatBoost reentrenado cada 5 d, vida media 15 d, semilla 2",
+      "precision_cupo": 0.16879795396419436,
+      "diferencia_con_mejor_rango95": [
+        -0.031028108620433703,
+        0.017543859649122806
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "MLP fijo (<= 149), semilla 5",
+      "precision_cupo": 0.14578005115089515,
+      "diferencia_con_mejor_rango95": [
+        -0.06753715810149218,
+        0.002858095787186989
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "MLP reentrenado cada 5 d, vida media 60 d, semilla 4",
+      "precision_cupo": 0.17135549872122763,
+      "diferencia_con_mejor_rango95": [
+        -0.026388244269955813,
+        0.013441765933397092
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "promedio de modelos fijo (<= 149), semilla 3",
+      "precision_cupo": 0.1585677749360614,
+      "diferencia_con_mejor_rango95": [
+        -0.05163597020933978,
+        0.015236316772309997
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "promedio de modelos reentrenado cada 5 d, vida media de cada base, semilla 2",
+      "precision_cupo": 0.16624040920716113,
+      "diferencia_con_mejor_rango95": [
+        -0.0339470131507713,
+        0.013057406898447147
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "stacking fijo (<= 149), semilla 3",
+      "precision_cupo": 0.16879795396419436,
+      "diferencia_con_mejor_rango95": [
+        -0.03398408633386846,
+        0.01695035290728381
+      ],
+      "empata": true
+    },
+    {
+      "alternativa": "stacking reentrenado cada 5 d, vida media de cada base, semilla 2",
+      "precision_cupo": 0.17135549872122763,
+      "diferencia_con_mejor_rango95": [
+        -0.04478105504224907,
+        0.03632071318511996
+      ],
+      "empata": true
     }
   ]
 }

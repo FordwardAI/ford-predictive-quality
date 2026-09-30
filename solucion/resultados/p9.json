@@ -11,6 +11,7 @@
       ],
       "fuentes": [
         "p3.json",
+        "p4.json",
         "eleccion.json"
       ]
     },

@@ -11,8 +11,8 @@
   "filas_minimo_por_codigo": 2,
   "sin_cubrir": 0,
   "minimo_por_codigo": {
-    "P": 20,
-    "origen": "provisorio, hasta que P5 lo elija en validación"
+    "P": 40,
+    "origen": "elegido en validación (P5)"
   },
   "predictor": "tasa fija (<= 149)",
   "ventana_tasa": [
@@ -36,5 +36,5 @@
   },
   "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
   "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
-  "version_codigo": "ab9b3be6384310c3e10aeebbbe283b2331c46d86"
+  "version_codigo": "8cc40b80c6251108ee2629554de1f4c7578316e3"
 }
