@@ -69,7 +69,7 @@ export default function App() {
     <div className="min-h-svh md:grid md:grid-cols-[228px_minmax(0,1fr)] md:gap-6 md:p-6">
       {/* §5: panel lateral flotante de 228 px, radio 16, Ford Blue con texto blanco. */}
       <nav aria-label="Secciones" className="sticky top-6 hidden h-[calc(100svh-48px)] flex-col rounded-lg bg-ford-blue px-3 py-6 text-white md:flex">
-        <div className="px-3 pb-8">
+        <div className="flex flex-col items-center px-3 pb-8 text-center">
           <img src="ford-logo.png" alt="Ford" width={128} height={58} className="w-32" />
           <p className="mt-2">Selección para Auditoría Adicional</p>
         </div>
@@ -89,7 +89,7 @@ export default function App() {
             </ul>
           </div>
         ))}
-        <p className="mt-auto px-3 text-2xl">FordwardAI</p>
+        <p className="mt-auto px-3 text-center text-2xl">FordwardAI</p>
       </nav>
 
       {/* Móvil: barra superior con el logo y navegación inferior desplazable. */}
