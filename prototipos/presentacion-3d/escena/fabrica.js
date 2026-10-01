@@ -10,6 +10,7 @@ import {
   crearMaterialXray,
   crearMaterialPuntos,
   crearMaterialPiso,
+  fijarOpacidad,
 } from './materiales.js';
 import { crearGeometriaPickupSimple } from './vehiculo.js';
 
@@ -50,10 +51,7 @@ class Capa {
   fijarOpacidad(a) {
     this.opacidad = a;
     this.grupo.visible = a > 0.003;
-    for (const { mat, base } of this.materiales) {
-      if (mat.uniforms?.uOpacidad) mat.uniforms.uOpacidad.value = base * a;
-      else mat.opacity = base * a;
-    }
+    for (const { mat, base } of this.materiales) fijarOpacidad(mat, base * a, base);
   }
 }
 
@@ -84,7 +82,7 @@ export function crearFabrica() {
     color: PALETA.skyview.clone().multiplyScalar(1.5), transparent: true, opacity: 1, fog: true,
   }));
   const emisivoBlanco = linea.registrar(new THREE.MeshBasicMaterial({
-    color: PALETA.blanco.clone().multiplyScalar(1.6), transparent: true, opacity: 0.9, fog: true,
+    color: PALETA.blanco.clone().multiplyScalar(0.75), transparent: true, opacity: 0.8, fog: true,
   }));
 
   const estaticos = [];      // rellenos opacos con bordes tenues
@@ -367,12 +365,79 @@ export function crearFabrica() {
   escaneoBorde.position.copy(escaneo.position);
   linea.grupo.add(escaneo, escaneoBorde);
 
+  // ----- Nave: columnas, cerchas y lámparas (todo fusionado con lo estático) -----
+  const lamparas = [];
+  const ALTO_NAVE = 8.2;
+  // Columnas del lado de cámara más lejos (z = 16) para no tapar el recorrido de la línea.
+  const Z_A = -9.5, Z_B = 16;
+  for (let x = INICIO_LINEA + 2; x <= FIN_LINEA; x += 12) {
+    for (const z of [Z_A, Z_B]) {
+      estaticos.push(caja(0.42, ALTO_NAVE, 0.42, x, ALTO_NAVE / 2, z));
+      estaticos.push(caja(0.9, 0.18, 0.9, x, 0.09, z)); // base
+    }
+    // Cercha: cordón superior e inferior + montantes y diagonales en zigzag
+    const yInf = ALTO_NAVE, yMed = ALTO_NAVE + 0.9;
+    estaticos.push(caja(0.18, 0.18, Z_B - Z_A, x, yInf, (Z_A + Z_B) / 2));
+    const tramos = 10;
+    for (let i = 0; i < tramos; i++) {
+      const z0 = Z_A + (i * (Z_B - Z_A)) / tramos, z1 = Z_A + ((i + 1) * (Z_B - Z_A)) / tramos;
+      const t0 = i / tramos, t1 = (i + 1) / tramos;
+      const altoEn = (t) => yInf + (yMed - yInf) * (1 - Math.abs(2 * t - 1));
+      const a = new THREE.Vector3(x, altoEn(t0), z0), b = new THREE.Vector3(x, altoEn(t1), z1);
+      const largoSeg = a.distanceTo(b);
+      const cord = new THREE.BoxGeometry(0.16, 0.16, largoSeg);
+      cord.lookAt(b.clone().sub(a));
+      cord.translate((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+      estaticos.push(cord);
+      const diag = new THREE.Vector3(x, yInf, z0).distanceTo(b);
+      const d = new THREE.BoxGeometry(0.07, 0.07, diag);
+      d.lookAt(b.clone().sub(new THREE.Vector3(x, yInf, z0)));
+      d.translate(x, (yInf + b.y) / 2, (z0 + z1) / 2);
+      estaticos.push(d);
+    }
+    // Lámparas colgadas sobre la línea
+    for (const z of [-4.2, 4.2]) {
+      estaticos.push(caja(0.04, 1.2, 0.04, x + 6, ALTO_NAVE - 0.6, z));
+      lamparas.push(caja(1.6, 0.06, 0.28, x + 6, ALTO_NAVE - 1.22, z));
+    }
+  }
+
+  // ----- Barrera en Gate Release: poste fijo + brazo con franjas que sube al pasar el vehículo -----
+  estaticos.push(caja(0.34, 1.3, 0.34, xG - 1.4, 0.65, 3.0));
+  const barrera = new THREE.Group();
+  barrera.position.set(xG - 1.4, 1.15, 3.0);
+  linea.grupo.add(barrera);
+  {
+    const brazo = caja(0.12, 0.12, 5.6, 0, 0, -2.8);
+    barrera.add(new THREE.Mesh(brazo, relleno), new THREE.LineSegments(new THREE.EdgesGeometry(brazo), bordesFuertes));
+    const franjas = [];
+    for (let i = 0; i < 7; i++) franjas.push(caja(0.13, 0.13, 0.4, 0, 0, -0.4 - i * 0.8));
+    barrera.add(new THREE.Mesh(mergeGeometries(franjas.map((g) => g.toNonIndexed())), emisivo));
+  }
+
+  // ----- Brazos de pintura dentro de la cabina: una malla fusionada por brazo -----
+  const brazosPintura = [];
+  for (const [dx, z, fase] of [[-1.6, 2.1, 0], [1.6, -2.1, 1.9]]) {
+    const pivote = new THREE.Group();
+    pivote.position.set(xP + dx, 0, z);
+    const geo = mergeGeometries([
+      new THREE.CylinderGeometry(0.3, 0.36, 0.5, 12).translate(0, 0.25, 0),
+      caja(0.2, 1.5, 0.22, 0, 1.2, 0),
+      caja(0.16, 0.16, 1.5, 0, 1.95, z > 0 ? -0.7 : 0.7),
+      new THREE.CylinderGeometry(0.04, 0.09, 0.3, 8).rotateX(Math.PI / 2).translate(0, 1.95, z > 0 ? -1.5 : 1.5),
+    ].map((g) => g.toNonIndexed()));
+    pivote.add(new THREE.Mesh(geo, relleno), new THREE.LineSegments(new THREE.EdgesGeometry(geo, 25), bordesFuertes));
+    linea.grupo.add(pivote);
+    brazosPintura.push({ pivote, fase });
+  }
+
   // Fusionar estáticos: pocos draw calls
   const estaticosGeo = mergeGeometries(estaticos.map((g) => g.toNonIndexed()));
   linea.grupo.add(new THREE.Mesh(estaticosGeo, relleno), new THREE.LineSegments(new THREE.EdgesGeometry(estaticosGeo, 20), bordes));
   const translGeo = mergeGeometries(translucidos.map((g) => g.toNonIndexed()));
   linea.grupo.add(new THREE.Mesh(translGeo, rellenoTranslucido), new THREE.LineSegments(new THREE.EdgesGeometry(translGeo, 20), bordesFuertes));
   linea.grupo.add(new THREE.Mesh(mergeGeometries(bandas.map((g) => g.toNonIndexed())), emisivo));
+  linea.grupo.add(new THREE.Mesh(mergeGeometries(lamparas.map((g) => g.toNonIndexed())), emisivoBlanco));
 
   // ----- Playa de despacho: pickups fusionadas con resalte por atributo -----
   const base = crearGeometriaPickupSimple();
@@ -418,6 +483,20 @@ export function crearFabrica() {
   const marcasMat = playa.registrar(new THREE.MeshBasicMaterial({ color: PALETA.skyview.clone().multiplyScalar(0.5), transparent: true, opacity: 0.6, fog: true }));
   playa.grupo.add(new THREE.Mesh(mergeGeometries(marcas.map((g) => g.toNonIndexed())), marcasMat));
   agregarAncla('playa-despacho', CENTRO_PLAYA.x, 3.2, CENTRO_PLAYA.z, playa.grupo);
+  // Postes de iluminación alrededor de la playa (fusionados: un poste y una luminaria por draw call)
+  const postes = [], cabezas = [];
+  const xMin = PLAYA.x0 - PLAYA.pasoX, xMax = PLAYA.x0 + PLAYA.columnas * PLAYA.pasoX;
+  const zBorde = ((PLAYA.filas - 1) / 2) * PLAYA.pasoZ + 4.2;
+  for (let x = xMin; x <= xMax + 0.01; x += (xMax - xMin) / 3) {
+    for (const z of [-zBorde, zBorde]) {
+      postes.push(caja(0.16, 6.5, 0.16, x, 3.25, z), caja(0.08, 0.08, 1.2, x, 6.45, z - Math.sign(z) * 0.6));
+      cabezas.push(caja(0.6, 0.08, 0.3, x, 6.38, z - Math.sign(z) * 1.1));
+    }
+  }
+  const posteMat = playa.registrar(crearMaterialRelleno({ color: new THREE.Color('#0a2a5a') }));
+  playa.grupo.add(new THREE.Mesh(mergeGeometries(postes.map((g) => g.toNonIndexed())), posteMat));
+  const cabezaMat = playa.registrar(new THREE.MeshBasicMaterial({ color: PALETA.blanco.clone().multiplyScalar(1.8), transparent: true, opacity: 1, fog: true }), 1);
+  playa.grupo.add(new THREE.Mesh(mergeGeometries(cabezas.map((g) => g.toNonIndexed())), cabezaMat));
 
   // ----- Convoy de unidades en la línea (vista «futuro») -----
   const nConvoy = 8;
@@ -461,6 +540,11 @@ export function crearFabrica() {
       for (let i = 0; i < nLuces * 2; i++) luces.setColorAt(i, colorLuz);
       luces.instanceColor.needsUpdate = true;
     }
+    // Barrera: abierta mientras el vehículo cruza el arco
+    const abierta = THREE.MathUtils.smoothstep(vehiculoX, xG - 9, xG - 4) * (1 - THREE.MathUtils.smoothstep(vehiculoX, xG + 4, xG + 8));
+    barrera.rotation.x = abierta * 1.35;
+    // Brazos de pintura: barrido lento
+    for (const b of brazosPintura) b.pivote.rotation.y = reducido ? 0 : Math.sin(t * 0.7 + b.fase) * 0.6;
     // Playa
     playaMat.uniforms.uMezcla.value = playaMezcla;
     playaBordesMat.uniforms.uMezcla.value = playaMezcla;
@@ -481,6 +565,7 @@ export function crearFabrica() {
     capas: { linea, playa, convoy },
     actualizar,
     posicionesPlaya: posiciones,
+    particulas: [chispasGeo, nieblaGeo],
     estaciones: tiposPorEstacion,
   };
 }
