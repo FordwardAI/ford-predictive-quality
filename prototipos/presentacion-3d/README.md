@@ -1,6 +1,6 @@
 # Presentación 3D interactiva
 
-Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 15 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Sigue el [guion de la presentación](../../docs/entrega/guion-presentacion.md) y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
+Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 16 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Sigue el [guion de la presentación](../../docs/entrega/guion-presentacion.md) y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
 
 Es un **complemento** de la presentación oficial (.pptx sobre el template de Ford), no la reemplaza. El contenido sale de los borradores de [`docs/entrega/`](../../docs/entrega/) y las cifras, de los agregados de [`solucion/resultados/`](../../solucion/resultados/).
 
@@ -24,10 +24,12 @@ Cada pantalla tiene antetítulo, titular, bajada y, según el caso, hasta 3 cifr
 - **Con scroll** (rueda, trackpad, barra): al llegar a una pantalla entra con la misma cascada.
 - En las pantallas de la **línea de producción** (`proceso`, `pregunta`, `aprende`) el vehículo recorre la línea solo al llegar (≈ 6 s) y la escena enfoca cada estación con callout al pasar por ella. En las pantallas con varios puntos sobre el vehículo, el foco rota entre ellos cada 3 s. Un click en un callout o en un punto 3D enfoca ese punto.
 - La URL guarda la pantalla (`#hoja`): al recargar se vuelve al mismo lugar.
-- El pie muestra `07 / 14` (pantalla / última pantalla) y la sección. A la derecha, el **riel**: una marca igual por pantalla (la actual, en azul); un clic en una marca va a esa pantalla y su nombre aparece al pasar el mouse.
+- El pie muestra `07 / 15` (pantalla / última pantalla; se numera desde `00`) y la sección. A la derecha, el **riel**: una marca igual por pantalla (la actual, en azul); un clic en una marca va a esa pantalla y su nombre aparece al pasar el mouse.
 - Las notas del orador (`N`) muestran las notas, el **respaldo para preguntas** (la `ampliacion` de la pantalla, que no se proyecta) y el título de la pantalla siguiente.
 
-Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `validacion` · 05 `alternativas` · 06 `resultado` · 07 `hoja` · 08 `donde-mirar` · 09 `aprende` · 10 `seguridad` · 11 `factibilidad` · 12 `futuro` · 13 `conclusiones` · 14 cierre.
+Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `validacion` · 05 `alternativas` · 06 `solucion` · 07 `resultado` · 08 `hoja` · 09 `donde-mirar` · 10 `aprende` · 11 `seguridad` · 12 `factibilidad` · 13 `futuro` · 14 `conclusiones` · 15 cierre.
+
+**La solución elegida** (`solucion`) es CatBoost con atributos del código, reentrenado cada 5 días (vida media 15 días, semilla 1), elegido por precisión en bloques de tiempo (propuesta aprobada el 30/09; [`precision.json`](../../solucion/resultados/precision.json)). Se muestra siempre con sus límites: es la más precisa de una familia que empata y no se confirmó en el último bloque. La cifra **oficial** de la prueba final sigue siendo la lectura 1 (tasa fija, preregistrada); `resultado` muestra también la lectura 2 (CatBoost, más débil porque el equipo ya conocía la primera) y su figura, las tres lecturas (la 3, Random Forest, sin acuerdo registrado del resto del equipo).
 
 ## Atajos de teclado
 
@@ -38,7 +40,7 @@ Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `
 | ↓ / ↑ | Igual que → / ← (si una pantalla no entrara en la ventana, primero la recorren) |
 | Inicio / Fin | Portada / cierre |
 | 0–6 | Ir a la portada (0) o a la primera pantalla de la sección 01–06 |
-| I / Esc | Abrir o cerrar el índice (las 15 pantallas) |
+| I / Esc | Abrir o cerrar el índice (las 16 pantallas) |
 | N | Abrir las notas del orador en otra ventana (notas, respaldo para preguntas y pantalla siguiente; sus botones también avanzan) |
 | F | Pantalla completa |
 | O | Activar o desactivar la órbita con el mouse (en los capítulos que la permiten) |
@@ -48,7 +50,7 @@ Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `
 
 | Parámetro | Qué hace |
 | --- | --- |
-| `?nucleo=1` | Solo los capítulos con `nucleo: true` (hoy son las 15 pantallas) |
+| `?nucleo=1` | Solo los capítulos con `nucleo: true` (hoy son las 16 pantallas) |
 | `?estatico=1` | Sin WebGL: diapositivas sobre un fondo CSS. Para proyectores lentos o si falla la escena |
 | `?calidad=alta` / `baja` / `auto` | Calidad inicial de la escena (la tecla `L` la cambia en vivo). `baja` es el modo de bajo consumo para notebook a batería |
 | `?limpio=1` | Oculta los chips `[PENDIENTE: …]` (el índice sigue contando cuántos hay) |
@@ -60,7 +62,7 @@ Con **movimiento reducido** activado en el sistema operativo no hay animaciones:
 
 ## Figuras, ilustraciones y capturas
 
-- **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (comparación de alternativas, particiones, veces el azar en la prueba final, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo. Los colores salen de las variables `--figura-*` de `styles.css`.
+- **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (comparación de alternativas, particiones, veces el azar de las tres lecturas de la prueba final, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo. Los colores salen de las variables `--figura-*` de `styles.css`. El respaldo de `veces_azar_prueba_final` (SVG del informe) muestra solo la lectura 1, por tramo.
 - **Ilustraciones a mano:** `assets/ilustraciones/` (proceso, solución y esquemas sin datos de la hoja y de la plataforma), versionadas e insertadas en línea para que tomen los colores del tema.
 - **Capturas locales:** la hoja y la plataforma muestran tasas por código, así que sus capturas **no se versionan**. Se generan con `herramientas/capturar_plataforma.ps1` (Windows) o `herramientas/capturar_plataforma.sh`, que dejan `d-hoja.png`, `d-inicio.png`, `d-codigos.png` y `d-alertas.png` en `assets/local/` (fuera de Git); la hoja también toma `assets/local/captura-hoja-dia-260.png` si existe. Sin ellas se ve el esquema sin números con un chip «Captura local pendiente».
 
@@ -118,6 +120,8 @@ python3 prototipos/presentacion-3d/verificar_cifras.py
 ```
 
 Falla si algún respaldo difiere de su campo. Correrlo cada vez que se regeneren los resultados o se edite `cifras.js`.
+
+De [`prueba-final.json`](../../solucion/resultados/prueba-final.json) se lee la primera corrida de cada preregistro: `corridas[0]` (lectura 1, tasa fija, la oficial), `corridas[1]` (lectura 2, CatBoost) y `corridas[3]` (lectura 3, Random Forest). `corridas[2]` repite exactamente a `corridas[1]` y no se lee. La lectura 3 todavía no figura en los borradores de `docs/entrega/`: su formato se comprueba solo contra el JSON.
 
 ## Archivos
 
