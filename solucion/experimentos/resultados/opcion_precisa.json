@@ -1,0 +1,1345 @@
+{
+  "pieza": "opción más precisa (exploratorio)",
+  "tramo": "Día < 195; prueba final no releída",
+  "calificador": "entre auditados con actividad QLS, base ficticia; períodos ya explorados",
+  "criterio_parametros": {
+    "dias": [
+      60,
+      149
+    ],
+    "metrica": "log-loss secuencial de todos los VIN",
+    "resultados": {
+      "riesgo_estandarizado": [
+        {
+          "vida": null,
+          "kappa": 5,
+          "log_loss": 0.36780395490197054
+        },
+        {
+          "vida": null,
+          "kappa": 10,
+          "log_loss": 0.3676848532895075
+        },
+        {
+          "vida": null,
+          "kappa": 20,
+          "log_loss": 0.36778463093160735
+        },
+        {
+          "vida": null,
+          "kappa": 40,
+          "log_loss": 0.36803057745223566
+        },
+        {
+          "vida": 120,
+          "kappa": 5,
+          "log_loss": 0.36771045001162544
+        },
+        {
+          "vida": 120,
+          "kappa": 10,
+          "log_loss": 0.3676235792887577
+        },
+        {
+          "vida": 120,
+          "kappa": 20,
+          "log_loss": 0.3677500198401733
+        },
+        {
+          "vida": 120,
+          "kappa": 40,
+          "log_loss": 0.3680145872317187
+        },
+        {
+          "vida": 60,
+          "kappa": 5,
+          "log_loss": 0.36763940676561135
+        },
+        {
+          "vida": 60,
+          "kappa": 10,
+          "log_loss": 0.36758155157619016
+        },
+        {
+          "vida": 60,
+          "kappa": 20,
+          "log_loss": 0.36772879667877856
+        },
+        {
+          "vida": 60,
+          "kappa": 40,
+          "log_loss": 0.3680174352936644
+        }
+      ],
+      "olvido_mercado": [
+        {
+          "vida": 30,
+          "kappa": 10,
+          "log_loss": 0.368521237756679
+        },
+        {
+          "vida": 30,
+          "kappa": 20,
+          "log_loss": 0.367939844398624
+        },
+        {
+          "vida": 30,
+          "kappa": 40,
+          "log_loss": 0.367611696071086
+        },
+        {
+          "vida": 60,
+          "kappa": 10,
+          "log_loss": 0.3687252510372307
+        },
+        {
+          "vida": 60,
+          "kappa": 20,
+          "log_loss": 0.36810188239414715
+        },
+        {
+          "vida": 60,
+          "kappa": 40,
+          "log_loss": 0.3677319349821751
+        },
+        {
+          "vida": 120,
+          "kappa": 10,
+          "log_loss": 0.36885957948624404
+        },
+        {
+          "vida": 120,
+          "kappa": 20,
+          "log_loss": 0.36820844488621796
+        },
+        {
+          "vida": 120,
+          "kappa": 40,
+          "log_loss": 0.3678143243807316
+        }
+      ]
+    },
+    "elegido_riesgo_estandarizado": {
+      "vida": 60,
+      "kappa": 10,
+      "log_loss": 0.36758155157619016
+    },
+    "elegido_olvido_mercado": {
+      "vida": 30,
+      "kappa": 40,
+      "log_loss": 0.367611696071086
+    }
+  },
+  "estructura": {
+    "heterogeneidad": [
+      {
+        "dias": [
+          1,
+          49
+        ],
+        "vins": 9968,
+        "codigos": 51,
+        "tasa": 0.13529149381465475,
+        "desvio_entre_codigos": 0.03071782012766358
+      },
+      {
+        "dias": [
+          50,
+          99
+        ],
+        "vins": 10486,
+        "codigos": 60,
+        "tasa": 0.12766993217065042,
+        "desvio_entre_codigos": 0.03029907303238392
+      },
+      {
+        "dias": [
+          100,
+          149
+        ],
+        "vins": 10825,
+        "codigos": 45,
+        "tasa": 0.11770194668535502,
+        "desvio_entre_codigos": 0.04063549901392013
+      },
+      {
+        "dias": [
+          155,
+          194
+        ],
+        "vins": 8038,
+        "codigos": 43,
+        "tasa": 0.09557550186873712,
+        "desvio_entre_codigos": 0.030147411527985328
+      }
+    ],
+    "estabilidad": [
+      {
+        "periodos": [
+          [
+            1,
+            49
+          ],
+          [
+            50,
+            99
+          ]
+        ],
+        "codigos_comunes": 22,
+        "correlacion_observada": 0.6722152060775499,
+        "correlacion_desatenuada": 1.1375816743500593
+      },
+      {
+        "periodos": [
+          [
+            1,
+            49
+          ],
+          [
+            100,
+            149
+          ]
+        ],
+        "codigos_comunes": 0
+      },
+      {
+        "periodos": [
+          [
+            1,
+            49
+          ],
+          [
+            155,
+            194
+          ]
+        ],
+        "codigos_comunes": 0
+      },
+      {
+        "periodos": [
+          [
+            50,
+            99
+          ],
+          [
+            100,
+            149
+          ]
+        ],
+        "codigos_comunes": 0
+      },
+      {
+        "periodos": [
+          [
+            50,
+            99
+          ],
+          [
+            155,
+            194
+          ]
+        ],
+        "codigos_comunes": 0
+      },
+      {
+        "periodos": [
+          [
+            100,
+            149
+          ],
+          [
+            155,
+            194
+          ]
+        ],
+        "codigos_comunes": 22,
+        "correlacion_observada": 0.6153270331357007,
+        "correlacion_desatenuada": 0.9805569331829219
+      }
+    ],
+    "rotacion": [
+      {
+        "dias": [
+          1,
+          49
+        ],
+        "vins": 9968,
+        "codigos": 51,
+        "pct_vins_con_codigo_presente_en": {
+          "1-49": 1.0,
+          "50-99": 0.9875601926163724,
+          "100-149": 0.23204253611556983,
+          "155-194": 0.00030096308186195825,
+          "200-260": 0.00030096308186195825
+        }
+      },
+      {
+        "dias": [
+          50,
+          99
+        ],
+        "vins": 10486,
+        "codigos": 60,
+        "pct_vins_con_codigo_presente_en": {
+          "1-49": 0.9933244325767691,
+          "50-99": 1.0,
+          "100-149": 0.21228304405874499,
+          "155-194": 0.004482166698455083,
+          "200-260": 0.004482166698455083
+        }
+      },
+      {
+        "dias": [
+          100,
+          149
+        ],
+        "vins": 10825,
+        "codigos": 45,
+        "pct_vins_con_codigo_presente_en": {
+          "1-49": 0.09709006928406466,
+          "50-99": 0.7439260969976905,
+          "100-149": 1.0,
+          "155-194": 0.9968591224018476,
+          "200-260": 0.9989838337182448
+        }
+      },
+      {
+        "dias": [
+          155,
+          194
+        ],
+        "vins": 8038,
+        "codigos": 43,
+        "pct_vins_con_codigo_presente_en": {
+          "1-49": 0.09343120179149042,
+          "50-99": 0.7300323463548146,
+          "100-149": 0.9851953222194576,
+          "155-194": 1.0,
+          "200-260": 0.9997511818860413
+        }
+      },
+      {
+        "dias": [
+          200,
+          260
+        ],
+        "vins": 13135,
+        "codigos": 44,
+        "pct_vins_con_codigo_presente_en": {
+          "1-49": 0.08389798248953179,
+          "50-99": 0.776170536733917,
+          "100-149": 0.9940616673011039,
+          "155-194": 0.9983250856490293,
+          "200-260": 1.0
+        }
+      }
+    ],
+    "agrupamiento_codigo_dia": {
+      "celdas": 2928,
+      "phi": 1.2185662196955136
+    }
+  },
+  "tramos": {
+    "validación 155–194": {
+      "bloques": [
+        [
+          155,
+          194
+        ]
+      ],
+      "alternativas": {
+        "azar": {
+          "aciertos": 35,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.08951406649616368,
+          "precision_rango95": [
+            0.06204758506999975,
+            0.11989100817438691
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 0.9062047930130668,
+          "auc_dia": 0.5,
+          "auc_dia_rango95": [
+            0.5,
+            0.5
+          ]
+        },
+        "jerárquico 60 d, peso 20": {
+          "aciertos": 66,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.16879795396419436,
+          "precision_rango95": [
+            0.125,
+            0.2137723762723762
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.7088433239674972,
+          "auc_dia": 0.5406059663721369,
+          "auc_dia_rango95": [
+            0.5164961771071211,
+            0.5664191388080521
+          ]
+        },
+        "móvil 120 d hacia el mercado, peso 20": {
+          "aciertos": 69,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.17647058823529413,
+          "precision_rango95": [
+            0.13130793799174262,
+            0.21945129107981218
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.7865180205114746,
+          "auc_dia": 0.5402949944239512,
+          "auc_dia_rango95": [
+            0.5149268246851408,
+            0.5675308349471113
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10": {
+          "aciertos": 73,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.1867007672634271,
+          "precision_rango95": [
+            0.14473684210526316,
+            0.22821428571428565
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.8900842825701107,
+          "auc_dia": 0.5406059663721369,
+          "auc_dia_rango95": [
+            0.5158953862318543,
+            0.5667637065694244
+          ]
+        },
+        "olvido 30 d hacia el mercado, κ 40": {
+          "aciertos": 69,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.17647058823529413,
+          "precision_rango95": [
+            0.13736140724946697,
+            0.2169034015413234
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.7865180205114746,
+          "auc_dia": 0.5375176932315348,
+          "auc_dia_rango95": [
+            0.5143675730267693,
+            0.5625826751931557
+          ]
+        },
+        "tasa fija (<= 149)": {
+          "aciertos": 59,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.15089514066496162,
+          "precision_rango95": [
+            0.11573925307055127,
+            0.1876652842676362
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.5276023653648838,
+          "auc_dia": 0.5377187526807926,
+          "auc_dia_rango95": [
+            0.5145840892029665,
+            0.5630067922125507
+          ]
+        },
+        "oráculo (no elegible)": {
+          "aciertos": 79,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.2020460358056266,
+          "precision_rango95": [
+            0.1598059833753526,
+            0.2446264855687606
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 2.045433675658065,
+          "auc_dia": 0.5793916745303251,
+          "auc_dia_rango95": [
+            0.5534435585800659,
+            0.6035350238702003
+          ]
+        }
+      },
+      "diferencias": {
+        "riesgo estandarizado, vida media 60 d, κ 10 − tasa fija (<= 149)": {
+          "precision_rango95": [
+            -0.002507547641482222,
+            0.07474871134020615
+          ],
+          "auc_dia_rango95": [
+            -0.008100987086477005,
+            0.013399714611822993
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10 − jerárquico 60 d, peso 20": {
+          "precision_rango95": [
+            -0.012563605179550144,
+            0.0514171944981846
+          ],
+          "auc_dia_rango95": [
+            -0.006406774325501882,
+            0.007198386840263035
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10 − móvil 120 d hacia el mercado, peso 20": {
+          "precision_rango95": [
+            -0.007576718966312875,
+            0.034884445862088956
+          ],
+          "auc_dia_rango95": [
+            -0.007537223088043801,
+            0.008168446117735978
+          ]
+        }
+      }
+    },
+    "selección 100–174": {
+      "bloques": [
+        [
+          100,
+          118
+        ],
+        [
+          119,
+          137
+        ],
+        [
+          138,
+          156
+        ],
+        [
+          157,
+          174
+        ]
+      ],
+      "alternativas": {
+        "azar": {
+          "aciertos": 83,
+          "elegidos": 740,
+          "vins": 15279,
+          "dias": 67,
+          "precision_cupo": 0.11216216216216217,
+          "precision_rango95": [
+            0.0911430027173913,
+            0.13205069667568625
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.0003985479718274,
+          "auc_dia": 0.5,
+          "auc_dia_rango95": [
+            0.5,
+            0.5
+          ]
+        },
+        "jerárquico 60 d, peso 20": {
+          "aciertos": 131,
+          "elegidos": 740,
+          "vins": 15279,
+          "dias": 67,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14483716682121467,
+            0.20887772444807273
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "auc_dia": 0.5389221556886228,
+          "auc_dia_rango95": [
+            0.5229356241483151,
+            0.5550951924172454
+          ]
+        },
+        "móvil 120 d hacia el mercado, peso 20": {
+          "aciertos": 126,
+          "elegidos": 740,
+          "vins": 15279,
+          "dias": 67,
+          "precision_cupo": 0.17027027027027028,
+          "precision_rango95": [
+            0.13725423593350386,
+            0.20217247728644716
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5186773137885574,
+          "auc_dia": 0.5346526176821658,
+          "auc_dia_rango95": [
+            0.5180171634426992,
+            0.5515059739297901
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10": {
+          "aciertos": 127,
+          "elegidos": 740,
+          "vins": 15279,
+          "dias": 67,
+          "precision_cupo": 0.17162162162162162,
+          "precision_rango95": [
+            0.14246478103685356,
+            0.2018970189701897
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5307303083424346,
+          "auc_dia": 0.5364703663539063,
+          "auc_dia_rango95": [
+            0.5195987419057236,
+            0.5538217421923771
+          ]
+        },
+        "olvido 30 d hacia el mercado, κ 40": {
+          "aciertos": 133,
+          "elegidos": 740,
+          "vins": 15279,
+          "dias": 67,
+          "precision_cupo": 0.17972972972972973,
+          "precision_rango95": [
+            0.15013429752066115,
+            0.20946230026922133
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.6030482756656994,
+          "auc_dia": 0.5353486975489551,
+          "auc_dia_rango95": [
+            0.5189692371691358,
+            0.552414204572103
+          ]
+        },
+        "tasa fija (reajustada al inicio de cada bloque)": {
+          "aciertos": 94,
+          "elegidos": 740,
+          "vins": 15279,
+          "dias": 67,
+          "precision_cupo": 0.12702702702702703,
+          "precision_rango95": [
+            0.10296093250152782,
+            0.15202834168431562
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.1329814880644793,
+          "auc_dia": 0.5207173717215383,
+          "auc_dia_rango95": [
+            0.5071120063715414,
+            0.5360322132865181
+          ]
+        },
+        "oráculo (no elegible)": {
+          "aciertos": 169,
+          "elegidos": 740,
+          "vins": 15279,
+          "dias": 67,
+          "precision_cupo": 0.22837837837837838,
+          "precision_rango95": [
+            0.1963471976831023,
+            0.2601689532520325
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 2.0369560796052872,
+          "auc_dia": 0.5953269590119388,
+          "auc_dia_rango95": [
+            0.5816570315489706,
+            0.6093145828263961
+          ]
+        }
+      },
+      "diferencias": {
+        "riesgo estandarizado, vida media 60 d, κ 10 − tasa fija (reajustada al inicio de cada bloque)": {
+          "precision_rango95": [
+            0.005641154656820018,
+            0.08190645724083635
+          ],
+          "auc_dia_rango95": [
+            0.0004796969496374427,
+            0.030974653598489076
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10 − jerárquico 60 d, peso 20": {
+          "precision_rango95": [
+            -0.0253168776371308,
+            0.014424342105263152
+          ],
+          "auc_dia_rango95": [
+            -0.0086097643922452,
+            0.0037389645088788774
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10 − móvil 120 d hacia el mercado, peso 20": {
+          "precision_rango95": [
+            -0.018361859958183194,
+            0.019608484755158605
+          ],
+          "auc_dia_rango95": [
+            -0.003871994495127148,
+            0.007308286831981942
+          ]
+        }
+      }
+    },
+    "confirmación 175–194": {
+      "bloques": [
+        [
+          175,
+          194
+        ]
+      ],
+      "alternativas": {
+        "azar": {
+          "aciertos": 21,
+          "elegidos": 225,
+          "vins": 4626,
+          "dias": 19,
+          "precision_cupo": 0.09333333333333334,
+          "precision_rango95": [
+            0.054455445544554455,
+            0.13333333333333333
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 1.0624442260910205,
+          "auc_dia": 0.5,
+          "auc_dia_rango95": [
+            0.5,
+            0.5
+          ]
+        },
+        "jerárquico 60 d, peso 20": {
+          "aciertos": 41,
+          "elegidos": 225,
+          "vins": 4626,
+          "dias": 19,
+          "precision_cupo": 0.18222222222222223,
+          "precision_rango95": [
+            0.13478260869565217,
+            0.23113334347737877
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.0742958699872305,
+          "auc_dia": 0.5550662109783681,
+          "auc_dia_rango95": [
+            0.5269204557919128,
+            0.588279184809573
+          ]
+        },
+        "móvil 120 d hacia el mercado, peso 20": {
+          "aciertos": 46,
+          "elegidos": 225,
+          "vins": 4626,
+          "dias": 19,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.15565014646334108,
+            0.2511854065068571
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "auc_dia": 0.5575472544115743,
+          "auc_dia_rango95": [
+            0.5256363206109117,
+            0.5944993376043847
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10": {
+          "aciertos": 44,
+          "elegidos": 225,
+          "vins": 4626,
+          "dias": 19,
+          "precision_cupo": 0.19555555555555557,
+          "precision_rango95": [
+            0.14418499895244083,
+            0.24577627953577685
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.226073616571662,
+          "auc_dia": 0.5587030818744333,
+          "auc_dia_rango95": [
+            0.5288431618823664,
+            0.5922346835213591
+          ]
+        },
+        "olvido 30 d hacia el mercado, κ 40": {
+          "aciertos": 40,
+          "elegidos": 225,
+          "vins": 4626,
+          "dias": 19,
+          "precision_cupo": 0.17777777777777778,
+          "precision_rango95": [
+            0.13388551721280914,
+            0.22522700566178827
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.02370328779242,
+          "auc_dia": 0.5537011388886122,
+          "auc_dia_rango95": [
+            0.5257850607302837,
+            0.5854598692304399
+          ]
+        },
+        "tasa fija (reajustada al inicio de cada bloque)": {
+          "aciertos": 46,
+          "elegidos": 225,
+          "vins": 4626,
+          "dias": 19,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.1522383027284988,
+            0.25471698113207547
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "auc_dia": 0.5591315351580793,
+          "auc_dia_rango95": [
+            0.5253234354093594,
+            0.5974210363732315
+          ]
+        },
+        "oráculo (no elegible)": {
+          "aciertos": 48,
+          "elegidos": 225,
+          "vins": 4626,
+          "dias": 19,
+          "precision_cupo": 0.21333333333333335,
+          "precision_rango95": [
+            0.1558395613820142,
+            0.2719753997310221
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.428443945350904,
+          "auc_dia": 0.6070385906876177,
+          "auc_dia_rango95": [
+            0.5747252450387463,
+            0.6404491440458723
+          ]
+        }
+      },
+      "diferencias": {
+        "riesgo estandarizado, vida media 60 d, κ 10 − tasa fija (reajustada al inicio de cada bloque)": {
+          "precision_rango95": [
+            -0.021739130434782608,
+            0.0
+          ],
+          "auc_dia_rango95": [
+            -0.015817651172893594,
+            0.014797296741163373
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10 − jerárquico 60 d, peso 20": {
+          "precision_rango95": [
+            -0.02586206896551724,
+            0.05834558823529405
+          ],
+          "auc_dia_rango95": [
+            -0.0062895778437901066,
+            0.015369103657737238
+          ]
+        },
+        "riesgo estandarizado, vida media 60 d, κ 10 − móvil 120 d hacia el mercado, peso 20": {
+          "precision_rango95": [
+            -0.025210084033613446,
+            0.009345794392523364
+          ],
+          "auc_dia_rango95": [
+            -0.012118768736824725,
+            0.014950682708151844
+          ]
+        }
+      }
+    }
+  },
+  "estabilidad_ranking": {
+    "alternativas": 54,
+    "spearman": -0.337167759817441,
+    "p_valor": 0.012660810512727386,
+    "primeras_10": [
+      {
+        "alternativa": "CatBoost con atributos del código, reentrenado cada 5 d",
+        "seleccion": 136,
+        "confirmacion": 39
+      },
+      {
+        "alternativa": "Random Forest con atributos del código, fijo (reajustado por bloque)",
+        "seleccion": 135,
+        "confirmacion": 46
+      },
+      {
+        "alternativa": "XGBoost con atributos del código, reentrenado cada 5 d",
+        "seleccion": 134,
+        "confirmacion": 44
+      },
+      {
+        "alternativa": "jerárquico 60 d, peso 40",
+        "seleccion": 132,
+        "confirmacion": 42
+      },
+      {
+        "alternativa": "móvil 60 d hacia el mercado, peso 20",
+        "seleccion": 131,
+        "confirmacion": 42
+      },
+      {
+        "alternativa": "jerárquico 60 d, peso 20",
+        "seleccion": 131,
+        "confirmacion": 41
+      },
+      {
+        "alternativa": "Random Forest con atributos del código, reentrenado cada 5 d",
+        "seleccion": 131,
+        "confirmacion": 45
+      },
+      {
+        "alternativa": "jerárquico 120 d, peso 40",
+        "seleccion": 129,
+        "confirmacion": 42
+      },
+      {
+        "alternativa": "LightGBM con atributos del código, fijo (reajustado por bloque)",
+        "seleccion": 129,
+        "confirmacion": 45
+      },
+      {
+        "alternativa": "jerárquico todo el historial, peso 40",
+        "seleccion": 128,
+        "confirmacion": 41
+      }
+    ]
+  },
+  "palancas": {
+    "margen": {
+      "validación 155–194": {
+        "1": {
+          "aciertos": 71,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.1815856777493606,
+          "precision_rango95": [
+            0.14484404779357865,
+            0.21658638202755845
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.8383011515407925,
+          "auc_dia": 0.5426701767178519,
+          "auc_dia_rango95": [
+            0.5162127966175093,
+            0.5701325283723537
+          ]
+        },
+        "2": {
+          "aciertos": 72,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.18414322250639387,
+          "precision_rango95": [
+            0.14062396385941645,
+            0.2277850877192982
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.8641927170554518,
+          "auc_dia": 0.5386650724886335,
+          "auc_dia_rango95": [
+            0.5132240653160107,
+            0.5663972529852165
+          ]
+        },
+        "3": {
+          "aciertos": 75,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.1918158567774936,
+          "precision_rango95": [
+            0.1492843784646499,
+            0.23449461515660502
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.9418674135994287,
+          "auc_dia": 0.5392119541906151,
+          "auc_dia_rango95": [
+            0.5132733301946799,
+            0.5663140658729987
+          ]
+        },
+        "5": {
+          "aciertos": 73,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.1867007672634271,
+          "precision_rango95": [
+            0.14473684210526316,
+            0.22821428571428565
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.8900842825701107,
+          "auc_dia": 0.5406059663721369,
+          "auc_dia_rango95": [
+            0.5158953862318543,
+            0.5667637065694244
+          ]
+        },
+        "10": {
+          "aciertos": 72,
+          "elegidos": 391,
+          "vins": 8038,
+          "dias": 35,
+          "precision_cupo": 0.18414322250639387,
+          "precision_rango95": [
+            0.13624671532846716,
+            0.22842826675313982
+          ],
+          "azar_mismo_cupo": 0.09877906979341364,
+          "veces_azar": 1.8641927170554518,
+          "auc_dia": 0.5465787724114266,
+          "auc_dia_rango95": [
+            0.5215772430927297,
+            0.5738668786685497
+          ]
+        }
+      },
+      "100–194": {
+        "1": {
+          "aciertos": 171,
+          "elegidos": 965,
+          "vins": 19905,
+          "dias": 86,
+          "precision_cupo": 0.1772020725388601,
+          "precision_rango95": [
+            0.15436760895007565,
+            0.20119005172955595
+          ],
+          "azar_mismo_cupo": 0.10645873279188074,
+          "veces_azar": 1.6645142008714078,
+          "auc_dia": 0.5389305667034879,
+          "auc_dia_rango95": [
+            0.5224839390168847,
+            0.556187441656322
+          ]
+        },
+        "2": {
+          "aciertos": 177,
+          "elegidos": 965,
+          "vins": 19905,
+          "dias": 86,
+          "precision_cupo": 0.18341968911917098,
+          "precision_rango95": [
+            0.15912957815458756,
+            0.20864443775402677
+          ],
+          "azar_mismo_cupo": 0.10645873279188074,
+          "veces_azar": 1.7229182079195273,
+          "auc_dia": 0.5389563945864757,
+          "auc_dia_rango95": [
+            0.5227311215625594,
+            0.5563867476421386
+          ]
+        },
+        "3": {
+          "aciertos": 178,
+          "elegidos": 965,
+          "vins": 19905,
+          "dias": 86,
+          "precision_cupo": 0.1844559585492228,
+          "precision_rango95": [
+            0.16071428571428573,
+            0.20952477837523617
+          ],
+          "azar_mismo_cupo": 0.10645873279188074,
+          "veces_azar": 1.732652209094214,
+          "auc_dia": 0.5365981101936694,
+          "auc_dia_rango95": [
+            0.5216401043013891,
+            0.553136421782627
+          ]
+        },
+        "5": {
+          "aciertos": 171,
+          "elegidos": 965,
+          "vins": 19905,
+          "dias": 86,
+          "precision_cupo": 0.1772020725388601,
+          "precision_rango95": [
+            0.15147904335933998,
+            0.20420206559249235
+          ],
+          "azar_mismo_cupo": 0.10645873279188074,
+          "veces_azar": 1.6645142008714078,
+          "auc_dia": 0.5409034196117076,
+          "auc_dia_rango95": [
+            0.5253446909389529,
+            0.557675954896691
+          ]
+        },
+        "10": {
+          "aciertos": 167,
+          "elegidos": 965,
+          "vins": 19905,
+          "dias": 86,
+          "precision_cupo": 0.17305699481865286,
+          "precision_rango95": [
+            0.14772665108414562,
+            0.19939704874985725
+          ],
+          "azar_mismo_cupo": 0.10645873279188074,
+          "veces_azar": 1.6255781961726614,
+          "auc_dia": 0.5347653238816527,
+          "auc_dia_rango95": [
+            0.517736559903963,
+            0.5530160931232645
+          ]
+        }
+      }
+    },
+    "playa": {
+      "validación 155–194": {
+        "riesgo estandarizado": {
+          "0": {
+            "calibrada_elegidas": 73,
+            "elegidos": 391,
+            "precision_cupo": 0.1867007672634271,
+            "precision_rango95": [
+              0.14473684210526316,
+              0.22821428571428565
+            ]
+          },
+          "1": {
+            "calibrada_elegidas": 73,
+            "elegidos": 391,
+            "precision_cupo": 0.1867007672634271,
+            "precision_rango95": [
+              0.14038277872725444,
+              0.23076923076923078
+            ]
+          },
+          "2": {
+            "calibrada_elegidas": 76,
+            "elegidos": 391,
+            "precision_cupo": 0.19437340153452684,
+            "precision_rango95": [
+              0.1498435432028739,
+              0.23670244886422037
+            ]
+          },
+          "3": {
+            "calibrada_elegidas": 79,
+            "elegidos": 391,
+            "precision_cupo": 0.2020460358056266,
+            "precision_rango95": [
+              0.15846923568235044,
+              0.24074847520551573
+            ]
+          }
+        },
+        "azar": {
+          "0": {
+            "calibrada_elegidas": 35,
+            "elegidos": 391,
+            "precision_cupo": 0.08951406649616368,
+            "precision_rango95": [
+              0.06204758506999975,
+              0.11989100817438691
+            ]
+          },
+          "1": {
+            "calibrada_elegidas": 48,
+            "elegidos": 391,
+            "precision_cupo": 0.12276214833759591,
+            "precision_rango95": [
+              0.09693877551020408,
+              0.14894137231441498
+            ]
+          },
+          "2": {
+            "calibrada_elegidas": 44,
+            "elegidos": 391,
+            "precision_cupo": 0.11253196930946291,
+            "precision_rango95": [
+              0.08064414560819046,
+              0.1475
+            ]
+          },
+          "3": {
+            "calibrada_elegidas": 42,
+            "elegidos": 391,
+            "precision_cupo": 0.10741687979539642,
+            "precision_rango95": [
+              0.07731926626732138,
+              0.13995300090479537
+            ]
+          }
+        }
+      },
+      "100–194": {
+        "riesgo estandarizado": {
+          "0": {
+            "calibrada_elegidas": 171,
+            "elegidos": 965,
+            "precision_cupo": 0.1772020725388601,
+            "precision_rango95": [
+              0.15147904335933998,
+              0.20420206559249235
+            ]
+          },
+          "1": {
+            "calibrada_elegidas": 177,
+            "elegidos": 965,
+            "precision_cupo": 0.18341968911917098,
+            "precision_rango95": [
+              0.15702176769597842,
+              0.210337347333001
+            ]
+          },
+          "2": {
+            "calibrada_elegidas": 176,
+            "elegidos": 965,
+            "precision_cupo": 0.18238341968911917,
+            "precision_rango95": [
+              0.15806732357800332,
+              0.2080095001999017
+            ]
+          },
+          "3": {
+            "calibrada_elegidas": 175,
+            "elegidos": 965,
+            "precision_cupo": 0.18134715025906736,
+            "precision_rango95": [
+              0.15702400704563146,
+              0.206163655685441
+            ]
+          }
+        },
+        "azar": {
+          "0": {
+            "calibrada_elegidas": 104,
+            "elegidos": 965,
+            "precision_cupo": 0.1077720207253886,
+            "precision_rango95": [
+              0.08974097788125728,
+              0.12588134709463708
+            ]
+          },
+          "1": {
+            "calibrada_elegidas": 107,
+            "elegidos": 965,
+            "precision_cupo": 0.11088082901554404,
+            "precision_rango95": [
+              0.09405570200982946,
+              0.1270191834958977
+            ]
+          },
+          "2": {
+            "calibrada_elegidas": 112,
+            "elegidos": 965,
+            "precision_cupo": 0.11606217616580311,
+            "precision_rango95": [
+              0.09426433041009133,
+              0.13860395023075203
+            ]
+          },
+          "3": {
+            "calibrada_elegidas": 96,
+            "elegidos": 965,
+            "precision_cupo": 0.09948186528497409,
+            "precision_rango95": [
+              0.08107880096069073,
+              0.12013154948499775
+            ]
+          }
+        }
+      }
+    }
+  },
+  "senal_vin": {
+    "entrenamiento": [
+      100,
+      149
+    ],
+    "evaluacion": [
+      155,
+      194
+    ],
+    "variables": 253,
+    "vins_entrenamiento": 10825,
+    "supuesto": "A: todos los eventos QLS del VIN; disponibilidad no acreditada",
+    "alternativas": {
+      "solo código (riesgo estandarizado)": {
+        "aciertos": 73,
+        "elegidos": 391,
+        "vins": 8038,
+        "dias": 35,
+        "precision_cupo": 0.1867007672634271,
+        "precision_rango95": [
+          0.14473684210526316,
+          0.22821428571428565
+        ],
+        "azar_mismo_cupo": 0.09877906979341364,
+        "veces_azar": 1.8900842825701107,
+        "auc_dia": 0.5406059663721369,
+        "auc_dia_rango95": [
+          0.5158953862318543,
+          0.5667637065694244
+        ]
+      },
+      "código + historial QLS": {
+        "aciertos": 67,
+        "elegidos": 391,
+        "vins": 8038,
+        "dias": 35,
+        "precision_cupo": 0.17135549872122763,
+        "precision_rango95": [
+          0.1309744752308984,
+          0.210672952853598
+        ],
+        "azar_mismo_cupo": 0.09877906979341364,
+        "veces_azar": 1.7347348894821564,
+        "auc_dia": 0.5181221583597838,
+        "auc_dia_rango95": [
+          0.4908115328197862,
+          0.5435146068012884
+        ]
+      },
+      "solo historial QLS": {
+        "aciertos": 33,
+        "elegidos": 391,
+        "vins": 8038,
+        "dias": 35,
+        "precision_cupo": 0.08439897698209718,
+        "precision_rango95": [
+          0.05699321551326117,
+          0.11380729365787345
+        ],
+        "azar_mismo_cupo": 0.09877906979341364,
+        "veces_azar": 0.8544216619837486,
+        "auc_dia": 0.4853280217894827,
+        "auc_dia_rango95": [
+          0.46370168035793674,
+          0.5066693984256075
+        ]
+      }
+    },
+    "historial_menos_codigo": {
+      "precision_rango95": [
+        -0.039262246710283666,
+        0.008431191848298486
+      ],
+      "auc_dia_rango95": [
+        -0.04602918133964083,
+        0.0010950085778199078
+      ]
+    }
+  },
+  "fuente_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+  "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047",
+  "version_codigo": "e9a6559deeb3624c01abf8999eb8468333c24a48+cambios"
+}
