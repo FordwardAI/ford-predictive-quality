@@ -231,7 +231,8 @@ function esNumeroValido(v) {
   return typeof v === 'number' && Number.isFinite(v);
 }
 
-async function leerJson(archivo) {
+// Exportada para figuras.js (cargarDatos), con la misma convención de rutas.
+export async function leerJson(archivo) {
   const url = new URL(RAIZ + archivo, import.meta.url);
   const respuesta = await fetch(url);
   if (!respuesta.ok) throw new Error(`${archivo}: HTTP ${respuesta.status}`);
@@ -240,8 +241,8 @@ async function leerJson(archivo) {
 
 /**
  * Carga todas las cifras.
- * @returns {Promise<Map<string, {valor: string, numero: number|number[]|null, etiqueta: string,
- *   leyenda: string, fuente: string, respaldo: boolean, pendiente: boolean}>>}
+ * @returns {Promise<Map<string, {valor: string, numero: number|number[]|null, formato: string,
+ *   etiqueta: string, leyenda: string, fuente: string, respaldo: boolean, pendiente: boolean}>>}
  */
 export async function cargarCifras() {
   const archivos = [...new Set(DEFINICIONES.filter((d) => d.archivo && !d.fijo).map((d) => d.archivo))];
@@ -285,6 +286,7 @@ export async function cargarCifras() {
     cifras.set(d.clave, {
       valor: pendiente ? '[PENDIENTE]' : formatear(d.formato, numero),
       numero: pendiente ? null : numero,
+      formato: d.formato, // para el conteo animado con el mismo formatear()
       etiqueta: d.etiqueta,
       leyenda,
       fuente: d.fuente ?? (d.ruta ? `${d.archivo} → ${d.ruta}` : d.archivo),
