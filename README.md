@@ -32,6 +32,10 @@ El [anexo completo](research/anexo-busqueda.md) lista los 238 pipelines, las 37 
 cobertura de las 458.098 configuraciones. Todo usa períodos ya explorados, Día <195, de la base ficticia;
 es evidencia exploratoria y no reemplaza la solución acordada ni la prueba final.
 
+La [evaluación de la opción más precisa](research/opcion-mas-precisa.md) compara todas las vías con criterio propio.
+Con esta base, los estimadores por código empatan cerca del techo del código; más búsqueda no los distingue.
+Lo que importa es actualizar la tasa y contraerla hacia el mercado, y para superar ese techo hacen falta datos por VIN.
+
 La [evaluación de datos de proceso](research/datos-proceso.md) propone qué telemetría,
 trazabilidad y mediciones pedir a Ford, con sus requisitos de unión por VIN y un piloto
 para medir el aporte incremental. No estima mejoras sin una nueva entrega.

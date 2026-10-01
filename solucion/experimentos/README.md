@@ -31,6 +31,14 @@ ni releer la prueba final. Usar únicamente la caché local propia (pickle no es
 
 Cobertura, resultados y límites de estos experimentos en [búsqueda amplia](../../research/busqueda-amplia.md).
 
+## Opción más precisa con el código
+
+`python -m solucion.experimentos.opcion_precisa --csv '<CSV vigente>' --catalogo '<catálogo vigente>'` mide el techo
+del código y la estabilidad del orden entre bloques. Compara dos familias nuevas con las del equipo: riesgo relativo
+estandarizado por día y tasa con olvido hacia el mercado, con parámetros elegidos por log-loss secuencial en 60–149.
+También prueba tres palancas (demora de resultados, días de playa e historial QLS). Solo Día <195; escribe
+`solucion/experimentos/resultados/opcion_precisa.json`. Informe: [opción más precisa](../../research/opcion-mas-precisa.md).
+
 ## Escenarios de datos de proceso inventados
 
 La simulación de sensibilidad añade 13 proxies normalizados de cuatro dimensiones de proceso
