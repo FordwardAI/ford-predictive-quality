@@ -70,21 +70,9 @@
 @media (max-width: 1100px) {
   :root { --t-display: 72px; --t-h1: 52px; --gutter: 40px; }
 }
-/* Pantallas bajas (1366×768): aire vertical más compacto */
+/* Pantallas bajas (1366×768): escala más compacta (las reglas, al final del archivo) */
 @media (max-height: 860px) and (min-width: 721px) {
   :root { --t-display: 76px; --t-h1: 48px; --t-h-cont: 36px; --t-stat: 34px; --t-stat-s: 28px; --t-lead: 17px; --t-body: 16px; --t-card: 14px; --t-small: 12px; --cabecera-h: 80px; --pie-h: 56px; }
-  .titular { margin-bottom: var(--s-2); }
-  .antetitulo { margin-bottom: var(--s-2); }
-  .bajada { margin-bottom: var(--s-3); }
-  .cifras { margin-bottom: var(--s-3); gap: var(--s-2) var(--s-3); }
-  .callouts { gap: 6px; }
-  .callout { padding: 8px 14px; }
-  .callout-texto { margin-left: 0; margin-top: 4px; }
-  .cifra-etiqueta { margin-top: 2px; }
-  .integrantes { margin-top: var(--s-4); }
-  .pista { margin-top: var(--s-3); }
-  .tarjeta { padding: 14px 16px; }
-  .tarjetas { gap: 10px; }
 }
 @media (max-width: 720px) {
   :root { --t-display: 52px; --t-h1: 44px; --t-h-cont: 32px; --t-stat: 32px; --t-stat-s: 28px; --t-body: 17px; --t-card: 15px; --gutter: 20px; --cabecera-h: 72px; }
@@ -672,6 +660,28 @@ kbd {
   .integrantes { grid-template-columns: 1fr; }
   .indice-lista { grid-template-columns: 1fr; gap: var(--s-5); }
   .indice-atajos { display: none; }
+}
+
+/* ---------- Pantallas bajas (1366×768): aire vertical más compacto ---------- */
+@media (max-height: 860px) and (min-width: 721px) {
+  .titular { margin-bottom: var(--s-2); }
+  .antetitulo { margin-bottom: var(--s-2); }
+  .cifras { margin-bottom: var(--s-3); gap: var(--s-2) var(--s-3); }
+  .callouts { gap: 6px; }
+  .callout { padding: 8px 14px; }
+  .callout-texto { margin-left: 0; margin-top: 4px; }
+  .cifra-etiqueta { margin-top: 2px; }
+  .integrantes { margin-top: var(--s-4); }
+  .pista { margin-top: var(--s-3); }
+  .tarjeta { padding: 14px 16px; }
+  .tarjetas { gap: 10px; }
+  .bajada { margin-bottom: var(--s-2); }
+  .cifras-leyenda { margin-top: calc(-1 * var(--s-2)); margin-bottom: var(--s-2); }
+  .callout-texto { line-height: 1.35; }
+  .tarjeta-texto { line-height: 1.35; }
+  .capitulo-figura { padding: 14px; }
+  .lista-paso { padding: 6px 14px 6px 10px; }
+  .lista-numero { width: 26px; height: 26px; }
 }
 
 /* ---------- Movimiento reducido ---------- */
