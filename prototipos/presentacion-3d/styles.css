@@ -258,6 +258,10 @@ kbd {
 /* Tarjetas al pie de la columna opuesta (si la banda no entra): debajo del vehículo */
 .tarjetas-lado .capitulo-lado, .callouts-lado .capitulo-lado { align-self: end; padding-bottom: var(--s-2); }
 .capitulo-lado .callouts { margin: 0; }
+/* Pantallas `centrado` (ver contenido.js): las tarjetas o la figura en el centro de su columna, un poco por
+   encima del medio, y no pegadas al pie. Pueden tapar parte del vehículo. */
+.centrado .capitulo-lado,
+.centrado.tarjetas-lado .capitulo-lado { align-self: center; padding-bottom: calc(110 * var(--u)); }
 .capitulo-banda {
   grid-column: 1 / -1; grid-row: 2;
   pointer-events: auto;

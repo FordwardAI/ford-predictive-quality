@@ -60,8 +60,12 @@ export const secciones = [
   { numero: '06', titulo: 'Conclusiones' },
 ];
 
-// Campos extra (opcionales para ui.js): `subseccion` (2.1…2.3) y `minutos`
-// (duración orientativa).
+// Campos extra (opcionales para ui.js): `subseccion` (2.1…2.3), `minutos` (duración orientativa),
+// `lado` ('derecha' | 'izquierda': de qué lado va el texto; si no, lo decide la sección), `centrado`
+// (true: las tarjetas o la figura van al centro de su columna, un poco por encima del medio, aunque
+// tapen parte del vehículo; ver styles.css) y, en las
+// pantallas de la escena `linea`, `recorrido` (segundos que tarda el vehículo en recorrerla; por
+// defecto 6, ver main.js). La línea mide ≈ 162 unidades, así que 11 s ≈ 14 u/s.
 //
 // Pantallas: una diapositiva por capítulo, pensadas para proyector: un titular,
 // pocas cifras (hasta 3), hasta 3 tarjetas cortas y, si hace falta, una figura.
@@ -99,6 +103,7 @@ export const capitulos = [
     id: 'proceso',
     seccion: '01',
     escena: 'linea',
+    recorrido: 28, // s del vehículo por toda la línea (por defecto 6): se aprecia cada estación (≈ 6 u/s; antes ≈ 14)
     nucleo: true,
     minutos: 1.2,
     antetitulo: 'Descripción del desafío',
@@ -135,6 +140,7 @@ export const capitulos = [
     id: 'pregunta',
     seccion: '01',
     escena: 'linea',
+    recorrido: 18, // ≈ 9 u/s: más lento que antes (≈ 14); el vehículo vuelve a pasar por la línea
     nucleo: true,
     minutos: 1.0,
     antetitulo: 'Descripción del desafío',
@@ -166,6 +172,7 @@ export const capitulos = [
     seccion: '02',
     subseccion: '2.2',
     escena: 'predictor',
+    centrado: true, // las tarjetas van al centro de su columna, un poco por encima del medio (pueden tapar el vehículo)
     nucleo: true,
     minutos: 1.5,
     antetitulo: 'Especificaciones técnicas · El predictor',
@@ -200,6 +207,7 @@ export const capitulos = [
     seccion: '02',
     subseccion: '2.2',
     escena: 'validacion',
+    centrado: true, // la figura va al centro de su columna, un poco por encima del medio
     nucleo: true,
     minutos: 1.5,
     antetitulo: 'Especificaciones técnicas · Validación',
@@ -320,45 +328,7 @@ export const capitulos = [
     orbita: false,
   },
 
-  // 8 · 02 Demo: la hoja — 2.2.1 Información complementaria --------------------
-  {
-    id: 'hoja',
-    seccion: '02',
-    subseccion: '2.2.1',
-    escena: 'predictor',
-    nucleo: true,
-    minutos: 2.0,
-    antetitulo: 'Información complementaria · La hoja',
-    titulo: 'Así la usa ', acento: 'el analista',
-    bajada: 'Cada mañana: qué códigos buscar en la ronda y cuántas unidades de cada uno.',
-    cifras: ['hoja.unidades', 'hoja.codigos', 'hoja.cupo'],
-    puntos: [
-      { id: 'etiqueta-parabrisas', titulo: 'Se lee el código', texto: 'Se busca su fila y se derivan las unidades sugeridas.' },
-    ],
-    // Captura local (fuera de Git: muestra tasas por código). Sin ella, el mock
-    // sin números con el chip de pendiente.
-    figura: {
-      tipo: 'local',
-      src: [LOCAL + 'captura-hoja-dia-260.png', LOCAL + 'd-hoja.png'],
-      respaldo: ILUSTRACIONES + 'hoja-mock.svg',
-      alt: 'La hoja de códigos prioritarios del día',
-      pendiente: '[PENDIENTE: captura de la hoja del Día 260 (captura-hoja-dia-260.png) — salida local fuera de Git; no se versiona porque muestra tasas por código]',
-    },
-    detalle: [],
-    ampliacion: [
-      { titulo: 'Se lee el código', texto: 'El analista lee el código en el parabrisas y busca su fila: cantidad sugerida, tasa del código con rango y n, veces la tasa general, acumulado y mercado de destino.' },
-      { titulo: 'Si un código no llega', texto: 'La cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron. Solo se completa al azar si se agota el ranking.' },
-      { titulo: 'Qué muestra', texto: 'Arriba, la frase permitida con su calificador y los límites. Después, la tabla de códigos (primero el código, porque es lo que se lee), las filas del mínimo por código aparte y el bloque «por qué este código». Nunca «probabilidad de la unidad» ni un puntaje por vehículo.' },
-      { titulo: 'Formatos', texto: 'Planilla (CSV/XLSX) e imprimible de una página: formato adaptable a la operación.' },
-      { titulo: 'Hoja de ensayo y hoja final', texto: 'La del Día 190 (validación) sirve de ensayo; la final es la del Día 260, ya generada. Las dos usan identificadores ficticios y ningún VIN.' },
-      { titulo: 'Diagrama de la solución', texto: 'Entradas (programa del día, cupo, resultados con Día ≤ t−5 y catálogo), tasa por código con mínimo por código y detector de cambios, y la hoja en planilla e imprimible. Ver assets/ilustraciones/solucion.svg.' },
-      { titulo: 'Quién calcula la tasa', texto: 'La hoja entrega una tasa por código. En la solución elegida la calcula CatBoost con atributos del código, reentrenado cada 5 días; la tasa fija es la lectura oficial preregistrada y la referencia simple. La hoja de ensayo del Día 190 se generó con la tasa fija (≤149) (solucion/resultados/p8.json): con CatBoost cambia la columna de tasa, no el formato.' },
-    ],
-    notas: 'Llevamos la hoja impresa y en planilla. Recorremos una fila: código, cantidad sugerida, tasa con rango y n, veces la tasa general, mercado de destino. La tasa de cada código la calcula la solución elegida (CatBoost); la hoja no cambia de formato. Mostramos el traspaso cuando un código no llega. Nunca decimos «probabilidad de la unidad». En la versión núcleo, la demo baja a un minuto. Si falla el equipo, usamos las capturas de respaldo.',
-    orbita: false,
-  },
-
-  // 9 · 04 Valor diferencial: dónde mirar --------------------------------------
+  // 8 · 04 Valor diferencial: dónde mirar --------------------------------------
   {
     id: 'donde-mirar',
     seccion: '04',
@@ -369,33 +339,32 @@ export const capitulos = [
     titulo: 'Además de cuál, ', acento: 'dónde mirar',
     bajada: 'Para cada código, los tres componentes que más se calibraron antes.',
     cifras: ['dondeMirar.prueba.codigo', 'dondeMirar.prueba.general'],
-    puntos: [
-      { id: 'componente-1', titulo: 'Componente 1' },
-      { id: 'componente-2', titulo: 'Componente 2' },
-      { id: 'componente-3', titulo: 'Componente 3' },
-    ],
+    // Sin puntos sobre el vehículo: los componentes reales están anonimizados en la base, así que no hay
+    // dónde ubicarlos y el foco no tiene por qué ir pasando por zonas del auto.
+    puntos: [],
     figura: null,
     detalle: [
-      { titulo: 'Zonas ilustrativas', texto: 'Los componentes reales están anonimizados en la base.' },
+      { titulo: 'Componentes anonimizados', texto: 'En la base no se pueden ubicar en la unidad.' },
       { titulo: 'Asociación, no causa', texto: 'Indica por dónde empezar la revisión.' },
     ],
     ampliacion: [
-      { titulo: 'Zona ilustrativa 1', texto: 'Zona genérica, solo para ilustrar. Los componentes de Auditoría Adicional están anonimizados en la base: la hoja sugeriría los 3 más calibrados en el código, sin ubicarlos en la unidad.' },
-      { titulo: 'Zona ilustrativa 2', texto: 'Zona genérica, solo para ilustrar. La lista sale de auditorías del código con resultado ya conocido (Día ≤ t−5), suavizada hacia la distribución general.' },
-      { titulo: 'Zona ilustrativa 3', texto: 'Zona genérica, solo para ilustrar. «Asociación, no causa»: indica por dónde empezar la revisión, no por qué se calibra.' },
+      { titulo: 'Qué sugiere la hoja', texto: 'Para cada código, los 3 componentes más calibrados en sus auditorías. Los componentes de Auditoría Adicional están anonimizados en la base: se listan, sin ubicarlos en la unidad (el vehículo de la escena es ilustrativo).' },
+      { titulo: 'De dónde sale la lista', texto: 'De auditorías del código con resultado ya conocido (Día ≤ t−5), suavizada hacia la distribución general.' },
+      { titulo: 'Asociación, no causa', texto: 'Indica por dónde empezar la revisión, no por qué se calibra.' },
       { titulo: 'Cinco piezas, cada una con su estado', texto: '«Dónde mirar»: mejora en validación y en la prueba final. Selección que aprende de sus auditorías: elegida en validación. Detector de cambios: calibrado en validación. Señal por mercado de destino: evaluada en validación. Insumo para la subcategorización: no se sostiene en validación.' },
       { titulo: 'En validación', texto: 'Sobre las 59 CALIBRADA que eligió la tasa fija, los 3 primeros del código acertaron 61,0 % contra 30,5 % de la lista general; sobre todas (n = 780), 40,0 % contra 33,5 %. Entre auditados con actividad QLS, validación 155–194, base ficticia.' },
       { titulo: 'Por qué', texto: 'Los mentores señalaron que la clave está en qué componente presentó la falla. Lo usamos como lo que se predice dentro de la unidad elegida.' },
     ],
-    notas: 'Cada pieza la decimos con su estado: evaluada en validación, leída en la prueba si estaba en el preregistro, o «solo validación» rotulado así. Las zonas del vehículo son ilustrativas: los componentes reales están anonimizados.',
+    notas: 'Cada pieza la decimos con su estado: evaluada en validación, leída en la prueba si estaba en el preregistro, o «solo validación» rotulado así. Los componentes reales están anonimizados: la hoja los listaría, pero no los ubica en la unidad; el vehículo es ilustrativo.',
     orbita: true,
   },
 
-  // 10 · 04 Una selección que aprende -------------------------------------------
+  // 9 · 04 Una selección que aprende -------------------------------------------
   {
     id: 'aprende',
     seccion: '04',
     escena: 'linea',
+    recorrido: 11, // la línea ahora es más larga (162 u): 11 s mantienen la velocidad de antes (≈ 14 u/s)
     nucleo: true,
     minutos: 1.0,
     antetitulo: 'Valor diferencial e innovación',
@@ -419,7 +388,7 @@ export const capitulos = [
     orbita: false,
   },
 
-  // 11 · 02 Seguridad y privacidad — 2.3 ---------------------------------------
+  // 10 · 02 Seguridad y privacidad — 2.3 ---------------------------------------
   {
     id: 'seguridad',
     seccion: '02',
@@ -449,7 +418,7 @@ export const capitulos = [
     orbita: false,
   },
 
-  // 12 · 03 Costos y escala, con la fórmula -------------------------------------
+  // 11 · 03 Costos y escala, con la fórmula -------------------------------------
   {
     id: 'factibilidad',
     seccion: '03',
@@ -481,14 +450,52 @@ export const capitulos = [
     orbita: false,
   },
 
-  // 13 · 05 Implementar midiendo, con la plataforma ------------------------------
+  // 12 · 05 Implementación: la hoja (captura de la aplicación) --------------------
+  {
+    id: 'hoja',
+    seccion: '05',
+    lado: 'derecha', // conserva el diseño que tenía en la sección 02: texto a la derecha, captura a la izquierda
+    escena: 'predictor',
+    nucleo: true,
+    minutos: 2.0,
+    antetitulo: 'Implementación · La hoja',
+    titulo: 'Así la usa ', acento: 'el analista',
+    bajada: 'Cada mañana: qué códigos buscar en la ronda y cuántas unidades de cada uno.',
+    cifras: ['hoja.unidades', 'hoja.codigos', 'hoja.cupo'],
+    puntos: [
+      { id: 'etiqueta-parabrisas', titulo: 'Se lee el código', texto: 'Se busca su fila y se derivan las unidades sugeridas.' },
+    ],
+    // Captura local (fuera de Git: muestra tasas por código). Sin ella, el mock
+    // sin números con el chip de pendiente.
+    figura: {
+      tipo: 'local',
+      src: [LOCAL + 'captura-hoja-dia-260.png', LOCAL + 'd-hoja.png'],
+      respaldo: ILUSTRACIONES + 'hoja-mock.svg',
+      alt: 'La hoja de códigos prioritarios del día',
+      pendiente: '[PENDIENTE: captura de la hoja del Día 260 (captura-hoja-dia-260.png) — salida local fuera de Git; no se versiona porque muestra tasas por código]',
+    },
+    detalle: [],
+    ampliacion: [
+      { titulo: 'Se lee el código', texto: 'El analista lee el código en el parabrisas y busca su fila: cantidad sugerida, tasa del código con rango y n, veces la tasa general, acumulado y mercado de destino.' },
+      { titulo: 'Si un código no llega', texto: 'La cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron. Solo se completa al azar si se agota el ranking.' },
+      { titulo: 'Qué muestra', texto: 'Arriba, la frase permitida con su calificador y los límites. Después, la tabla de códigos (primero el código, porque es lo que se lee), las filas del mínimo por código aparte y el bloque «por qué este código». Nunca «probabilidad de la unidad» ni un puntaje por vehículo.' },
+      { titulo: 'Formatos', texto: 'Planilla (CSV/XLSX) e imprimible de una página: formato adaptable a la operación.' },
+      { titulo: 'Hoja de ensayo y hoja final', texto: 'La del Día 190 (validación) sirve de ensayo; la final es la del Día 260, ya generada. Las dos usan identificadores ficticios y ningún VIN.' },
+      { titulo: 'Diagrama de la solución', texto: 'Entradas (programa del día, cupo, resultados con Día ≤ t−5 y catálogo), tasa por código con mínimo por código y detector de cambios, y la hoja en planilla e imprimible. Ver assets/ilustraciones/solucion.svg.' },
+      { titulo: 'Quién calcula la tasa', texto: 'La hoja entrega una tasa por código. En la solución elegida la calcula CatBoost con atributos del código, reentrenado cada 5 días; la tasa fija es la lectura oficial preregistrada y la referencia simple. La hoja de ensayo del Día 190 se generó con la tasa fija (≤149) (solucion/resultados/p8.json): con CatBoost cambia la columna de tasa, no el formato.' },
+    ],
+    notas: 'Llevamos la hoja impresa y en planilla. Recorremos una fila: código, cantidad sugerida, tasa con rango y n, veces la tasa general, mercado de destino. La tasa de cada código la calcula la solución elegida (CatBoost); la hoja no cambia de formato. Mostramos el traspaso cuando un código no llega. Nunca decimos «probabilidad de la unidad». En la versión núcleo, la demo baja a un minuto. Si falla el equipo, usamos las capturas de respaldo.',
+    orbita: false,
+  },
+
+  // 13 · 05 Implementación: la plataforma y los días de control ------------------------
   {
     id: 'futuro',
     seccion: '05',
     escena: 'futuro',
     nucleo: true,
     minutos: 1.2,
-    antetitulo: 'Trabajo futuro',
+    antetitulo: 'Implementación · Trabajo futuro',
     titulo: 'Implementar ', acento: 'midiendo',
     bajada: 'Días de control alternados, mínimo por código y resultados con y sin actividad QLS por separado.',
     cifras: [],

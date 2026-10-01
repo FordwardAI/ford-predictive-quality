@@ -27,6 +27,8 @@ const consultaMovimiento = matchMedia('(prefers-reduced-motion: reduce)');
 let movimientoReducido = consultaMovimiento.matches;
 
 // Recorrido automático de la línea (s para t de 0 a 1) y rotación del foco (ms).
+// `DURACION_LINEA` es el valor por defecto; una pantalla puede pedir otro con `recorrido` (en
+// contenido.js): la 01 lo alarga para que se aprecie cómo el vehículo pasa por cada estación.
 const DURACION_LINEA = 6;
 const DURACION_ESCENA = 1.6;
 const ROTACION_FOCO = 3000;
@@ -192,7 +194,7 @@ function arrancarAuto(cap) {
     let siguiente = 0;
     estado.tweenAuto = gsap.to(estado.tAuto, {
       t: meta,
-      duration: Math.max(2, DURACION_LINEA * meta),
+      duration: Math.max(2, (cap.recorrido ?? DURACION_LINEA) * meta),
       ease: 'power1.inOut',
       onUpdate: () => {
         while (siguiente < estaciones.length && estado.tAuto.t >= estaciones[siguiente].p - 0.004) {
