@@ -49,8 +49,8 @@ Para usar el modelo 3D:
 
    ```sh
    npx @gltf-transform/cli@4 optimize prototipos/presentacion-3d/assets/fuente/scene.gltf \
-     prototipos/presentacion-3d/assets/ranger.glb --compress draco --simplify true \
-     --simplify-ratio 0.5 --simplify-error 0.0005 --texture-compress webp --texture-size 1024
+     prototipos/presentacion-3d/assets/ranger.glb --compress draco --simplify false \
+     --weld false --texture-compress webp --texture-size 1024
    ```
 
 3. Meta: **menos de 5 MB**. `assets/.gitignore` ignora todo salvo `ranger.glb`; si queda por encima de 5 MB, no se versiona. Antes de subirlo, revisar el atributo en [CREDITOS.md](CREDITOS.md).
