@@ -1,0 +1,984 @@
+{
+  "pieza": "Simulación de un mundo con verdad conocida (#33)",
+  "rotulo": "simulación, no evidencia sobre la planta; Día < 195; prueba final no releída; no elegible",
+  "protocolo": {
+    "bloques_seleccion": [
+      [
+        100,
+        118
+      ],
+      [
+        119,
+        137
+      ],
+      [
+        138,
+        156
+      ],
+      [
+        157,
+        174
+      ]
+    ],
+    "confirmacion": [
+      175,
+      194
+    ],
+    "margen_dias": 5,
+    "replicas": 24,
+    "semilla": 20261005,
+    "candidatas": [
+      "tasa_fija",
+      "rf_atributos",
+      "catboost_atributos"
+    ],
+    "pares": [
+      [
+        "catboost_atributos",
+        "rf_atributos"
+      ]
+    ],
+    "configuracion_fija": "la de los preregistros: RF min_samples_leaf 5, vida 15, semilla 4; CatBoost l2 10, vida 15, semilla 1; logística C 1, vida 60; sin ajuste por bloque"
+  },
+  "mundo": {
+    "desvio_entre_codigos_log": 0.2150347031413495,
+    "nivel_general": {
+      "min": 0.0861397479954181,
+      "max": 0.14820936639118457
+    },
+    "riesgo_relativo_por_mercado": {
+      "LOCATION_1": 1.026772268019088,
+      "LOCATION_2": 0.9643645073811272,
+      "LOCATION_3": 0.852622151597571,
+      "LOCATION_4": 1.8870577045496155,
+      "LOCATION_5": 0.8712793007087621,
+      "LOCATION_6": 0.9288133147937411,
+      "LOCATION_7": 0.7845812319232167,
+      "LOCATION_8": 0.5096395708077329,
+      "LOCATION_9": 0.8427524465272607
+    },
+    "codigos": 98,
+    "ajustado_con": "Día <= 194",
+    "amplitud": 1.0,
+    "calibracion": null
+  },
+  "fidelidad_escenario_base": [
+    {
+      "clave": "azar",
+      "nombre": "azar",
+      "seleccion": {
+        "real": 11.216216216216218,
+        "simulada": 11.08108108108108,
+        "simulada_p2_5": 9.25,
+        "simulada_p97_5": 12.908783783783784
+      },
+      "confirmacion": {
+        "real": 9.333333333333334,
+        "simulada": 10.148148148148147,
+        "simulada_p2_5": 6.355555555555556,
+        "simulada_p97_5": 13.388888888888891
+      },
+      "todo": {
+        "real": 10.777202072538861,
+        "simulada": 10.86355785837651,
+        "simulada_p2_5": 8.914507772020725,
+        "simulada_p97_5": 12.966321243523316
+      }
+    },
+    {
+      "clave": "tasa_fija",
+      "nombre": "tasa fija, reajustada por bloque",
+      "seleccion": {
+        "real": 12.702702702702704,
+        "simulada": 13.772522522522522,
+        "simulada_p2_5": 11.391891891891893,
+        "simulada_p97_5": 17.175675675675677
+      },
+      "confirmacion": {
+        "real": 20.444444444444446,
+        "simulada": 14.981481481481481,
+        "simulada_p2_5": 8.511111111111111,
+        "simulada_p97_5": 19.933333333333337
+      },
+      "todo": {
+        "real": 14.507772020725387,
+        "simulada": 14.05440414507772,
+        "simulada_p2_5": 11.207253886010362,
+        "simulada_p97_5": 17.282383419689122
+      }
+    },
+    {
+      "clave": "rf_atributos",
+      "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+      "seleccion": {
+        "real": 16.08108108108108,
+        "simulada": 15.979729729729732,
+        "simulada_p2_5": 13.070945945945946,
+        "simulada_p97_5": 19.97972972972973
+      },
+      "confirmacion": {
+        "real": 19.555555555555557,
+        "simulada": 14.388888888888891,
+        "simulada_p2_5": 6.8,
+        "simulada_p97_5": 19.866666666666667
+      },
+      "todo": {
+        "real": 16.89119170984456,
+        "simulada": 15.608808290155443,
+        "simulada_p2_5": 12.145077720207254,
+        "simulada_p97_5": 19.020725388601036
+      }
+    },
+    {
+      "clave": "catboost_atributos",
+      "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+      "seleccion": {
+        "real": 17.43243243243243,
+        "simulada": 16.70045045045045,
+        "simulada_p2_5": 14.094594594594595,
+        "simulada_p97_5": 19.976351351351354
+      },
+      "confirmacion": {
+        "real": 17.333333333333336,
+        "simulada": 14.666666666666666,
+        "simulada_p2_5": 7.311111111111112,
+        "simulada_p97_5": 20.18888888888889
+      },
+      "todo": {
+        "real": 17.409326424870468,
+        "simulada": 16.226252158894646,
+        "simulada_p2_5": 13.562176165803109,
+        "simulada_p97_5": 19.569948186528496
+      }
+    }
+  ],
+  "escenarios": {
+    "base": {
+      "escenario": {
+        "mezcla": "real",
+        "heterogeneidad": 1.0,
+        "deriva": 0.0
+      },
+      "replicas": 24,
+      "seleccion": {
+        "elegidos_por_replica": 740,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.281340256057513,
+              "desvio": 0.7165403620647736,
+              "p2_5": 10.222930756173207,
+              "p97_5": 12.586319204008838
+            },
+            "precision_realizada": {
+              "media": 11.08108108108108,
+              "desvio": 1.0096872545587041,
+              "p2_5": 9.25,
+              "p97_5": 12.908783783783784
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 13.727480550114242,
+              "desvio": 1.628438635213776,
+              "p2_5": 11.708859294295868,
+              "p97_5": 16.99578127419427
+            },
+            "precision_realizada": {
+              "media": 13.772522522522522,
+              "desvio": 1.7424239809029884,
+              "p2_5": 11.391891891891893,
+              "p97_5": 17.175675675675677
+            },
+            "fraccion_del_techo": 0.7565290191496897,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.878905713494348,
+              "desvio": 1.853535072388396,
+              "p2_5": 12.822248961269752,
+              "p97_5": 18.817039691713163
+            },
+            "precision_realizada": {
+              "media": 15.979729729729732,
+              "desvio": 1.9417020245117127,
+              "p2_5": 13.070945945945946,
+              "p97_5": 19.97972972972973
+            },
+            "fraccion_del_techo": 0.8744306488743758,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.1514251633801087,
+              "desvio": 0.7129086183988594,
+              "p2_5": 0.9454389851976029,
+              "p97_5": 3.35451805884332
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.207207207207207,
+              "desvio": 1.6848553884831725,
+              "p2_5": -0.4020270270270264,
+              "p97_5": 5.300675675675677
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 16.25156215047507,
+              "desvio": 1.857921095886251,
+              "p2_5": 13.100565192520799,
+              "p97_5": 19.067064891487195
+            },
+            "precision_realizada": {
+              "media": 16.70045045045045,
+              "desvio": 1.7250214392032108,
+              "p2_5": 14.094594594594595,
+              "p97_5": 19.976351351351354
+            },
+            "fraccion_del_techo": 0.8948316603086953,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.5240816003608333,
+              "desvio": 0.9627644322835394,
+              "p2_5": 0.910321551162831,
+              "p97_5": 4.302842271488797
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.9279279279279273,
+              "desvio": 1.6457597672391102,
+              "p2_5": 0.40540540540540565,
+              "p97_5": 5.385135135135134
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 1.0
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 18.13539008108472,
+              "desvio": 1.7068292145073973,
+              "p2_5": 15.120962060927532,
+              "p97_5": 20.87946018422549
+            }
+          }
+        ],
+        "comparaciones_directas": [
+          {
+            "a": "catboost_atributos",
+            "b": "rf_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días menos Random Forest con atributos, reentrenado cada 5 días",
+            "diferencia_verdadera": {
+              "media": 0.37265643698072476,
+              "desvio": 0.4957620736723893,
+              "p2_5": -0.4288512433702802,
+              "p97_5": 1.136442634711923
+            },
+            "diferencia_realizada": {
+              "media": 0.7207207207207208,
+              "desvio": 1.397943370642804,
+              "p2_5": -1.3513513513513513,
+              "p97_5": 3.2229729729729746
+            },
+            "a_es_mejor": 0.75,
+            "a_se_ve_mejor_en_los_datos": 0.7083333333333334
+          }
+        ]
+      },
+      "confirmacion": {
+        "elegidos_por_replica": 225,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 9.553039528521998,
+              "desvio": 0.5685483616977577,
+              "p2_5": 8.617673870767586,
+              "p97_5": 10.46510508554675
+            },
+            "precision_realizada": {
+              "media": 10.148148148148147,
+              "desvio": 2.1119161106107627,
+              "p2_5": 6.355555555555556,
+              "p97_5": 13.388888888888891
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 15.311107771496628,
+              "desvio": 2.2640467748682904,
+              "p2_5": 11.041473720362658,
+              "p97_5": 18.347942357732304
+            },
+            "precision_realizada": {
+              "media": 14.981481481481481,
+              "desvio": 3.1494645348574615,
+              "p2_5": 8.511111111111111,
+              "p97_5": 19.933333333333337
+            },
+            "fraccion_del_techo": 0.9434073677651318,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.00095473837038,
+              "desvio": 2.193887503395659,
+              "p2_5": 11.096736022087134,
+              "p97_5": 18.48334757343336
+            },
+            "precision_realizada": {
+              "media": 14.388888888888891,
+              "desvio": 3.581577482406303,
+              "p2_5": 6.8,
+              "p97_5": 19.866666666666667
+            },
+            "fraccion_del_techo": 0.9247026150813085,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.3101530331262467,
+              "desvio": 0.8024592973397019,
+              "p2_5": -1.95550202637286,
+              "p97_5": 1.0133267937972326
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.5925925925925927,
+              "desvio": 1.7370536893749082,
+              "p2_5": -3.866666666666667,
+              "p97_5": 2.411111111111112
+            },
+            "es_mejor_que_la_tasa_fija": 0.3333333333333333,
+            "se_ve_mejor_en_los_datos": 0.2916666666666667
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.2199126551403,
+              "desvio": 2.2496507034390985,
+              "p2_5": 11.062940699035053,
+              "p97_5": 18.709716810774726
+            },
+            "precision_realizada": {
+              "media": 14.666666666666666,
+              "desvio": 3.6106837353937604,
+              "p2_5": 7.311111111111112,
+              "p97_5": 20.18888888888889
+            },
+            "fraccion_del_techo": 0.9378656317310511,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.09119511635632686,
+              "desvio": 0.7975378879129278,
+              "p2_5": -1.7711185807805616,
+              "p97_5": 1.4545327187122843
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.3148148148148148,
+              "desvio": 2.4535768508515345,
+              "p2_5": -4.311111111111112,
+              "p97_5": 4.755555555555557
+            },
+            "es_mejor_que_la_tasa_fija": 0.375,
+            "se_ve_mejor_en_los_datos": 0.3333333333333333
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 16.18876480603542,
+              "desvio": 2.002317740738767,
+              "p2_5": 12.27728113986268,
+              "p97_5": 19.27903208690906
+            }
+          }
+        ],
+        "comparaciones_directas": [
+          {
+            "a": "catboost_atributos",
+            "b": "rf_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días menos Random Forest con atributos, reentrenado cada 5 días",
+            "diferencia_verdadera": {
+              "media": 0.21895791676991982,
+              "desvio": 0.33789720775762333,
+              "p2_5": -0.23264971437234425,
+              "p97_5": 0.8937683136520888
+            },
+            "diferencia_realizada": {
+              "media": 0.27777777777777785,
+              "desvio": 2.050620790232919,
+              "p2_5": -2.666666666666667,
+              "p97_5": 4.688888888888892
+            },
+            "a_es_mejor": 0.7083333333333334,
+            "a_se_ve_mejor_en_los_datos": 0.4166666666666667
+          }
+        ]
+      },
+      "todo": {
+        "elegidos_por_replica": 965,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 10.878368583834208,
+              "desvio": 0.6716334930816698,
+              "p2_5": 9.863930308907202,
+              "p97_5": 12.099621081653863
+            },
+            "precision_realizada": {
+              "media": 10.86355785837651,
+              "desvio": 0.9805553041476132,
+              "p2_5": 8.914507772020725,
+              "p97_5": 12.966321243523316
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 14.096720057690442,
+              "desvio": 1.6516885539417012,
+              "p2_5": 11.729406380187696,
+              "p97_5": 16.932186702424467
+            },
+            "precision_realizada": {
+              "media": 14.05440414507772,
+              "desvio": 1.8306239964036575,
+              "p2_5": 11.207253886010362,
+              "p97_5": 17.282383419689122
+            },
+            "fraccion_del_techo": 0.7966703720695193,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.674202118258188,
+              "desvio": 1.8633578589941289,
+              "p2_5": 12.489925484788031,
+              "p97_5": 18.348978689049968
+            },
+            "precision_realizada": {
+              "media": 15.608808290155443,
+              "desvio": 2.0177050110481254,
+              "p2_5": 12.145077720207254,
+              "p97_5": 19.020725388601036
+            },
+            "fraccion_del_techo": 0.8850454080252849,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.577482060567746,
+              "desvio": 0.5917060378460034,
+              "p2_5": 0.7057250647234816,
+              "p97_5": 2.6646290428045374
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 1.5544041450777204,
+              "desvio": 1.3438537308574032,
+              "p2_5": -0.4119170984455952,
+              "p97_5": 4.0362694300518145
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.8333333333333334
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 16.01102211270272,
+              "desvio": 1.903800143505297,
+              "p2_5": 12.607228083716839,
+              "p97_5": 18.787373647932945
+            },
+            "precision_realizada": {
+              "media": 16.226252158894646,
+              "desvio": 1.8067759553178824,
+              "p2_5": 13.562176165803109,
+              "p97_5": 19.569948186528496
+            },
+            "fraccion_del_techo": 0.9038693069457278,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.9143020550122734,
+              "desvio": 0.7852904627878861,
+              "p2_5": 0.6062520585836436,
+              "p97_5": 3.30146854618186
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.171848013816926,
+              "desvio": 1.3571566495831515,
+              "p2_5": -0.21761658031088005,
+              "p97_5": 4.189119170984457
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 17.681513721617268,
+              "desvio": 1.7159625094410778,
+              "p2_5": 14.454188666745182,
+              "p97_5": 20.372764725802043
+            }
+          }
+        ],
+        "comparaciones_directas": [
+          {
+            "a": "catboost_atributos",
+            "b": "rf_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días menos Random Forest con atributos, reentrenado cada 5 días",
+            "diferencia_verdadera": {
+              "media": 0.3368199944445276,
+              "desvio": 0.38619235507147714,
+              "p2_5": -0.28930392271437316,
+              "p97_5": 0.884110476931387
+            },
+            "diferencia_realizada": {
+              "media": 0.6174438687392058,
+              "desvio": 1.1670081296094523,
+              "p2_5": -1.0647668393782375,
+              "p97_5": 2.8549222797927465
+            },
+            "a_es_mejor": 0.75,
+            "a_se_ve_mejor_en_los_datos": 0.7083333333333334
+          }
+        ]
+      }
+    },
+    "mezcla_estable": {
+      "escenario": {
+        "mezcla": "estable",
+        "heterogeneidad": 1.0,
+        "deriva": 0.0
+      },
+      "replicas": 24,
+      "seleccion": {
+        "elegidos_por_replica": 740,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.331780343681103,
+              "desvio": 0.4677882849928351,
+              "p2_5": 10.776243390962616,
+              "p97_5": 12.33059644956222
+            },
+            "precision_realizada": {
+              "media": 11.458333333333334,
+              "desvio": 1.091299509080716,
+              "p2_5": 9.807432432432433,
+              "p97_5": 13.68581081081081
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 19.06190360737428,
+              "desvio": 1.5422418603613282,
+              "p2_5": 15.98408501806825,
+              "p97_5": 21.86112649020438
+            },
+            "precision_realizada": {
+              "media": 19.3018018018018,
+              "desvio": 2.2342800369311684,
+              "p2_5": 15.138513513513514,
+              "p97_5": 23.570945945945947
+            },
+            "fraccion_del_techo": 0.9533661468747449,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 18.012391347742355,
+              "desvio": 1.5446062379148486,
+              "p2_5": 14.89002346237034,
+              "p97_5": 20.85201975061925
+            },
+            "precision_realizada": {
+              "media": 18.164414414414413,
+              "desvio": 2.1610296191717,
+              "p2_5": 14.79391891891892,
+              "p97_5": 22.658783783783786
+            },
+            "fraccion_del_techo": 0.9007905889670808,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -1.0495122596319257,
+              "desvio": 0.5097461760354626,
+              "p2_5": -2.1108935379176654,
+              "p97_5": -0.3301225495848984
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -1.1373873873873874,
+              "desvio": 1.383241040620907,
+              "p2_5": -3.125000000000001,
+              "p97_5": 1.5439189189189182
+            },
+            "es_mejor_que_la_tasa_fija": 0.0,
+            "se_ve_mejor_en_los_datos": 0.16666666666666666
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 18.655882590587527,
+              "desvio": 1.5131614145390453,
+              "p2_5": 15.80523003170534,
+              "p97_5": 21.38992290598194
+            },
+            "precision_realizada": {
+              "media": 18.620495495495494,
+              "desvio": 2.2326136556283456,
+              "p2_5": 15.27364864864865,
+              "p97_5": 22.902027027027028
+            },
+            "fraccion_del_techo": 0.9333375805350269,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.40602101678675334,
+              "desvio": 0.5775450705979958,
+              "p2_5": -1.6369388893989631,
+              "p97_5": 0.12320712935955401
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.6813063063063063,
+              "desvio": 1.342201199476652,
+              "p2_5": -2.625000000000001,
+              "p97_5": 1.253378378378378
+            },
+            "es_mejor_que_la_tasa_fija": 0.16666666666666666,
+            "se_ve_mejor_en_los_datos": 0.3333333333333333
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 19.978501890353495,
+              "desvio": 1.326350043484695,
+              "p2_5": 17.23316158357262,
+              "p97_5": 22.394551266232778
+            }
+          }
+        ],
+        "comparaciones_directas": [
+          {
+            "a": "catboost_atributos",
+            "b": "rf_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días menos Random Forest con atributos, reentrenado cada 5 días",
+            "diferencia_verdadera": {
+              "media": 0.6434912428451725,
+              "desvio": 0.30844219921642513,
+              "p2_5": 0.07011451499482521,
+              "p97_5": 1.2307416024156628
+            },
+            "diferencia_realizada": {
+              "media": 0.4560810810810813,
+              "desvio": 1.226171878306004,
+              "p2_5": -1.962837837837837,
+              "p97_5": 2.121621621621622
+            },
+            "a_es_mejor": 0.9583333333333334,
+            "a_se_ve_mejor_en_los_datos": 0.7083333333333334
+          }
+        ]
+      },
+      "confirmacion": {
+        "elegidos_por_replica": 225,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 9.382647855598664,
+              "desvio": 0.47767028704080766,
+              "p2_5": 8.752140513732776,
+              "p97_5": 10.327406422311519
+            },
+            "precision_realizada": {
+              "media": 9.722222222222223,
+              "desvio": 2.018965365895343,
+              "p2_5": 6.9222222222222225,
+              "p97_5": 14.022222222222224
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 15.82900096918793,
+              "desvio": 1.2396884337634693,
+              "p2_5": 13.550472710265222,
+              "p97_5": 18.27907991197527
+            },
+            "precision_realizada": {
+              "media": 14.796296296296296,
+              "desvio": 2.8936539420805247,
+              "p2_5": 10.222222222222223,
+              "p97_5": 20.0
+            },
+            "fraccion_del_techo": 0.9647886237768613,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 14.506455505942833,
+              "desvio": 1.3999727578932533,
+              "p2_5": 12.090780559565406,
+              "p97_5": 17.270508032704573
+            },
+            "precision_realizada": {
+              "media": 13.481481481481481,
+              "desvio": 2.806836731753187,
+              "p2_5": 8.444444444444445,
+              "p97_5": 17.711111111111112
+            },
+            "fraccion_del_techo": 0.8832768120538245,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -1.3225454632450984,
+              "desvio": 0.563312532576995,
+              "p2_5": -2.338604753776421,
+              "p97_5": -0.410986966097025
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -1.3148148148148149,
+              "desvio": 2.214398465813304,
+              "p2_5": -4.944444444444445,
+              "p97_5": 2.911111111111113
+            },
+            "es_mejor_que_la_tasa_fija": 0.0,
+            "se_ve_mejor_en_los_datos": 0.20833333333333334
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.29424490442643,
+              "desvio": 1.3366130938361693,
+              "p2_5": 13.10368874457914,
+              "p97_5": 17.92639881458772
+            },
+            "precision_realizada": {
+              "media": 14.833333333333334,
+              "desvio": 2.5237465865385436,
+              "p2_5": 10.47777777777778,
+              "p97_5": 18.41111111111111
+            },
+            "fraccion_del_techo": 0.9317302571686001,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.5347560647615004,
+              "desvio": 0.4772608004133395,
+              "p2_5": -1.4240556107085742,
+              "p97_5": 0.2593479302010706
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.037037037037037035,
+              "desvio": 1.767684714623373,
+              "p2_5": -2.666666666666667,
+              "p97_5": 3.2333333333333343
+            },
+            "es_mejor_que_la_tasa_fija": 0.125,
+            "se_ve_mejor_en_los_datos": 0.4583333333333333
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 16.396825767591157,
+              "desvio": 1.071454774477383,
+              "p2_5": 14.531061858867009,
+              "p97_5": 18.59476623596331
+            }
+          }
+        ],
+        "comparaciones_directas": [
+          {
+            "a": "catboost_atributos",
+            "b": "rf_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días menos Random Forest con atributos, reentrenado cada 5 días",
+            "diferencia_verdadera": {
+              "media": 0.7877893984835977,
+              "desvio": 0.34832643202900365,
+              "p2_5": 0.15277248461714724,
+              "p97_5": 1.4902396103692528
+            },
+            "diferencia_realizada": {
+              "media": 1.3518518518518519,
+              "desvio": 1.9013983798485465,
+              "p2_5": -2.222222222222222,
+              "p97_5": 4.444444444444444
+            },
+            "a_es_mejor": 1.0,
+            "a_se_ve_mejor_en_los_datos": 0.7083333333333334
+          }
+        ]
+      },
+      "todo": {
+        "elegidos_por_replica": 965,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 10.877319400863954,
+              "desvio": 0.4552733876612894,
+              "p2_5": 10.340176030058544,
+              "p97_5": 11.833945807381815
+            },
+            "precision_realizada": {
+              "media": 11.053540587219345,
+              "desvio": 0.8801882920266149,
+              "p2_5": 9.696891191709843,
+              "p97_5": 12.538860103626941
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 18.308118018159846,
+              "desvio": 1.456717169608192,
+              "p2_5": 15.448241757674948,
+              "p97_5": 21.025934282845263
+            },
+            "precision_realizada": {
+              "media": 18.251295336787564,
+              "desvio": 2.154996856816709,
+              "p2_5": 14.212435233160623,
+              "p97_5": 22.038860103626945
+            },
+            "fraccion_del_techo": 0.9556549008434082,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 17.194945167011895,
+              "desvio": 1.480417626618668,
+              "p2_5": 14.237350246690433,
+              "p97_5": 20.016952251623596
+            },
+            "precision_realizada": {
+              "media": 17.072538860103627,
+              "desvio": 1.8790635252211545,
+              "p2_5": 13.772020725388602,
+              "p97_5": 20.582901554404145
+            },
+            "fraccion_del_techo": 0.897304558222979,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -1.1131728511479506,
+              "desvio": 0.39404547886649427,
+              "p2_5": -1.8754530376987169,
+              "p97_5": -0.44312165180442
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -1.1787564766839382,
+              "desvio": 1.1080406123641608,
+              "p2_5": -2.6347150259067362,
+              "p97_5": 0.7694300518134716
+            },
+            "es_mejor_que_la_tasa_fija": 0.0,
+            "se_ve_mejor_en_los_datos": 0.125
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 17.872081057544786,
+              "desvio": 1.43933046291672,
+              "p2_5": 15.175336985484206,
+              "p97_5": 20.582365475345984
+            },
+            "precision_realizada": {
+              "media": 17.73747841105354,
+              "desvio": 2.068630391378185,
+              "p2_5": 14.507772020725387,
+              "p97_5": 21.27461139896373
+            },
+            "fraccion_del_techo": 0.9330276375950232,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.43603696061506164,
+              "desvio": 0.420007027012723,
+              "p2_5": -1.367632245905968,
+              "p97_5": 0.015441411808771649
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.5138169257340243,
+              "desvio": 1.206352606873379,
+              "p2_5": -2.4559585492227964,
+              "p97_5": 1.2720207253886016
+            },
+            "es_mejor_que_la_tasa_fija": 0.041666666666666664,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 19.143396058621345,
+              "desvio": 1.2594195712221443,
+              "p2_5": 16.603138331698254,
+              "p97_5": 21.508591026014507
+            }
+          }
+        ],
+        "comparaciones_directas": [
+          {
+            "a": "catboost_atributos",
+            "b": "rf_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días menos Random Forest con atributos, reentrenado cada 5 días",
+            "diferencia_verdadera": {
+              "media": 0.677135890532889,
+              "desvio": 0.27792150329311677,
+              "p2_5": 0.18105250783925872,
+              "p97_5": 1.1752485695924766
+            },
+            "diferencia_realizada": {
+              "media": 0.6649395509499137,
+              "desvio": 0.9172042894932821,
+              "p2_5": -1.300518134715026,
+              "p97_5": 2.0569948186528504
+            },
+            "a_es_mejor": 1.0,
+            "a_se_ve_mejor_en_los_datos": 0.7916666666666666
+          }
+        ]
+      }
+    }
+  },
+  "version_codigo": "f839e4f40efecb81eda99df29bb154c6442527f6"
+}
