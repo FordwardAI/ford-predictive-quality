@@ -11,28 +11,32 @@ from solucion.eleccion import ganadora
 from solucion.puntaje import atributos_de, crear
 
 RESULTADOS = RAIZ / "solucion" / "resultados"
-POR_DEFECTO = "rf"
+POR_DEFECTO = "catboost"
+SEMILLAS = {"rf": 4, "catboost": 1}  # Las de los preregistros (semilla 4: la corrida mediana de RF; semilla 1: CatBoost).
 
 FICHAS = {
-    "rf": {
-        "nombre": "Random Forest con atributos", "corto": "Random Forest",
-        "detalle": "Reentrenado cada 5 días con las auditorías de resultado conocido (Día ≤ t − 5). "
-                   "Entradas: el código y sus atributos (mercado, motor, tracción, versión).",
-        "origen": "Elegido por efectividad el 01/10: la mejor peor lectura entre validación, selección y confirmación.",
-        "advertencia": "No está probado que supere a sus parecidas; nunca se leyó en la prueba final.",
-        "base": "rf", "familia": "ml_rf_atributos",
-    },
     "catboost": {
         "nombre": "CatBoost con atributos", "corto": "CatBoost",
-        "detalle": "Reentrenado cada 5 días, mismas entradas que Random Forest.",
-        "origen": "Segunda lectura de la prueba final (30/09), elegido por precisión en bloques de tiempo.",
-        "advertencia": "Su lectura final ocurrió después de conocer la primera: evidencia más débil.",
+        "detalle": "Reentrenado cada 5 días con las auditorías de resultado conocido (Día ≤ t − 5). "
+                   "Entradas: el código y sus atributos (mercado, motor, tracción, versión).",
+        "origen": "Elegido por precisión en bloques de tiempo y mejor lectura de la prueba final (78 de 652, 12,0 %). "
+                  "En el mundo simulado le gana a Random Forest en la comparación pareada.",
+        "advertencia": "La diferencia con Random Forest (78 contra 77 aciertos) está dentro del ruido, y su lectura final "
+                       "ocurrió después de conocer la de la tasa fija.",
         "base": "catboost", "familia": "ml_catboost_atributos",
+    },
+    "rf": {
+        "nombre": "Random Forest con atributos", "corto": "Random Forest",
+        "detalle": "Reentrenado cada 5 días, mismas entradas que CatBoost, con la configuración preregistrada (semilla 4).",
+        "origen": "Elegido por efectividad el 01/10; tercera lectura de la prueba final: 77 de 652 (11,8 %).",
+        "advertencia": "En el mundo simulado quedó último entre las opciones que se actualizan; la tercera lectura se hizo "
+                       "conociendo las dos anteriores.",
+        "base": "rf", "familia": "ml_rf_atributos",
     },
     "tasa_fija": {
         "nombre": "Tasa fija por código", "corto": "Tasa fija",
-        "detalle": "Proporción CALIBRADA de cada código con los resultados hasta el Día 149, sin reentrenar.",
-        "origen": "Ganadora preregistrada del 30/09 (regla de la más simple entre las que empatan).",
+        "detalle": "Proporción CALIBRADA de cada código con los resultados conocidos, sin reentrenar entre versiones.",
+        "origen": "Ganadora preregistrada del 30/09 y cifra oficial de la prueba final (71 de 652, 10,9 %).",
         "advertencia": "Pierde precisión cuando rota la mezcla de códigos.",
     },
 }
@@ -49,7 +53,8 @@ ESTOCASTICOS = ("rf", "catboost")
 def construir(tabla, semilla=None):
     """{clave: puntaje} con la configuración de validación (ancla 155; ajuste por log-loss interna ≤ 149).
 
-    Sin `semilla`, los modelos estocásticos usan la del ajuste (la primera de `ml.SEMILLAS`).
+    Sin `semilla`, los modelos estocásticos usan la de su preregistro (`SEMILLAS`). Los hiperparámetros y la vida media
+    salen del ajuste interno con Día ≤ 149 (`ml.ajustar`): ajustarlos con días posteriores filtraría la validación.
     """
     fuente = fuente_completa(tabla)
     atributos = atributos_de(tabla.catalogo)
@@ -57,7 +62,7 @@ def construir(tabla, semilla=None):
     for clave in ESTOCASTICOS:
         f = FICHAS[clave]
         a = ml.ajustar(f["base"], "reentrenado", fuente, atributos=atributos)
-        salida[clave] = crear(f["familia"], {"modo": "reentrenado", "semilla": semilla or a["semilla_ajuste"],
+        salida[clave] = crear(f["familia"], {"modo": "reentrenado", "semilla": semilla or SEMILLAS[clave],
                                              "vida": a["vida"], "hiperparametros": a["hiperparametros"]}, tabla)
     return salida
 
@@ -68,7 +73,7 @@ def prueba_final():
     salida = {}
     for corrida in pf["corridas"]:
         familia = corrida["ganadora"]["familia"]
-        clave = "tasa_fija" if familia == "tasa_fija" else "catboost" if "catboost" in familia else None
+        clave = {"tasa_fija": "tasa_fija", "ml_catboost_atributos": "catboost", "ml_rf_atributos": "rf"}.get(familia)
         principal = next((t for t in corrida["tramos"] if t.get("lectura_del_tramo") == "principal"), None)
         if clave and principal:
             g, azar = principal["ganadora"], principal.get("azar_simulado", {})

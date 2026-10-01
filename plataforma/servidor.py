@@ -68,10 +68,11 @@ class Plataforma:
     def _evaluar(self):
         try:
             otras = {c: [] for c in modelos_mod.ESTOCASTICOS}
-            for s in modelos_mod.ml.SEMILLAS[1:]:
+            for s in modelos_mod.ml.SEMILLAS:  # Las otras semillas de cada modelo, para el rango de aciertos.
                 variante = modelos_mod.construir(self.tabla, semilla=s)
                 for c in otras:
-                    otras[c].append(variante[c])
+                    if s != modelos_mod.SEMILLAS[c]:
+                        otras[c].append(variante[c])
             self.sim = simulacion.cacheada(self.tabla, self.modelos, self.carpeta, otras)
         except Exception as error:  # noqa: BLE001  Se informa en la pantalla de evaluación.
             traceback.print_exc()

@@ -92,12 +92,12 @@ Criterio de la interfaz: cada pantalla muestra primero la decisión, y el detall
   - etiquetas parciales: el modelo solo conoce el histórico y lo auditado (`puntaje.Fuente`, como en P5). `hoja.armar` recibe esa fuente con el parámetro opcional `fuente`;
   - evaluador (`cupo.simular`, `cupo.metricas`).
 - **Modelos:**
-  - Random Forest con atributos, reentrenado cada 5 días: elección por efectividad del 01/10, por defecto.
-  - CatBoost con atributos, reentrenado: segunda lectura.
-  - Tasa fija: preregistrada.
-  - RF y CatBoost se ajustan con `ml.ajustar` (log-loss interna ≤ 149) y la semilla 1. Para que una corrida no se lea como cifra exacta, la simulación informa el rango de aciertos entre las 5 semillas.
-  - Tasa fija reproduce `eleccion.json` (59/391).
-- **Prueba final:** se muestran las lecturas ya registradas en `solucion/resultados/prueba-final.json`; no se recalculan. RF no tiene lectura.
+  - CatBoost con atributos, reentrenado cada 5 días: **por defecto**. Lo eligieron por precisión las conclusiones del informe (`docs/entrega/06-conclusiones.md`). Tiene la mejor lectura de la prueba final (78 de 652, 12,0 %) y en la comparación pareada del mundo simulado le gana a Random Forest (`research/simulacion-evaluacion.md`). La diferencia con Random Forest está dentro del ruido. En la validación de la plataforma (155–194) rinde menos: 61 de 391, contra 72.
+  - Random Forest con atributos, reentrenado: elegido por efectividad el 01/10. Tercera lectura de la prueba final: 77 de 652 (11,8 %). En el mundo simulado quedó último entre las opciones que se actualizan.
+  - Tasa fija: preregistrada el 30/09; cifra oficial de la prueba final (71 de 652, 10,9 %).
+  - Semillas de los preregistros: CatBoost 1 y Random Forest 4. Los hiperparámetros y la vida media salen de `ml.ajustar` con Día ≤ 149; ajustarlos con días posteriores filtraría la validación.
+  - En la Evaluación, la tasa fija reproduce `eleccion.json` (59/391). Random Forest da 72/391; la cifra publicada, 73, viene de otra corrida de `precision.json`. Se informa el rango de aciertos entre las 5 semillas.
+- **Prueba final:** se muestran las tres lecturas ya registradas en `solucion/resultados/prueba-final.json` (tasa fija, CatBoost y Random Forest); no se recalculan.
 - **Supuestos de la demo:**
   - Días: solo validación (155–194).
   - Gate Release: el Día del VIN lo aproxima.

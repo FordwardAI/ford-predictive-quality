@@ -12,7 +12,7 @@ import { pct } from '@/lib/formato'
 // El modelo se actualiza solo, con un calendario fijo. Nadie elige el momento mirando los resultados: eso sería una
 // forma de sobreajuste, y los resultados que vuelven son solo de lo que el propio modelo eligió.
 export function Modelo() {
-  const { planta, modelo } = useApp()
+  const { meta, planta, modelo } = useApp()
   const [datos, setDatos] = useState<{ versiones: Version[]; programa: Programa; cambios: Cambios | null } | null>(null)
   const pedir = useCallback(() => { api<typeof datos>('modelo').then(setDatos) }, [])
   useEffect(() => { pedir() }, [pedir, planta.dia])
@@ -29,7 +29,7 @@ export function Modelo() {
         <Cifra rotulo="Versión vigente" valor={`v${v.numero}`} apoyo={`resultados hasta el Día ${v.entrenado_hasta}`} />
         <Cifra rotulo="Próxima actualización" valor={`Día ${prog.proxima}`} acento apoyo={`en ${prog.proxima - planta.dia} día(s)`} />
         <Cifra rotulo="Resultados nuevos" valor={prog.nuevos} apoyo="entrarán en la próxima versión" />
-        <Cifra rotulo="Modelo" valor={<span className="text-2xl">{c ? modelo(c.modelo).corto : modelo('rf').corto}</span>} />
+        <Cifra rotulo="Modelo" valor={<span className="text-2xl">{(c ? modelo(c.modelo) : modelo(meta.modelos.find((m) => m.por_defecto)!.clave)).corto}</span>} />
       </section>
 
       <section className="mb-10 grid gap-6 lg:grid-cols-3">

@@ -16,7 +16,7 @@ import { useApp } from '@/lib/estado'
 import { dec, entero, LECTURA, pct, rangoPct } from '@/lib/formato'
 
 type Seleccion = ClaveModelo | 'todos'
-const CLAVES: ClaveModelo[] = ['rf', 'catboost', 'tasa_fija']
+const CLAVES: ClaveModelo[] = ['catboost', 'rf', 'tasa_fija']
 // §9.3: serie principal Skyview, segunda Ford Blue, tercera Ford Blue punteada, azar Off-Black discontinuo.
 const TRAZO = [
   { stroke: '#066FEF', strokeWidth: 4 },
@@ -53,7 +53,7 @@ export function SimulacionBase() {
     return serie.map((p, i) => {
       const fila: Record<string, number> = { dia: p.dia, cupo: p.cupo }
       for (const c of CLAVES) fila[c] = acum[c] = (acum[c] ?? 0) + sim.modelos![c].serie[i].encontradas
-      fila.azar = acum.azar = (acum.azar ?? 0) + sim.modelos![sel === 'todos' ? 'rf' : sel].serie[i].esperado_azar
+      fila.azar = acum.azar = (acum.azar ?? 0) + sim.modelos![sel === 'todos' ? CLAVES[0] : sel].serie[i].esperado_azar
       fila.k = acum.k = (acum.k ?? 0) + p.cupo
       return fila
     })
