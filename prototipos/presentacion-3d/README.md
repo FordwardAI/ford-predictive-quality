@@ -29,7 +29,12 @@ Cada pantalla tiene antetítulo, titular, bajada y, según el caso, hasta 3 cifr
 
 Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `validacion` · 05 `alternativas` · 06 `solucion` · 07 `resultado` · 08 `hoja` · 09 `donde-mirar` · 10 `aprende` · 11 `seguridad` · 12 `factibilidad` · 13 `futuro` · 14 `conclusiones` · 15 cierre.
 
-**La solución elegida** (`solucion`) es CatBoost con atributos del código, reentrenado cada 5 días (vida media 15 días, semilla 1), elegido por precisión en bloques de tiempo (propuesta aprobada el 30/09; [`precision.json`](../../solucion/resultados/precision.json)). Se muestra siempre con sus límites: es la más precisa de una familia que empata y no se confirmó en el último bloque. La cifra **oficial** de la prueba final sigue siendo la lectura 1 (tasa fija, preregistrada); `resultado` muestra también la lectura 2 (CatBoost, más débil porque el equipo ya conocía la primera) y su figura, las tres lecturas (la 3, Random Forest, sin acuerdo registrado del resto del equipo).
+**La solución y el resultado** son de CatBoost con atributos del código, reentrenado cada 5 días (vida media 15 días, semilla 1):
+
+- `alternativas` cuenta la elección por precisión en cinco bloques de tiempo (propuesta aprobada el 30/09; [`precision.json`](../../solucion/resultados/precision.json)): 54 alternativas, un punto por alternativa en la figura `seleccion`, con CatBoost, el azar y el oráculo rotulados y las demás anónimas.
+- `solucion` presenta CatBoost con sus límites: es la más precisa de una familia que empata y en el último bloque (confirmación) baja, dentro del ruido.
+- `resultado` muestra solo la lectura preregistrada de CatBoost en la prueba final (`corridas[1]` de [`prueba-final.json`](../../solucion/resultados/prueba-final.json)), por tramo, y advierte que es una lectura más débil porque el equipo ya conocía otra lectura previa. Las otras lecturas quedan solo en el respaldo del orador (`ampliacion` de `resultado`).
+- Las piezas de «dónde mirar», mínimo por código, detector y la hoja de ensayo del Día 190 se evaluaron con el predictor de la primera etapa; sus rótulos lo dicen y no se atribuyen a CatBoost.
 
 ## Atajos de teclado
 
@@ -62,7 +67,7 @@ Con **movimiento reducido** activado en el sistema operativo no hay animaciones:
 
 ## Figuras, ilustraciones y capturas
 
-- **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (comparación de alternativas, particiones, veces el azar de las tres lecturas de la prueba final, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo. Los colores salen de las variables `--figura-*` de `styles.css`. El respaldo de `veces_azar_prueba_final` (SVG del informe) muestra solo la lectura 1, por tramo.
+- **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (elección por precisión `seleccion`, particiones, veces el azar de CatBoost en la prueba final, comparación de alternativas en validación, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo cuando lo declara; `seleccion` y `veces_azar_prueba_final` no tienen respaldo (el SVG del informe muestra otra lectura) y, si no se pueden dibujar, la pantalla queda sin figura. Los colores salen de las variables `--figura-*` de `styles.css`.
 - **Ilustraciones a mano:** `assets/ilustraciones/` (proceso, solución y esquemas sin datos de la hoja y de la plataforma), versionadas e insertadas en línea para que tomen los colores del tema.
 - **Capturas locales:** la hoja y la plataforma muestran tasas por código, así que sus capturas **no se versionan**. Se generan con `herramientas/capturar_plataforma.ps1` (Windows) o `herramientas/capturar_plataforma.sh`, que dejan `d-hoja.png`, `d-inicio.png`, `d-codigos.png` y `d-alertas.png` en `assets/local/` (fuera de Git); la hoja también toma `assets/local/captura-hoja-dia-260.png` si existe. Sin ellas se ve el esquema sin números con un chip «Captura local pendiente».
 
@@ -121,7 +126,15 @@ python3 prototipos/presentacion-3d/verificar_cifras.py
 
 Falla si algún respaldo difiere de su campo. Correrlo cada vez que se regeneren los resultados o se edite `cifras.js`.
 
-De [`prueba-final.json`](../../solucion/resultados/prueba-final.json) se lee la primera corrida de cada preregistro: `corridas[0]` (lectura 1, tasa fija, la oficial), `corridas[1]` (lectura 2, CatBoost) y `corridas[3]` (lectura 3, Random Forest). `corridas[2]` repite exactamente a `corridas[1]` y no se lee. La lectura 3 todavía no figura en los borradores de `docs/entrega/`: su formato se comprueba solo contra el JSON.
+Cifras que se proyectan en las pantallas de la solución:
+
+| Pantalla | Claves | Fuente |
+| --- | --- | --- |
+| `alternativas` | `alternativas.n`, `catboost.seleccion`, `catboost.azarSeleccion` | `precision.json` (`ranking#largo`, `ganadora`, `azar`) |
+| `solucion` | `catboost.seleccion`, `catboost.confirmacion`, `catboost.azarConfirmacion` | `precision.json` (`ganadora`, `azar.confirmacion`) |
+| `resultado` | `catboost.prueba.precision`, `catboost.prueba.azar`, `catboost.prueba.veces` | `prueba-final.json` → `corridas[1]` (CatBoost) |
+
+De [`prueba-final.json`](../../solucion/resultados/prueba-final.json) se proyecta solo `corridas[1]` (preregistro de precisión, CatBoost). `corridas[2]` la repite exactamente y no se lee. Las claves de `corridas[0]` y `corridas[3]` se conservan en `cifras.js` (verificadas contra el JSON) pero no se proyectan; esas lecturas solo aparecen, como texto verificado, en el respaldo del orador de `resultado`. `catboost.azarConfirmacion` y la tercera lectura no figuran en los borradores de `docs/entrega/`: su formato se comprueba solo contra el JSON.
 
 ## Archivos
 

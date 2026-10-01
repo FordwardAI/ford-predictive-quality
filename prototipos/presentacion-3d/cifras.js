@@ -15,7 +15,9 @@
 //                    conserva en el JSON y no se lee aquí.
 //       corridas[3]  lectura 3, Random Forest (preregistro-efectividad.json,
 //                    pedida el 01/10; no consta acuerdo del resto del equipo).
-//     Las tres lecturas se informan juntas; la 2 y la 3 no reemplazan a la 1.
+//     La presentación proyecta solo la lectura 2 (CatBoost, la solución
+//     elegida); la 1 y la 3 quedan en el respaldo del orador (contenido.js,
+//     `resultado` › ampliacion) y sus claves se conservan sin proyectarse.
 //   - solucion/resultados/precision.json  elección por precisión en bloques de
 //     tiempo (propuesta del 30/09): selección 100–174 y confirmación 175–194,
 //     todo con Día < 195 (prueba final no releída).
@@ -48,8 +50,8 @@ const TRAMOS = {
   prueba: { texto: 'prueba final Día 200–284', n: 'prueba.n', unidad: 'VIN' },
   prueba260: { texto: 'prueba final Día 200–260', n: 'prueba.hasta260.n', unidad: 'VIN' },
   pruebaParcial: { texto: 'prueba final Día 200–284, etiquetas parciales', n: 'prueba.n', unidad: 'VIN' },
-  dondeMirar: { texto: 'validación 155–194', n: 'dondeMirar.n', unidad: 'VIN CALIBRADA elegidos por la tasa fija' },
-  dondeMirarPrueba: { texto: 'prueba final Día 200–284', n: 'dondeMirar.prueba.n', unidad: 'VIN CALIBRADA elegidos por la tasa fija' },
+  dondeMirar: { texto: 'validación 155–194', n: 'dondeMirar.n', unidad: 'VIN CALIBRADA elegidos por el predictor de la primera etapa' },
+  dondeMirarPrueba: { texto: 'prueba final Día 200–284', n: 'dondeMirar.prueba.n', unidad: 'VIN CALIBRADA elegidos por el predictor de la primera etapa' },
   hoja190: { texto: 'hoja de desarrollo del Día 190 (validación)', n: 'validacion.n', unidad: 'VIN en validación; unidades con identificadores ficticios' },
   seleccion: { texto: 'selección 100–174 (prueba final no releída)', n: 'seleccion.n', unidad: 'VIN' },
   confirmacion: { texto: 'confirmación 175–194 (prueba final no releída)', n: 'confirmacion.n', unidad: 'VIN' },
@@ -82,7 +84,7 @@ export const DEFINICIONES = [
   { clave: 'validacion.dias', archivo: 'solucion/resultados/p3.json', ruta: 'resultados[1].dias', formato: 'entero', respaldo: 35,
     tramo: 'validacion', etiqueta: 'días con VIN' },
   { clave: 'validacion.precision', archivo: 'solucion/resultados/eleccion.json', ruta: 'ganadora.precision_cupo', formato: 'pct1', respaldo: 0.15089514066496162,
-    tramo: 'validacion', etiqueta: 'de cada 100 elegidos por la tasa fija se calibran' },
+    tramo: 'validacion', etiqueta: 'de cada 100 elegidos por el predictor de la primera etapa se calibran' },
   { clave: 'validacion.precisionRango', archivo: 'solucion/resultados/eleccion.json', ruta: 'ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.11573925307055127, 0.1876652842676362],
     tramo: 'validacion', etiqueta: 'rango del 95 % de la precisión en el cupo' },
   { clave: 'validacion.azar', archivo: 'solucion/resultados/p3.json', ruta: 'resultados[1].azar_mismo_cupo', formato: 'pct1', respaldo: 0.09877906979341364,
@@ -102,7 +104,7 @@ export const DEFINICIONES = [
   { clave: 'oraculo', archivo: 'solucion/resultados/p3.json', ruta: 'resultados[14].precision_cupo', formato: 'pct1', respaldo: 0.2020460358056266,
     tramo: 'validacion', etiqueta: 'techo con el código (oráculo, no elegible)' },
 
-  // --- Prueba final (corrida única, tasa fija ≤194) -------------------------
+  // --- Prueba final, primera lectura, corridas[0] (no se proyecta) ---------
   { clave: 'prueba.n', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.vins', formato: 'entero', respaldo: 13312,
     tramo: 'prueba', etiqueta: 'VIN en la prueba final' },
   { clave: 'prueba.elegidos', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.elegidos', formato: 'entero', respaldo: 652,
@@ -112,7 +114,7 @@ export const DEFINICIONES = [
   { clave: 'prueba.calibradasElegidas', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.calibrada_elegidas', formato: 'entero', respaldo: 71,
     tramo: 'prueba', etiqueta: 'CALIBRADA entre los elegidos' },
   { clave: 'prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.10889570552147239,
-    tramo: 'prueba', etiqueta: 'se calibran · lectura 1, tasa fija (oficial)' },
+    tramo: 'prueba', etiqueta: 'se calibran con el predictor de la primera etapa (no se proyecta)' },
   { clave: 'prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.08274629051053826, 0.13609099666968646],
     tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo' },
   { clave: 'prueba.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08228066604795758,
@@ -141,45 +143,49 @@ export const DEFINICIONES = [
   { clave: 'catboost.seleccion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.precision_seleccion', formato: 'pct1', respaldo: 0.1837837837837838,
     tramo: 'seleccion', etiqueta: 'de cada 100 elegidos por CatBoost se calibran' },
   { clave: 'catboost.tasaFijaSeleccion', archivo: 'solucion/resultados/precision.json', ruta: 'tasa_fija.precision_seleccion', formato: 'pct1', respaldo: 0.12702702702702703,
-    tramo: 'seleccion', etiqueta: 'con la tasa fija reajustada en cada bloque' },
+    tramo: 'seleccion', etiqueta: 'con el predictor de la primera etapa, reajustado en cada bloque (no se proyecta)' },
   { clave: 'catboost.azarSeleccion', archivo: 'solucion/resultados/precision.json', ruta: 'azar.precision_seleccion', formato: 'pct1', respaldo: 0.11216216216216217,
     tramo: 'seleccion', etiqueta: 'al azar con el mismo cupo' },
   { clave: 'catboost.confirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.17333333333333334,
-    tramo: 'confirmacion', etiqueta: 'CatBoost en el último bloque: no se confirmó' },
+    tramo: 'confirmacion', etiqueta: 'de cada 100 elegidos por CatBoost en el último bloque' },
+  { clave: 'catboost.azarConfirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'azar.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.09333333333333334,
+    tramo: 'confirmacion', etiqueta: 'al azar con el mismo cupo, en el último bloque' },
+  { clave: 'alternativas.n', archivo: 'solucion/resultados/precision.json', ruta: 'ranking#largo', formato: 'entero', respaldo: 54,
+    tramo: 'seleccion', etiqueta: 'alternativas compitieron' },
   { clave: 'catboost.tasaFijaConfirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'tasa_fija.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.20444444444444446,
-    tramo: 'confirmacion', etiqueta: 'tasa fija en el último bloque (dentro del ruido)' },
+    tramo: 'confirmacion', etiqueta: 'predictor de la primera etapa en el último bloque (no se proyecta)' },
 
-  // Prueba final, lectura 2 (corridas[1], CatBoost; corridas[2] la repite igual).
+  // Prueba final de CatBoost, corridas[1] (corridas[2] la repite igual): la que se proyecta.
   { clave: 'catboost.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.1196319018404908,
-    tramo: 'prueba', etiqueta: 'se calibran · lectura 2, CatBoost' },
+    tramo: 'prueba', etiqueta: 'se calibran con CatBoost' },
   { clave: 'catboost.prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.09162573707704177, 0.1475946322603848],
-    tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo · lectura 2' },
+    tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo' },
   { clave: 'catboost.prueba.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08228066604795758,
-    tramo: 'prueba', etiqueta: 'al azar con el mismo cupo · lectura 2' },
+    tramo: 'prueba', etiqueta: 'al azar con el mismo cupo' },
   { clave: 'catboost.prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.4539491181411064,
-    tramo: 'prueba', etiqueta: 'veces el azar · lectura 2, CatBoost' },
+    tramo: 'prueba', etiqueta: 'veces el azar' },
   { clave: 'catboost.prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.143937851209665, 1.7606161509632392],
-    tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar · lectura 2' },
+    tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar' },
 
-  // Prueba final, lectura 3 (corridas[3], Random Forest; sin acuerdo del resto del equipo).
+  // Prueba final, tercera lectura, corridas[3] (sin acuerdo del resto del equipo; no se proyecta).
   { clave: 'rf.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.11809815950920245,
-    tramo: 'prueba', etiqueta: 'se calibran · lectura 3, Random Forest' },
+    tramo: 'prueba', etiqueta: 'se calibran · tercera lectura (no se proyecta)' },
   { clave: 'rf.prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.09223003256939673, 0.14618075150777565],
-    tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo · lectura 3' },
+    tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo · tercera lectura (no se proyecta)' },
   { clave: 'rf.prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.4353087448316049,
-    tramo: 'prueba', etiqueta: 'veces el azar · lectura 3, Random Forest' },
+    tramo: 'prueba', etiqueta: 'veces el azar · tercera lectura (no se proyecta)' },
   { clave: 'rf.prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.1318838968651415, 1.7603055447500682],
-    tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar · lectura 3' },
+    tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar · tercera lectura (no se proyecta)' },
 
   // --- Valor diferencial ---------------------------------------------------
   { clave: 'dondeMirar.n', archivo: 'solucion/resultados/p6.json', ruta: 'componente.calibrada_elegidas_por_la_ganadora.calibrada_evaluadas', formato: 'entero', respaldo: 59,
-    tramo: 'dondeMirar', etiqueta: 'CALIBRADA elegidas por la tasa fija en validación' },
+    tramo: 'dondeMirar', etiqueta: 'CALIBRADA elegidas por el predictor de la primera etapa en validación' },
   { clave: 'dondeMirar.codigo', archivo: 'solucion/resultados/p6.json', ruta: 'componente.calibrada_elegidas_por_la_ganadora.acierto_codigo', formato: 'pct1', respaldo: 0.6101694915254238,
     tramo: 'dondeMirar', etiqueta: 'aciertan mirando primero los 3 componentes de su código' },
   { clave: 'dondeMirar.general', archivo: 'solucion/resultados/p6.json', ruta: 'componente.calibrada_elegidas_por_la_ganadora.acierto_general', formato: 'pct1', respaldo: 0.3050847457627119,
     tramo: 'dondeMirar', etiqueta: 'aciertan con los 3 componentes más frecuentes en general' },
   { clave: 'dondeMirar.prueba.n', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].piezas.p6.resultado.componente.prueba_final.calibrada_elegidas_por_la_ganadora.calibrada_evaluadas', formato: 'entero', respaldo: 71,
-    tramo: 'dondeMirarPrueba', etiqueta: 'CALIBRADA elegidas por la tasa fija en la prueba final' },
+    tramo: 'dondeMirarPrueba', etiqueta: 'CALIBRADA elegidas por el predictor de la primera etapa en la prueba final' },
   { clave: 'dondeMirar.prueba.codigo', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].piezas.p6.resultado.componente.prueba_final.calibrada_elegidas_por_la_ganadora.acierto_codigo', formato: 'pct1', respaldo: 0.6338028169014085,
     tramo: 'dondeMirarPrueba', etiqueta: 'aciertan con los 3 componentes de su código (prueba final)' },
   { clave: 'dondeMirar.prueba.general', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].piezas.p6.resultado.componente.prueba_final.calibrada_elegidas_por_la_ganadora.acierto_general', formato: 'pct1', respaldo: 0.352112676056338,

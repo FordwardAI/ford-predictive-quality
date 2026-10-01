@@ -7,9 +7,9 @@
 //   ajustar(svg)  (ya en el documento: comprime textos que no entren)
 //
 // `id`: comparacion | veces_azar_prueba_final | donde_mirar | etiquetas_parciales
-//       | detector | particiones
+//       | detector | particiones | seleccion
 // `datos`: lo que devuelve cargarDatos(): un JSON por clave (p3, p4, eleccion,
-//   pruebaFinal, p5, p6, preparacion), o null si ese fetch falló.
+//   pruebaFinal, p5, p6, preparacion, precision), o null si ese fetch falló.
 // `opciones`:
 //   - { titulo: false } en todas: omite el título y el subtítulo internos (la
 //     pantalla ya tiene titular).
@@ -21,7 +21,14 @@
 //   - { resaltar: 'fuga' } en `comparacion` (con o sin `resumen`): la versión con
 //     fuga en el color de alerta.
 // Devuelve null si falta un JSON que la figura necesita; ui.js usa entonces el
-// SVG de matplotlib de respaldo (docs/entrega/figuras/).
+// SVG de matplotlib de respaldo (docs/entrega/figuras/) si la pantalla lo
+// declara. `seleccion` y `veces_azar_prueba_final` no tienen respaldo en la
+// presentación: sin figura, la pantalla queda sin figura.
+//   - `seleccion`: elección por precisión (precision.json): un punto por
+//     alternativa del ranking sobre un eje de precisión en selección, con
+//     CatBoost destacado, el azar y el oráculo; ninguna otra alternativa rotulada.
+//   - `veces_azar_prueba_final`: CatBoost en la prueba final (primera corrida
+//     de solucion/preregistro-precision.json), una fila por tramo.
 //
 // Reglas:
 // - Ninguna cifra escrita a mano: todo número sale del JSON. Los textos fijos
@@ -36,7 +43,7 @@
 //   746 px; la escala viewBox→px es ancho del panel / ancho del viewBox. Toda la
 //   página escala con el viewport (a 1366×768 el panel mide 531 px), así que la
 //   proporción con el resto de la pantalla se mantiene.
-//   · `particiones` y `comparacion` con `resumen`: 740 de ancho (escala ≈ 1,0 a
+//   · `particiones`, `seleccion` y `comparacion` con `resumen`: 740 de ancho (escala ≈ 1,0 a
 //     1920 px) y alto según el contenido; letra de 22 px o más en rótulos y
 //     valores principales y nunca menos de 18 px (ejes, «margen»).
 //   · `veces_azar_prueba_final`: 900 de ancho con letra de 23 a 40 (≈ 19 a 33 px
@@ -59,6 +66,7 @@ export const IDS = [
   'etiquetas_parciales',
   'detector',
   'particiones',
+  'seleccion',
 ];
 
 // JSON que necesita cada figura (clave en `datos`).
@@ -69,6 +77,7 @@ const REQUISITOS = {
   etiquetas_parciales: ['p5'],
   detector: ['p6'],
   particiones: ['preparacion', 'p3', 'eleccion', 'pruebaFinal'],
+  seleccion: ['precision'],
 };
 
 const ARCHIVOS = {
@@ -79,6 +88,7 @@ const ARCHIVOS = {
   p5: 'solucion/resultados/p5.json',
   p6: 'solucion/resultados/p6.json',
   preparacion: 'solucion/resultados/preparacion.json',
+  precision: 'solucion/resultados/precision.json',
 };
 
 const RAIZ = '../../'; // relativo a prototipos/presentacion-3d/
@@ -814,38 +824,34 @@ function figuraComparacion(datos, opciones) {
   return svg;
 }
 
-// --- 2. veces_azar_prueba_final: las tres lecturas de la prueba final ----------
+// --- 2. veces_azar_prueba_final: CatBoost en la prueba final, por tramo -------
 
-// Rótulo de cada lectura según su preregistro (prueba-final.json → corridas[].preregistro).
-const LECTURAS = {
-  'solucion/preregistro.json': ['Lectura 1', 'tasa fija (oficial)'],
-  'solucion/preregistro-precision.json': ['Lectura 2', 'CatBoost'],
-  'solucion/preregistro-efectividad.json': ['Lectura 3', 'Random Forest'],
-};
+const PREREGISTRO_CATBOOST = 'solucion/preregistro-precision.json';
+// Tramos que se grafican (prueba-final.json → corridas[].tramos[].tramo) y su rótulo.
+const TRAMOS_PRUEBA = [
+  ['prueba completa', 'Prueba completa', (t) => `Día ${t.dias_del_vin[0]}–${t.dias_del_vin[1]}`],
+  ['prueba ≤260', 'Prueba ≤260', (t) => `Día ${t.dias_del_vin[0]}–${t.dias_del_vin[1]}`],
+  ['sensibilidad con la cohorte posterior a 260', 'Sensibilidad con la', () => 'cohorte posterior a 260'],
+];
 
 function figuraPruebaFinal(datos, opciones) {
-  // Una fila por lectura: la primera corrida de cada preregistro, en orden
-  // (corridas[0] tasa fija, corridas[1] CatBoost, corridas[3] Random Forest).
-  // corridas[2] repite exactamente a corridas[1] y no se grafica. Se usa el
-  // tramo «prueba completa» (tramos[0]), el mismo de cifras.js.
-  const vistos = new Set();
-  const lecturas = [];
-  for (const c of datos.pruebaFinal.corridas) {
-    if (vistos.has(c.preregistro)) continue;
-    vistos.add(c.preregistro);
-    const g = c.tramos?.[0]?.ganadora;
-    if (!g || !esNumero(g.veces_azar) || !esRango(g.veces_azar_rango95)) continue;
-    const [linea1, linea2] = LECTURAS[c.preregistro]
-      ?? [`Lectura ${lecturas.length + 1}`, capital(c.ganadora?.familia ?? '')];
-    lecturas.push({ c, g, linea1, linea2 });
+  // La primera corrida del preregistro de CatBoost (corridas[1]); corridas[2]
+  // la repite exactamente y no se grafica. Una fila por tramo.
+  const corrida = datos.pruebaFinal.corridas.find((c) => c.preregistro === PREREGISTRO_CATBOOST);
+  if (!corrida) return null;
+  const filas = [];
+  for (const [clave, linea1, linea2] of TRAMOS_PRUEBA) {
+    const t = corrida.tramos?.find((x) => x.tramo === clave);
+    const g = t?.ganadora;
+    if (!g || !esNumero(g.veces_azar) || !esRango(g.veces_azar_rango95) || !esRango(t.dias_del_vin)) continue;
+    filas.push({
+      linea1, linea2: linea2(t), g, valor: g.veces_azar, rango: g.veces_azar_rango95, destacada: !filas.length,
+      valorTexto: veces(g.veces_azar),
+      valorSub: `${veces(g.veces_azar_rango95[0]).replace(/\s×$/, '')} a ${veces(g.veces_azar_rango95[1])}`,
+    });
   }
-  if (!lecturas.length) return null;
-  const filas = lecturas.map(({ g, linea1, linea2 }, i) => ({
-    linea1, linea2, valor: g.veces_azar, rango: g.veces_azar_rango95, destacada: i === 0,
-    valorTexto: veces(g.veces_azar),
-    valorSub: `${veces(g.veces_azar_rango95[0]).replace(/\s×$/, '')} a ${veces(g.veces_azar_rango95[1])}`,
-  }));
-  const principal = lecturas[0].g;
+  if (!filas.length) return null;
+  const principal = filas[0].g;
   const sinPct = (x) => pct(x).replace(/\s%$/, '');
 
   // Pensada para ~900 px de ancho (1 unidad ≈ 1 px). El panel de la pantalla la
@@ -855,22 +861,19 @@ function figuraPruebaFinal(datos, opciones) {
   const TAM = { rotulo: 28, valor: 40, rango: 23, eje: 23, ref: 23 };
   const PASO = 120;
   const { svg, arriba } = lienzo('veces_azar_prueba_final', ANCHO, 2000, {
-    titulo: 'Prueba final: veces el azar de cada lectura',
-    subtitulo: [`Lectura 1 (oficial): ${sinPct(principal.precision_cupo)} de cada 100 elegidos, `
+    titulo: 'Prueba final: veces el azar de CatBoost',
+    subtitulo: [`Prueba completa: ${sinPct(principal.precision_cupo)} de cada 100 elegidos, `
       + `contra ${sinPct(principal.azar_mismo_cupo)} al azar; ${principal.calificador}.`],
-    desc: 'Veces el azar en la prueba final (prueba completa) de la primera corrida de cada preregistro, '
-      + 'con rango del 95 % por bootstrap de días: '
-      + lecturas.map(({ c, g }, i) => `${filas[i].linea1}, ${nombre(c.ganadora?.alternativa)}: `
-        + `${pct(g.precision_cupo)} contra ${pct(g.azar_mismo_cupo)} al azar, ${filas[i].valorTexto} (${filas[i].valorSub}), `
-        + `lectura ${g.lectura}`).join('; ')
-      + `. ${principal.calificador}. La lectura 1 es la oficial; la 2 es más débil porque el equipo ya conocía `
-      + 'la primera; la 3 se pidió el 01/10 sin acuerdo registrado del resto del equipo.',
+    desc: `Veces el azar en la prueba final de ${nombre(corrida.ganadora?.alternativa)} (preregistro de precisión, `
+      + 'primera corrida), con rango del 95 % por bootstrap de días: '
+      + filas.map((f) => `${f.linea1} ${f.linea2}: ${pct(f.g.precision_cupo)} contra ${pct(f.g.azar_mismo_cupo)} al azar, `
+        + `${f.valorTexto} (${f.valorSub}), lectura ${f.g.lectura}, ${f.g.calificador}`).join('; ') + '.',
     opciones,
   });
   const xEtiqueta = 24;
-  const x0 = 330;
-  const x1 = 650;
-  const xValor = 680;
+  const x0 = 400;
+  const x1 = 680;
+  const xValor = 706;
   const dominio = Math.max(2.5, ...filas.map((f) => f.rango[1] + 0.1));
   const esc = escala(0, dominio, x0, x1);
   const yAzar = arriba + 14;
@@ -1156,6 +1159,125 @@ function figuraParticiones(datos, opciones) {
   return svg;
 }
 
+// --- 7. seleccion: elección por precisión en bloques de tiempo (precision.json) --
+
+/**
+ * Un punto por alternativa del ranking (estimación puntual en selección), sobre un
+ * solo eje. Solo se rotulan CatBoost (la ganadora), el azar y el oráculo; las demás
+ * alternativas quedan anónimas. Ancho 740 (≈ 1 px por unidad en el panel de 746 px):
+ * letra de 20 a 28 px.
+ */
+function figuraSeleccion(datos, opciones) {
+  const p = datos.precision;
+  const ranking = (Array.isArray(p.ranking) ? p.ranking : [])
+    .filter((r) => r.elegible !== false && esNumero(r.precision_seleccion));
+  const ganadora = ranking.find((r) => r.clave === p.ganadora?.clave);
+  const azar = p.azar?.precision_seleccion;
+  const oraculo = p.oraculo?.precision_seleccion;
+  const bloques = p.protocolo?.bloques_seleccion;
+  const elegidos = p.ganadora?.elegidos_seleccion;
+  if (!ganadora || !esNumero(azar) || !esNumero(oraculo) || !Array.isArray(bloques) || !bloques.length
+    || !esNumero(elegidos)) return null;
+  const diaIni = bloques[0][0];
+  const diaFin = bloques[bloques.length - 1][1];
+
+  const ANCHO = 740;
+  const TAM = { destacado: 28, rotulo: 22, eje: 20, nota: 22 };
+  const R = 8;
+  const R_GANADORA = 13;
+  const x0 = 40;
+  const x1 = 700;
+  // Dominio en múltiplos de 5 puntos que contienen todos los valores.
+  const valores = [azar, oraculo, ...ranking.map((r) => r.precision_seleccion)];
+  const dmin = Math.floor(Math.min(...valores) * 20) / 20;
+  const dmax = Math.ceil(Math.max(...valores) * 20) / 20;
+  const esc = escala(dmin, dmax, x0, x1);
+  const desc = `Precisión en el cupo diario del 5 % de cada una de las ${ranking.length} alternativas elegibles, `
+    + `selección Día ${diaIni}–${diaFin} (${entero(elegidos)} elegidos por alternativa), ${p.calificador_seleccion ?? ''}. `
+    + `CatBoost con atributos del código: ${pct(ganadora.precision_seleccion)}; azar: ${pct(azar)}; `
+    + `oráculo (techo con el código, no elegible): ${pct(oraculo)}. Los primeros empatan: es una familia.`;
+  const { svg, arriba } = lienzo('seleccion', ANCHO, 2000, {
+    titulo: 'Elección por precisión en bloques de tiempo', desc, opciones,
+    subtitulo: [`Precisión en el cupo, selección Día ${diaIni}–${diaFin}.`],
+  });
+
+  // Enjambre hacia abajo: CatBoost primero (queda sobre la línea), después de
+  // izquierda a derecha.
+  const orden = [ganadora, ...ranking.filter((r) => r !== ganadora)
+    .sort((a, b) => a.precision_seleccion - b.precision_seleccion)];
+  const dys = enjambre(orden.map((r) => esc(r.precision_seleccion)), R + 1, { soloAbajo: true });
+  const bajo = Math.max(R_GANADORA, ...dys.map((dy) => dy + R + 1));
+
+  // Disposición vertical: rótulos del azar y del oráculo, rótulo de CatBoost,
+  // puntos, eje y nota.
+  const yRef = arriba + 14;
+  const yGanadora = yRef + 52;
+  const yLinea = yGanadora + 22 + R_GANADORA + 18;
+  const yBase = yLinea + bajo + 22;
+
+  const g = el(svg, 'g', { class: 'eje' });
+  for (let k = 0; dmin + k * 0.05 <= dmax + 1e-9; k++) {
+    const v = +(dmin + k * 0.05).toFixed(4);
+    linea(g, esc(v), yGanadora + 22, esc(v), yBase, C.linea, 1);
+    texto(g, esc(v), yBase + 24, pctEje(v), { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  }
+  linea(g, x0, yBase, x1, yBase, C.rango, 1.5);
+  texto(g, (x0 + x1) / 2, yBase + 60, `Precisión en el cupo (${entero(elegidos)} elegidos)`, {
+    tam: TAM.eje, color: C.tenue, ancla: 'middle',
+  });
+
+  // Azar: línea vertical, rótulo arriba a su derecha.
+  const xAzar = esc(azar);
+  const ga = el(svg, 'g', { class: 'referencia azar' });
+  linea(ga, xAzar, yRef + 14, xAzar, yBase, C.texto, 2);
+  texto(ga, xAzar + 10, yRef, `Azar · ${pct(azar)}`, { tam: TAM.rotulo, color: C.tenue });
+
+  let i = 0;
+  // Oráculo: rombo hueco sobre la línea, rótulo arriba con línea guía.
+  const xOr = esc(oraculo);
+  const go = fila(svg, i++, 'punto referencia oraculo');
+  el(go, 'title', {}, `Oráculo (techo con el código, no elegible): ${pct(oraculo)}`);
+  const d = R * 1.5;
+  el(go, 'path', {
+    d: `M${xOr} ${yLinea - d}L${xOr + d} ${yLinea}L${xOr} ${yLinea + d}L${xOr - d} ${yLinea}Z`,
+    style: `fill:${C.superficie};stroke:${C.texto};stroke-width:3;stroke-linejoin:round`,
+  });
+  const rotuloOr = `Oráculo · ${pct(oraculo)}`;
+  const mitadOr = (anchoTexto(rotuloOr, TAM.rotulo) * 1.15) / 2;
+  texto(go, Math.min(xOr, ANCHO - 8 - mitadOr), yRef, rotuloOr, { tam: TAM.rotulo, ancla: 'middle', halo: true });
+  linea(go, xOr, yRef + 16, xOr, yLinea - d - 6, C.tenue, 1.5);
+
+  // Alternativas: de izquierda a derecha para la cascada; CatBoost al final, encima.
+  const puntos = orden.map((r, j) => ({ r, dy: dys[j] })).slice(1)
+    .sort((a, b) => a.r.precision_seleccion - b.r.precision_seleccion);
+  for (const { r, dy } of puntos) {
+    const gp = fila(svg, i++, 'punto');
+    el(gp, 'title', {}, pct(r.precision_seleccion));
+    el(gp, 'circle', {
+      cx: esc(r.precision_seleccion), cy: yLinea + dy, r: R,
+      style: `fill:${C.punto};stroke:${C.superficie};stroke-width:2`,
+    });
+  }
+  const xG = esc(ganadora.precision_seleccion);
+  const gg = fila(svg, i++, 'punto ganadora');
+  el(gg, 'title', {}, `CatBoost con atributos del código: ${pct(ganadora.precision_seleccion)}`);
+  el(gg, 'circle', { cx: xG, cy: yLinea, r: R_GANADORA + 6, style: `fill:${C.acentoSuave}` });
+  el(gg, 'circle', { cx: xG, cy: yLinea, r: R_GANADORA, style: `fill:${C.acento};stroke:${C.superficie};stroke-width:3` });
+  linea(gg, xG, yGanadora + 20, xG, yLinea - R_GANADORA - 6, C.acento, 2);
+  const rotuloG = `CatBoost · ${pct(ganadora.precision_seleccion)}`;
+  const mitadG = (anchoTexto(rotuloG, TAM.destacado) * 1.15) / 2;
+  texto(gg, Math.max(xAzar + 16 + mitadG, Math.min(xG, ANCHO - 8 - mitadG)), yGanadora, rotuloG, {
+    tam: TAM.destacado, peso: 700, ancla: 'middle', halo: true,
+  });
+
+  const gn = fila(svg, i++, 'nota');
+  texto(gn, 20, yBase + 106, 'Los primeros empatan: es una familia.', { tam: TAM.nota, peso: 500, clase: 'nota' });
+  const alto = Math.ceil(yBase + 130);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
+  svg.querySelector('rect')?.setAttribute('height', alto);
+  return svg;
+}
+
 const CONSTRUCTORES = {
   comparacion: figuraComparacion,
   veces_azar_prueba_final: figuraPruebaFinal,
@@ -1163,4 +1285,5 @@ const CONSTRUCTORES = {
   etiquetas_parciales: figuraEtiquetasParciales,
   detector: figuraDetector,
   particiones: figuraParticiones,
+  seleccion: figuraSeleccion,
 };
