@@ -629,7 +629,7 @@ export async function crearEscena({
     portada(p) {
       const e = estadoBase();
       e.modo = 1; e.vehRot = 0.55 + idle(0.12); e.bloom = 0.28;
-      e.cam.set(5.4, 0.85, 6.9).multiplyScalar(1 + p * 0.15);
+      e.cam.set(5.4, 0.85, 6.9).multiplyScalar(1.14 + p * 0.15);
       e.mira.set(0.2, 0.85, 0);
       e.opac.anillo = 1; e.grilla = 0.7; e.fov = 32;
       return e;
@@ -662,7 +662,7 @@ export async function crearEscena({
     validacion(p) {
       const e = estadoBase();
       e.veh = 0; e.bloom = 0.45;
-      e.cam.set(-3 + p * 4, 6.2, 17); e.mira.set(0.5 + p * 2.5, 0.4, 0);
+      e.cam.set(-2.5 + p * 4, 7, 19.5); e.mira.set(1.4 + p * 2.5, 0.4, 0);
       e.opac.timeline = 1; e.grilla = 0.6;
       return e;
     },
@@ -676,7 +676,7 @@ export async function crearEscena({
     seguridad(p) {
       const e = estadoBase();
       e.modo = 0; e.vehRot = -0.5 + idle(0.06); e.bloom = 0.4;
-      e.cam.set(9.5, 3.6, 10.5).multiplyScalar(1 - p * 0.12); e.mira.set(0, 1.4, 0);
+      e.cam.set(9.5, 3.6, 10.5).multiplyScalar(1.1 - p * 0.12); e.mira.set(0, 1.4, 0);
       e.opac.escudo = 1;
       return e;
     },
@@ -691,7 +691,7 @@ export async function crearEscena({
     'donde-mirar'(p) {
       const e = estadoBase();
       e.modo = 0; e.vehRot = 0; e.halos = 1; e.bloom = 0.38;
-      e.cam.set(4.6, 3.1, -7.2).multiplyScalar(1 - p * 0.1); e.mira.set(0.1, 0.95, 0);
+      e.cam.set(4.6, 3.1, -7.2).multiplyScalar(1.08 - p * 0.1); e.mira.set(0.1, 0.95, 0);
       return e;
     },
     futuro(p) {
@@ -797,10 +797,13 @@ export async function crearEscena({
 
   // Encuadre: corre el centro óptico para que el sujeto quede del lado opuesto al texto.
   // desplazamiento ∈ [-1, 1]: negativo = sujeto a la izquierda, positivo = a la derecha.
+  // 0,24 del ancho: con la columna de texto de la ronda 2 (≈ 46 % del ancho) el sujeto queda
+  // centrado en el 54 % libre (≈ 73 % del ancho) en vez de asomar bajo el velo.
   const encuadre = { x: 0 };
+  const CORRIMIENTO_ENCUADRE = 0.24;
   function aplicarEncuadre(w = canvas.clientWidth || window.innerWidth, h = canvas.clientHeight || window.innerHeight) {
     const angosto = w < 900; // en mobile el texto ocupa todo el ancho: sin corrimiento
-    const dx = angosto ? 0 : -encuadre.x * w * 0.2;
+    const dx = angosto ? 0 : -encuadre.x * w * CORRIMIENTO_ENCUADRE;
     if (dx === 0) camara.clearViewOffset();
     else camara.setViewOffset(w, h, dx, 0, w, h);
     camara.updateProjectionMatrix();
