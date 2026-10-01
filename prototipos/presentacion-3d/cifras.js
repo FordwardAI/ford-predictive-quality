@@ -231,6 +231,7 @@ function esNumeroValido(v) {
   return typeof v === 'number' && Number.isFinite(v);
 }
 
+// Exportada para figuras.js (cargarDatos), con la misma convención de rutas.
 export async function leerJson(archivo) {
   const url = new URL(RAIZ + archivo, import.meta.url);
   const respuesta = await fetch(url);
@@ -294,14 +295,4 @@ export async function cargarCifras() {
     });
   }
   return cifras;
-}
-
-// Agregados que dibuja figuras.js, por nombre de pieza (como solucion/figuras.py:
-// p3, p4, p5, p6, eleccion, prueba-final, preparacion). Un archivo que no se
-// pueda leer queda en null y la figura usa su SVG de respaldo.
-export const PIEZAS_FIGURAS = ['p3', 'p4', 'p5', 'p6', 'eleccion', 'prueba-final', 'preparacion'];
-
-export async function cargarDatosFiguras(piezas = PIEZAS_FIGURAS) {
-  const lecturas = await Promise.allSettled(piezas.map((p) => leerJson(`solucion/resultados/${p}.json`)));
-  return Object.fromEntries(piezas.map((p, i) => [p, lecturas[i].status === 'fulfilled' ? lecturas[i].value : null]));
 }

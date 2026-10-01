@@ -510,10 +510,7 @@ export const capitulos = [
       { id: 'inspeccion-adicional', titulo: 'El resultado vuelve', texto: 'Cada resultado de auditoría alimenta, con 5 días de margen, la siguiente revisión de la tasa de su código.' },
     ],
     figura: { tipo: 'js', id: 'etiquetas_parciales', opciones: {}, src: FIGURAS + 'etiquetas_parciales.svg', alt: 'Precisión en el cupo de cada política de exploración con etiquetas parciales', pie: 'Validación 155–194, conociendo solo lo auditado desde el Día 155. El detector se muestra en detector_potencia.svg.' },
-    detalle: [
-      { titulo: 'El problema', texto: 'Si la hoja orienta todo el cupo, en planta solo se conoce lo que la hoja eligió: los códigos que nunca se eligen dejan de tener datos nuevos.' },
-      { titulo: 'Mínimo por código', texto: 'Cada código que se produce recibe, por rotación, al menos una auditoría cada 40 días (elegido en validación). Con etiquetas parciales conserva la precisión del ranking puro; reservar un 20 % al azar la baja.' },
-    ],
+    detalle: [],
     notas: 'Seguimos con el estado de cada pieza. En la prueba final, el mínimo por código dio inconcluso: lo decimos así si preguntan.',
     orbita: false,
   },
@@ -524,6 +521,8 @@ export const capitulos = [
     puntos: [],
     figura: { tipo: 'js', id: 'detector', opciones: {}, src: FIGURAS + 'detector_potencia.svg', alt: 'Potencia del detector de cambios ante cambios sintéticos en validación', pie: 'Validación 155–194, con cambios sintéticos en la tasa de un código.' },
     detalle: [
+      { titulo: 'El problema', texto: 'Si la hoja orienta todo el cupo, en planta solo se conoce lo que la hoja eligió: los códigos que nunca se eligen dejan de tener datos nuevos.' },
+      { titulo: 'Mínimo por código', texto: 'Cada código que se produce recibe, por rotación, al menos una auditoría cada 40 días (elegido en validación). Con etiquetas parciales conserva la precisión del ranking puro; reservar un 20 % al azar la baja.' },
       { titulo: 'Detector de cambios', texto: 'Un CUSUM de Bernoulli por código, calibrado para no superar una falsa alarma cada 30 días en todo el catálogo. Sus alarmas son observaciones, no causas, y no modifican al predictor.' },
       { titulo: 'Señal por mercado de destino', texto: 'La hoja explica cada prioridad por el mercado de destino, en el bloque «por qué este código». No prueba que el mercado cause calibraciones.' },
       { titulo: 'Subcategorización', texto: 'Agrupar códigos por perfil de fallas no da un orden estable en validación. Queda la herramienta para cuando Ford publique su subcategorización.' },
