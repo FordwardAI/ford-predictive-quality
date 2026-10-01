@@ -149,8 +149,11 @@ function objetivoPaso(sec, cap) {
   if (cap.escena === 'linea' && callouts.length) {
     const revelados = pasos.slice(0, paso).filter((p) => p.tipo === 'callout');
     if (!revelados.length) return 0;
-    const k = revelados.at(-1).indiceCallout;
-    return callouts.length > 1 ? k / (callouts.length - 1) : 1;
+    const ultimo = revelados.at(-1);
+    // Posición real de la estación en la línea; si la escena no la conoce, reparto parejo.
+    const deEstacion = estado.escena?.progresoEstacion?.(ultimo.punto);
+    if (typeof deEstacion === 'number') return deEstacion;
+    return callouts.length > 1 ? ultimo.indiceCallout / (callouts.length - 1) : 1;
   }
   return paso / pasos.length;
 }

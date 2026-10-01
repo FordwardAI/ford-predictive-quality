@@ -1086,6 +1086,9 @@ export async function crearEscena({
       else foco.k = 1;
     },
 
+    // Progreso (0..1) de la escena «linea» en el que el vehículo está frente a la estación `id`.
+    progresoEstacion(id) { return progresoEstacion(id); },
+
     // 'alta' | 'baja' | 'auto' (sin argumento sólo consulta). Devuelve la calidad efectiva.
     calidad(modo) {
       if (modo && ['alta', 'baja', 'auto'].includes(modo) && modo !== modoCalidad) {
