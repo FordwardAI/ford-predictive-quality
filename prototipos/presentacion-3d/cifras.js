@@ -112,11 +112,11 @@ export const DEFINICIONES = [
   { clave: 'prueba.calibradasElegidas', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.calibrada_elegidas', formato: 'entero', respaldo: 71,
     tramo: 'prueba', etiqueta: 'CALIBRADA entre los elegidos' },
   { clave: 'prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.10889570552147239,
-    tramo: 'prueba', etiqueta: 'de cada 100 elegidos se calibran · lectura 1, tasa fija (oficial)' },
+    tramo: 'prueba', etiqueta: 'se calibran · lectura 1, tasa fija (oficial)' },
   { clave: 'prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.08274629051053826, 0.13609099666968646],
     tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo' },
   { clave: 'prueba.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08228066604795758,
-    tramo: 'prueba', etiqueta: 'de cada 100 elegidos al azar con el mismo cupo' },
+    tramo: 'prueba', etiqueta: 'al azar con el mismo cupo' },
   { clave: 'prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.3234665049745966,
     tramo: 'prueba', etiqueta: 'veces el azar' },
   { clave: 'prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.0078349707617178, 1.6396184187210794],
@@ -151,7 +151,7 @@ export const DEFINICIONES = [
 
   // Prueba final, lectura 2 (corridas[1], CatBoost; corridas[2] la repite igual).
   { clave: 'catboost.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.1196319018404908,
-    tramo: 'prueba', etiqueta: 'de cada 100 elegidos se calibran · lectura 2, CatBoost (más débil)' },
+    tramo: 'prueba', etiqueta: 'se calibran · lectura 2, CatBoost' },
   { clave: 'catboost.prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.09162573707704177, 0.1475946322603848],
     tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo · lectura 2' },
   { clave: 'catboost.prueba.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08228066604795758,
@@ -163,7 +163,7 @@ export const DEFINICIONES = [
 
   // Prueba final, lectura 3 (corridas[3], Random Forest; sin acuerdo del resto del equipo).
   { clave: 'rf.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.11809815950920245,
-    tramo: 'prueba', etiqueta: 'de cada 100 elegidos se calibran · lectura 3, Random Forest' },
+    tramo: 'prueba', etiqueta: 'se calibran · lectura 3, Random Forest' },
   { clave: 'rf.prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.09223003256939673, 0.14618075150777565],
     tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo · lectura 3' },
   { clave: 'rf.prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.4353087448316049,

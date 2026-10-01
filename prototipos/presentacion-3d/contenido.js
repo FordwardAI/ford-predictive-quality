@@ -300,6 +300,8 @@ export const capitulos = [
     // La figura usa la primera corrida de cada preregistro (corridas[0], [1] y [3]).
     // Su respaldo (SVG del informe) muestra solo la lectura 1, por tramo.
     figura: { tipo: 'js', id: 'veces_azar_prueba_final', opciones: {}, src: FIGURAS + 'veces_azar_prueba_final.svg', alt: 'Veces el azar de las tres lecturas de la prueba final (tasa fija, CatBoost y Random Forest), con su rango del 95 %', pie: 'Prueba final Día 200–284: primera corrida de cada preregistro. La lectura 1 es la oficial.' },
+    // Dos tarjetas: en la columna de texto no entran en 1920×1080; van en la banda al pie.
+    disposicion: 'tarjetas-escena',
     detalle: [
       { titulo: 'La lectura 2 es más débil', texto: 'El equipo ya conocía la primera; la ganadora se eligió casi al azar entre los 12 primeros.' },
       { titulo: 'No es una medición de planta', texto: 'Base ficticia; el tramo de prueba ya se había mirado.' },

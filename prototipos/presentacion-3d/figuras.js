@@ -804,46 +804,63 @@ function figuraComparacion(datos, opciones) {
   return svg;
 }
 
-// --- 2. veces_azar_prueba_final (figuras.py:297-344) ----------------------------
+// --- 2. veces_azar_prueba_final: las tres lecturas de la prueba final ----------
+
+// Rótulo de cada lectura según su preregistro (prueba-final.json → corridas[].preregistro).
+const LECTURAS = {
+  'solucion/preregistro.json': ['Lectura 1', 'tasa fija (oficial)'],
+  'solucion/preregistro-precision.json': ['Lectura 2', 'CatBoost'],
+  'solucion/preregistro-efectividad.json': ['Lectura 3', 'Random Forest'],
+};
 
 function figuraPruebaFinal(datos, opciones) {
-  // corridas[0] es la corrida única del preregistro (tasa fija ≤194), la misma
-  // que publica docs/entrega/figuras/veces_azar_prueba_final.svg y cifras.js.
-  // corridas[1] y [2] son la segunda lectura (CatBoost) y no se grafican.
-  const corrida = datos.pruebaFinal.corridas[0];
-  const tramos = corrida.tramos.filter((t) => esRango(t.ganadora?.veces_azar_rango95)
-    && !String(t.lectura_del_tramo ?? '').startsWith('descriptiva'));
-  if (!tramos.length) return null;
-  const filas = tramos.map((t, i) => {
-    const g = t.ganadora;
-    return {
-      etiqueta: capital(t.tramo), valor: g.veces_azar, rango: g.veces_azar_rango95, destacada: i === 0,
-      valorTexto: veces(g.veces_azar),
-      valorSub: `${veces(g.veces_azar_rango95[0]).replace(/\s×$/, '')} a ${veces(g.veces_azar_rango95[1])}`,
-    };
-  });
-  const principal = tramos[0].ganadora;
+  // Una fila por lectura: la primera corrida de cada preregistro, en orden
+  // (corridas[0] tasa fija, corridas[1] CatBoost, corridas[3] Random Forest).
+  // corridas[2] repite exactamente a corridas[1] y no se grafica. Se usa el
+  // tramo «prueba completa» (tramos[0]), el mismo de cifras.js.
+  const vistos = new Set();
+  const lecturas = [];
+  for (const c of datos.pruebaFinal.corridas) {
+    if (vistos.has(c.preregistro)) continue;
+    vistos.add(c.preregistro);
+    const g = c.tramos?.[0]?.ganadora;
+    if (!g || !esNumero(g.veces_azar) || !esRango(g.veces_azar_rango95)) continue;
+    const [linea1, linea2] = LECTURAS[c.preregistro]
+      ?? [`Lectura ${lecturas.length + 1}`, capital(c.ganadora?.familia ?? '')];
+    lecturas.push({ c, g, linea1, linea2 });
+  }
+  if (!lecturas.length) return null;
+  const filas = lecturas.map(({ g, linea1, linea2 }, i) => ({
+    linea1, linea2, valor: g.veces_azar, rango: g.veces_azar_rango95, destacada: i === 0,
+    valorTexto: veces(g.veces_azar),
+    valorSub: `${veces(g.veces_azar_rango95[0]).replace(/\s×$/, '')} a ${veces(g.veces_azar_rango95[1])}`,
+  }));
+  const principal = lecturas[0].g;
   const sinPct = (x) => pct(x).replace(/\s%$/, '');
 
-  // Pensada para ~900 px de ancho (1 unidad ≈ 1 px): rótulos de 24 px, valores de 36 px.
+  // Pensada para ~900 px de ancho (1 unidad ≈ 1 px). El panel de la pantalla la
+  // muestra a ~0,8: rótulos de 28 y valores de 40 (≥ 22 px efectivos), rangos y
+  // eje de 23 (≥ 18 px efectivos).
   const ANCHO = 900;
-  const TAM = { rotulo: 24, valor: 36, rango: 20, eje: 20, ref: 20 };
-  const PASO = 112;
+  const TAM = { rotulo: 28, valor: 40, rango: 23, eje: 23, ref: 23 };
+  const PASO = 120;
   const { svg, arriba } = lienzo('veces_azar_prueba_final', ANCHO, 2000, {
-    titulo: `Prueba final: de cada 100 elegidos se calibrarían ${sinPct(principal.precision_cupo)}, `
-      + `contra ${sinPct(principal.azar_mismo_cupo)} al azar`,
-    subtitulo: [`Veces el azar de la ganadora, ${principal.calificador}.`],
-    desc: `Veces el azar de la ganadora (${nombre(corrida.ganadora?.alternativa)}) en la prueba final, por tramo, `
+    titulo: 'Prueba final: veces el azar de cada lectura',
+    subtitulo: [`Lectura 1 (oficial): ${sinPct(principal.precision_cupo)} de cada 100 elegidos, `
+      + `contra ${sinPct(principal.azar_mismo_cupo)} al azar; ${principal.calificador}.`],
+    desc: 'Veces el azar en la prueba final (prueba completa) de la primera corrida de cada preregistro, '
       + 'con rango del 95 % por bootstrap de días: '
-      + filas.map((f) => `${f.etiqueta.toLowerCase()} ${f.valorTexto} (${f.valorSub})`).join('; ')
-      + `. Lectura de la prueba completa: ${principal.lectura}. Corrida única del preregistro acordado; `
-      + 'el tramo >260 es solo descriptivo y no se grafica.',
+      + lecturas.map(({ c, g }, i) => `${filas[i].linea1}, ${nombre(c.ganadora?.alternativa)}: `
+        + `${pct(g.precision_cupo)} contra ${pct(g.azar_mismo_cupo)} al azar, ${filas[i].valorTexto} (${filas[i].valorSub}), `
+        + `lectura ${g.lectura}`).join('; ')
+      + `. ${principal.calificador}. La lectura 1 es la oficial; la 2 es más débil porque el equipo ya conocía `
+      + 'la primera; la 3 se pidió el 01/10 sin acuerdo registrado del resto del equipo.',
     opciones,
   });
   const xEtiqueta = 24;
-  const x0 = 318;
-  const x1 = 668;
-  const xValor = 700;
+  const x0 = 330;
+  const x1 = 650;
+  const xValor = 680;
   const dominio = Math.max(2.5, ...filas.map((f) => f.rango[1] + 0.1));
   const esc = escala(0, dominio, x0, x1);
   const yAzar = arriba + 14;
@@ -851,12 +868,12 @@ function figuraPruebaFinal(datos, opciones) {
   const yBase = yInicio + PASO * filas.length;
 
   const g = el(svg, 'g', { class: 'eje' });
-  for (const v of ticks(dominio, 5)) {
+  for (const v of ticks(dominio, 3)) {
     linea(g, esc(v), yInicio, esc(v), yBase, C.linea, 1);
-    texto(g, esc(v), yBase + 24, v.toFixed(1).replace('.', ',') + NBSP + '×', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+    texto(g, esc(v), yBase + 26, v.toFixed(1).replace('.', ',') + NBSP + '×', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
   }
   linea(g, x0, yBase, x1, yBase, C.rango, 1.5);
-  texto(g, (x0 + x1) / 2, yBase + 60, 'Veces el azar (rango del 95 %)', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  texto(g, (x0 + x1) / 2, yBase + 64, 'Veces el azar (rango del 95 %)', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
 
   const gr = el(svg, 'g', { class: 'referencia' });
   linea(gr, esc(1), yAzar + 12, esc(1), yBase, C.texto, 2);
@@ -865,15 +882,14 @@ function figuraPruebaFinal(datos, opciones) {
   filas.forEach((f, i) => {
     const y = yInicio + PASO * (i + 0.5);
     const gf = fila(svg, i, f.destacada ? 'destacada' : '');
-    const peso = f.destacada ? 700 : 500;
-    const lineas = anchoTexto(f.etiqueta, TAM.rotulo) > x0 - xEtiqueta - 24 ? partirEnDos(f.etiqueta) : [f.etiqueta];
-    textoLineas(gf, xEtiqueta, y, lineas, { tam: TAM.rotulo, peso });
+    texto(gf, xEtiqueta, y - 17, f.linea1, { tam: TAM.rotulo, peso: 700, color: f.destacada ? C.texto : C.tenue });
+    texto(gf, xEtiqueta, y + 17, f.linea2, { tam: TAM.rotulo, peso: f.destacada ? 600 : 400 });
     puntoIntervalo(gf, esc, y, f.valor, f.rango, f.destacada ? 'destacada' : 'normal', f.destacada ? 13 : 11);
-    texto(gf, xValor, y - 14, f.valorTexto, { tam: TAM.valor, peso: 700, color: f.destacada ? C.texto : C.tenue });
-    texto(gf, xValor, y + 24, f.valorSub, { tam: TAM.rango, color: C.tenue });
+    texto(gf, xValor, y - 15, f.valorTexto, { tam: TAM.valor, peso: 700, color: f.destacada ? C.texto : C.tenue });
+    texto(gf, xValor, y + 26, f.valorSub, { tam: TAM.rango, color: C.tenue });
   });
 
-  const alto = Math.ceil(yBase + 84);
+  const alto = Math.ceil(yBase + 90);
   svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
   svg.querySelector('rect')?.setAttribute('height', alto);
   return svg;
