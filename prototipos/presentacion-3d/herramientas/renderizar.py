@@ -20,6 +20,7 @@ import http.server
 import json
 import os
 import re
+import shutil
 import socket
 import struct
 import subprocess
@@ -238,6 +239,7 @@ def main() -> int:
         except subprocess.TimeoutExpired:
             chrome.kill()
         srv.shutdown()
+        shutil.rmtree(perfil, ignore_errors=True)
     return 1 if fallas else 0
 
 
