@@ -1,6 +1,6 @@
 import {
-  BadgeCheck, CalendarClock, CalendarDays, CircleCheck, CircleMinus, CircleX, ClipboardCheck, ClipboardList,
-  Download, Factory, Info, ListChecks, ListOrdered, RefreshCw, Route, ScanSearch,
+  BadgeCheck, CalendarClock, CalendarDays, CircleCheck, CircleMinus, CircleX, ClipboardList,
+  Download, Factory, Info, ListChecks, RefreshCw, Route, ScanSearch,
   SquareParking, type LucideIcon,
 } from 'lucide-react'
 
@@ -12,13 +12,11 @@ const ICONOS = {
   audito: ScanSearch,
   ronda: Route,
   seguimiento: ListChecks,
-  prioridades: ListOrdered,
   resultados: BadgeCheck,
   modelo: RefreshCw,
   programa: CalendarClock,
   linea: Factory,
   playa: SquareParking,
-  calidad: ClipboardCheck,
   check: CircleCheck,
   menos: CircleMinus,
   fuera: CircleX,

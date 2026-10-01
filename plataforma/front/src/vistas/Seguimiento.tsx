@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useApp, useSincronizar } from '@/lib/estado'
 
-// Calidad de Planta sigue el día desde el escritorio: cuánto se envió de cada código y qué pasó en cada ronda.
+// El avance del día: cuánto se envió de cada código y qué pasó en cada ronda.
 // Se actualiza solo con lo que registra la tablet de la playa.
 export function Seguimiento() {
   const { hoja, estado, refrescar, planta } = useApp()
@@ -29,8 +29,8 @@ export function Seguimiento() {
 
   return (
     <>
-      <Encabezado ojo={`Calidad de Planta · Día ${hoja.dia}`} titulo="Seguimiento del" acento="día"
-        bajada="Lo que registra el responsable de la selección en la playa, actualizado cada 15 segundos."
+      <Encabezado ojo={`Día ${hoja.dia}`} titulo="Seguimiento del" acento="día"
+        bajada="Lo que se registra en la playa, actualizado cada 15 segundos."
         acciones={<Button variant="outline" asChild><a href="#resultados"><Icono nombre="resultados" />Ver resultados</a></Button>} />
 
       <section className="mb-10 grid grid-cols-2 gap-6 lg:grid-cols-4">

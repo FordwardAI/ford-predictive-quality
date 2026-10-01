@@ -22,7 +22,7 @@ export function Modelo() {
   const c = datos?.cambios
   return (
     <>
-      <Encabezado ojo="Calidad de Planta · automático" titulo="Actualización del" acento="modelo"
+      <Encabezado ojo="Automático" titulo="Actualización del" acento="modelo"
         bajada="La plataforma actualiza el modelo sola, en días fijos, con los resultados que vuelven de la auditoría." />
 
       <section className="mb-8 grid grid-cols-2 gap-6 lg:grid-cols-4">

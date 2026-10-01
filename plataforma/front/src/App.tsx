@@ -5,9 +5,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Icono, type NombreIcono } from '@/components/iconos'
 import { useApp, useVista, type Vista } from '@/lib/estado'
-import { useRol, type Rol } from '@/lib/rol'
 import { cn } from '@/lib/utils'
-import { ElegirRol } from '@/vistas/ElegirRol'
 import { HojaDelDia } from '@/vistas/Hoja'
 import { DiaPlanta } from '@/vistas/DiaPlanta'
 import { Modelo } from '@/vistas/Modelo'
@@ -17,39 +15,27 @@ import { Seguimiento } from '@/vistas/Seguimiento'
 import { Seleccion } from '@/vistas/Seleccion'
 
 type Item = { id: Vista; nombre: string; corto: string; icono: NombreIcono }
-const NAV: Record<Rol, { nombre: string; grupos: { grupo: string; items: Item[] }[] }> = {
-  seleccion: {
-    nombre: 'Selección en la playa',
-    grupos: [{
-      grupo: 'En la playa',
-      items: [
-        { id: 'seleccion', nombre: 'Selección', corto: 'Selección', icono: 'audito' },
-        { id: 'prioridades', nombre: 'Prioridades del día', corto: 'Prioridades', icono: 'prioridades' },
-      ],
-    }],
-  },
-  calidad: {
-    nombre: 'Calidad de Planta',
-    grupos: [
-      {
-        grupo: 'Operación del día',
-        items: [
-          { id: 'hoy', nombre: 'Día de planta', corto: 'Día', icono: 'hoy' },
-          { id: 'hoja', nombre: 'Hoja del día', corto: 'Hoja', icono: 'hoja' },
-          { id: 'seguimiento', nombre: 'Seguimiento', corto: 'Seguimiento', icono: 'seguimiento' },
-        ],
-      },
-      {
-        grupo: 'Retorno de la auditoría',
-        items: [
-          { id: 'resultados', nombre: 'Resultados', corto: 'Resultados', icono: 'resultados' },
-          { id: 'modelo', nombre: 'Modelo', corto: 'Modelo', icono: 'modelo' },
-          { id: 'linea', nombre: 'Reporte para la línea', corto: 'Línea', icono: 'linea' },
-        ],
-      },
+// Una sola navegación: todavía no se sabe cómo se reparten estas tareas en planta, así que no se separa por rol.
+const NAV: { grupo: string; items: Item[] }[] = [
+  {
+    grupo: 'Operación del día',
+    items: [
+      { id: 'hoy', nombre: 'Día de planta', corto: 'Día', icono: 'hoy' },
+      { id: 'hoja', nombre: 'Hoja del día', corto: 'Hoja', icono: 'hoja' },
+      { id: 'seguimiento', nombre: 'Seguimiento', corto: 'Seguimiento', icono: 'seguimiento' },
     ],
   },
-}
+  {
+    grupo: 'Retorno de la auditoría',
+    items: [
+      { id: 'resultados', nombre: 'Resultados', corto: 'Resultados', icono: 'resultados' },
+      { id: 'modelo', nombre: 'Modelo', corto: 'Modelo', icono: 'modelo' },
+      { id: 'linea', nombre: 'Reporte para la línea', corto: 'Línea', icono: 'linea' },
+    ],
+  },
+  { grupo: 'En la playa', items: [{ id: 'seleccion', nombre: 'Selección', corto: 'Selección', icono: 'audito' }] },
+]
+const ITEMS = NAV.flatMap((g) => g.items)
 
 function Contexto() {
   const { meta, hoja, modelo } = useApp()
@@ -72,18 +58,12 @@ function Contexto() {
 }
 
 export default function App() {
-  const [rol, setRol] = useRol()
   const vistaHash = useVista()
-  const nav = rol ? NAV[rol] : null
-  const items = nav ? nav.grupos.flatMap((g) => g.items) : []
-  const vista = items.find((i) => i.id === vistaHash) ?? items[0]
+  const vista = ITEMS.find((i) => i.id === vistaHash) ?? ITEMS[0]
 
-  useEffect(() => { if (vista) document.title = `${vista.nombre} · Plataforma FordwardAI` }, [vista])
-
-  if (!rol || !nav || !vista) {
-    return <ElegirRol alElegir={(r) => { setRol(r); location.hash = NAV[r].grupos[0].items[0].id }} />
-  }
-  const cambiarRol = () => { setRol(null); history.replaceState(null, '', location.pathname) }
+  useEffect(() => { document.title = `${vista.nombre} · Plataforma FordwardAI` }, [vista])
+  // En móvil, la pestaña activa de la navegación inferior se desplaza a la vista.
+  useEffect(() => { document.querySelector('#nav-movil [aria-current]')?.scrollIntoView({ block: 'nearest', inline: 'center' }) }, [vista])
 
   return (
     <div className="min-h-svh md:grid md:grid-cols-[228px_minmax(0,1fr)] md:gap-6 md:p-6">
@@ -93,7 +73,7 @@ export default function App() {
           <img src="ford-logo.png" alt="Ford" width={128} height={58} className="w-32" />
           <p className="mt-2">Selección para Auditoría Adicional</p>
         </div>
-        {nav.grupos.map((g) => (
+        {NAV.map((g) => (
           <div key={g.grupo} className="mb-6">
             <p className="px-3 pb-2">{g.grupo}</p>
             <ul className="flex flex-col gap-1">
@@ -109,19 +89,13 @@ export default function App() {
             </ul>
           </div>
         ))}
-        <div className="mt-auto px-3">
-          <p>{nav.nombre}</p>
-          <button type="button" onClick={cambiarRol} className="mt-1 rounded-full text-left underline underline-offset-4">Cambiar de rol</button>
-          <p className="mt-6 text-2xl">FordwardAI</p>
-        </div>
+        <p className="mt-auto px-3 text-2xl">FordwardAI</p>
       </nav>
 
-      {/* Móvil: barra superior con el logo y el rol; navegación inferior, al alcance del pulgar en la playa. */}
+      {/* Móvil: barra superior con el logo y navegación inferior desplazable. */}
       <div className="flex items-center justify-between gap-3 bg-ford-blue px-4 py-3 text-white md:hidden">
         <img src="ford-logo.png" alt="Ford" width={80} height={36} className="w-20" />
-        <button type="button" onClick={cambiarRol} className="rounded-full text-right">
-          {nav.nombre}<span className="block underline underline-offset-4">Cambiar</span>
-        </button>
+        <span className="font-medium">FordwardAI</span>
       </div>
 
       <div className="flex min-w-0 flex-col">
@@ -130,7 +104,6 @@ export default function App() {
         </div>
         <main className="w-full max-w-[1280px] px-4 pt-6 pb-28 md:px-12 md:pt-8 md:pb-16">
           {vista.id === 'seleccion' && <Seleccion />}
-          {vista.id === 'prioridades' && <HojaDelDia soloLectura />}
           {vista.id === 'hoy' && <DiaPlanta />}
           {vista.id === 'resultados' && <Resultados />}
           {vista.id === 'modelo' && <Modelo />}
@@ -140,9 +113,8 @@ export default function App() {
         </main>
       </div>
 
-      <nav aria-label="Secciones" className={cn('fixed inset-x-0 bottom-0 z-40 border-t-2 border-ford-gray bg-white md:hidden',
-        items.length <= 4 ? 'grid grid-cols-2' : 'flex overflow-x-auto [&>a]:min-w-24')}>
-        {items.map((i) => (
+      <nav id="nav-movil" aria-label="Secciones" className="fixed inset-x-0 bottom-0 z-40 flex overflow-x-auto border-t-2 border-ford-gray bg-white md:hidden [&>a]:min-w-24 [&>a]:flex-1">
+        {ITEMS.map((i) => (
           <a key={i.id} href={`#${i.id}`} aria-current={vista.id === i.id ? 'page' : undefined}
             className={cn('flex flex-col items-center gap-1 py-2', vista.id === i.id ? 'font-medium text-ford-skyview' : 'text-ford-blue')}>
             <Icono nombre={i.icono} />

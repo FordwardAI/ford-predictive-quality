@@ -25,7 +25,7 @@ export function Resultados() {
 
   return (
     <>
-      <Encabezado ojo="Calidad de Planta · retorno de la auditoría" titulo="¿Fue" acento="acertada?"
+      <Encabezado ojo="Retorno de la auditoría" titulo="¿Fue" acento="acertada?"
         bajada="Cada unidad enviada, con la tasa que el modelo le asignaba al elegirla y lo que encontró la Auditoría Adicional." />
 
       <section className="mb-10 grid grid-cols-2 gap-6 lg:grid-cols-4">

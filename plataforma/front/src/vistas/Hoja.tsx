@@ -17,7 +17,7 @@ import { dec, entero, pct, rangoPct } from '@/lib/formato'
 
 // La hoja responde una pregunta: qué códigos auditar hoy y cuántas unidades de cada uno. El ranking completo, el
 // detalle de cada código y la metodología quedan a un clic.
-export function HojaDelDia({ soloLectura = false }: { soloLectura?: boolean }) {
+export function HojaDelDia() {
   const { hoja, estado, modelo, refrescar } = useApp()
   const [detalle, setDetalle] = useState<Fila | null>(null)
   useSincronizar(refrescar)
@@ -25,8 +25,8 @@ export function HojaDelDia({ soloLectura = false }: { soloLectura?: boolean }) {
     return (
       <>
         <Encabezado titulo="Hoja del" acento="día" />
-        <Vacio titulo="Todavía no hay hoja para hoy" texto="Calidad de Planta la arma al inicio del día con el programa de producción y el cupo."
-          accion={soloLectura ? undefined : <Button asChild size="cta"><a href="#hoy"><Icono nombre="hoy" />Preparar el día</a></Button>} />
+        <Vacio titulo="Todavía no hay hoja para hoy" texto="Se arma al inicio del día con las unidades en la playa y el cupo."
+          accion={<Button asChild size="cta"><a href="#hoy"><Icono nombre="hoy" />Preparar el día</a></Button>} />
       </>
     )
   }
@@ -42,9 +42,9 @@ export function HojaDelDia({ soloLectura = false }: { soloLectura?: boolean }) {
 
   return (
     <>
-      <Encabezado ojo={soloLectura ? 'Prioridades del día' : `Hoja del día · ${m.nombre}`} titulo={`Día ${hoja.dia}:`} acento="qué auditar"
+      <Encabezado ojo={`Hoja del día · ${m.nombre}`} titulo={`Día ${hoja.dia}:`} acento="qué auditar"
         bajada="Se priorizan códigos, no vehículos: dentro de un código cualquier unidad sirve."
-        acciones={soloLectura ? undefined :
+        acciones={
           <>
             <ComoLeer hoja={hoja} />
             <DropdownMenu>

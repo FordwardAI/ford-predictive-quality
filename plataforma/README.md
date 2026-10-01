@@ -6,22 +6,23 @@ Propuesta de plataforma para la implementación, que funciona en la notebook. No
 
 Es el MVP de cómo se usaría la solución en planta. El usuario principal es el **responsable de la selección**: el equipo de analistas que, cada ~2 h, elige en la playa de despacho qué unidades pasan a Auditoría Adicional. La decisión ocurre después de Gate Release, mientras las unidades esperan el despacho. Esa espera va de 0 a 5 días, así que en la playa conviven unidades de varios días. Se decide **por código** (etiqueta del parabrisas), y por eso una unidad de un día anterior se decide igual.
 
-Cada dispositivo elige su rol en la primera pantalla (o con un acceso directo `?rol=seleccion` / `?rol=calidad`). Se puede cambiar desde el menú.
+Todavía no se sabe cómo se reparten estas tareas en planta (quién arma la hoja, quién elige en la playa), así que la plataforma **no separa roles**: tiene una sola navegación.
 
-| Rol | Dónde | Pantallas |
-| --- | --- | --- |
-| **Selección en la playa** | Tablet o celular | **Selección**: qué buscar, «¿la envío?», enviadas con su resultado y deshacer, y terminar ronda. **Prioridades del día**: la hoja en solo lectura. |
-| **Calidad de Planta** | Escritorio | **Día de planta**: entradas, cupo, modelo y armar la hoja. **Hoja del día**. **Seguimiento**. **Resultados**: acierto por unidad. **Modelo**: calendario de actualización automática, último cambio e historial. **Reporte para la línea**. |
+| Grupo | Pantallas |
+| --- | --- |
+| Operación del día | **Día de planta**: entradas, cupo, modelo y armar la hoja. **Hoja del día**. **Seguimiento**. |
+| Retorno de la auditoría | **Resultados**: acierto por unidad. **Modelo**: calendario de actualización automática, último cambio e historial. **Reporte para la línea**. |
+| En la playa | **Selección**: qué buscar, «¿la envío?», enviadas con su resultado y deshacer, y terminar ronda. Se puede usar desde el celular o una tablet. |
 
 ### El ciclo en planta
 
 1. **Entran las unidades de Gate Release.** Cada unidad llega con su código y su día (`POST /api/ingreso`). Espera en la playa de despacho de 0 a 5 días, así que la playa del día reúne las unidades de los últimos 5 días que no se enviaron ni despacharon.
-2. **Calidad de Planta arma la hoja** con la playa, el cupo y la versión vigente del modelo. El cupo por defecto es el 5 % de lo que pasó Gate Release ese día. Hasta que la arma, la tablet muestra «Esperando la hoja» y la selección sigue al azar, como hoy.
-3. **El responsable de la selección decide en la playa, cada ~2 h.**
+2. **Se arma la hoja** con la playa, el cupo y la versión vigente del modelo. El cupo por defecto es el 5 % de lo que pasó Gate Release ese día. Hasta entonces, Selección muestra «Esperando la hoja» y la selección sigue al azar, como hoy.
+3. **Se decide en la playa, cada ~2 h.**
    - Por cada vehículo escribe el código de la etiqueta y la app responde **Enviar a auditoría** o **No enviar**, con el motivo.
    - «Enviar» registra una unidad de ese código que está en la playa, la más antigua primero, y guarda la tasa y el puesto que tenía al decidir.
    - **Terminar ronda** pregunta qué faltó de lo buscado; lo que faltó baja al siguiente del ranking.
-4. **Vuelve el resultado de la auditoría** (`POST /api/resultados`, la exportación de QLS con el resultado y el componente). Solo se aceptan resultados de unidades enviadas. **Resultados** muestra el acierto por unidad: CALIBRADA = acierto. La tablet lo muestra en su lista.
+4. **Vuelve el resultado de la auditoría** (`POST /api/resultados`, la exportación de QLS con el resultado y el componente). Solo se aceptan resultados de unidades enviadas. **Resultados** muestra el acierto por unidad: CALIBRADA = acierto. Selección lo muestra en la lista de enviadas.
 5. **El modelo se actualiza solo, con calendario fijo.** Cada versión es «el modelo con los resultados hasta el Día X»; entre versiones, el orden no cambia aunque lleguen resultados. La plataforma crea la versión nueva **cada 5 días desde el 155** (160, 165, 170…) al empezar el día, con los resultados de Día ≤ t − 5. Es el mismo esquema que se evaluó en validación para los modelos reentrenados (`solucion/ml.py`: `REENTRENO_DESDE`, `CADA`). Nadie decide cuándo: elegir el momento mirando los resultados es una forma de sobreajuste, y los resultados que vuelven son solo de lo que el modelo eligió. El calendario está fijo en `plataforma/modelo.py: PROGRAMA`, no en la pantalla. **Modelo** muestra la próxima actualización, qué cambió en el ranking con la última y el historial.
 6. **Retorno a la línea.** El **Reporte para la línea** muestra, entre lo auditado, la tasa de calibración por código, versión, motor y mercado, los componentes más calibrados y la tendencia semanal. Se descarga en CSV, solo con agregados. El componente no se usa para predecir, porque es el resultado; acá es información para mejorar la producción.
 

@@ -13,7 +13,7 @@ import { api, type ClaveModelo, type Planta } from '@/lib/api'
 import { useApp, useSincronizar } from '@/lib/estado'
 import { entero } from '@/lib/formato'
 
-// Calidad de Planta al inicio del día: qué entró (Gate Release y resultados), con qué modelo y qué cupo se trabaja.
+// Inicio del día: qué entró (Gate Release y resultados), con qué modelo y qué cupo se trabaja.
 export function DiaPlanta() {
   const { meta, planta, setPlanta, refrescarPlanta, hoja, estado, armar, modelo, refrescar } = useApp()
   const [cupo, setCupo] = useState('')
@@ -42,7 +42,7 @@ export function DiaPlanta() {
 
   return (
     <>
-      <Encabezado ojo="Calidad de Planta" titulo={`Día ${t} en la`} acento="planta"
+      <Encabezado ojo="Inicio del día" titulo={`Día ${t} en la`} acento="planta"
         bajada="Lo que entró hoy, con qué modelo se prioriza y cuántas unidades se auditan." />
 
       {prog.hoy && (
@@ -91,7 +91,7 @@ export function DiaPlanta() {
               <Label htmlFor="cupo">Cupo del día</Label>
               <Input id="cupo" className="h-12" type="number" min={0} inputMode="numeric" placeholder={String(planta.cupo_sugerido)}
                 value={cupo} onChange={(e) => setCupo(e.target.value)} />
-              <p>Lo fija Calidad de Planta. Vacío: el 5 % de las {entero(planta.gate_release_hoy)} que pasaron Gate Release hoy ({planta.cupo_sugerido}).</p>
+              <p>Vacío: el 5 % de las {entero(planta.gate_release_hoy)} que pasaron Gate Release hoy ({planta.cupo_sugerido}).</p>
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="modelo" className="flex items-center gap-1">Modelo

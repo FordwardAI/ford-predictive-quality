@@ -14,7 +14,7 @@ import { useApp, useSincronizar } from '@/lib/estado'
 import { cn } from '@/lib/utils'
 import { ResultadoBadge } from '@/vistas/Resultados'
 
-// La pantalla del responsable de la selección, en la playa de despacho. Una ronda (cada ~2 h): mirar qué buscar,
+// La selección en la playa de despacho. Una ronda (cada ~2 h): mirar qué buscar,
 // leer el código de cada vehículo, enviar los que correspondan y, al terminar, avisar qué no estaba.
 export function Seleccion() {
   const { hoja, estado, refrescar, setEstado } = useApp()
@@ -34,11 +34,12 @@ export function Seleccion() {
 
   if (!hoja || !estado) {
     return (
-      <div className="mx-auto max-w-xl">
+      <div className="max-w-xl">
         <Encabezado ojo="Selección para Auditoría Adicional" titulo="Esperando la" acento="hoja" />
         <section className="rounded-lg bg-ford-gray p-8">
-          <h2 className="text-2xl">Calidad de Planta todavía no armó la hoja de hoy</h2>
+          <h2 className="text-2xl">Todavía no se armó la hoja de hoy</h2>
           <p className="mt-3">Mientras tanto, la selección sigue como hoy, al azar. Esta pantalla se actualiza sola cuando la hoja esté lista.</p>
+          <Button asChild className="mt-6"><a href="#hoy"><Icono nombre="hoy" />Ir a Día de planta</a></Button>
         </section>
       </div>
     )
@@ -81,7 +82,7 @@ export function Seleccion() {
   const ultimas = new Set(Object.values(Object.fromEntries(estado.enviadas.map((e) => [e.codigo, e.unidad]))))
 
   return (
-    <div className="mx-auto max-w-xl">
+    <div className="max-w-xl">
       <Encabezado ojo={`Día ${hoja.dia} · ronda ${ronda}`} titulo="¿La" acento="envío?" />
 
       <section aria-label="Avance del día" className="mb-8">
@@ -94,7 +95,7 @@ export function Seleccion() {
           <p className="flex items-center gap-3 text-3xl font-medium tracking-tight"><Icono nombre="check" className="size-10" />
             {estado.cupo === 0 ? 'Hoy no se audita' : 'Cupo del día cubierto'}</p>
           <p className="mt-3">{estado.cupo === 0
-            ? 'El cupo de hoy es 0: no hubo unidades nuevas de Gate Release. Si Calidad de Planta fija otro cupo, aparece acá.'
+            ? 'El cupo de hoy es 0: no hubo unidades nuevas de Gate Release. Si se fija otro cupo en Día de planta, aparece acá.'
             : 'No hace falta enviar más unidades hoy.'}</p>
         </section>
       ) : (
@@ -116,7 +117,7 @@ export function Seleccion() {
             <Label htmlFor="codigo">Código de la etiqueta del parabrisas</Label>
             <Input id="codigo" ref={campo} value={codigo} onChange={(e) => setCodigo(e.target.value.toUpperCase())}
               autoComplete="off" autoCapitalize="characters" spellCheck={false} placeholder="ABF6" enterKeyHint="send"
-              className="h-24 rounded-lg px-6 text-3xl tracking-widest uppercase" />
+              className="h-24 rounded-lg px-6 text-3xl tracking-widest uppercase md:text-3xl" />
           </form>
           <Respuesta decision={decision} enviando={enviando} alEnviar={enviar} />
         </>
