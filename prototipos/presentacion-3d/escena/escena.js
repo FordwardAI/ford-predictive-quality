@@ -850,6 +850,16 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
       else if (transicion.k >= 1) activarOrbita();
     },
 
+    // --- Contrato de la API para el modo de diapositivas (el bloque B los implementa) ---
+    // Resalta el punto/halo `id` (o quita el foco con null).
+    enfocarPunto(/* id | null */) {},
+    // 'alta' | 'baja' | 'auto'. Devuelve la calidad efectiva.
+    calidad(/* modo */) { return 'auto'; },
+    // Pausa o reanuda el render (inactividad, pestaña oculta).
+    pausar(/* booleano */) {},
+    // Renderiza un cuadro a resolución completa. Devuelve Promise<Blob> (PNG).
+    capturar() { return Promise.resolve(null); },
+
     destruir() {
       activo = false;
       cancelAnimationFrame(raf);
