@@ -1,0 +1,4 @@
+# Modelos 3D descargados a mano: no se versionan, salvo el optimizado (<5 MB).
+*
+!.gitignore
+!ranger.glb
