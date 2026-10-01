@@ -15,6 +15,8 @@ Pedido de Facundo Lanusse el 01/10/2026, en [#33](https://github.com/FordwardAI/
    - sumar el historial QLS del VIN, que **empeora**: el AUC dentro del día baja de 0,541 a 0,518.
 5. **Subir de verdad exige información por VIN que la base no tiene.** El techo con el código es el oráculo: 20,2 % en validación y 22,8 % en selección, y es optimista. La vía para superarlo es la de [datos de proceso](datos-proceso.md).
 
+**Elección por efectividad.** Facundo pidió elegir solo por efectividad, sin desempate por simplicidad. Con ese criterio, la opción elegida es **Random Forest con atributos del código, reentrenado cada 5 días**. Es la más consistente de las 54 alternativas, aunque no está probado que supere a sus parecidas ([detalle](#elección-por-efectividad)).
+
 ## Las vías evaluadas
 
 | Vía | Qué podría ganar | Evidencia (Día < 195) | Veredicto |
@@ -127,12 +129,38 @@ Agregar el historial cambia el AUC entre −0,046 y +0,001, y la precisión entr
   - en planta, el historial QLS no se relaciona con la calibración.
 - La demora y el tamaño de la playa no importan porque el riesgo relativo es estable y casi no hay agrupamiento por día. Con datos de proceso, una alarma de corto plazo podría cambiar esto.
 
+## Elección por efectividad
+
+**Criterio.** Lo pidió Facundo el 01/10: elegir solo por efectividad, sin desempate por simplicidad ni facilidad de explicación. Como el orden se invierte entre bloques, «el de más aciertos en un tramo» no sirve. Se elige la alternativa cuya **peor** lectura sea la más alta entre validación 155–194, selección 100–174 y confirmación 175–194. El criterio se fijó después de ver esos tramos: la elección es exploratoria.
+
+**Elegida: Random Forest con atributos del código, reentrenado cada 5 días.** De las 54 alternativas elegibles de [`precision.json`](../solucion/resultados/precision.json), es la de mejor peor lectura: 17,7 %. La sigue XGBoost con atributos reentrenado, con 17,6 %.
+
+| Opción | Validación 155–194 | Selección 100–174 | Confirmación 175–194 | Peor lectura |
+| --- | --- | --- | --- | --- |
+| **RF con atributos, reentrenado cada 5 d** | **73/391 · 18,7 %** | **131/740 · 17,7 %** | **45/225 · 20,0 %** | **17,7 %** |
+| XGBoost con atributos, reentrenado cada 5 d | 69/391 · 17,6 % | 134/740 · 18,1 % | 44/225 · 19,6 % | 17,6 % |
+| Riesgo estandarizado, 60 d, κ 10 (este informe) | 73/391 · 18,7 % | 127/740 · 17,2 % | 44/225 · 19,6 % | 17,2 % |
+| Móvil 120 d hacia el mercado | 69/391 · 17,6 % | 126/740 · 17,0 % | 46/225 · 20,4 % | 17,0 % |
+| CatBoost con atributos, reentrenado (2.ª lectura de la prueba final) | 63/391 · 16,1 % | 136/740 · 18,4 % | 39/225 · 17,3 % | 16,1 % |
+| Tasa fija (≤149 en validación; reajustada por bloque) | 59/391 · 15,1 % | 94/740 · 12,7 % | 46/225 · 20,4 % | 12,7 % |
+
+- **Qué es.** Un bosque de 200 árboles de decisión.
+  - **Entradas:** el código y sus atributos (mercado, motor dominante, tracción, versión dominante y mercado × versión).
+  - **Reentrenamiento:** cada 5 días, con las auditorías de resultado conocido (Día ≤ t − 5) y más peso para lo reciente. La vida media es de 15, 30 o 60 días, y ella y el ajuste del bosque se eligen por log-loss con los días previos.
+  - **Salida:** una probabilidad por código, que entra en la hoja sin cambiarle el formato.
+- **Por qué esta.** No cae en ninguna lectura. En la rotación de la mezcla supera a la tasa fija por +1,1 a +9,0 puntos en selección (rango del 95 %, pareado por días); en confirmación la diferencia va de −2,5 a +1,4. CatBoost, en cambio, gana en selección y es de las más débiles en validación y confirmación.
+- **Lo que no prueba.** Su ventaja sobre XGBoost reentrenado, el riesgo estandarizado o la móvil hacia el mercado es de 5 a 10 aciertos sobre unos 1.000 elegidos, dentro del ruido. Su efectividad esperada es similar, alrededor de 18 % en validación.
+- **Cifras sin prueba final.** RF reentrenado nunca se leyó en la prueba final: allí solo están la tasa fija (10,9 % contra 8,2 % al azar) y CatBoost (12,0 %, segunda lectura). El equipo acordó no hacer una tercera lectura. Sus cifras se rotulan «evaluado en validación; prueba final no releída».
+- **Origen de las cifras.**
+  - Modelos de ML: [`precision.json`](../solucion/resultados/precision.json). En los bloques se informa la corrida mediana de 5 semillas por precisión de selección (RF: semilla 4); validación 155–194 usa una corrida.
+  - Riesgo estandarizado: [`opcion_precisa.json`](../solucion/experimentos/resultados/opcion_precisa.json).
+
 ## Recomendación
 
 Es una propuesta de este análisis; no es una decisión del equipo.
 
-1. **Trials Day.** No presentar ningún modelo como «el más preciso». La cifra principal sigue siendo la preregistrada: tasa fija, 10,9 % contra 8,2 % al azar (×1,32). CatBoost, 12,0 %, se presenta rotulado como segunda lectura. La inversión del orden entre bloques es el argumento para defender que más búsqueda no habría encontrado algo mejor.
-2. **Implementación.** La tasa de la hoja debería actualizarse con lo auditado y contraerse hacia el mercado. Cualquiera de las secuenciales equivalentes sirve; conviene la más simple de explicar, por ejemplo la móvil de 120 días hacia el mercado. La tasa fija revisada cada tanto no basta en una rotación de mezcla. El detector de cambios sigue siendo útil para avisar entre revisiones.
+1. **Trials Day.** Presentar RF con atributos reentrenado como la opción elegida por efectividad, con sus cifras de validación rotuladas. Las únicas cifras de prueba final son la tasa fija preregistrada (10,9 % contra 8,2 % al azar, ×1,32) y CatBoost (12,0 %, segunda lectura). No afirmar que RF le gana a las opciones parecidas. La inversión del orden entre bloques explica por qué se eligió por consistencia y no por el máximo de un tramo.
+2. **Implementación.** Calcular la columna de tasa de la hoja con RF con atributos reentrenado cada 5 días, en lugar de la tasa fija: la tasa fija revisada cada tanto no basta en una rotación de mezcla. Si el equipo no quiere operar un modelo de ML, la móvil de 120 días hacia el mercado tiene una efectividad esperada similar. El detector de cambios sigue siendo útil para avisar entre reentrenamientos.
 3. **Más precisión.** Pedir a Ford el piloto de [datos de proceso](datos-proceso.md): es la única vía que puede superar el techo del código. Mientras tanto, el techo esperable con la base actual es de unos 18–20 % en validación.
 
 ## Método y reproducción
@@ -168,7 +196,7 @@ Es una propuesta de este análisis; no es una decisión del equipo.
 
 ## Decisiones acordadas
 
-Ninguna. El informe no cambia la solución operativa, la hoja ni los preregistros, y no relee la prueba final. La recomendación 2 contradice la opción de tasa fija acordada el 30/09 en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33). Requiere acuerdo del equipo.
+Ninguna. El informe no cambia la solución operativa, la hoja ni los preregistros, y no relee la prueba final. La elección de RF con atributos reentrenado es de este análisis, con el criterio de efectividad que pidió Facundo. Contradice la opción de tasa fija acordada el 30/09 en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33) y requiere acuerdo del equipo.
 
 ## Fuentes
 
