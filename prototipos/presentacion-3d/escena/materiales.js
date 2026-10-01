@@ -191,16 +191,17 @@ function conBase(mat, base = 1) {
 
 // Pintura metalizada Ford Blue con clearcoat (requiere scene.environment). El azul Ford es muy
 // oscuro: con metalness alto refleja sólo el entorno y queda negro, así que se usa un metalizado
-// moderado sobre un azul algo más claro y el clearcoat aporta los reflejos nítidos.
+// moderado sobre un azul algo más claro y un clearcoat sobrio (algo rugoso) que da reflejos
+// suaves sin manchas quemadas.
 // Opaca por defecto: `fijarOpacidadMaterial` la vuelve transparente sólo durante los fundidos.
 export function crearMaterialPintura() {
   return conBase(new THREE.MeshPhysicalMaterial({
-    color: PALETA.fordBlue.clone().lerp(PALETA.skyview, 0.12).multiplyScalar(1.15),
+    color: PALETA.fordBlue.clone().lerp(PALETA.skyview, 0.12).multiplyScalar(1.3),
     metalness: 0.5,
-    roughness: 0.34,
-    clearcoat: 1,
-    clearcoatRoughness: 0.05,
-    envMapIntensity: 1.5,
+    roughness: 0.38,
+    clearcoat: 0.7,
+    clearcoatRoughness: 0.28,
+    envMapIntensity: 1.1,
     transparent: false,
     opacity: 1,
   }));
@@ -212,10 +213,10 @@ export function crearMaterialVidrio({ opacidad = 0.82, color = '#02060f' } = {})
   const mat = conBase(new THREE.MeshPhysicalMaterial({
     color: new THREE.Color(color),
     metalness: 0.2,
-    roughness: 0.05,
-    clearcoat: 1,
-    clearcoatRoughness: 0.02,
-    envMapIntensity: 1.6,
+    roughness: 0.12,
+    clearcoat: 0.6,
+    clearcoatRoughness: 0.1,
+    envMapIntensity: 0.8,
     transparent: true,
     depthWrite: false,
     opacity: opacidad,
@@ -237,8 +238,8 @@ export function crearMaterialMetal() {
   return conBase(new THREE.MeshPhysicalMaterial({
     color: new THREE.Color('#4a525e'),
     metalness: 1,
-    roughness: 0.3,
-    envMapIntensity: 1.0,
+    roughness: 0.38,
+    envMapIntensity: 0.7,
   }));
 }
 
