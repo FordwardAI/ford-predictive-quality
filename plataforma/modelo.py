@@ -1,16 +1,41 @@
-"""Versiones del modelo en planta: la plataforma recomienda y recuerda cuándo actualizar; decide el gerente.
+"""Versiones del modelo en planta: la plataforma las actualiza sola, en días programados de antemano.
 
 Una versión es «el modelo con los resultados conocidos hasta el Día X». Entre versiones el orden no cambia aunque
-lleguen resultados: el predictor se envuelve en `Congelado`, que solo ve la fuente de su versión. Los resultados que
-vuelven son de lo que el propio modelo eligió (una muestra sesgada): por eso actualizar es una decisión explícita y no
-un reentrenamiento automático.
+lleguen resultados: el predictor se envuelve en `Congelado`, que solo ve la fuente de su versión.
+
+La actualización es automática y con calendario fijo: cada 5 días desde el 155, con los resultados de Día ≤ t − 5.
+Es el mismo esquema que se evaluó en validación para los modelos reentrenados (`solucion/ml.py`: REENTRENO_DESDE y
+CADA). Nadie elige cuándo actualizar mirando los resultados: elegir el momento con los datos a la vista es una forma de
+sobreajuste, y los resultados que vuelven son solo de lo que el propio modelo eligió.
 """
 from solucion.datos import MARGEN
+from solucion.ml import CADA, REENTRENO_DESDE
 from solucion.puntaje import Contexto, Fuente, crear
 
-# Regla de recomendación (propuesta del equipo, ajustable): cadencia del RF reentrenado y un mínimo de resultados.
-REGLA = {"dias": 5, "resultados": 30, "posponer_dias": 2, "posponer_resultados": 15}
+PROGRAMA = {"desde": REENTRENO_DESDE, "cada": CADA}  # Fijo en el código: no se cambia desde la pantalla.
 HISTORICO_HASTA = 149  # Histórico de auditorías al azar: etiquetas completas hasta el Día 149 (como en P5).
+AUTOMATICA = "Actualización programada (automática)"
+
+
+def programada(t, programa=PROGRAMA):
+    """¿El día t es de actualización? Desde el día siguiente al inicio, cada 5 días: 160, 165, 170…"""
+    return t > programa["desde"] and (t - programa["desde"]) % programa["cada"] == 0
+
+
+def proxima(t, programa=PROGRAMA):
+    """Primer día de actualización posterior a t."""
+    d = t + 1
+    while not programada(d, programa):
+        d += 1
+    return d
+
+
+def aplicar_programa(planta, t):
+    """Si hoy toca, crea la versión con los resultados hasta t − 5. Devuelve el número de versión nueva o None."""
+    v = planta.version()
+    if not programada(t) or v is None or v["dia"] >= t:
+        return None
+    return planta.nueva_version(t - MARGEN, t, AUTOMATICA, nuevos(planta, v, t))
 
 
 class Congelado:
@@ -41,34 +66,6 @@ def nuevos(planta, version, t):
     """Resultados utilizables (Día ≤ t − 5, ya recibidos) que la versión vigente todavía no usa."""
     hasta = t - MARGEN
     return len([r for r in planta.registros(hasta, t) if r[0] > version["entrenado_hasta"]])
-
-
-def recomendacion(planta, t, regla=REGLA):
-    """¿Conviene actualizar? Recomienda con ≥ 5 días desde la versión y ≥ 30 resultados nuevos. Si el gerente pospuso,
-    vuelve a recordar a los 2 días o con 15 resultados más."""
-    v = planta.version()
-    if v is None or t is None:
-        return None
-    n, dias = nuevos(planta, v, t), t - v["dia"]
-    base = {"version": v["numero"], "entrenado_hasta": v["entrenado_hasta"], "dias": dias, "nuevos": n,
-            "regla": regla, "candidata_hasta": t - MARGEN}
-    cumple = dias >= regla["dias"] and n >= regla["resultados"]
-    d = planta.ultima_decision()
-    pospuesta = bool(d and d["tipo"] == "posponer" and d["dia"] >= v["dia"]
-                     and t - d["dia"] < regla["posponer_dias"] and n - d["resultados_nuevos"] < regla["posponer_resultados"])
-    if cumple and not pospuesta:
-        motivo = f"{n} resultados nuevos y {dias} días desde la versión {v['numero']}"
-        return {**base, "recomendar": True, "motivo": motivo}
-    if pospuesta:
-        motivo = "Pospuesta por el gerente; se vuelve a recordar en 2 días o con 15 resultados más"
-    else:
-        faltan = []
-        if dias < regla["dias"]:
-            faltan.append(f"{regla['dias'] - dias} día(s)")
-        if n < regla["resultados"]:
-            faltan.append(f"{regla['resultados'] - n} resultado(s)")
-        motivo = "Todavía no: faltan " + " y ".join(faltan)
-    return {**base, "recomendar": False, "pospuesta": pospuesta, "motivo": motivo}
 
 
 def comparar(actual, candidata, ctx_t, codigos):

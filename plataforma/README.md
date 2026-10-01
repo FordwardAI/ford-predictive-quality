@@ -11,7 +11,7 @@ Cada dispositivo elige su rol en la primera pantalla (o con un acceso directo `?
 | Rol | Dónde | Pantallas |
 | --- | --- | --- |
 | **Selección en la playa** | Tablet o celular | **Selección**: qué buscar, «¿la envío?», enviadas con su resultado y deshacer, y terminar ronda. **Prioridades del día**: la hoja en solo lectura. |
-| **Calidad de Planta** | Escritorio | **Día de planta**: entradas, cupo, modelo y armar la hoja. **Hoja del día**. **Seguimiento**. **Resultados**: acierto por unidad. **Modelo**: recomendación y decisión del gerente. **Reporte para la línea**. **Evaluación**: la simulación frente al azar. |
+| **Calidad de Planta** | Escritorio | **Día de planta**: entradas, cupo, modelo y armar la hoja. **Hoja del día**. **Seguimiento**. **Resultados**: acierto por unidad. **Modelo**: calendario de actualización automática, último cambio e historial. **Reporte para la línea**. **Evaluación**: la simulación frente al azar. |
 
 ### El ciclo en planta
 
@@ -22,11 +22,7 @@ Cada dispositivo elige su rol en la primera pantalla (o con un acceso directo `?
    - «Enviar» registra una unidad de ese código que está en la playa, la más antigua primero, y guarda la tasa y el puesto que tenía al decidir.
    - **Terminar ronda** pregunta qué faltó de lo buscado; lo que faltó baja al siguiente del ranking.
 4. **Vuelve el resultado de la auditoría** (`POST /api/resultados`, la exportación de QLS con el resultado y el componente). Solo se aceptan resultados de unidades enviadas. **Resultados** muestra el acierto por unidad: CALIBRADA = acierto. La tablet lo muestra en su lista.
-5. **El modelo se actualiza solo si decide el gerente.**
-   - Los resultados que vuelven son solo de lo que el modelo eligió, una muestra sesgada. Por eso no se reentrena solo: una versión es «el modelo con los resultados hasta el Día X».
-   - La plataforma **recomienda y recuerda** actualizar cuando pasaron ≥ 5 días desde la versión y hay ≥ 30 resultados nuevos utilizables (Día ≤ t − 5). La regla es una propuesta del equipo y se configura en `plataforma/modelo.py: REGLA`.
-   - Antes de decidir, **Modelo** muestra qué códigos suben o bajan en el ranking. El gerente actualiza o pospone: si pospone, el recordatorio vuelve a los 2 días o con 15 resultados más.
-   - La versión nueva rige desde la próxima hoja.
+5. **El modelo se actualiza solo, con calendario fijo.** Cada versión es «el modelo con los resultados hasta el Día X»; entre versiones, el orden no cambia aunque lleguen resultados. La plataforma crea la versión nueva **cada 5 días desde el 155** (160, 165, 170…) al empezar el día, con los resultados de Día ≤ t − 5. Es el mismo esquema que se evaluó en validación para los modelos reentrenados (`solucion/ml.py`: `REENTRENO_DESDE`, `CADA`). Nadie decide cuándo: elegir el momento mirando los resultados es una forma de sobreajuste, y los resultados que vuelven son solo de lo que el modelo eligió. El calendario está fijo en `plataforma/modelo.py: PROGRAMA`, no en la pantalla. **Modelo** muestra la próxima actualización, qué cambió en el ranking con la última y el historial.
 6. **Retorno a la línea.** El **Reporte para la línea** muestra, entre lo auditado, la tasa de calibración por código, versión, motor y mercado, los componentes más calibrados y la tendencia semanal. Se descarga en CSV, solo con agregados. El componente no se usa para predecir, porque es el resultado; acá es información para mejorar la producción.
 
 ### Contrato de las entradas
@@ -82,8 +78,8 @@ Criterio de la interfaz: cada pantalla muestra primero la decisión, y el detall
 | --- | --- | --- |
 | Selección | El cupo, qué buscar y la respuesta para el código escrito | Deshacer (en el aviso y en la lista de enviadas), terminar la ronda (diálogo) |
 | Hoja | Códigos a auditar, cantidad y avance | Ranking completo (pestaña), detalle del código (panel lateral), metodología (diálogo «Cómo leerla») |
-| Día de planta | Entradas del día, recordatorio del modelo y armar la hoja | Importar CSV, el contrato de cada entrada (tooltip) |
-| Modelo | La recomendación y la decisión | Qué cambia en el ranking, el historial de versiones |
+| Día de planta | Entradas del día, versión vigente y armar la hoja | Importar CSV, el contrato de cada entrada (tooltip) |
+| Modelo | Próxima actualización programada | Qué cambió en el ranking, el historial de versiones |
 | Evaluación | Cifras y curva | Comparación y tabla por día (pestañas) |
 | Contexto | Insignia «Base ficticia» | Calificador, huellas de la fuente y límites (tooltip) |
 
@@ -126,6 +122,6 @@ La norma es `ford-design-system.md` (Ford Brand Central, extraído el 30/09/2026
 - **Letra (§2):** 4 tamaños (16, 20, 24 y 40 px) y pesos 400/500. Las clases `text-sm` o `font-bold` de shadcn caen en esos valores.
 - **Botones (§5):** CTA de 76 px con radio 16, outline de 3 px y compacto de 2 px.
 - **Componentes:** se ajustaron los de shadcn: se sacaron el modo oscuro y las transparencias, y se corrigieron el selector de dos opciones y el fondo de la barra de progreso.
-- **Íconos:** la navegación y las acciones principales usan íconos propios con la geometría de §7. Las indicaciones chicas de los componentes (flechas, cerrar) usan lucide, que es lo que trae shadcn.
+- **Íconos:** [lucide](https://lucide.dev) en toda la interfaz (la librería de shadcn), con trazo de 2 px. El sistema de íconos de Ford (§7) es solo para marketing.
 - **Logo (§6):** el logo de Ford del equipo, en blanco sobre Ford Blue. Solo se volvió transparente su fondo, `#02193B`, que no está en la paleta; el script queda igual. El nombre FordwardAI va al pie del panel.
 - **Control:** `verificar_ds.py` falla si algo de esto se rompe. En el navegador se verificó además que los colores, tamaños y pesos calculados están dentro de la norma.

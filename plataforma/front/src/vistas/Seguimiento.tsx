@@ -31,7 +31,7 @@ export function Seguimiento() {
     <>
       <Encabezado ojo={`Calidad de Planta · Día ${hoja.dia}`} titulo="Seguimiento del" acento="día"
         bajada="Lo que registra el responsable de la selección en la playa, actualizado cada 15 segundos."
-        acciones={<Button variant="outline" asChild><a href="#resultados"><Icono nombre="check" />Ver resultados</a></Button>} />
+        acciones={<Button variant="outline" asChild><a href="#resultados"><Icono nombre="resultados" />Ver resultados</a></Button>} />
 
       <section className="mb-10 grid grid-cols-2 gap-6 lg:grid-cols-4">
         <Cifra rotulo="Enviadas" valor={estado.tomadas} acento apoyo={`de un cupo de ${estado.cupo}`} />

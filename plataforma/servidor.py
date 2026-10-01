@@ -5,7 +5,7 @@
 
 Ciclo de planta: entran las unidades que pasaron Gate Release (`POST /api/ingreso`), el responsable de la selección
 elige cuáles van a Auditoría Adicional, vuelven los resultados (`POST /api/resultados`) y la plataforma muestra el
-acierto por unidad, recomienda cuándo actualizar el modelo (decide el gerente) y arma el reporte para la línea.
+acierto por unidad, actualiza el modelo en días programados (automático) y arma el reporte para la línea.
 Mientras no haya conexión con Ford, una fuente simulada reproduce la base día por día con el mismo contrato.
 
 Corre en la notebook: los datos no salen de la máquina. Usa la tabla enmascarada (sin etiquetas de Día >= 200) y solo
@@ -39,7 +39,6 @@ from .simulador import Simulador
 WEB = Path(__file__).resolve().parent / "web"
 CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 VALIDACION = TRAMOS["validacion"]
-GERENTE = "Gerente de Calidad"
 
 
 class Plataforma:
@@ -57,11 +56,11 @@ class Plataforma:
         self.simulador = Simulador(self.tabla, self.planta)
         self.lock = threading.RLock()
         self.h, self.dia = None, None
+        self.sim, self.sim_error = None, None  # Antes de restaurar: la hoja consulta la evaluación.
         if self.planta.dia is None:
             self.reiniciar()
         else:
             self._restaurar()
-        self.sim, self.sim_error = None, None
         threading.Thread(target=self._evaluar, daemon=True).start()
 
     # --- Evaluación (simulación fuera de línea con etiquetas completas, la de la pantalla Evaluación) ----------
@@ -96,6 +95,8 @@ class Plataforma:
     def avanzar(self):
         r = self.simulador.avanzar()
         self.h, self.dia = None, None
+        # Al empezar el día, si toca, la plataforma actualiza el modelo sola (calendario fijo, ver modelo.py).
+        r["version_nueva"] = modelo_mod.aplicar_programa(self.planta, r["dia"])
         return r
 
     # --- Modelo: versiones congeladas -------------------------------------------------------------------------
@@ -219,7 +220,7 @@ class Plataforma:
             "enviadas_total": len(envios), "con_resultado": sum(1 for e in envios if e["resultado"]),
             "entradas": {"ingreso": ultima("ingreso"), "resultados": ultima("resultados")},
             "hoja_armada": bool(self.h and self.h.dia == t), "version": self.planta.version(),
-            "recomendacion": modelo_mod.recomendacion(self.planta, t),
+            "programa": self.programa(),
         }
 
     def envios(self):
@@ -236,38 +237,31 @@ class Plataforma:
     def linea(self):
         return reporte_linea(self.planta.envios(), self.atributos)
 
-    def propuesta(self):
+    def programa(self):
         t = self.planta.dia
-        v = self._version()
+        v = self.planta.version()
+        return {**modelo_mod.PROGRAMA, "hoy": bool(v and v["dia"] == t and v["numero"] > 1),
+                "proxima": modelo_mod.proxima(t), "nuevos": modelo_mod.nuevos(self.planta, v, t) if v else 0}
+
+    def cambios(self):
+        """Qué cambió con la última actualización, para los códigos que hoy esperan en la playa."""
+        versiones = self.planta.versiones()
+        if len(versiones) < 2:
+            return None
+        nueva, anterior = versiones[0], versiones[1]
+        t = self.planta.dia
         clave = self.dia.modelo if self.dia else modelos_mod.POR_DEFECTO
         codigos = sorted({c for _, c, _ in self.planta.playa(t)})
-        actual = self.predictor(clave, v, t)
-        candidata = self.predictor(clave, {**v, "numero": v["numero"] + 1}, t, entrenado_hasta=t - MARGEN)
-        filas = modelo_mod.comparar(actual, candidata, t, codigos)
-        return {"modelo": clave, "version": v, "candidata_hasta": t - MARGEN,
-                "nuevos": modelo_mod.nuevos(self.planta, v, t), "filas": filas,
+        filas = modelo_mod.comparar(self.predictor(clave, anterior, t), self.predictor(clave, nueva, t), t, codigos)
+        return {"modelo": clave, "anterior": anterior, "nueva": nueva, "filas": filas,
                 "suben": sum(f["puesto_nuevo"] < f["puesto_actual"] for f in filas),
                 "bajan": sum(f["puesto_nuevo"] > f["puesto_actual"] for f in filas)}
-
-    def actualizar_modelo(self):
-        t = self.planta.dia
-        v = self._version()
-        hasta = t - MARGEN
-        assert hasta > v["entrenado_hasta"], "No hay resultados nuevos que la versión vigente no use"
-        n = modelo_mod.nuevos(self.planta, v, t)
-        numero = self.planta.nueva_version(hasta, t, GERENTE, n)
-        self.planta.decidir("actualizar", t, n)
-        return numero
-
-    def posponer_modelo(self):
-        t = self.planta.dia
-        self.planta.decidir("posponer", t, modelo_mod.nuevos(self.planta, self._version(), t))
 
     def meta(self):
         return {"validacion": VALIDACION, "modelos": modelos_mod.fichas(),
                 "fuente": {"csv": self.tabla.fuente.get("csv_sha256", "")[:12],
                            "catalogo": self.tabla.fuente.get("catalogo_sha256", "")[:12]},
-                "simulacion_lista": self.sim is not None, "regla": modelo_mod.REGLA}
+                "simulacion_lista": self.sim is not None, "programa": modelo_mod.PROGRAMA}
 
 
 def _jsonable(x):
@@ -369,17 +363,9 @@ class Manejador(SimpleHTTPRequestHandler):
         if metodo == "GET" and ruta == "linea.csv":
             return self._enviar(200, reporte_csv(p.linea()).encode("utf-8"), "text/csv; charset=utf-8",
                                 f"reporte-linea-dia-{p.planta.dia}.csv")
-        # Modelo: recomendación y decisión del gerente.
+        # Modelo: versiones programadas (la plataforma las aplica sola al empezar el día).
         if metodo == "GET" and ruta == "modelo":
-            return self._enviar(200, {"versiones": p.planta.versiones(), "decision": p.planta.ultima_decision(),
-                                      "recomendacion": modelo_mod.recomendacion(p.planta, p.planta.dia)})
-        if metodo == "GET" and ruta == "modelo/propuesta":
-            return self._enviar(200, p.propuesta())
-        if metodo == "POST" and ruta == "modelo/actualizar":
-            return self._enviar(200, {"version": p.actualizar_modelo(), "planta": p.resumen_planta()})
-        if metodo == "POST" and ruta == "modelo/posponer":
-            p.posponer_modelo()
-            return self._enviar(200, {"planta": p.resumen_planta()})
+            return self._enviar(200, {"versiones": p.planta.versiones(), "programa": p.programa(), "cambios": p.cambios()})
         # Hoja y selección del día.
         if metodo == "GET" and ruta == "hoja":
             return self._enviar(200, {"hoja": p.hoja_json(), "estado": p.estado()})

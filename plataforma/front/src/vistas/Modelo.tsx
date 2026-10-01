@@ -1,99 +1,84 @@
 import { useCallback, useEffect, useState } from 'react'
-import { toast } from 'sonner'
 
 import { Cifra, Encabezado } from '@/components/comunes'
 import { Icono } from '@/components/iconos'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { api, type Planta, type Propuesta, type Recomendacion, type Version } from '@/lib/api'
+import { api, type Cambios, type Programa, type Version } from '@/lib/api'
 import { useApp } from '@/lib/estado'
 import { pct } from '@/lib/formato'
 
-// El modelo cambia solo cuando el gerente lo decide. La plataforma recomienda y recuerda cuándo (regla de días y de
-// resultados nuevos) y muestra qué cambiaría antes de aplicar. Los resultados nuevos son solo de lo que el modelo
-// eligió: una muestra sesgada, por eso no se reentrena solo.
+// El modelo se actualiza solo, con un calendario fijo. Nadie elige el momento mirando los resultados: eso sería una
+// forma de sobreajuste, y los resultados que vuelven son solo de lo que el propio modelo eligió.
 export function Modelo() {
-  const { meta, planta, setPlanta, modelo } = useApp()
-  const [datos, setDatos] = useState<{ versiones: Version[]; recomendacion: Recomendacion | null } | null>(null)
-  const [propuesta, setPropuesta] = useState<Propuesta | null>(null)
-  const [ocupado, setOcupado] = useState(false)
-
-  const pedir = useCallback(() => {
-    api<{ versiones: Version[]; recomendacion: Recomendacion | null }>('modelo').then(setDatos)
-    api<Propuesta>('modelo/propuesta').then(setPropuesta).catch(() => setPropuesta(null))
-  }, [])
+  const { planta, modelo } = useApp()
+  const [datos, setDatos] = useState<{ versiones: Version[]; programa: Programa; cambios: Cambios | null } | null>(null)
+  const pedir = useCallback(() => { api<typeof datos>('modelo').then(setDatos) }, [])
   useEffect(() => { pedir() }, [pedir, planta.dia])
 
-  async function decidir(ruta: 'actualizar' | 'posponer') {
-    setOcupado(true)
-    try {
-      const r = await api<{ planta: Planta; version?: number }>(`modelo/${ruta}`, {})
-      setPlanta(r.planta)
-      toast.success(ruta === 'actualizar' ? `Modelo actualizado a la versión ${r.version}: rige desde la próxima hoja` : 'Actualización pospuesta')
-      pedir()
-    } catch (e) { toast.error((e as Error).message) } finally { setOcupado(false) }
-  }
-
-  const rec = datos?.recomendacion
   const v = planta.version
-  const cambian = propuesta?.filas.filter((f) => f.puesto_nuevo !== f.puesto_actual) ?? []
+  const prog = planta.programa
+  const c = datos?.cambios
   return (
     <>
-      <Encabezado ojo="Calidad de Planta · decisión del gerente" titulo="Actualizar el" acento="modelo"
-        bajada="Con los resultados que vuelven de la auditoría, la plataforma recomienda cuándo actualizar. Decide el gerente; la versión nueva rige desde la próxima hoja." />
+      <Encabezado ojo="Calidad de Planta · automático" titulo="Actualización del" acento="modelo"
+        bajada="La plataforma actualiza el modelo sola, en días fijos, con los resultados que vuelven de la auditoría." />
 
       <section className="mb-8 grid grid-cols-2 gap-6 lg:grid-cols-4">
         <Cifra rotulo="Versión vigente" valor={`v${v.numero}`} apoyo={`resultados hasta el Día ${v.entrenado_hasta}`} />
-        <Cifra rotulo="Días desde la versión" valor={rec?.dias ?? '—'} apoyo={`se recomienda cada ${meta.regla.dias}`} />
-        <Cifra rotulo="Resultados nuevos" valor={rec?.nuevos ?? '—'} acento apoyo={`utilizables (Día ≤ ${planta.dia - 5}); mínimo ${meta.regla.resultados}`} />
-        <Cifra rotulo="Modelo" valor={<span className="text-2xl">{propuesta ? modelo(propuesta.modelo).corto : '—'}</span>} />
+        <Cifra rotulo="Próxima actualización" valor={`Día ${prog.proxima}`} acento apoyo={`en ${prog.proxima - planta.dia} día(s)`} />
+        <Cifra rotulo="Resultados nuevos" valor={prog.nuevos} apoyo="entrarán en la próxima versión" />
+        <Cifra rotulo="Modelo" valor={<span className="text-2xl">{c ? modelo(c.modelo).corto : modelo('rf').corto}</span>} />
       </section>
 
-      <section className={rec?.recomendar ? 'mb-10 rounded-lg bg-ford-blue p-6 text-white' : 'mb-10 rounded-lg bg-ford-gray p-6'} aria-live="polite">
-        <p className="flex items-center gap-3 text-2xl"><Icono nombre={rec?.recomendar ? 'info' : 'check'} className="size-7" />
-          {rec?.recomendar ? 'Recomendado actualizar' : 'Por ahora no hace falta actualizar'}</p>
-        <p className="mt-2">{rec?.motivo}.</p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Button variant={rec?.recomendar ? 'inverse' : 'default'} onClick={() => decidir('actualizar')}
-            disabled={ocupado || !propuesta || propuesta.nuevos === 0}>
-            <Icono nombre="check" />Actualizar a v{v.numero + 1} (resultados hasta el Día {planta.dia - 5})
-          </Button>
-          {rec?.recomendar && <Button variant="ghost" className="text-white hover:bg-ford-twilight" onClick={() => decidir('posponer')} disabled={ocupado}>Posponer</Button>}
+      <section className="mb-10 grid gap-6 lg:grid-cols-3">
+        <div className="rounded-lg bg-ford-blue p-6 text-white lg:col-span-2">
+          <p className="flex items-center gap-3 text-2xl"><Icono nombre="programa" className="size-7" />Calendario fijo</p>
+          <p className="mt-3">Cada {prog.cada} días desde el Día {prog.desde} (próximas: Día {prog.proxima} y Día {prog.proxima + prog.cada}),
+            con los resultados de Día ≤ t − 5. La versión nueva rige desde la hoja de ese día.</p>
+          {prog.hoy && <p className="mt-3"><b>Hoy se actualizó a v{v.numero}.</b></p>}
+        </div>
+        <div className="rounded-lg bg-ford-gray p-6">
+          <p className="flex items-center gap-2 text-lg font-medium"><Icono nombre="info" className="size-5" />Por qué automático</p>
+          <p className="mt-2">Elegir cuándo actualizar mirando los resultados es sobreajustar. El calendario es el mismo que se
+            evaluó en validación para los modelos reentrenados, y está fijo en el código: no se cambia desde la pantalla.</p>
         </div>
       </section>
 
       <section className="mb-10">
-        <h2 className="mb-2 text-2xl">Qué cambiaría hoy</h2>
-        <p className="mb-4">Códigos que hoy esperan en la playa, ordenados con la versión nueva. {propuesta && `${propuesta.nuevos} resultados nuevos · ${propuesta.suben} suben y ${propuesta.bajan} bajan.`}</p>
-        {!propuesta ? <Skeleton className="h-64 w-full bg-ford-gray" /> : (
-          <div className="max-h-[480px] overflow-auto rounded-lg">
-            <Table>
-              <TableHeader className="sticky top-0">
-                <TableRow className="bg-ford-blue hover:bg-ford-blue">
-                  {['Código', `Puesto v${v.numero}`, `Puesto v${v.numero + 1}`, `Tasa v${v.numero}`, `Tasa v${v.numero + 1}`, ''].map((c) => <TableHead key={c} className="text-white">{c}</TableHead>)}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {propuesta.filas.map((f) => {
-                  const d = f.puesto_actual - f.puesto_nuevo
-                  return (
-                    <TableRow key={f.codigo} className="even:bg-ford-gray hover:bg-ford-gray">
-                      <TableCell className="font-medium">{f.codigo}</TableCell>
-                      <TableCell>{f.puesto_actual}</TableCell>
-                      <TableCell className="font-medium">{f.puesto_nuevo}</TableCell>
-                      <TableCell>{pct(f.tasa_actual)}</TableCell>
-                      <TableCell>{pct(f.tasa_nueva)}</TableCell>
-                      <TableCell>{d > 0 ? <Badge>sube {d}</Badge> : d < 0 ? <Badge variant="outline">baja {-d}</Badge> : ''}</TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
-          </div>
+        <h2 className="mb-2 text-2xl">Qué cambió en la última actualización</h2>
+        {!datos ? <Skeleton className="h-64 w-full bg-ford-gray" /> : !c ? (
+          <p>Todavía rige la versión inicial (histórico de auditorías al azar). La primera actualización es el Día {prog.proxima}.</p>
+        ) : (
+          <>
+            <p className="mb-4">De v{c.anterior.numero} a v{c.nueva.numero}, para los códigos que hoy esperan en la playa: {c.suben} suben y {c.bajan} bajan.</p>
+            <div className="max-h-[480px] overflow-auto rounded-lg">
+              <Table>
+                <TableHeader className="sticky top-0">
+                  <TableRow className="bg-ford-blue hover:bg-ford-blue">
+                    {['Código', `Puesto v${c.anterior.numero}`, `Puesto v${c.nueva.numero}`, `Tasa v${c.anterior.numero}`, `Tasa v${c.nueva.numero}`, ''].map((x) => <TableHead key={x} className="text-white">{x}</TableHead>)}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {c.filas.map((f) => {
+                    const d = f.puesto_actual - f.puesto_nuevo
+                    return (
+                      <TableRow key={f.codigo} className="even:bg-ford-gray hover:bg-ford-gray">
+                        <TableCell className="font-medium">{f.codigo}</TableCell>
+                        <TableCell>{f.puesto_actual}</TableCell>
+                        <TableCell className="font-medium">{f.puesto_nuevo}</TableCell>
+                        <TableCell>{pct(f.tasa_actual)}</TableCell>
+                        <TableCell>{pct(f.tasa_nueva)}</TableCell>
+                        <TableCell>{d > 0 ? <Badge>sube {d}</Badge> : d < 0 ? <Badge variant="outline">baja {-d}</Badge> : ''}</TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
-        {propuesta && cambian.length === 0 && <p className="mt-3">Con estos resultados el orden no cambia.</p>}
       </section>
 
       <section>

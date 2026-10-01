@@ -7,7 +7,7 @@ const ROLES: { rol: Rol; titulo: string; texto: string; donde: string; icono: No
     texto: 'Elijo qué unidades van a Auditoría Adicional: leo el código del parabrisas y la plataforma me dice si la envío.',
   },
   {
-    rol: 'calidad', titulo: 'Calidad de Planta', icono: 'hoy', donde: 'Escritorio',
+    rol: 'calidad', titulo: 'Calidad de Planta', icono: 'calidad', donde: 'Escritorio',
     texto: 'Preparo el día con el programa y el cupo, sigo el avance y reviso cómo rinde la selección.',
   },
 ]

@@ -163,21 +163,21 @@ def test_version_congelada_no_ve_resultados_nuevos():
         assert filas["A"]["puesto_actual"] == 2 and filas["A"]["puesto_nuevo"] == 1
 
 
-def test_recomendacion_y_posponer():
+def test_actualizacion_programada_cada_cinco_dias():
+    assert [d for d in range(155, 172) if modelo.programada(d)] == [160, 165, 170]
+    assert modelo.proxima(155) == 160 and modelo.proxima(160) == 165
     with tempfile.TemporaryDirectory() as c:
         p = _planta(c)
         p.nueva_version(149, 155, "inicio", 0)
-        p.ingresar([{"unidad": f"U{i}", "codigo": "A", "dia": 156} for i in range(40)], "simulada")
-        for i in range(40):
-            p.enviar(f"U{i}", 156, 1, 1, 0.2, 1, "rf")
-        p.registrar_resultados([{"unidad": f"U{i}", "resultado": "OK", "dia": 158} for i in range(40)], "simulada")
-        assert not modelo.recomendacion(p, 159)["recomendar"]  # 4 días y resultados todavía no utilizables.
-        r = modelo.recomendacion(p, 161)
-        assert r["recomendar"] and r["nuevos"] == 40
-        p.decidir("posponer", 161, r["nuevos"])
-        assert not modelo.recomendacion(p, 162)["recomendar"] and modelo.recomendacion(p, 163)["recomendar"]
-        p.nueva_version(158, 163, "Gerente de Calidad", 40)
-        assert not modelo.recomendacion(p, 163)["recomendar"]
+        p.ingresar([{"unidad": f"U{i}", "codigo": "A", "dia": 154} for i in range(3)], "simulada")
+        for i, d in enumerate((154, 155, 158)):
+            p.enviar(f"U{i}", d, 1, 1, 0.2, 1, "rf")
+        p.registrar_resultados([{"unidad": f"U{i}", "resultado": "OK", "dia": 159} for i in range(3)], "simulada")
+        assert modelo.aplicar_programa(p, 159) is None  # No toca.
+        assert modelo.aplicar_programa(p, 160) == 2
+        v = p.version()
+        assert (v["entrenado_hasta"], v["resultados_usados"], v["decidido_por"]) == (155, 2, modelo.AUTOMATICA)
+        assert modelo.aplicar_programa(p, 160) is None  # Una sola vez por día.
 
 
 def test_reporte_solo_agrega_lo_auditado():

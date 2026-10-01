@@ -24,7 +24,7 @@ export function DiaPlanta() {
 
   const t = planta.dia
   const armadaHoy = planta.hoja_armada && hoja?.dia === t
-  const rec = planta.recomendacion
+  const prog = planta.programa
 
   async function accion(nombre: string, f: () => Promise<void>) {
     setOcupado(nombre)
@@ -32,11 +32,12 @@ export function DiaPlanta() {
   }
 
   const avanzar = () => accion('avanzar', async () => {
-    const r = await api<{ avance: { dia: number; nuevas: number; resultados: number; calibradas: number }; planta: Planta }>('planta/avanzar', {})
+    const r = await api<{ avance: { dia: number; nuevas: number; resultados: number; calibradas: number; version_nueva: number | null }; planta: Planta }>('planta/avanzar', {})
     setPlanta(r.planta)
     await refrescar()
     const a = r.avance
     toast.success(`Día ${a.dia}: ${entero(a.nuevas)} unidades pasaron Gate Release · ${a.resultados} resultados de auditoría (${a.calibradas} CALIBRADA)`)
+    if (a.version_nueva) toast(`Actualización programada: el modelo pasó a v${a.version_nueva}`)
   })
 
   return (
@@ -44,13 +45,10 @@ export function DiaPlanta() {
       <Encabezado ojo="Calidad de Planta" titulo={`Día ${t} en la`} acento="planta"
         bajada="Lo que entró hoy, con qué modelo se prioriza y cuántas unidades se auditan." />
 
-      {rec?.recomendar && (
-        <section className="mb-8 flex flex-wrap items-center justify-between gap-6 rounded-lg bg-ford-blue p-6 text-white" aria-live="polite">
-          <div className="max-w-2xl">
-            <p className="flex items-center gap-3 text-2xl"><Icono nombre="info" className="size-7" />Recomendado actualizar el modelo</p>
-            <p className="mt-2">{rec.motivo}. La decisión es del gerente de Calidad.</p>
-          </div>
-          <Button variant="inverse" asChild><a href="#modelo">Ver cambios</a></Button>
+      {prog.hoy && (
+        <section className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-ford-blue px-6 py-4 text-white" aria-live="polite">
+          <p className="flex items-center gap-3"><Icono nombre="modelo" />Hoy el modelo se actualizó solo a <b>v{planta.version.numero}</b>, con los resultados hasta el Día {planta.version.entrenado_hasta}.</p>
+          <Button variant="inverse" size="sm" asChild><a href="#modelo">Qué cambió</a></Button>
         </section>
       )}
 
@@ -63,14 +61,15 @@ export function DiaPlanta() {
           ultima={planta.entradas.resultados} columnas="unidad,resultado,dia,componente" ruta="resultados" alImportar={setPlanta} />
         <div className="flex flex-col gap-3 rounded-lg border-2 border-ford-gray p-6">
           <h2 className="text-lg">Modelo vigente</h2>
-          <p><b className="text-3xl">v{planta.version.numero}</b> · resultados hasta el Día {planta.version.entrenado_hasta}</p>
-          <p>{planta.version.decidido_por} · Día {planta.version.dia}</p>
+          <Cifra rotulo="" valor={`v${planta.version.numero}`} apoyo={`resultados hasta el Día ${planta.version.entrenado_hasta}`} />
+          <p>Se actualiza solo cada {prog.cada} días. Próxima: Día {prog.proxima}, con {prog.nuevos} resultados nuevos hasta hoy.</p>
           <Button variant="compact" size="sm" asChild className="mt-auto self-start"><a href="#modelo">Ver modelo</a></Button>
         </div>
       </section>
 
+      <div className="grid gap-6 lg:grid-cols-3">
       {armadaHoy && estado ? (
-        <section className="mb-10 flex flex-wrap items-center justify-between gap-6 rounded-lg bg-ford-gray p-6">
+        <section className="flex flex-wrap content-start items-center justify-between gap-6 rounded-lg bg-ford-gray p-6 lg:col-span-2">
           <div className="min-w-64 flex-1">
             <h2 className="text-2xl">Hoja del Día {t} armada</h2>
             <p className="mt-2">{estado.tomadas} de {estado.cupo} unidades enviadas a auditoría · {modelo(estado.modelo).nombre} v{estado.version}</p>
@@ -78,11 +77,11 @@ export function DiaPlanta() {
           </div>
           <div className="flex flex-wrap gap-3">
             <Button variant="outline" asChild><a href="#hoja">Ver la hoja</a></Button>
-            <Button asChild><a href="#seguimiento"><Icono nombre="ronda" />Seguimiento</a></Button>
+            <Button asChild><a href="#seguimiento"><Icono nombre="seguimiento" />Seguimiento</a></Button>
           </div>
         </section>
       ) : (
-        <section className="mb-10 max-w-4xl rounded-lg border-2 border-ford-gray p-8">
+        <section className="rounded-lg border-2 border-ford-gray p-6 lg:col-span-2">
           <h2 className="mb-6 text-2xl">Armar la hoja del Día {t}</h2>
           <form className="grid gap-8 md:grid-cols-2" onSubmit={(e) => {
             e.preventDefault()
@@ -100,10 +99,10 @@ export function DiaPlanta() {
               <Select value={clave} onValueChange={(v) => setClave(v as ClaveModelo)}>
                 <SelectTrigger id="modelo" className="h-12 w-full"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {meta.modelos.map((x) => <SelectItem key={x.clave} value={x.clave}>{x.nombre}{x.por_defecto ? ' (recomendado)' : ''}</SelectItem>)}
+                  {meta.modelos.map((x) => <SelectItem key={x.clave} value={x.clave}>{x.nombre}</SelectItem>)}
                 </SelectContent>
               </Select>
-              <p>Usa la versión v{planta.version.numero}: el histórico y los resultados hasta el Día {planta.version.entrenado_hasta}.</p>
+              <p>{modelo(clave).por_defecto ? 'Recomendado. ' : ''}Usa la versión v{planta.version.numero}: el histórico y los resultados hasta el Día {planta.version.entrenado_hasta}.</p>
             </div>
             <div className="md:col-span-2">
               <Button type="submit" size="cta" disabled={!!ocupado || planta.playa === 0}>
@@ -116,20 +115,20 @@ export function DiaPlanta() {
       )}
 
       {planta.modo === 'simulada' && (
-        <section className="max-w-4xl rounded-lg bg-ford-gray p-6">
+        <section className="flex flex-col rounded-lg bg-ford-gray p-6">
           <h2 className="text-lg">Fuente simulada · base ficticia</h2>
-          <p className="mt-2">Mientras no haya conexión con Ford, la base se reproduce día por día con el mismo contrato que
-            tendrían los datos reales: entran las unidades de Gate Release y, entre 1 y 5 días después del envío, vuelven los
-            resultados de lo auditado. Solo de lo enviado: lo que no se audita no revela su resultado.</p>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
+          <p className="mt-2">Hasta que haya conexión con Ford, la base se reproduce día por día con el mismo contrato:
+            entran las unidades de Gate Release y, de 1 a 5 días después, los resultados de lo enviado.</p>
+          <div className="mt-auto flex flex-wrap items-center gap-3 pt-6">
             <Button variant="outline" onClick={avanzar} disabled={!!ocupado || t >= planta.fin}>
               {ocupado === 'avanzar' ? 'Avanzando…' : `Avanzar al Día ${t + 1}`}
             </Button>
             <Button variant="ghost" onClick={() => setReiniciar(true)} disabled={!!ocupado}>Reiniciar en el Día {planta.inicio}</Button>
-            {t >= planta.fin && <span>Fin de la validación: los días siguientes son la prueba final, que no se relee.</span>}
           </div>
+          {t >= planta.fin && <p className="mt-3">Fin de la validación: los días siguientes son la prueba final, que no se relee.</p>}
         </section>
       )}
+      </div>
 
       <Dialog open={reiniciar} onOpenChange={setReiniciar}>
         <DialogContent className="sm:max-w-lg">

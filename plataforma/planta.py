@@ -22,8 +22,6 @@ CREATE TABLE IF NOT EXISTS resultado (unidad TEXT PRIMARY KEY REFERENCES envio(u
   componente TEXT, dia INTEGER NOT NULL, fuente TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS version (numero INTEGER PRIMARY KEY, entrenado_hasta INTEGER NOT NULL, dia INTEGER NOT NULL,
   decidido_por TEXT NOT NULL, resultados_usados INTEGER NOT NULL);
-CREATE TABLE IF NOT EXISTS decision (id INTEGER PRIMARY KEY AUTOINCREMENT, tipo TEXT NOT NULL, dia INTEGER NOT NULL,
-  resultados_nuevos INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS clave (nombre TEXT PRIMARY KEY, valor TEXT NOT NULL);
 """
 
@@ -66,7 +64,7 @@ class Planta:
 
     def vaciar(self):
         with self.db:
-            for tabla in ("resultado", "envio", "unidad", "version", "decision", "clave"):
+            for tabla in ("resultado", "envio", "unidad", "version", "clave"):
                 self.db.execute(f"DELETE FROM {tabla}")
 
     # --- Entradas ---------------------------------------------------------------------------------------------
@@ -165,7 +163,7 @@ class Planta:
             "SELECT e.dia, u.codigo, r.resultado FROM envio e JOIN unidad u ON u.id = e.unidad "
             "JOIN resultado r ON r.unidad = e.unidad WHERE e.dia <= ? AND r.dia <= ?", (hasta, conocidos_al))]
 
-    # --- Versiones del modelo y decisiones del gerente --------------------------------------------------------
+    # --- Versiones del modelo (las crea el calendario de modelo.py) --------------------------------------------------------
 
     def version(self):
         f = self.db.execute("SELECT * FROM version ORDER BY numero DESC LIMIT 1").fetchone()
@@ -180,15 +178,6 @@ class Planta:
             self.db.execute("INSERT INTO version VALUES (?, ?, ?, ?, ?)",
                             (numero, entrenado_hasta, dia, decidido_por, resultados_usados))
         return numero
-
-    def decidir(self, tipo, dia, resultados_nuevos):
-        with self.db:
-            self.db.execute("INSERT INTO decision (tipo, dia, resultados_nuevos) VALUES (?, ?, ?)",
-                            (tipo, dia, resultados_nuevos))
-
-    def ultima_decision(self):
-        f = self.db.execute("SELECT * FROM decision ORDER BY id DESC LIMIT 1").fetchone()
-        return dict(f) if f else None
 
 
 # --- Reporte para la línea ------------------------------------------------------------------------------------

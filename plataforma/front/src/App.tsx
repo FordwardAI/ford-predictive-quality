@@ -27,7 +27,7 @@ const NAV: Record<Rol, { nombre: string; grupos: { grupo: string; items: Item[] 
       grupo: 'En la playa',
       items: [
         { id: 'seleccion', nombre: 'Selección', corto: 'Selección', icono: 'audito' },
-        { id: 'prioridades', nombre: 'Prioridades del día', corto: 'Prioridades', icono: 'hoja' },
+        { id: 'prioridades', nombre: 'Prioridades del día', corto: 'Prioridades', icono: 'prioridades' },
       ],
     }],
   },
@@ -39,15 +39,15 @@ const NAV: Record<Rol, { nombre: string; grupos: { grupo: string; items: Item[] 
         items: [
           { id: 'hoy', nombre: 'Día de planta', corto: 'Día', icono: 'hoy' },
           { id: 'hoja', nombre: 'Hoja del día', corto: 'Hoja', icono: 'hoja' },
-          { id: 'seguimiento', nombre: 'Seguimiento', corto: 'Seguimiento', icono: 'ronda' },
+          { id: 'seguimiento', nombre: 'Seguimiento', corto: 'Seguimiento', icono: 'seguimiento' },
         ],
       },
       {
         grupo: 'Retorno de la auditoría',
         items: [
-          { id: 'resultados', nombre: 'Resultados', corto: 'Resultados', icono: 'check' },
-          { id: 'modelo', nombre: 'Modelo', corto: 'Modelo', icono: 'info' },
-          { id: 'linea', nombre: 'Reporte para la línea', corto: 'Línea', icono: 'descarga' },
+          { id: 'resultados', nombre: 'Resultados', corto: 'Resultados', icono: 'resultados' },
+          { id: 'modelo', nombre: 'Modelo', corto: 'Modelo', icono: 'modelo' },
+          { id: 'linea', nombre: 'Reporte para la línea', corto: 'Línea', icono: 'linea' },
         ],
       },
       { grupo: 'Evaluación', items: [{ id: 'simulacion', nombre: 'Evaluación', corto: 'Evaluación', icono: 'simulacion' }] },
@@ -76,7 +76,6 @@ function Contexto() {
 }
 
 export default function App() {
-  const { planta } = useApp()
   const [rol, setRol] = useRol()
   const vistaHash = useVista()
   const nav = rol ? NAV[rol] : null
@@ -108,7 +107,6 @@ export default function App() {
                     className={cn('flex min-h-10 items-center gap-3 rounded-full px-3 transition-colors duration-300',
                       vista.id === i.id ? 'bg-white font-medium text-ford-blue' : 'hover:bg-ford-twilight')}>
                     <Icono nombre={i.icono} />{i.nombre}
-                    {i.id === 'modelo' && planta.recomendacion?.recomendar && <Badge className="ml-auto" aria-label="Actualización recomendada">1</Badge>}
                   </a>
                 </li>
               ))}

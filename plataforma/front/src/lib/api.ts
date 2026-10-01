@@ -12,18 +12,19 @@ export interface Modelo {
 export type ClaveModelo = 'rf' | 'catboost' | 'tasa_fija'
 export interface Meta {
   validacion: Par; modelos: Modelo[]; fuente: { csv: string; catalogo: string }; simulacion_lista: boolean
-  regla: { dias: number; resultados: number; posponer_dias: number; posponer_resultados: number }
+  programa: { desde: number; cada: number }
 }
 export interface Version { numero: number; entrenado_hasta: number; dia: number; decidido_por: string; resultados_usados: number }
-export interface Recomendacion {
-  version: number; entrenado_hasta: number; dias: number; nuevos: number; candidata_hasta: number
-  recomendar: boolean; pospuesta?: boolean; motivo: string
+export interface Programa { desde: number; cada: number; hoy: boolean; proxima: number; nuevos: number }
+export interface Cambios {
+  modelo: ClaveModelo; anterior: Version; nueva: Version; suben: number; bajan: number
+  filas: { codigo: string; tasa_actual: number; tasa_nueva: number; puesto_actual: number; puesto_nuevo: number }[]
 }
 export interface Planta {
   dia: number; modo: string; inicio: number; fin: number; gate_release_hoy: number; playa: number
   playa_dias_anteriores: number; cupo_sugerido: number; enviadas_total: number; con_resultado: number
   entradas: { ingreso: { dia: number | null; n: number } | null; resultados: { dia: number | null; n: number } | null }
-  hoja_armada: boolean; version: Version; recomendacion: Recomendacion | null
+  hoja_armada: boolean; version: Version; programa: Programa
 }
 export type Resultado = 'OK' | 'CALIBRADA'
 export interface Envio {
@@ -34,10 +35,6 @@ export interface Grupo { grupo: string; n: number; calibradas: number; tasa: num
 export interface Linea {
   auditadas: number; calibradas: number; por_codigo: Grupo[]; por_version: Grupo[]; por_motor: Grupo[]; por_mercado: Grupo[]
   componentes: { componente: string; n: number; parte: number }[]; semanas: Grupo[]
-}
-export interface Propuesta {
-  modelo: ClaveModelo; version: Version; candidata_hasta: number; nuevos: number; suben: number; bajan: number
-  filas: { codigo: string; tasa_actual: number; tasa_nueva: number; puesto_actual: number; puesto_nuevo: number }[]
 }
 export interface Fila {
   codigo: string; sugerida: number; tasa: number; rango: Par | null; n: number; cal: number; veces: number | null
