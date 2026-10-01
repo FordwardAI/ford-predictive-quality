@@ -1,31 +1,48 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Toaster } from '@/components/ui/sonner'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { Icono, type NombreIcono } from '@/components/iconos'
 import { useApp, useVista, type Vista } from '@/lib/estado'
+import { useRol, type Rol } from '@/lib/rol'
 import { cn } from '@/lib/utils'
-import { Audito } from '@/vistas/Audito'
+import { ElegirRol } from '@/vistas/ElegirRol'
 import { HojaDelDia } from '@/vistas/Hoja'
 import { Hoy } from '@/vistas/Hoy'
-import { RondaPlaya } from '@/vistas/Ronda'
+import { Seguimiento } from '@/vistas/Seguimiento'
+import { Seleccion } from '@/vistas/Seleccion'
 
-// Recharts solo se carga al abrir la simulación.
+// Recharts solo se carga al abrir la evaluación.
 const SimulacionBase = lazy(() => import('@/vistas/Simulacion').then((m) => ({ default: m.SimulacionBase })))
 
-const NAV: { grupo: string; items: { id: Vista; nombre: string; corto: string; icono: NombreIcono }[] }[] = [
-  {
-    grupo: 'Operación del día',
-    items: [
-      { id: 'hoy', nombre: 'Preparar el día', corto: 'Hoy', icono: 'hoy' },
-      { id: 'hoja', nombre: 'Hoja del día', corto: 'Hoja', icono: 'hoja' },
-      { id: 'audito', nombre: '¿Lo audito?', corto: 'Auditar', icono: 'audito' },
-      { id: 'ronda', nombre: 'Ronda en la playa', corto: 'Ronda', icono: 'ronda' },
+type Item = { id: Vista; nombre: string; corto: string; icono: NombreIcono }
+const NAV: Record<Rol, { nombre: string; grupos: { grupo: string; items: Item[] }[] }> = {
+  seleccion: {
+    nombre: 'Selección en la playa',
+    grupos: [{
+      grupo: 'En la playa',
+      items: [
+        { id: 'seleccion', nombre: 'Selección', corto: 'Selección', icono: 'audito' },
+        { id: 'prioridades', nombre: 'Prioridades del día', corto: 'Prioridades', icono: 'hoja' },
+      ],
+    }],
+  },
+  calidad: {
+    nombre: 'Calidad de Planta',
+    grupos: [
+      {
+        grupo: 'Operación del día',
+        items: [
+          { id: 'hoy', nombre: 'Preparar el día', corto: 'Preparar', icono: 'hoy' },
+          { id: 'hoja', nombre: 'Hoja del día', corto: 'Hoja', icono: 'hoja' },
+          { id: 'seguimiento', nombre: 'Seguimiento', corto: 'Seguimiento', icono: 'ronda' },
+        ],
+      },
+      { grupo: 'Evaluación', items: [{ id: 'simulacion', nombre: 'Evaluación', corto: 'Evaluación', icono: 'simulacion' }] },
     ],
   },
-  { grupo: 'Evaluación', items: [{ id: 'simulacion', nombre: 'Simulación', corto: 'Simular', icono: 'simulacion' }] },
-]
+}
 
 function Contexto() {
   const { meta, hoja, modelo } = useApp()
@@ -48,9 +65,18 @@ function Contexto() {
 }
 
 export default function App() {
-  const [vista] = useVista()
-  const titulo = NAV.flatMap((g) => g.items).find((i) => i.id === vista)!
-  document.title = `${titulo.nombre} · Plataforma FordwardAI`
+  const [rol, setRol] = useRol()
+  const vistaHash = useVista()
+  const nav = rol ? NAV[rol] : null
+  const items = nav ? nav.grupos.flatMap((g) => g.items) : []
+  const vista = items.find((i) => i.id === vistaHash) ?? items[0]
+
+  useEffect(() => { if (vista) document.title = `${vista.nombre} · Plataforma FordwardAI` }, [vista])
+
+  if (!rol || !nav || !vista) {
+    return <ElegirRol alElegir={(r) => { setRol(r); location.hash = NAV[r].grupos[0].items[0].id }} />
+  }
+  const cambiarRol = () => { setRol(null); history.replaceState(null, '', location.pathname) }
 
   return (
     <div className="min-h-svh md:grid md:grid-cols-[228px_minmax(0,1fr)] md:gap-6 md:p-6">
@@ -60,15 +86,15 @@ export default function App() {
           <img src="ford-logo.png" alt="Ford" width={128} height={58} className="w-32" />
           <p className="mt-2">Selección para Auditoría Adicional</p>
         </div>
-        {NAV.map((g) => (
+        {nav.grupos.map((g) => (
           <div key={g.grupo} className="mb-6">
             <p className="px-3 pb-2">{g.grupo}</p>
             <ul className="flex flex-col gap-1">
               {g.items.map((i) => (
                 <li key={i.id}>
-                  <a href={`#${i.id}`} aria-current={vista === i.id ? 'page' : undefined}
+                  <a href={`#${i.id}`} aria-current={vista.id === i.id ? 'page' : undefined}
                     className={cn('flex min-h-10 items-center gap-3 rounded-full px-3 transition-colors duration-300',
-                      vista === i.id ? 'bg-white font-medium text-ford-blue' : 'hover:bg-ford-twilight')}>
+                      vista.id === i.id ? 'bg-white font-medium text-ford-blue' : 'hover:bg-ford-twilight')}>
                     <Icono nombre={i.icono} />{i.nombre}
                   </a>
                 </li>
@@ -76,13 +102,19 @@ export default function App() {
             </ul>
           </div>
         ))}
-        <p className="mt-auto px-3 text-2xl">FordwardAI</p>
+        <div className="mt-auto px-3">
+          <p>{nav.nombre}</p>
+          <button type="button" onClick={cambiarRol} className="mt-1 rounded-full text-left underline underline-offset-4">Cambiar de rol</button>
+          <p className="mt-6 text-2xl">FordwardAI</p>
+        </div>
       </nav>
 
-      {/* Móvil: barra superior con el logo y navegación inferior, al alcance del pulgar en la playa. */}
-      <div className="flex items-center justify-between gap-3 bg-ford-blue px-4 py-3 md:hidden">
+      {/* Móvil: barra superior con el logo y el rol; navegación inferior, al alcance del pulgar en la playa. */}
+      <div className="flex items-center justify-between gap-3 bg-ford-blue px-4 py-3 text-white md:hidden">
         <img src="ford-logo.png" alt="Ford" width={80} height={36} className="w-20" />
-        <span className="font-medium text-white">FordwardAI</span>
+        <button type="button" onClick={cambiarRol} className="rounded-full text-right">
+          {nav.nombre}<span className="block underline underline-offset-4">Cambiar</span>
+        </button>
       </div>
 
       <div className="flex min-w-0 flex-col">
@@ -90,18 +122,20 @@ export default function App() {
           <Contexto />
         </div>
         <main className="w-full max-w-[1280px] px-4 pt-6 pb-28 md:px-12 md:pt-8 md:pb-16">
-          {vista === 'hoy' && <Hoy />}
-          {vista === 'hoja' && <HojaDelDia />}
-          {vista === 'audito' && <Audito />}
-          {vista === 'ronda' && <RondaPlaya />}
-          {vista === 'simulacion' && <Suspense fallback={<p>Cargando…</p>}><SimulacionBase /></Suspense>}
+          {vista.id === 'seleccion' && <Seleccion />}
+          {vista.id === 'prioridades' && <HojaDelDia soloLectura />}
+          {vista.id === 'hoy' && <Hoy />}
+          {vista.id === 'hoja' && <HojaDelDia />}
+          {vista.id === 'seguimiento' && <Seguimiento />}
+          {vista.id === 'simulacion' && <Suspense fallback={<p>Cargando…</p>}><SimulacionBase /></Suspense>}
         </main>
       </div>
 
-      <nav aria-label="Secciones" className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t-2 border-ford-gray bg-white md:hidden">
-        {NAV.flatMap((g) => g.items).map((i) => (
-          <a key={i.id} href={`#${i.id}`} aria-current={vista === i.id ? 'page' : undefined}
-            className={cn('flex flex-col items-center gap-1 py-2', vista === i.id ? 'font-medium text-ford-skyview' : 'text-ford-blue')}>
+      <nav aria-label="Secciones" className={cn('fixed inset-x-0 bottom-0 z-40 grid border-t-2 border-ford-gray bg-white md:hidden',
+        items.length === 2 ? 'grid-cols-2' : 'grid-cols-4')}>
+        {items.map((i) => (
+          <a key={i.id} href={`#${i.id}`} aria-current={vista.id === i.id ? 'page' : undefined}
+            className={cn('flex flex-col items-center gap-1 py-2', vista.id === i.id ? 'font-medium text-ford-skyview' : 'text-ford-blue')}>
             <Icono nombre={i.icono} />
             <span className="leading-none">{i.corto}</span>
           </a>

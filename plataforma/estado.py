@@ -29,6 +29,7 @@ class Dia:
     tomadas: dict = dataclasses.field(default_factory=dict)  # {código: [unidades]}.
     rondas: list = dataclasses.field(default_factory=list)
     azar: int = 0  # Cantidad que solo se completa al azar (ranking agotado).
+    enviadas: list = dataclasses.field(default_factory=list)  # [{unidad, codigo, ronda}] en orden de envío.
 
     @classmethod
     def desde_hoja(cls, h, programa, modelo):
@@ -60,7 +61,7 @@ class Dia:
         c = normalizar(codigo)
         base = {"codigo": c, "tomadas": self.tomadas_total(), "cupo": self.cupo}
         if c not in self.ranking:
-            return {**base, "decision": FUERA, "motivo": "El código no está en el programa de hoy"}
+            return {**base, "decision": FUERA, "motivo": "Este código no tiene cantidad hoy"}
         posicion = self.ranking.index(c) + 1
         base |= {"posicion": posicion, "programadas": self.programadas(c)}
         if self.pendiente(c):
@@ -82,7 +83,16 @@ class Dia:
             unidad = libres[0]
         assert unidad in libres, f"La unidad {unidad} no es del código {c} o ya se tomó"
         self.tomadas.setdefault(c, []).append(unidad)
+        self.enviadas.append({"unidad": unidad, "codigo": c, "ronda": len(self.rondas) + 1})
         return unidad
+
+    def deshacer(self, unidad):
+        """Corrige un envío por error: la unidad vuelve a estar disponible y su código recupera lo pendiente."""
+        envio = next((e for e in self.enviadas if e["unidad"] == unidad), None)
+        assert envio, f"La unidad {unidad} no figura entre las enviadas"
+        self.enviadas.remove(envio)
+        self.tomadas[envio["codigo"]].remove(unidad)
+        return envio["codigo"]
 
     def registrar_ronda(self, en_playa):
         """Cierra una ronda. `en_playa` {código: unidades que llegaron} para los códigos revisados; el resto se
@@ -113,7 +123,8 @@ class Dia:
                 "pendientes": [{"codigo": c, "pendiente": q, "motivo": self.motivos.get(c, "Prioridad"),
                                 "posicion": self.ranking.index(c) + 1, "programadas": self.programadas(c),
                                 "tomadas": self.tomadas.get(c, [])} for c, q in self.pendientes()],
-                "tomadas_por_codigo": self.tomadas, "rondas": self.rondas, "azar": self.azar}
+                "tomadas_por_codigo": self.tomadas, "rondas": self.rondas, "azar": self.azar,
+                "enviadas": self.enviadas}
 
     def guardar(self, carpeta):
         carpeta = Path(carpeta)

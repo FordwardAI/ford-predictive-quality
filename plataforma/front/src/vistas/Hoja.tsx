@@ -12,20 +12,21 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { Fila, Hoja } from '@/lib/api'
-import { useApp } from '@/lib/estado'
+import { useApp, useSincronizar } from '@/lib/estado'
 import { dec, entero, pct, rangoPct } from '@/lib/formato'
 
 // La hoja responde una pregunta: qué códigos auditar hoy y cuántas unidades de cada uno. El ranking completo, el
 // detalle de cada código y la metodología quedan a un clic.
-export function HojaDelDia() {
-  const { hoja, estado, modelo } = useApp()
+export function HojaDelDia({ soloLectura = false }: { soloLectura?: boolean }) {
+  const { hoja, estado, modelo, refrescar } = useApp()
   const [detalle, setDetalle] = useState<Fila | null>(null)
+  useSincronizar(refrescar)
   if (!hoja || !estado) {
     return (
       <>
         <Encabezado titulo="Hoja del" acento="día" />
         <Vacio titulo="Todavía no hay hoja para hoy" texto="Calidad de Planta la arma al inicio del día con el programa de producción y el cupo."
-          accion={<Button asChild size="cta"><a href="#hoy"><Icono nombre="hoy" />Preparar el día</a></Button>} />
+          accion={soloLectura ? undefined : <Button asChild size="cta"><a href="#hoy"><Icono nombre="hoy" />Preparar el día</a></Button>} />
       </>
     )
   }
@@ -42,9 +43,9 @@ export function HojaDelDia() {
 
   return (
     <>
-      <Encabezado ojo={`Hoja del día · ${m.nombre}`} titulo={`Día ${hoja.dia}:`} acento="qué auditar"
+      <Encabezado ojo={soloLectura ? 'Prioridades del día' : `Hoja del día · ${m.nombre}`} titulo={`Día ${hoja.dia}:`} acento="qué auditar"
         bajada="Se priorizan códigos, no vehículos: dentro de un código cualquier unidad sirve."
-        acciones={
+        acciones={soloLectura ? undefined :
           <>
             <ComoLeer hoja={hoja} />
             <DropdownMenu>
@@ -63,8 +64,8 @@ export function HojaDelDia() {
       <section className="mb-10 grid grid-cols-2 gap-6 lg:grid-cols-4">
         <Cifra rotulo="Cupo del día" valor={hoja.cupo} acento apoyo={`de ${entero(hoja.programadas)} programadas`} />
         <Cifra rotulo="Códigos a auditar" valor={aAuditar.length} apoyo={`de ${hoja.filas.length} programados`} />
-        <Cifra rotulo="Esperado en el cupo" valor={evaluacion ? `${evaluacion[1]} %` : '—'}
-          apoyo={evaluacion ? `contra ${evaluacion[2]} % al azar` : undefined} ayuda={hoja.textos.evaluacion} />
+        {!soloLectura && <Cifra rotulo="Esperado en el cupo" valor={evaluacion ? `${evaluacion[1]} %` : '—'}
+          apoyo={evaluacion ? `contra ${evaluacion[2]} % al azar` : undefined} ayuda={hoja.textos.evaluacion} />}
         <div className="flex flex-col gap-1">
           <span>Avance</span>
           <span className="text-3xl leading-tight font-medium tracking-tight">{estado.tomadas}<span className="text-2xl"> / {estado.cupo}</span></span>

@@ -4,12 +4,21 @@ Propuesta de plataforma para la implementación, que funciona en la notebook. No
 
 ## Para quién y qué decide
 
-| Usuario | Momento | Pregunta | Pantalla |
-| --- | --- | --- | --- |
-| Calidad de Planta | Inicio del día | ¿Qué códigos priorizo y cuántas unidades de cada uno, con mi cupo? | Preparar el día → Hoja del día |
-| Equipo de analistas | En la playa, con el vehículo delante | ¿Lo audito? (código de la etiqueta del parabrisas) | ¿Lo audito? (pensada para celular o tablet) |
-| Equipo de analistas | Cada ~2 h | ¿Qué llegó, qué tomé y cómo queda lo pendiente? | Ronda |
-| Jurado / Calidad | Presentación | ¿Le gana al azar con el mismo cupo, y por cuánto? | Simulación |
+Es el MVP de cómo se usaría la solución en planta. El usuario principal es el **responsable de la selección**: el equipo de analistas que, cada ~2 h, elige en la playa de despacho qué unidades pasan a Auditoría Adicional. La decisión ocurre después de Gate Release, mientras las unidades esperan el despacho. Esa espera va de 0 a 5 días, así que en la playa conviven unidades de varios días. Se decide **por código** (etiqueta del parabrisas), y por eso una unidad de un día anterior se decide igual.
+
+Cada dispositivo elige su rol en la primera pantalla. Se puede cambiar desde el menú.
+
+| Rol | Dónde | Pantallas |
+| --- | --- | --- |
+| **Selección en la playa** | Tablet o celular | **Selección**: qué buscar, «¿la envío?», enviadas con deshacer y terminar ronda. **Prioridades del día**: la hoja en solo lectura. |
+| **Calidad de Planta** | Escritorio | **Preparar el día**: programa, cupo y modelo. **Hoja del día**: ranking, detalle y descargas. **Seguimiento**: avance por código, rondas y cierre. **Evaluación**: la simulación frente al azar. |
+
+### Un día en planta
+
+1. **Inicio del día (Calidad de Planta).** Carga el programa y el cupo, y arma la hoja. Hasta que la arma, la tablet muestra «Esperando la hoja» y la selección sigue al azar, como hoy.
+2. **Cada ~2 h (Selección).** El analista mira *qué buscar* (códigos con cantidad pendiente, por prioridad) y recorre la playa. Por cada vehículo escribe el código y la app responde **Enviar a auditoría** o **No enviar**, con el motivo. Si se equivoca, **deshace** el envío.
+3. **Fin de la ronda (Selección).** **Terminar ronda** pregunta solo por lo que se buscaba: qué código no estaba o tenía menos unidades. Lo que faltó baja al siguiente del ranking, con la regla de la hoja.
+4. **Durante el día (Calidad de Planta).** **Seguimiento** se actualiza solo cada 15 s con lo que registra la tablet. Al final, el cierre del día; en la demo, el resultado en agregado, porque es un día de validación.
 
 ## Cómo correrla
 
@@ -41,6 +50,7 @@ Criterio de la interfaz: cada pantalla muestra primero la decisión, y el detall
 
 | Pantalla | A la vista | A un clic |
 | --- | --- | --- |
+| Selección | El cupo, qué buscar y la respuesta para el código escrito | Deshacer (en el aviso y en la lista de enviadas), terminar la ronda (diálogo) |
 | Hoja | Códigos a auditar, cantidad y avance | Ranking completo (pestaña), detalle del código (panel lateral), metodología (diálogo «Cómo leerla») |
 | Simulación | Cifras y curva | Comparación y tabla por día (pestañas) |
 | Contexto | Insignia «Base ficticia» | Calificador, huellas de la fuente y límites (tooltip) |

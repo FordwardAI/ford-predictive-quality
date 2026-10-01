@@ -224,7 +224,7 @@ class Manejador(SimpleHTTPRequestHandler):
                 b = self._cuerpo()
                 hoja_ = p.armar(b["dia"], b.get("modelo", modelos_mod.POR_DEFECTO), b.get("cupo"), b.get("programa"))
                 return self._enviar(200, {"hoja": hoja_, "estado": p.dia.resumen()})
-            if p.dia is None and ruta in ("decidir", "tomar", "ronda", "estado", "cierre", "descarga"):
+            if p.dia is None and ruta in ("decidir", "tomar", "deshacer", "ronda", "estado", "cierre", "descarga"):
                 return self._enviar(409, {"error": "Primero hay que armar la hoja del día"})
             if metodo == "GET" and ruta == "estado":
                 return self._enviar(200, p.dia.resumen())
@@ -237,6 +237,11 @@ class Manejador(SimpleHTTPRequestHandler):
                     p.dia.guardar(p.carpeta)
                 return self._enviar(200, {"unidad": unidad, "decision": p.dia.decidir(b.get("codigo")),
                                           "estado": p.dia.resumen()})
+            if metodo == "POST" and ruta == "deshacer":
+                with p.lock:
+                    codigo = p.dia.deshacer(self._cuerpo().get("unidad"))
+                    p.dia.guardar(p.carpeta)
+                return self._enviar(200, {"decision": p.dia.decidir(codigo), "estado": p.dia.resumen()})
             if metodo == "POST" and ruta == "ronda":
                 with p.lock:
                     ronda = p.dia.registrar_ronda(self._cuerpo().get("en_playa", {}))

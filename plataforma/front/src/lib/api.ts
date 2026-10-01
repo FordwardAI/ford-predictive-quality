@@ -31,6 +31,7 @@ export interface Ronda { numero: number; en_playa: Record<string, number>; cambi
 export interface Estado {
   dia: number; cupo: number; modelo: ClaveModelo; tomadas: number; pendientes: Pendiente[]
   tomadas_por_codigo: Record<string, string[]>; rondas: Ronda[]; azar: number
+  enviadas: { unidad: string; codigo: string; ronda: number }[]
 }
 export type TipoDecision = 'auditar' | 'no_auditar' | 'fuera_del_programa'
 export interface Decision {

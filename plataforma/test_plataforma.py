@@ -55,6 +55,28 @@ def test_ronda_ranking_agotado_va_al_azar():
     assert r["azar"] == 3 and d.pendientes() == [("D", 1)]
 
 
+def test_deshacer_devuelve_lo_pendiente():
+    d = _dia()
+    u = d.tomar("A")
+    assert d.pendiente("A") == 1
+    d.deshacer(u)
+    assert d.pendiente("A") == 2 and d.tomadas_total() == 0
+    try:
+        d.deshacer("U-99")
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError("Deshacer una unidad no enviada tenía que fallar")
+
+
+def test_enviadas_guardan_su_ronda():
+    d = _dia()
+    d.tomar("A")
+    d.registrar_ronda({})
+    d.tomar("B")
+    assert [(e["unidad"], e["codigo"], e["ronda"]) for e in d.resumen()["enviadas"]] == [("U-1", "A", 1), ("U-4", "B", 2)]
+
+
 def test_guardar_y_leer():
     d = _dia()
     d.tomar("B")

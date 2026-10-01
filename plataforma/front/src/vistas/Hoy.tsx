@@ -56,12 +56,12 @@ export function Hoy() {
         <section className="mb-8 flex flex-wrap items-center justify-between gap-6 rounded-lg bg-ford-gray p-6">
           <div className="min-w-64 flex-1">
             <h2 className="text-2xl">Día {hoja.dia} en curso</h2>
-            <p className="mt-2">{estado.tomadas} de {estado.cupo} auditorías tomadas · {modelo(hoja.modelo).nombre}</p>
+            <p className="mt-2">{estado.tomadas} de {estado.cupo} unidades enviadas a auditoría · {modelo(hoja.modelo).nombre}</p>
             <Progress value={(100 * estado.tomadas) / Math.max(1, estado.cupo)} className="mt-3 max-w-md" aria-label="Cupo cubierto" />
           </div>
           <div className="flex flex-wrap gap-3">
             <Button variant="outline" asChild><a href="#hoja">Ver la hoja</a></Button>
-            <Button asChild><a href="#audito"><Icono nombre="audito" />Ir a la playa</a></Button>
+            <Button asChild><a href="#seguimiento"><Icono nombre="ronda" />Ver el seguimiento</a></Button>
           </div>
         </section>
       )}
