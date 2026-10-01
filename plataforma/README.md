@@ -62,5 +62,5 @@ La norma es `ford-design-system.md` (Ford Brand Central, extraído el 30/09/2026
 - **Forma y letra:** sin sombras, 4 tamaños de letra (40, 24, 20 en los CTA y 16) y pesos 400/500.
 - **Componentes:** botones con las medidas de §5 y tablas como propone §9.3.
 - **Íconos:** propios, con la geometría de §7.
-- **Logo:** sin Ford Oval ni Signature.
+- **Logo:** el logo de Ford del equipo (`../videos/logo-ford.png`), en blanco sobre Ford Blue como pide §6. Solo se volvió transparente su fondo `#02193B`, que no está en la paleta; el script queda igual, sin recolorear ni recortar. El nombre del equipo va al pie del panel.
 - **Control:** `verificar_ds.py` falla si algo de esto se rompe.

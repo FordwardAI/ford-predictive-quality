@@ -28,8 +28,9 @@ b, strong { font-family: var(--font-family-medium); font-weight: var(--fw-medium
   background: var(--color-bg-inverse); color: var(--color-text-inverse);
   border-radius: var(--radius-lg); padding: var(--space-3) 12px;
 }
-.marca { padding: 0 12px; color: var(--color-text-inverse); }
-.marca b { display: block; font-size: var(--fs-heading-05); line-height: var(--lh-heading); }
+.marca { padding: 0 12px; color: var(--color-text-inverse); display: flex; flex-direction: column; gap: var(--space-1); }
+.marca img { display: block; width: 128px; height: auto; }  /* §6: blanco sobre Ford Blue, sin recolorear ni recortar. */
+.rol b { font-size: var(--fs-heading-05); line-height: var(--lh-heading); }
 .nav ol { list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--space-1); }
 .nav a {
   display: flex; align-items: center; gap: 12px; padding: 4px 12px; min-height: 40px;
@@ -157,11 +158,12 @@ td .rango { margin-left: var(--space-1); }
 }
 @media (max-width: 767px) {
   .app { grid-template-columns: minmax(0, 1fr); padding: var(--space-2); gap: var(--space-2); }
-  .nav { position: static; height: auto; flex-direction: row; align-items: center; overflow-x: auto; padding: var(--space-1) 12px; gap: var(--space-2); }
-  .nav ol { flex-direction: row; }
+  .nav { position: static; height: auto; flex-direction: row; align-items: center; overflow: hidden; padding: var(--space-1) 12px; gap: var(--space-2); }
+  .nav ol { flex-direction: row; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
   .nav a { white-space: nowrap; }
-  .marca, .nav .rol { display: none; }
-  .nav { scrollbar-width: none; }
+  .marca { flex: none; padding: 0 8px; }
+  .marca img { width: 72px; }
+  .marca span, .nav .rol { display: none; }
   .columnas { gap: var(--space-2); }
   .vista { padding: var(--space-3) 4px var(--space-6); }
   .cta { width: 100%; }
