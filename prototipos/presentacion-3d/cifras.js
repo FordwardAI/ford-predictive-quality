@@ -26,7 +26,7 @@
 //   - research/audit-csv.json  auditoría del CSV vigente (SHA-256 a24860d8…c5a82b).
 //   - research/catalog-groups.json  solo `cobertura.codigos_base`; no se pide
 //     desde el navegador porque el archivo trae tasas por mercado (fijo: true).
-//   - docs/entrega/03-factibilidad-economica.md  tiempos y precios públicos,
+//   - docs/entrega/03-factibilidad-economica.md  tiempos medidos,
 //     sin JSON (archivo: null).
 //
 // Regla de leyenda (guion de la presentación): toda cifra en pantalla lleva
@@ -223,9 +223,6 @@ export const DEFINICIONES = [
   { clave: 'factibilidad.corrida', archivo: null, ruta: null, formato: 'segundos1', respaldo: 2.4,
     leyenda: 'corrida diaria en una notebook Apple M1 Pro, medida el 29/09/2026 (lectura del CSV 2,2 s + hoja 0,2 s)',
     fuente: 'docs/entrega/03-factibilidad-economica.md', etiqueta: 'por día para leer QLS y armar la hoja' },
-  { clave: 'factibilidad.vmMes', archivo: null, ruta: null, formato: 'usd1', respaldo: 24.5,
-    leyenda: 'techo de referencia: AWS t3.small en São Paulo encendida 730 h, precio público a demanda consultado el 29/09/2026, sin disco',
-    fuente: 'docs/entrega/03-factibilidad-economica.md', etiqueta: 'por mes si se usara una VM de nube (no hace falta)' },
 ];
 
 // --- Formato es-AR, sin depender de Intl (agrupa también los números de 4 cifras).
@@ -245,7 +242,6 @@ const FORMATOS = {
   puntos1: (x) => numeroEsAR(x * 100, 1) + NBSP + 'puntos',
   puntos2: (x) => numeroEsAR(x * 100, 2) + NBSP + 'puntos',
   segundos1: (x) => numeroEsAR(x, 1) + NBSP + 's',
-  usd1: (x) => 'USD' + NBSP + numeroEsAR(x, 1),
 };
 
 export function formatear(formato, valor) {

@@ -422,7 +422,7 @@ export const capitulos = [
     orbita: false,
   },
 
-  // 11 · 03 Costos y escala, con la fórmula -------------------------------------
+  // 11 · 03 Equipo existente y escala -------------------------------------
   {
     id: 'factibilidad',
     seccion: '03',
@@ -431,26 +431,23 @@ export const capitulos = [
     minutos: 1.2,
     antetitulo: 'Factibilidad económica',
     titulo: 'Sin licencias ni ', acento: 'auditorías extra',
-    bajada: 'Equipo existente y bibliotecas abiertas. El valor lo completa Ford con sus costos.',
-    cifras: ['factibilidad.corrida', 'factibilidad.vmMes'],
+    bajada: 'Equipo existente y bibliotecas abiertas.',
+    cifras: ['factibilidad.corrida'],
     puntos: [],
     figura: null,
     detalle: [
-      { titulo: 'La fórmula', texto: '(precisión de la hoja − precisión al azar) × auditorías por día × costo evitado.' },
-      { titulo: 'No es un ahorro', texto: 'La diferencia se mide en calibraciones, no en dinero.' },
+      { titulo: 'Sin licencias', texto: 'Python y bibliotecas abiertas.' },
+      { titulo: 'Sin auditorías extra', texto: 'El cupo lo sigue fijando Calidad de Planta.' },
+      { titulo: 'Equipo existente', texto: 'Una notebook o un servidor de planta, sin GPU.' },
     ],
     ampliacion: [
-      { titulo: 'Implementación', texto: 'Automatizar la exportación diaria de QLS y el programa del día, instalar el script y capacitar a los analistas. Son horas internas de Ford, que no estimamos: dependen de sus sistemas.' },
+      { titulo: 'Implementación', texto: 'Automatizar la exportación diaria de QLS y el programa del día, instalar el script y capacitar a los analistas.' },
       { titulo: 'Operación', texto: 'Una corrida por día y una hoja de una página. Ninguna auditoría adicional: el cupo lo sigue fijando Calidad de Planta.' },
       { titulo: 'Mantenimiento', texto: 'Reentrenar la solución elegida cada 5 días (parte de la corrida), atender las alertas del detector de cambios y actualizar el catálogo y las dependencias de forma controlada.' },
       { titulo: 'Cómputo con CatBoost', texto: 'Los 2,4 s medidos son la corrida de la hoja con el predictor de la primera etapa. CatBoost suma reentrenar cada 5 días sobre unas decenas de miles de VIN, sin GPU; como referencia, evaluar los 18 modelos de ML en validación, con 8 reentrenamientos cada uno, llevó unos 50 s en la misma notebook. El reentrenamiento de CatBoost solo no se midió aparte (docs/entrega/03-factibilidad-economica.md).' },
-      { titulo: 'Escenarios de escala', texto: 'Una línea: una notebook de Calidad. Una planta: un servidor existente o una VM chica. Varias plantas: cada una con su catálogo y su cupo; sigue siendo una tabla de tasas por código por planta.' },
-      { titulo: 'Fórmula · precisiones', texto: 'En planta se miden con los días de control, no con la base.' },
-      { titulo: 'Fórmula · auditorías por día', texto: 'El cupo diario que ya fija Calidad de Planta.' },
-      { titulo: 'Fórmula · costo evitado', texto: 'Lo define Ford: lo que vale encontrar en la auditoría una unidad que necesitaba calibración, en lugar de que salga sin ella.' },
-      { titulo: 'No es un ahorro', texto: 'La diferencia sobre la base ficticia equivale a calibraciones más cada 100 auditorías, entre auditados con actividad QLS. No es un ahorro de planta.' },
+      { titulo: 'Escenarios de escala', texto: 'Una línea: una notebook de Calidad. Una planta: un servidor existente. Varias plantas: cada una con su catálogo y su cupo; sigue siendo una tabla de tasas por código por planta.' },
     ],
-    notas: 'No damos cifras de ahorro: Ford no pudo dar costos y la base es ficticia. Dejamos la fórmula para que Ford aplique sus propios valores.',
+    notas: 'Sin licencias ni auditorías extra: corre en un equipo existente con bibliotecas abiertas, y el cupo lo sigue fijando Calidad de Planta.',
     orbita: false,
   },
 

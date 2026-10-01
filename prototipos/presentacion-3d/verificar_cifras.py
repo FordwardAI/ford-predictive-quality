@@ -176,7 +176,6 @@ def formatear(formato: str, v) -> str:
         "puntos1": lambda: numero_es_ar(v * 100, 1) + " puntos",
         "puntos2": lambda: numero_es_ar(v * 100, 2) + " puntos",
         "segundos1": lambda: numero_es_ar(v, 1) + " s",
-        "usd1": lambda: "USD " + numero_es_ar(v, 1),
     }[formato]()
 
 
