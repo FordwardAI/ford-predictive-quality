@@ -6,6 +6,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
@@ -15,9 +17,12 @@ import {
   crearMaterialBordes,
   crearMaterialRelleno,
   crearMaterialPuntos,
+  fijarOpacidad,
+  SHADER_FINAL,
 } from './materiales.js';
 import { cargarVehiculo } from './vehiculo.js';
 import { crearFabrica, crearPiso, ESTACIONES, CENTRO_PLAYA } from './fabrica.js';
+import { crearSombraContacto } from './sombra.js';
 
 export const IDS_ESCENA = ['portada', 'linea', 'datos', 'predictor', 'validacion', 'resultado', 'seguridad', 'factibilidad', 'donde-mirar', 'futuro', 'cierre'];
 export const IDS_PUNTOS = ['etiqueta-parabrisas', 'carroceria', 'pintura', 'montaje', 'gate-release', 'inspeccion-adicional', 'componente-1', 'componente-2', 'componente-3', 'playa-despacho'];
@@ -63,6 +68,8 @@ function inyectarEstilos() {
   :where(.escena-etiquetas) :where(.punto):hover { background:rgba(6,111,239,.35); }
   :where(.escena-etiquetas) :where(.punto):focus-visible { outline:2px solid #066FEF; outline-offset:2px; }
   :where(.escena-etiquetas) :where(.punto--oculto) { opacity:0; pointer-events:none; }
+  :where(.escena-etiquetas) :where(.punto--foco) { transform:scale(1.35); background:rgba(6,111,239,.6); border-color:#fff; }
+  :where(.escena-etiquetas) :where(.punto--tenue) { opacity:.45; }
   @keyframes escena-pulso { 0% { transform:scale(1); opacity:.9; } 100% { transform:scale(2.1); opacity:0; } }
   @media (prefers-reduced-motion: reduce) { :where(.escena-etiquetas) :where(.punto)::after { animation:none; } }
   `;
@@ -80,7 +87,8 @@ function crearEstudio() {
         float h = normalize(vP).y;
         vec3 c = mix(vec3(0.002, 0.008, 0.02), vec3(0.01, 0.045, 0.12), smoothstep(-0.25, 0.35, h));
         c = mix(c, vec3(0.004, 0.015, 0.04), smoothstep(0.35, 1.0, h));
-        c += vec3(0.35, 0.5, 0.8) * exp(-pow((h - 0.04) * 22.0, 2.0)) * 0.9;
+        float dh = (h - 0.04) * 22.0;
+        c += vec3(0.35, 0.5, 0.8) * exp(-dh * dh) * 0.9;
         gl_FragColor = vec4(c, 1.0);
       }`,
   }));
@@ -268,7 +276,8 @@ function crearColumnas() {
         uniform vec3 uColor; uniform float uOpacidad; uniform float uBrillo; uniform float uTiempo;
         varying float vY; varying vec3 vN; varying vec3 vV;
         void main(){
-          float f = pow(1.0 - abs(dot(vN, vV)), 1.6);
+          // max(): con MSAA los varyings se extrapolan y |dot| puede pasar de 1 → pow(negativo) = NaN
+          float f = pow(max(1.0 - abs(dot(normalize(vN), normalize(vV))), 0.0), 1.6);
           float top = smoothstep(0.86, 1.0, vY);
           float lineas = 0.85 + 0.15 * sin(vY * 60.0 - uTiempo * 2.0);
           vec3 c = uColor * (0.1 + f * 0.9 + top * 1.2) * lineas * uBrillo;
@@ -382,22 +391,6 @@ function crearAnillo() {
   return { grupo, materiales };
 }
 
-function crearSombra() {
-  const mat = new THREE.ShaderMaterial({
-    uniforms: { uOpacidad: { value: 1 } },
-    vertexShader: /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: /* glsl */ `uniform float uOpacidad; varying vec2 vUv;
-      void main(){ vec2 c = (vUv - 0.5) * 2.0; float d = length(c * vec2(1.0, 1.0));
-        float a = smoothstep(1.0, 0.25, d) * 0.75; gl_FragColor = vec4(0.0, 0.0, 0.0, a * uOpacidad); }`,
-    transparent: true, depthWrite: false,
-  });
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(6.6, 2.9), mat);
-  m.rotation.x = -Math.PI / 2;
-  m.position.y = 0.006;
-  m.renderOrder = 0;
-  return m;
-}
-
 // ---------- Estados por escena ----------
 
 function estadoBase() {
@@ -409,8 +402,11 @@ function estadoBase() {
   };
 }
 
-function mezclarEstado(a, b, k, salida) {
+// La cámara recorre una Bézier cuadrática con el punto de control elevado `elev` sobre el punto
+// medio; algebraicamente es el lerp más 2·k·(1−k)·elev en Y (pico de elev/2 en k = 0,5).
+function mezclarEstado(a, b, k, salida, elev = 0) {
   salida.cam.lerpVectors(a.cam, b.cam, k);
+  if (elev) salida.cam.y += 2 * k * (1 - k) * elev;
   salida.mira.lerpVectors(a.mira, b.mira, k);
   for (const c of ['fov', 'vehX', 'modo', 'veh', 'halos', 'bloom', 'alternar', 'grilla', 'playaMezcla']) salida[c] = a[c] + (b[c] - a[c]) * k;
   const ra = envolver(a.vehRot), rb = envolver(b.vehRot);
@@ -431,29 +427,80 @@ function fovPara(fovBase, aspecto) {
   return Math.min(fov, 90);
 }
 
+// ---------- Calidad ----------
+
+// 'alta': pixel ratio del dispositivo (≤ 2), MSAA ×4 en el render target del composer y bloom a ½.
+// 'baja': pixel ratio 1, sin MSAA (FXAA en el pass final), bloom a ¼, la mitad de las
+// partículas y 30 cuadros por segundo. 'auto' empieza en alta y se adapta en ambos sentidos.
+const CALIDADES = {
+  alta: { muestras: 4, divBloom: 2, particulas: 1, fps: 0, fxaa: 0 },
+  baja: { muestras: 0, divBloom: 4, particulas: 0.5, fps: 30, fxaa: 1 },
+};
+const INACTIVIDAD_MS = 90000;
+const EXPOSICION = 1.05;
+
+// Zonas lejanas entre sí: saltar entre ellas pasa por un fundido a oscuro.
+const ZONAS = { linea: 'linea', factibilidad: 'playa', futuro: 'futuro' };
+
+// Progreso de la escena «linea» que deja el vehículo en la estación `id` (o null).
+const X_INICIO_LINEA = ESTACIONES.carroceria - 8;
+const X_FIN_LINEA = ESTACIONES['inspeccion-adicional'] + 6;
+export function progresoEstacion(id) {
+  if (!(id in ESTACIONES)) return null;
+  return clamp01((ESTACIONES[id] - X_INICIO_LINEA) / (X_FIN_LINEA - X_INICIO_LINEA));
+}
+
 // ---------- API ----------
 
-export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/ranger.glb', movimientoReducido = false } = {}) {
+export async function crearEscena({
+  canvas,
+  capaEtiquetas,
+  modeloUrl = 'assets/ranger.glb',
+  movimientoReducido = false,
+  calidad: calidadInicial = 'auto',
+  entorno = 'estudio',
+  captura = false,
+} = {}) {
   inyectarEstilos();
-  const gsap = window.gsap;
-  const debug = typeof location !== 'undefined' && location.search.includes('debug');
+  // En modo captura (Chrome headless con tiempo virtual) no corren requestAnimationFrame ni el
+  // ticker de GSAP: el bucle usa setTimeout y las transiciones son instantáneas.
+  const gsap = captura ? null : window.gsap;
+  const busqueda = typeof location !== 'undefined' ? location.search : '';
+  const debug = busqueda.includes('debug');
+  const programar = captura ? (f) => setTimeout(() => f(performance.now()), 16) : (f) => requestAnimationFrame(f);
+  const cancelar = captura ? (id) => clearTimeout(id) : (id) => cancelAnimationFrame(id);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance', alpha: false });
+  // Sin antialias nativo: todo pasa por el composer, que tiene su propio MSAA o FXAA.
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', alpha: false });
   renderer.toneMapping = THREE.NeutralToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = EXPOSICION;
   renderer.setClearColor(PALETA.twilight, 1);
-  let pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  renderer.info.autoReset = false;
+  const pixelRatioMax = Math.min(window.devicePixelRatio || 1, 2);
+  let pixelRatio = pixelRatioMax;
   renderer.setPixelRatio(pixelRatio);
 
   const escena = new THREE.Scene();
   escena.background = PALETA.twilight.clone();
   escena.fog = new THREE.FogExp2(PALETA.twilight, UNIFORMS_GLOBALES.uNiebla.value);
+  // Entorno para los reflejos de la pintura. Se compararon el estudio procedural y RoomEnvironment
+  // (three/addons) con demo.html?env=estudio|room: los dos leen bien el azul con la pintura
+  // ajustada, pero las luces de la sala florecen en llantas y vidrios con el bloom; el estudio
+  // deja reflejos de horizonte en los vidrios y encaja con el fondo Twilight. Queda el estudio.
   const pmrem = new THREE.PMREMGenerator(renderer);
-  const ambiente = crearEstudio();
-  const envTex = pmrem.fromScene(ambiente, 0.02).texture;
+  let envTex;
+  if (entorno === 'estudio') {
+    const ambiente = crearEstudio();
+    envTex = pmrem.fromScene(ambiente, 0.02).texture;
+    escena.environmentIntensity = 0.9;
+    ambiente.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
+  } else {
+    const sala = new RoomEnvironment();
+    envTex = pmrem.fromScene(sala, 0.04).texture;
+    escena.environmentIntensity = 0.42;
+    sala.dispose?.();
+  }
   escena.environment = envTex;
-  escena.environmentIntensity = 0.9;
-  ambiente.traverse((o) => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
 
   const camara = new THREE.PerspectiveCamera(35, 1, 0.1, 400);
   camara.position.set(7, 2, 8);
@@ -474,11 +521,10 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
   const fabrica = crearFabrica();
   escena.add(fabrica.grupo);
 
-  // Vehículo (GLB o procedural; nunca falla)
+  // Vehículo (GLB o procedural; nunca falla) y su sombra de contacto
   const vehiculo = await cargarVehiculo(modeloUrl);
   escena.add(vehiculo.grupo);
-  const sombra = crearSombra();
-  escena.add(sombra);
+  const sombra = crearSombraContacto(renderer, vehiculo);
 
   // Grupos abstractos
   const datos = crearDatos();
@@ -505,20 +551,23 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
       fijarOpacidad(a) {
         this.opacidad = a;
         g.grupo.visible = a > 0.003;
-        for (const { mat, base } of g.materiales) {
-          if (mat.uniforms?.uOpacidad) mat.uniforms.uOpacidad.value = base * a;
-          else mat.opacity = base * a;
-        }
+        for (const { mat, base } of g.materiales) fijarOpacidad(mat, base * a, base);
       },
     };
   }
+  const geometriasParticulas = [datos.grupo.children[0].geometry, ...fabrica.particulas];
+  const totalesParticulas = geometriasParticulas.map((g) => g.attributes.position.count);
 
-  // Postproceso
-  const composer = new EffectComposer(renderer);
+  // Postproceso: render target HalfFloat con MSAA (alta) → bloom → OutputPass (tone mapping y
+  // sRGB) → pass final propio (FXAA en baja + viñeta).
+  const rtComposer = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: CALIDADES.alta.muestras });
+  const composer = new EffectComposer(renderer, rtComposer);
   composer.addPass(new RenderPass(escena, camara));
   const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.9, 0.5, 0.55);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
+  const passFinal = new ShaderPass(SHADER_FINAL);
+  composer.addPass(passFinal);
 
   // Etiquetas CSS2D
   const etiquetas = new CSS2DRenderer();
@@ -658,6 +707,24 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
     },
   };
 
+  // Perfil de transición por escena: duración base (se escala con la distancia) y curva.
+  ESCENAS.portada.perfil = { duracion: 1.6, ease: 'power3.inOut' };
+  ESCENAS.linea.perfil = { duracion: 1.8, ease: 'power2.inOut' };
+  ESCENAS.datos.perfil = { duracion: 1.6, ease: 'power3.inOut' };
+  ESCENAS.predictor.perfil = { duracion: 1.4, ease: 'expo.inOut' };
+  ESCENAS.validacion.perfil = { duracion: 1.5, ease: 'power3.inOut' };
+  ESCENAS.resultado.perfil = { duracion: 1.4, ease: 'power3.inOut' };
+  ESCENAS.seguridad.perfil = { duracion: 1.6, ease: 'power3.inOut' };
+  ESCENAS.factibilidad.perfil = { duracion: 2.0, ease: 'power2.inOut' };
+  ESCENAS['donde-mirar'].perfil = { duracion: 1.4, ease: 'power3.inOut' };
+  ESCENAS.futuro.perfil = { duracion: 2.0, ease: 'power2.inOut' };
+  ESCENAS.cierre.perfil = { duracion: 1.8, ease: 'power3.inOut' };
+
+  const viaje = { elev: 0, fundido: false };
+  const foco = { id: null, k: 0 };
+  let tweenFoco = null;
+  const posFoco = new THREE.Vector3();
+
   function objetivo() {
     return ESCENAS[actual](progresos[actual]);
   }
@@ -668,9 +735,8 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
     vehiculo.modo = e.modo;
     vehiculo.fijarVisibilidad(e.veh);
     vehiculo.fijarHalos(e.halos, movimientoReducido ? 0 : tiempo);
-    sombra.position.x = e.vehX;
-    sombra.rotation.z = e.vehRot;
-    sombra.material.uniforms.uOpacidad.value = e.veh;
+    // en x-ray el vehículo es casi transparente: la sombra se aclara
+    sombra.fijarOpacidad(e.veh * (0.35 + 0.65 * THREE.MathUtils.clamp(e.modo, 0, 1)));
     for (const c of CAPAS) capas[c].fijarOpacidad(e.opac[c]);
     bloom.strength = e.bloom;
     piso.material.uniforms.uAlternar.value = e.alternar;
@@ -679,7 +745,15 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
     if (!orbitando) {
       camara.position.copy(e.cam);
       controles.target.copy(e.mira);
-      camara.lookAt(e.mira);
+      // Foco: la mirada se corre hacia el punto y la cámara se acerca un poco (no en la línea,
+      // donde el vehículo mismo avanza hasta la estación).
+      if (foco.k > 0.001 && foco.id && puntos[foco.id] && actual !== 'linea') {
+        vehiculo.grupo.updateMatrixWorld(true);
+        puntos[foco.id].ancla.getWorldPosition(posFoco);
+        controles.target.lerp(posFoco, 0.28 * foco.k);
+        camara.position.lerp(posFoco, 0.1 * foco.k);
+      }
+      camara.lookAt(controles.target);
     }
     // Los fov de cada escena están pensados para 16:9; en pantallas más angostas se conserva
     // el campo horizontal para que el vehículo no se salga de cuadro.
@@ -687,8 +761,11 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
     if (Math.abs(camara.fov - fov) > 0.01) { camara.fov = fov; camara.updateProjectionMatrix(); }
   }
 
+  let focoMarcado;
   function actualizarPuntos() {
     const camPos = camara.position;
+    const cambioFoco = focoMarcado !== foco.id;
+    focoMarcado = foco.id;
     for (const [id, p] of Object.entries(puntos)) {
       let visible = puntosActivos.has(id);
       if (visible) {
@@ -705,15 +782,19 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
         }
       }
       p.obj.visible = visible;
+      if (cambioFoco) {
+        p.boton.classList.toggle('punto--foco', foco.id === id);
+        p.boton.classList.toggle('punto--tenue', !!foco.id && foco.id !== id);
+        if (foco.id === id) p.boton.setAttribute('aria-current', 'true');
+        else p.boton.removeAttribute('aria-current');
+      }
     }
   }
 
   // Encuadre: corre el centro óptico para que el sujeto quede del lado opuesto al texto.
   // desplazamiento ∈ [-1, 1]: negativo = sujeto a la izquierda, positivo = a la derecha.
   const encuadre = { x: 0 };
-  function aplicarEncuadre() {
-    const w = canvas.clientWidth || window.innerWidth;
-    const h = canvas.clientHeight || window.innerHeight;
+  function aplicarEncuadre(w = canvas.clientWidth || window.innerWidth, h = canvas.clientHeight || window.innerHeight) {
     const angosto = w < 900; // en mobile el texto ocupa todo el ancho: sin corrimiento
     const dx = angosto ? 0 : -encuadre.x * w * 0.2;
     if (dx === 0) camara.clearViewOffset();
@@ -721,39 +802,129 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
     camara.updateProjectionMatrix();
   }
 
-  // Tamaño
-  function redimensionar() {
-    const w = canvas.clientWidth || window.innerWidth;
-    const h = canvas.clientHeight || window.innerHeight;
-    renderer.setPixelRatio(pixelRatio);
+  // ---------- Calidad ----------
+  let modoCalidad = ['alta', 'baja', 'auto'].includes(calidadInicial) ? calidadInicial : 'auto';
+  let calidadEfectiva = modoCalidad === 'baja' ? 'baja' : 'alta';
+
+  // Tamaño (w, h en px CSS; pr = pixel ratio). Lo usa también capturar() con otra resolución.
+  function dimensionar(w, h, pr) {
+    const cfg = CALIDADES[calidadEfectiva];
+    renderer.setPixelRatio(pr);
     renderer.setSize(w, h, false);
-    composer.setPixelRatio(pixelRatio);
+    composer.setPixelRatio(pr);
     composer.setSize(w, h);
-    bloom.setSize(Math.round((w * pixelRatio) / 2), Math.round((h * pixelRatio) / 2));
+    bloom.setSize(Math.round((w * pr) / cfg.divBloom), Math.round((h * pr) / cfg.divBloom));
+    passFinal.uniforms.uResolucion.value.set(w * pr, h * pr);
     etiquetas.setSize(w, h);
     camara.aspect = w / h;
-    aplicarEncuadre();
-    UNIFORMS_GLOBALES.uPixelRatio.value = pixelRatio * (h / 900);
+    aplicarEncuadre(w, h);
+    UNIFORMS_GLOBALES.uPixelRatio.value = pr * (h / 900);
   }
-  window.addEventListener('resize', redimensionar);
-  redimensionar();
+  function redimensionar() {
+    dimensionar(canvas.clientWidth || window.innerWidth, canvas.clientHeight || window.innerHeight, pixelRatio);
+  }
 
-  // Bucle
+  function aplicarCalidad(efectiva, { pr } = {}) {
+    calidadEfectiva = efectiva;
+    const cfg = CALIDADES[efectiva];
+    pixelRatio = pr ?? (efectiva === 'baja' ? 1 : pixelRatioMax);
+    for (const rt of [composer.renderTarget1, composer.renderTarget2]) {
+      if (rt.samples !== cfg.muestras) { rt.samples = cfg.muestras; rt.dispose(); }
+    }
+    passFinal.uniforms.uFxaa.value = cfg.fxaa;
+    geometriasParticulas.forEach((g, i) => g.setDrawRange(0, Math.round(totalesParticulas[i] * cfg.particulas)));
+    redimensionar();
+    medicion.reiniciar();
+  }
+
+  // Medición para 'auto' y para el panel ?debug.
+  const medicion = {
+    acumulado: 0, cuadros: 0, intervalos: 0, nIntervalos: 0, lentos: 0, rapidos: 0, ultimaBaja: -Infinity, espera: 6,
+    ms: 0, fps: 0, ultimaSubida: -Infinity,
+    reiniciar() { this.acumulado = 0; this.cuadros = 0; this.intervalos = 0; this.nIntervalos = 0; this.lentos = 0; this.rapidos = 0; },
+  };
+  function adaptar(ahora) {
+    const m = medicion;
+    if (m.acumulado < 1.5) return;
+    m.ms = (m.acumulado / m.cuadros) * 1000;
+    m.fps = m.cuadros / m.acumulado;
+    const intervalo = m.nIntervalos ? (m.intervalos / m.nIntervalos) * 1000 : m.ms;
+    m.acumulado = 0; m.cuadros = 0; m.intervalos = 0; m.nIntervalos = 0;
+    if (modoCalidad !== 'auto' || captura) return;
+    if (calidadEfectiva === 'alta') {
+      if (m.ms > 24) {
+        m.rapidos = 0;
+        if (++m.lentos >= 2) {
+          m.lentos = 0;
+          if (pixelRatio > 1) { pixelRatio = Math.max(1, pixelRatio - 0.25); redimensionar(); }
+          else {
+            // si recién se había subido, esperar el doble antes de volver a probar
+            m.espera = ahora - m.ultimaSubida < 15000 ? Math.min(m.espera * 2, 48) : 6;
+            aplicarCalidad('baja');
+          }
+        }
+      } else if (m.ms < 14 && pixelRatio < pixelRatioMax) {
+        m.lentos = 0;
+        if (++m.rapidos >= 4) { m.rapidos = 0; pixelRatio = Math.min(pixelRatioMax, pixelRatio + 0.25); redimensionar(); }
+      } else { m.lentos = 0; m.rapidos = 0; }
+    } else if (intervalo < 19) {
+      // En baja se dibuja a 30 fps; si el navegador igual llega a 60 callbacks fluidos, hay margen.
+      if (++m.rapidos >= m.espera) { m.ultimaSubida = ahora; aplicarCalidad('alta', { pr: 1 }); }
+    } else m.rapidos = 0;
+  }
+
+  window.addEventListener('resize', redimensionar);
+  aplicarCalidad(calidadEfectiva);
+
+  // ---------- Panel de depuración (?debug) ----------
+  let panelDebug = null;
+  if (debug && !captura) {
+    panelDebug = document.createElement('div');
+    panelDebug.style.cssText = 'position:fixed;top:8px;right:8px;z-index:99;font:12px/1.4 monospace;color:#cfe3ff;background:rgba(0,10,30,.75);padding:6px 8px;border-radius:6px;pointer-events:none;white-space:pre';
+    document.body.appendChild(panelDebug);
+  }
+
+  // ---------- Bucle, pausa por inactividad ----------
   let raf = 0;
   let activo = true;
-  let acumulado = 0, cuadros = 0, lentos = 0;
-  function cuadro() {
-    raf = requestAnimationFrame(cuadro);
-    const ahora = performance.now();
+  let pausaManual = false;
+  let pausaInactividad = false;
+  let capturando = false;
+  let ultimaActividad = performance.now();
+  let ultimoRender = 0;
+  let ultimoCallback = performance.now();
+
+  const corriendo = () => activo && !pausaManual && !pausaInactividad && !document.hidden;
+  function reanudarBucle() {
+    if (!raf && corriendo()) { ultimoT = performance.now(); ultimoCallback = ultimoT; raf = programar(cuadro); }
+  }
+  function detenerBucle() {
+    if (raf) cancelar(raf);
+    raf = 0;
+  }
+  function registrarActividad() {
+    ultimaActividad = performance.now();
+    if (pausaInactividad) { pausaInactividad = false; reanudarBucle(); }
+  }
+  const EVENTOS_ACTIVIDAD = ['pointermove', 'pointerdown', 'wheel', 'keydown', 'touchstart', 'scroll'];
+  for (const ev of EVENTOS_ACTIVIDAD) window.addEventListener(ev, registrarActividad, { passive: true, capture: true });
+
+  function renderizar(ahora) {
     const dt = Math.min((ahora - ultimoT) / 1000, 0.1);
     ultimoT = ahora;
     if (!movimientoReducido) tiempo += dt;
     UNIFORMS_GLOBALES.uTiempo.value = tiempo;
 
     const meta = objetivo();
-    const e = desde && transicion.k < 1 ? mezclarEstado(desde, meta, transicion.k, estadoActual) : mezclarEstado(meta, meta, 1, estadoActual);
-    if (transicion.k >= 1 && orbitaPedida && !orbitando) activarOrbita();
+    const e = desde && transicion.k < 1
+      ? mezclarEstado(desde, meta, transicion.k, estadoActual, viaje.elev)
+      : mezclarEstado(meta, meta, 1, estadoActual);
+    // Fundido a oscuro en saltos largos: la exposición baja a 0,7 en la mitad del viaje.
+    const s = viaje.fundido && transicion.k < 1 ? Math.sin(Math.PI * transicion.k) : 0;
+    renderer.toneMappingExposure = EXPOSICION * (1 - 0.3 * s * s);
     aplicarEstado(e);
+    // la órbita arranca desde la cámara ya ubicada en la escena (no desde la inicial)
+    if (transicion.k >= 1 && orbitaPedida && !orbitando) activarOrbita();
 
     // animaciones internas
     datos.fijarP(progresos.datos);
@@ -762,25 +933,50 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
     fabrica.actualizar(tiempo, { vehiculoX: e.vehX, playaMezcla: e.playaMezcla, reducido: movimientoReducido });
     if (orbitando) controles.update();
 
+    renderer.info.reset();
     composer.render();
     actualizarPuntos();
     etiquetas.render(escena, camara);
+    return dt;
+  }
 
-    // calidad adaptativa: baja el pixel ratio si el cuadro es lento
-    acumulado += dt; cuadros++;
-    if (acumulado > 1.5) {
-      const ms = (acumulado / cuadros) * 1000;
-      if (ms > 24 && pixelRatio > 1) { lentos++; if (lentos >= 2) { pixelRatio = Math.max(1, pixelRatio - 0.25); redimensionar(); lentos = 0; } }
-      else lentos = 0;
-      acumulado = 0; cuadros = 0;
+  function cuadro(ahora = performance.now()) {
+    raf = 0;
+    if (!corriendo()) return;
+    raf = programar(cuadro);
+    if (capturando) return;
+    medicion.intervalos += Math.min((ahora - ultimoCallback) / 1000, 0.1);
+    medicion.nIntervalos++;
+    ultimoCallback = ahora;
+    const fps = CALIDADES[calidadEfectiva].fps;
+    if (fps) {
+      // conserva la fase para promediar 30 fps aunque la pantalla vaya a 60, 120 o 144 Hz
+      const intervalo = 1000 / fps, transcurrido = ahora - ultimoRender;
+      if (transcurrido < intervalo - 1) return;
+      ultimoRender = transcurrido > intervalo * 3 ? ahora : ultimoRender + intervalo;
+    } else ultimoRender = ahora;
+    const dt = renderizar(ahora);
+    medicion.acumulado += dt; medicion.cuadros++;
+    adaptar(ahora);
+    if (panelDebug) {
+      const i = renderer.info.render;
+      panelDebug.textContent = `${medicion.fps.toFixed(0)} fps · ${medicion.ms.toFixed(1)} ms/cuadro\n` +
+        `draw calls ${i.calls} · tris ${(i.triangles / 1000).toFixed(0)} k\n` +
+        `calidad ${modoCalidad} → ${calidadEfectiva} · pr ${pixelRatio}`;
+    }
+    // Pausa por inactividad: sin input ni transición durante 90 s se deja de dibujar.
+    const quieto = transicion.k >= 1 && !tweenFoco?.isActive?.() && !orbitando;
+    if (!captura && quieto && ahora - ultimaActividad > INACTIVIDAD_MS) {
+      pausaInactividad = true;
+      detenerBucle();
     }
   }
   function alCambiarVisibilidad() {
-    if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
-    else if (activo && !raf) { ultimoT = performance.now(); raf = requestAnimationFrame(cuadro); }
+    if (document.hidden) detenerBucle();
+    else reanudarBucle();
   }
   document.addEventListener('visibilitychange', alCambiarVisibilidad);
-  raf = requestAnimationFrame(cuadro);
+  raf = programar(cuadro);
 
   function activarOrbita() {
     orbitando = true;
@@ -798,8 +994,10 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
   const api = {
     modeloCargado: vehiculo.tipo,
 
-    irA(idEscena, { duracion = 1.6 } = {}) {
+    // Sin `duracion` se usa el perfil de la escena destino escalado por la distancia recorrida.
+    irA(idEscena, { duracion } = {}) {
       if (!ESCENAS[idEscena]) { console.warn('[escena] id desconocido:', idEscena); return; }
+      registrarActividad();
       // instantánea del estado visible (incluye la cámara de la órbita si estaba activa)
       const instante = copiarEstado(estadoActual);
       instante.cam.copy(camara.position);
@@ -807,18 +1005,25 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
       orbitaPedida = false;
       desactivarOrbita();
       const cambio = idEscena !== actual;
+      const zonaPrevia = ZONAS[actual] || 'centro';
       actual = idEscena;
       desde = instante;
       if (tween) tween.kill?.();
-      const d = movimientoReducido ? 0 : duracion;
+      const meta = objetivo();
+      const distancia = instante.cam.distanceTo(meta.cam);
+      const perfil = ESCENAS[idEscena].perfil || {};
+      const d = movimientoReducido || !gsap ? 0
+        : duracion ?? THREE.MathUtils.clamp((perfil.duracion ?? 1.6) * (0.75 + distancia / 40), 1.1, 2.4);
+      const zonaNueva = ZONAS[idEscena] || 'centro';
+      viaje.fundido = cambio && (zonaPrevia !== zonaNueva) && (zonaPrevia !== 'centro' || zonaNueva !== 'centro' || distancia > 28);
+      viaje.elev = distancia < 4 ? 0 : Math.min(distancia * 0.2, 14);
       if (idEscena === 'resultado' && cambio) {
-        crecimiento.k = movimientoReducido ? 1 : 0;
-        if (!movimientoReducido && gsap) gsap.to(crecimiento, { k: 1, duration: 1.8, delay: d * 0.5, ease: 'power2.out' });
-        else crecimiento.k = 1;
+        crecimiento.k = movimientoReducido || !gsap ? 1 : 0;
+        if (crecimiento.k < 1) gsap.to(crecimiento, { k: 1, duration: 1.8, delay: d * 0.5, ease: 'power2.out' });
       }
-      if (d <= 0 || !gsap) { transicion.k = 1; return; }
+      if (d <= 0) { transicion.k = 1; return; }
       transicion.k = 0;
-      tween = gsap.to(transicion, { k: 1, duration: d, ease: 'power3.inOut' });
+      tween = gsap.to(transicion, { k: 1, duration: d, ease: perfil.ease || 'power3.inOut' });
     },
 
     // lado = lado del TEXTO ('izquierda' | 'derecha' | null): el sujeto se corre al opuesto.
@@ -826,12 +1031,14 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
       const meta = lado === 'izquierda' ? 1 : lado === 'derecha' ? -1 : 0;
       const d = movimientoReducido || !gsap ? 0 : duracion;
       if (d <= 0) { encuadre.x = meta; aplicarEncuadre(); return; }
-      gsap.to(encuadre, { x: meta, duration: d, ease: 'power3.inOut', onUpdate: aplicarEncuadre, overwrite: true });
+      gsap.to(encuadre, { x: meta, duration: d, ease: 'power3.inOut', onUpdate: () => aplicarEncuadre(), overwrite: true });
     },
 
     progreso(idEscena, t) {
       if (!(idEscena in progresos)) return;
-      progresos[idEscena] = clamp01(Number(t) || 0);
+      const v = clamp01(Number(t) || 0);
+      if (v !== progresos[idEscena]) registrarActividad();
+      progresos[idEscena] = v;
     },
 
     mostrarPuntos(ids = []) {
@@ -850,24 +1057,80 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
       else if (transicion.k >= 1) activarOrbita();
     },
 
-    // --- Contrato de la API para el modo de diapositivas (el bloque B los implementa) ---
-    // Resalta el punto/halo `id` (o quita el foco con null).
-    enfocarPunto(/* id | null */) {},
-    // 'alta' | 'baja' | 'auto'. Devuelve la calidad efectiva.
-    calidad(/* modo */) { return 'auto'; },
-    // Pausa o reanuda el render (inactividad, pestaña oculta).
-    pausar(/* booleano */) {},
-    // Renderiza un cuadro a resolución completa. Devuelve Promise<Blob> (PNG).
-    capturar() { return Promise.resolve(null); },
+    // Resalta el punto `id` (o quita el foco con null): el botón crece y los demás se atenúan,
+    // el halo correspondiente brilla más y la cámara se inclina hacia él. En «linea», si `id` es
+    // una estación, el vehículo avanza hasta ella (ver progresoEstacion).
+    enfocarPunto(id = null) {
+      registrarActividad();
+      const nuevo = id && puntos[id] ? id : null;
+      if (nuevo && actual === 'linea') {
+        const p = progresoEstacion(nuevo);
+        if (p !== null) {
+          if (gsap && !movimientoReducido) gsap.to(progresos, { linea: p, duration: 1.2, ease: 'power2.inOut', overwrite: 'auto' });
+          else progresos.linea = p;
+        }
+      }
+      vehiculo.focoHalo = nuevo;
+      if (nuevo === foco.id) return;
+      const anterior = foco.id;
+      if (tweenFoco) tweenFoco.kill?.();
+      const d = movimientoReducido || !gsap ? 0 : 0.9;
+      if (!nuevo) {
+        if (d) tweenFoco = gsap.to(foco, { k: 0, duration: d, ease: 'power2.inOut', onComplete: () => { foco.id = null; } });
+        else { foco.k = 0; foco.id = null; }
+        return;
+      }
+      foco.id = nuevo;
+      // de un punto a otro se reparte el viaje sin volver a cero
+      if (d) tweenFoco = gsap.fromTo(foco, { k: anterior ? Math.min(foco.k, 0.5) : foco.k }, { k: 1, duration: d, ease: 'power2.inOut' });
+      else foco.k = 1;
+    },
+
+    // 'alta' | 'baja' | 'auto' (sin argumento sólo consulta). Devuelve la calidad efectiva.
+    calidad(modo) {
+      if (modo && ['alta', 'baja', 'auto'].includes(modo) && modo !== modoCalidad) {
+        modoCalidad = modo;
+        aplicarCalidad(modo === 'baja' ? 'baja' : 'alta');
+      }
+      return calidadEfectiva;
+    },
+
+    // Pausa (true) o reanuda (false) el render. Una pausa manual no se levanta con el input;
+    // la de inactividad sí.
+    pausar(pausado = true) {
+      pausaManual = !!pausado;
+      if (pausaManual) detenerBucle();
+      else { pausaInactividad = false; ultimaActividad = performance.now(); reanudarBucle(); }
+    },
+
+    // Renderiza un cuadro a `ancho`×`alto` (pixel ratio 1) y devuelve Promise<Blob>.
+    // Por defecto 1920×1080 en PNG; `tipo: 'image/webp'` y `calidad` para los renders.
+    capturar({ ancho = 1920, alto = 1080, tipo = 'image/png', calidad: q = 0.92 } = {}) {
+      return new Promise((resolver) => {
+        capturando = true;
+        dimensionar(ancho, alto, 1);
+        UNIFORMS_GLOBALES.uPixelRatio.value = alto / 900;
+        renderizar(performance.now());
+        renderer.domElement.toBlob((blob) => {
+          capturando = false;
+          redimensionar();
+          resolver(blob);
+        }, tipo, q);
+      });
+    },
 
     destruir() {
       activo = false;
-      cancelAnimationFrame(raf);
+      detenerBucle();
       if (tween) tween.kill?.();
+      if (tweenFoco) tweenFoco.kill?.();
       window.removeEventListener('resize', redimensionar);
       document.removeEventListener('visibilitychange', alCambiarVisibilidad);
+      for (const ev of EVENTOS_ACTIVIDAD) window.removeEventListener(ev, registrarActividad, { capture: true });
+      panelDebug?.remove();
       controles.dispose();
       etiquetas.domElement.remove();
+      sombra.destruir();
       escena.traverse((o) => {
         if (o.geometry) o.geometry.dispose();
         if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m.dispose());
@@ -879,6 +1142,6 @@ export async function crearEscena({ canvas, capaEtiquetas, modeloUrl = 'assets/r
     },
   };
 
-  if (debug) window.__escena = { renderer, escena, camara, bloom, vehiculo, fabrica };
+  if (debug || busqueda.includes('anclas')) window.__escena = { renderer, escena, camara, bloom, vehiculo, fabrica, sombra, composer };
   return api;
 }
