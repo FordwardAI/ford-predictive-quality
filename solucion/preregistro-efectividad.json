@@ -1,5 +1,6 @@
 {
-  "estado": "propuesto",
+  "estado": "acordado",
+  "acuerdo": "Tercera lectura pedida explícitamente por Mateo Serebrinsky el 01/10/2026 en la sesión de trabajo con Claude. No consta en el repositorio un acuerdo del resto del equipo; los documentos registran que se había acordado no hacer una tercera lectura. Se corre y se registra con ese calificador.",
   "fecha": "2026-10-01",
   "como_acordar": "Tercera lectura de la prueba final. Los documentos registran que el equipo acordó no hacerla: hace falta un acuerdo explícito. Revisar en equipo, cambiar estado a \"acordado\", commitear, enlazar en #33 y correr una vez con --preregistro solucion/preregistro-efectividad.json --hash-preregistro <sha256 del archivo commiteado>. Se informan las tres lecturas.",
   "fuente": {
