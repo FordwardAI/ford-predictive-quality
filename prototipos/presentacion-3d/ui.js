@@ -1,15 +1,14 @@
-// Render de pantallas, pasos, índice y pie.
+// Render de pantallas, índice, riel de progreso y pie.
 // Consume `contenido.js` (meta, secciones, capitulos) y el Map de `cifras.js`.
 // Todo el texto entra por textContent: el contenido es dato, nunca HTML.
 //
-// Pasos: cada pantalla tiene una cabecera (antetítulo, titular, bajada) que
-// entra siempre, y una lista de pasos (`sec._pasos`) que se revelan con
-// opacidad y transform (nunca `display`): cifras, callouts, figura, tarjetas y
-// lista, en ese orden. Los elementos están siempre en el DOM.
+// Una pantalla se muestra siempre completa: al llegar (teclado, scroll, índice
+// o enlace) todos sus elementos entran en una cascada corta (≤ 1,2 s) con
+// opacidad y transform. Los elementos animados llevan `data-anim` y están
+// siempre en el DOM.
 
 const PENDIENTE_RE = /\[PENDIENTE[^\]]*\]/g;
 const SECCIONES_ESPECIALES = { portada: 'Portada', cierre: 'Cierre' };
-const HEREDADOS = ['seccion', 'subseccion', 'escena', 'nucleo', 'orbita', 'antetitulo', 'titulo', 'acento', 'notas', 'lado', 'diapositiva'];
 
 let formatear = null; // de cifras.js, para el conteo animado
 
@@ -69,39 +68,26 @@ export function textoTitular(cap) {
   return `${cap.titulo ?? ''}${cap.acento ?? ''}`.replace(PENDIENTE_RE, '').replace(/\s+/g, ' ').trim();
 }
 
-// ---------- Pantallas de continuación y numeración ----------
-// Resuelve `continuacion`: hereda del padre lo que la pantalla no define.
+// ---------- Normalización y numeración ----------
+// Listas siempre presentes; `ampliacion` (respaldo para preguntas, solo en las
+// notas del orador) queda como [{ titulo, texto }] sin entradas vacías.
 export function normalizarCapitulos(todos) {
-  const porId = new Map(todos.map((c) => [c.id, c]));
-  return todos.map((c) => {
-    if (!c.continuacion) return c;
-    const padre = porId.get(c.continuacion);
-    if (!padre) {
-      console.warn(`[presentacion] «${c.id}» continúa a «${c.continuacion}», que no existe`);
-      return c;
-    }
-    const heredado = {};
-    for (const k of HEREDADOS) if (c[k] === undefined && padre[k] !== undefined) heredado[k] = padre[k];
-    return { ...heredado, ...c, padre: padre.id };
-  });
+  const lista = (v) => (Array.isArray(v) ? v.filter(Boolean) : []);
+  return todos.map((c) => ({
+    ...c,
+    cifras: lista(c.cifras),
+    puntos: lista(c.puntos),
+    detalle: lista(c.detalle),
+    ampliacion: lista(c.ampliacion)
+      .map((a) => ({ titulo: String(a.titulo ?? '').trim(), texto: String(a.texto ?? '').trim() }))
+      .filter((a) => a.titulo || a.texto),
+  }));
 }
 
-// Número visible: «09» para las pantallas principales, «09b» para sus continuaciones.
+// Número visible «00»…«14»; devuelve el de la última pantalla.
 export function numerarCapitulos(capitulos) {
-  let n = -1;
-  const letras = new Map();
-  for (const c of capitulos) {
-    if (c.padre && capitulos.some((p) => p.id === c.padre)) {
-      const k = (letras.get(c.padre) ?? 0) + 1;
-      letras.set(c.padre, k);
-      const padre = capitulos.find((p) => p.id === c.padre);
-      c.numeroPantalla = `${padre.numeroPantalla}${String.fromCharCode(97 + k)}`;
-    } else {
-      n += 1;
-      c.numeroPantalla = String(n).padStart(2, '0');
-    }
-  }
-  return String(Math.max(n, 0)).padStart(2, '0');
+  capitulos.forEach((c, i) => { c.numeroPantalla = String(i).padStart(2, '0'); });
+  return String(Math.max(capitulos.length - 1, 0)).padStart(2, '0');
 }
 
 // Lado del texto: `cap.lado` si viene; si no, las secciones pares van a la derecha.
@@ -178,9 +164,9 @@ export function dividirLineas(h) {
   }
 }
 
-function crearTitular(cap, nivel, clase = 'titular') {
+function crearTitular(cap, nivel) {
   const h = document.createElement(nivel);
-  h.className = clase;
+  h.className = 'titular';
   h.id = `titular-${cap.id}`;
   h.setAttribute('aria-label', textoTitular(cap));
   segmentosTitular.set(h, segmentosDe(cap));
@@ -202,6 +188,7 @@ function crearCifra(clave, cifras, { sinLeyenda = false } = {}) {
   const li = document.createElement('li');
   li.className = 'cifra';
   li.dataset.clave = clave;
+  li.dataset.anim = '';
   const c = cifras?.get?.(clave);
   if (!c) {
     console.warn(`[presentacion] cifra sin clave en cifras.js: «${clave}»`);
@@ -240,7 +227,7 @@ function contar(li, { instantaneo } = {}) {
   li._conteo = proxy;
   try { valor.textContent = formatear(li.dataset.formato, 0); } catch { valor.textContent = final; return; }
   gsap.to(proxy, {
-    x: n, duration: 1.1, ease: 'power2.out',
+    x: n, duration: 0.9, ease: 'power2.out',
     onUpdate: () => { valor.textContent = formatear(li.dataset.formato, proxy.x); },
     onComplete: () => { valor.textContent = final; },
   });
@@ -254,11 +241,14 @@ export function terminarConteos(raiz = document) {
 // ---------- Callouts (puntos de la escena) ----------
 function crearCallouts(cap, alTocarCallout) {
   const ol = crear('ol', 'callouts');
-  if (cap.puntos.length >= 5) ol.classList.add('callouts-muchos');
+  const conTexto = cap.puntos.filter((p) => p.texto).length;
+  if (!conTexto) ol.classList.add('callouts-fila');
+  else if (cap.puntos.length >= 4) ol.classList.add('callouts-muchos');
   ol.setAttribute('aria-label', 'Recorrido');
   cap.puntos.forEach((p, i) => {
     const li = crear('li', 'callout');
     li.dataset.punto = p.id;
+    li.dataset.anim = '';
     const b = crear('button', 'callout-boton');
     b.type = 'button';
     b.append(crear('span', 'callout-numero', String(i + 1)), crear('span', 'callout-titulo', p.titulo ?? p.id));
@@ -270,26 +260,22 @@ function crearCallouts(cap, alTocarCallout) {
   return ol;
 }
 
+// Resalta el callout del punto `id` (null: ninguno).
+export function marcarCallout(sec, id) {
+  sec?.querySelectorAll('.callout').forEach((li) => li.classList.toggle('activo', Boolean(id) && li.dataset.punto === id));
+}
+
 // ---------- Tarjetas ----------
-function crearTarjetas(detalle, nivel = 'h3') {
+function crearTarjetas(detalle) {
   const ul = crear('ul', 'tarjetas');
+  ul.style.setProperty('--n', String(detalle.length));
   for (const d of detalle) {
     const li = crear('li', 'tarjeta');
-    if ((d.texto ?? '').length > 300) li.classList.add('tarjeta-larga');
-    li.append(crear(nivel, 'tarjeta-titulo', d.titulo), crear('p', 'tarjeta-texto', d.texto));
+    li.dataset.anim = '';
+    li.append(crear('h3', 'tarjeta-titulo', d.titulo), crear('p', 'tarjeta-texto', d.texto));
     ul.append(li);
   }
   return ul;
-}
-
-function crearLista(items) {
-  const ol = crear('ol', 'lista-pasos');
-  items.forEach((t, i) => {
-    const li = crear('li', 'lista-paso');
-    li.append(crear('span', 'lista-numero', String(i + 1)), crear('span', 'lista-texto', t));
-    ol.append(li);
-  });
-  return ol;
 }
 
 // ---------- Figuras ----------
@@ -353,6 +339,7 @@ function crearFigura(cap, { datos, figuras }) {
   const f = cap.figura;
   if (!f) return null;
   const fig = crear('figure', 'capitulo-figura');
+  fig.dataset.anim = '';
   const marco = crear('div', 'figura-marco');
   fig.append(marco);
 
@@ -397,6 +384,8 @@ function crearFigura(cap, { datos, figuras }) {
 }
 
 // ---------- Pantallas ----------
+// Disposición: texto de un lado (≈ 46 %), figura del otro; sin figura, las
+// tarjetas van en una banda al pie para no tapar el vehículo 3D.
 export function renderizarCapitulos({ main, meta = {}, secciones = [], capitulos = [], cifras, datos, figuras, formatearCifra, alTocarCallout }) {
   formatear = formatearCifra ?? null;
   main.textContent = '';
@@ -405,8 +394,8 @@ export function renderizarCapitulos({ main, meta = {}, secciones = [], capitulos
     const sec = document.createElement('section');
     sec.className = 'capitulo';
     if (especial) sec.classList.add(`capitulo-${especial}`);
-    if (cap.padre) sec.classList.add('es-continuacion');
     if (ladoDe(cap, secciones) === 'derecha') sec.classList.add('lado-derecha');
+    if (cap.centrado) sec.classList.add('centrado');
     sec.id = cap.id;
     sec.tabIndex = -1;
     sec.dataset.indice = String(indice);
@@ -414,6 +403,7 @@ export function renderizarCapitulos({ main, meta = {}, secciones = [], capitulos
 
     const texto = crear('div', 'capitulo-texto');
     const lado = crear('div', 'capitulo-lado');
+    const banda = crear('div', 'capitulo-banda');
 
     if (especial === 'portada') {
       const lista = crear('ul', 'portada-meta');
@@ -427,69 +417,76 @@ export function renderizarCapitulos({ main, meta = {}, secciones = [], capitulos
       ante.dataset.anim = '';
       if (!especial && cap.seccion) ante.append(crear('span', 'antetitulo-numero', cap.seccion), ' ');
       ante.append(textoRico(cap.antetitulo));
-      if (cap.padre) ante.append(crear('span', 'antetitulo-continua', 'continúa'));
       texto.append(ante);
     }
 
-    texto.append(crearTitular(cap, indice === 0 ? 'h1' : 'h2', cap.padre ? 'titular titular-continuacion' : 'titular'));
+    texto.append(crearTitular(cap, indice === 0 ? 'h1' : 'h2'));
 
     if (cap.bajada) {
       const bajada = crear('p', 'bajada', cap.bajada);
       bajada.dataset.anim = '';
       texto.append(bajada);
     }
-    if (cap.subtitulo) {
-      const sub = crear('h3', 'subtitulo', cap.subtitulo);
-      sub.dataset.anim = '';
-      texto.append(sub);
-    }
 
-    if (cap.cifras?.length) {
-      const ul = crear('ul', 'cifras');
-      if (cap.cifras.length >= 4) ul.classList.add('cifras-muchas');
+    if (cap.cifras.length) {
+      const ul = crear('ul', `cifras cifras-${cap.cifras.length}`);
       ul.setAttribute('aria-label', 'Cifras');
       // Si todas las cifras comparten la leyenda (mismo tramo y n), va una sola vez debajo.
       const leyendas = new Set(cap.cifras.map((k) => leyendaDe(cifras?.get?.(k))));
-      const compartida = cap.cifras.length > 1 && leyendas.size === 1 ? [...leyendas][0] : '';
+      const compartida = leyendas.size === 1 ? [...leyendas][0] : '';
       for (const clave of cap.cifras) ul.append(crearCifra(clave, cifras, { sinLeyenda: Boolean(compartida) }));
       texto.append(ul);
       if (compartida) {
         const p = crear('p', 'cifras-leyenda', compartida);
-        ul.lastElementChild._leyenda = p; // se revela con la última cifra
+        p.dataset.anim = '';
         texto.append(p);
       }
     }
 
-    if (cap.puntos?.length) texto.append(crearCallouts(cap, alTocarCallout));
+    if (cap.puntos.length) texto.append(crearCallouts(cap, alTocarCallout));
 
     const figura = crearFigura(cap, { datos, figuras });
     if (figura) { lado.append(figura); sec.classList.add('con-figura'); }
 
-    if (cap.detalle?.length) {
-      const enEscena = cap.disposicion ? cap.disposicion === 'tarjetas-escena' : !figura;
+    if (cap.detalle.length) {
+      const enBanda = cap.disposicion ? cap.disposicion === 'tarjetas-escena' : !figura;
       const ul = crearTarjetas(cap.detalle);
-      if (enEscena) { lado.append(ul); sec.classList.add('tarjetas-escena'); } else texto.append(ul);
-      if (cap.detalle.length >= 4 && !enEscena) ul.classList.add('tarjetas-compactas');
+      if (enBanda) { banda.append(ul); sec.classList.add('con-banda'); } else texto.append(ul);
     }
 
-    if (cap.lista?.length) texto.append(crearLista(cap.lista));
-
     if ((especial === 'portada' || especial === 'cierre') && meta.integrantes?.length && (especial === 'portada' || !capitulos.some((c) => c.seccion === 'portada'))) {
+      // Lo que es solo un marcador [PENDIENTE] lleva `.solo-pendiente`: con
+      // ?limpio=1 desaparece sin dejar separadores ni filas vacías.
+      const soloPendiente = (t) => new RegExp(`^\\s*${PENDIENTE_RE.source}\\s*$`).test(String(t ?? ''));
       const ul = crear('ul', 'integrantes');
       ul.dataset.anim = '';
       ul.setAttribute('aria-label', 'Equipo');
       for (const p of meta.integrantes) {
         const li = document.createElement('li');
-        li.append(crear('span', 'integrante-nombre', p.nombre));
-        const dato = [p.carrera, p.universidad].filter(Boolean).join(' · ');
-        if (dato) li.append(crear('span', 'integrante-dato', dato));
+        const nombre = crear('span', 'integrante-nombre', p.nombre);
+        if (soloPendiente(p.nombre)) nombre.classList.add('solo-pendiente');
+        li.append(nombre);
+        const partes = [p.carrera, p.universidad].filter(Boolean);
+        if (partes.length) {
+          const dato = crear('span', 'integrante-dato');
+          for (const t of partes) {
+            const parte = crear('span', 'integrante-parte', t);
+            if (soloPendiente(t)) parte.classList.add('solo-pendiente');
+            dato.append(parte);
+          }
+          li.append(dato);
+        }
+        const todo = [p.nombre, ...partes];
+        if (todo.every(soloPendiente)) li.classList.add('solo-pendiente');
         ul.append(li);
       }
+      if ([...ul.children].every((li) => li.classList.contains('solo-pendiente'))) ul.classList.add('solo-pendiente');
       texto.append(ul);
     }
 
     sec.append(texto);
     if (lado.childElementCount) sec.append(lado);
+    if (banda.childElementCount) sec.append(banda);
 
     if (especial) {
       const pista = crear('p', 'pista');
@@ -500,7 +497,6 @@ export function renderizarCapitulos({ main, meta = {}, secciones = [], capitulos
       sec.append(pista);
     }
 
-    numerarPasos(sec, cap);
     main.append(sec);
     return sec;
   });
@@ -508,244 +504,185 @@ export function renderizarCapitulos({ main, meta = {}, secciones = [], capitulos
   return elementos;
 }
 
-// ---------- Pasos ----------
-function modoDe(cap, grupo, n) {
-  const m = cap.pasos?.[grupo];
-  if (m === 'uno' || m === 'pares' || m === 'todos') return m;
-  if (grupo === 'cifras') return n <= 3 ? 'uno' : 'todos';
-  if (grupo === 'tarjetas') return n <= 4 ? 'uno' : 'pares';
-  return 'uno';
-}
-
-function agrupar(elementos, modo) {
-  if (modo === 'todos') return [elementos];
-  const tam = modo === 'pares' ? 2 : 1;
-  const grupos = [];
-  for (let i = 0; i < elementos.length; i += tam) grupos.push(elementos.slice(i, i + tam));
-  return grupos;
-}
-
-// Asigna `data-paso` (1…n) y guarda en `sec._pasos` la lista de pasos con su
-// rótulo (para las notas) y, en los callouts, el punto de la escena.
-export function numerarPasos(sec, cap) {
-  const pasos = [];
-  const cifras = [...sec.querySelectorAll('.cifra')];
-  for (const g of agrupar(cifras, modoDe(cap, 'cifras', cifras.length))) {
-    if (g.at(-1)?._leyenda) g.push(g.at(-1)._leyenda);
-    const etiquetas = g.map((li) => li.querySelector?.('.cifra-etiqueta')?.textContent).filter(Boolean);
-    pasos.push({ tipo: 'cifras', elementos: g, rotulo: etiquetas.length > 1 ? 'Cifras' : `Cifra: ${etiquetas[0] ?? ''}`.trim() });
+// Pantallas sin figura que no entran en la ventana: primero las tarjetas pasan
+// de la banda al pie de la columna opuesta al texto (debajo del vehículo) y, si
+// todavía no entra, también los callouts. Se mide con la tipografía ya
+// cargada; al redimensionar se vuelve a medir desde la disposición original.
+export function ajustarDisposicion(sec) {
+  if (sec.classList.contains('con-figura')) return;
+  const texto = sec.querySelector(':scope > .capitulo-texto');
+  const tarjetas = sec.querySelector(':scope .tarjetas');
+  const callouts = sec.querySelector(':scope .callouts');
+  if (!texto || (!tarjetas && !callouts)) return;
+  let lado = sec.querySelector(':scope > .capitulo-lado');
+  let banda = sec.querySelector(':scope > .capitulo-banda');
+  if (!lado) { lado = crear('div', 'capitulo-lado'); texto.after(lado); }
+  if (!banda) { banda = crear('div', 'capitulo-banda'); lado.after(banda); }
+  if (callouts) {
+    // Marca del lugar original de los callouts en la columna de texto.
+    sec._marcaCallouts ??= document.createComment('callouts');
+    if (!sec._marcaCallouts.parentNode) callouts.before(sec._marcaCallouts);
+    sec._marcaCallouts.after(callouts);
   }
-  const callouts = [...sec.querySelectorAll('.callout')];
-  callouts.forEach((li, k) => {
-    pasos.push({ tipo: 'callout', elementos: [li], punto: li.dataset.punto, indiceCallout: k, totalCallouts: callouts.length, rotulo: li.querySelector('.callout-titulo')?.textContent ?? '' });
-  });
-  const figura = sec.querySelector('.capitulo-figura');
-  if (figura) pasos.push({ tipo: 'figura', elementos: [figura], rotulo: `Figura: ${cap.figura?.alt ?? ''}`.trim() });
-  const tarjetas = [...sec.querySelectorAll('.tarjeta')];
-  for (const g of agrupar(tarjetas, modoDe(cap, 'tarjetas', tarjetas.length))) {
-    pasos.push({ tipo: 'tarjetas', elementos: g, rotulo: g.map((li) => li.querySelector('.tarjeta-titulo')?.textContent).join(' · ') });
-  }
-  for (const li of sec.querySelectorAll('.lista-paso')) {
-    pasos.push({ tipo: 'lista', elementos: [li], rotulo: li.querySelector('.lista-texto')?.textContent ?? '' });
-  }
-  pasos.forEach((p, i) => p.elementos.forEach((el) => { el.dataset.paso = String(i + 1); el.classList.add('paso'); }));
-  sec._pasos = pasos;
-  sec._paso = pasos.length;
-  return pasos;
-}
-
-function tween(els, visible, { instantaneo = false, retraso = 0, escalonado = 0.07 } = {}) {
-  if (!els.length) return;
-  const gsap = window.gsap;
-  if (!gsap) {
-    for (const el of els) { el.style.opacity = visible ? '' : '0'; el.style.visibility = visible ? '' : 'hidden'; }
+  if (tarjetas) banda.append(tarjetas);
+  sec.classList.toggle('con-banda', Boolean(tarjetas));
+  sec.classList.remove('tarjetas-lado', 'callouts-lado');
+  if (sec.classList.contains('centrado') && tarjetas) {
+    // Pantalla `centrado`: las tarjetas van siempre en la columna del vehículo, centradas (ver styles.css).
+    lado.append(tarjetas);
+    sec.classList.remove('con-banda');
+    sec.classList.add('tarjetas-lado');
     return;
   }
-  gsap.killTweensOf(els);
-  if (instantaneo) {
-    gsap.set(els, visible ? { autoAlpha: 1, y: 0, clearProps: 'transform' } : { autoAlpha: 0, y: 16 });
-    return;
+  const entra = () => sec.scrollHeight <= Math.ceil(innerHeight) + 1;
+  if (entra()) return;
+  if (tarjetas) {
+    lado.append(tarjetas);
+    sec.classList.remove('con-banda');
+    sec.classList.add('tarjetas-lado');
+    if (entra()) return;
   }
-  if (visible) gsap.to(els, { autoAlpha: 1, y: 0, duration: 0.5, delay: retraso, stagger: escalonado, ease: 'power3.out', clearProps: 'transform' });
-  else gsap.to(els, { autoAlpha: 0, y: 12, duration: 0.3, ease: 'power2.in' });
-}
-
-function alRevelar(paso, { instantaneo }) {
-  if (paso.tipo === 'cifras') for (const li of paso.elementos) if (li.classList.contains('cifra')) contar(li, { instantaneo });
-  // Figuras de figuras.js: las filas (<g class="fila" style="--i:n">) entran escalonadas por CSS.
-  if (paso.tipo === 'figura') paso.elementos[0].classList.toggle('figura-entrando', !instantaneo);
-  if (paso.tipo === 'figura') requestAnimationFrame(() => paso.elementos[0].classList.add('figura-visible'));
-}
-
-// Oculta todos los pasos sin animación (estado de llegada por teclado).
-export function prepararPasos(sec) {
-  for (const p of sec._pasos ?? []) tween(p.elementos, false, { instantaneo: true });
-  sec.querySelectorAll('.capitulo-figura').forEach((f) => f.classList.remove('figura-visible'));
-  sec.querySelectorAll('.callout.activo').forEach((li) => li.classList.remove('activo'));
-  sec._paso = 0;
-}
-
-export function mostrarPaso(sec, k, { instantaneo = false } = {}) {
-  const paso = sec._pasos?.[k - 1];
-  if (!paso) return null;
-  tween(paso.elementos, true, { instantaneo });
-  alRevelar(paso, { instantaneo });
-  sec.querySelectorAll('.callout.activo').forEach((li) => li.classList.remove('activo'));
-  if (paso.tipo === 'callout') paso.elementos[0].classList.add('activo');
-  sec._paso = k;
-  // Si el paso queda fuera de la pantalla (pantallas bajas), traerlo.
-  const r = paso.elementos.at(-1).getBoundingClientRect();
-  if (r.bottom > innerHeight - 24 || r.top < 0) {
-    paso.elementos.at(-1).scrollIntoView({ block: 'nearest', behavior: instantaneo ? 'auto' : 'smooth' });
+  if (callouts) {
+    lado.prepend(callouts);
+    sec.classList.add('callouts-lado');
   }
-  return paso;
 }
 
-export function ocultarPaso(sec, k) {
-  const paso = sec._pasos?.[k - 1];
-  if (!paso) return null;
-  tween(paso.elementos, false);
-  paso.elementos.forEach((li) => li.classList.remove('activo', 'figura-visible'));
-  sec._paso = k - 1;
-  const anterior = sec._pasos[k - 2];
-  if (anterior?.tipo === 'callout') anterior.elementos[0].classList.add('activo');
-  return anterior ?? null;
-}
-
-// Revela todos los pasos (llegada por scroll: en cascada; reducido: de una vez).
-export function mostrarTodo(sec, { instantaneo = false, retraso = 0.35 } = {}) {
-  const pasos = sec._pasos ?? [];
-  sec.querySelectorAll('.callout.activo').forEach((li) => li.classList.remove('activo'));
-  pasos.forEach((p, i) => {
-    tween(p.elementos, true, { instantaneo, retraso: retraso + i * 0.12, escalonado: 0.05 });
-    alRevelar(p, { instantaneo });
-  });
-  sec._paso = pasos.length;
-}
-
-// ---------- Entrada y salida de la cabecera ----------
-function cabecera(sec) {
+// ---------- Entrada y salida ----------
+function partes(sec) {
   return {
-    lineas: sec.querySelectorAll('.titular .linea-interior'),
-    resto: sec.querySelectorAll('[data-anim]'),
-    contenedores: sec.querySelectorAll('.capitulo-texto, .capitulo-lado, .pista'),
+    lineas: [...sec.querySelectorAll('.titular .linea-interior')],
+    resto: [...sec.querySelectorAll('[data-anim]')],
+    contenedores: [...sec.querySelectorAll('.capitulo-texto, .capitulo-lado, .capitulo-banda, .pista')],
   };
 }
 
+// Estado previo a la entrada: todo oculto (los contenedores, visibles).
 export function prepararEntrada(sec) {
   const gsap = window.gsap;
   if (!gsap) return;
-  const { lineas, resto, contenedores } = cabecera(sec);
+  const { lineas, resto, contenedores } = partes(sec);
   sec._tl?.kill();
+  gsap.killTweensOf([...lineas, ...resto, ...contenedores]);
   gsap.set(contenedores, { autoAlpha: 1 });
   gsap.set(lineas, { yPercent: 105 });
-  gsap.set(resto, { autoAlpha: 0, y: 24 });
+  gsap.set(resto, { autoAlpha: 0, y: 20 });
+  sec.querySelectorAll('.capitulo-figura').forEach((f) => f.classList.remove('figura-visible'));
+  marcarCallout(sec, null);
 }
 
+// Al revelar: conteo de cifras y filas escalonadas de la figura (CSS).
+function alRevelar(el, { instantaneo }) {
+  if (el.classList.contains('cifra')) contar(el, { instantaneo });
+  if (el.classList.contains('capitulo-figura')) {
+    el.classList.toggle('figura-entrando', !instantaneo);
+    if (instantaneo) el.classList.add('figura-visible');
+    else requestAnimationFrame(() => el.classList.add('figura-visible'));
+  }
+}
+
+// Toda la pantalla en una cascada corta: titular por líneas y el resto en orden
+// del documento (≈ 1,15 s en total, haya los elementos que haya).
 export function animarEntrada(sec, { movimientoReducido } = {}) {
   const gsap = window.gsap;
-  if (!gsap) return;
-  const { lineas, resto, contenedores } = cabecera(sec);
-  sec._tl?.kill();
-  if (movimientoReducido) { gsap.set([...lineas, ...resto, ...contenedores], { clearProps: 'all' }); return; }
+  if (!gsap || movimientoReducido) { mostrarTodo(sec, { instantaneo: true }); return; }
   prepararEntrada(sec);
-  sec._tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-    .to(lineas, { yPercent: 0, duration: 0.9, stagger: 0.08 }, 0)
-    .to(resto, { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.06, clearProps: 'transform' }, 0.2);
+  const { lineas, resto } = partes(sec);
+  const inicio = 0.12;
+  const escalon = Math.min(0.07, 0.5 / Math.max(1, resto.length - 1));
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.to(lineas, { yPercent: 0, duration: 0.6, stagger: 0.06 }, 0);
+  resto.forEach((el, k) => {
+    const t = inicio + k * escalon;
+    tl.to(el, { autoAlpha: 1, y: 0, duration: 0.45, clearProps: 'transform' }, t);
+    tl.call(() => alRevelar(el, { instantaneo: false }), null, t);
+  });
+  sec._tl = tl;
 }
 
-// Al salir: se desvanece y queda lista para re-reproducir la entrada.
+// Todo visible sin animar (movimiento reducido, pantalla ya activa, impresión).
+export function mostrarTodo(sec) {
+  const gsap = window.gsap;
+  const { lineas, resto, contenedores } = partes(sec);
+  sec._tl?.kill();
+  if (gsap) {
+    gsap.killTweensOf([...lineas, ...resto, ...contenedores]);
+    gsap.set([...lineas, ...resto, ...contenedores], { clearProps: 'opacity,visibility,transform' });
+  } else {
+    for (const el of resto) { el.style.opacity = ''; el.style.visibility = ''; }
+  }
+  resto.forEach((el) => alRevelar(el, { instantaneo: true }));
+}
+
+// Al salir: fundido breve (0,25 s) y queda lista para re-reproducir la entrada.
+// Nunca bloquea: la entrada siguiente mata esta línea de tiempo.
 export function animarSalida(sec, { movimientoReducido } = {}) {
   const gsap = window.gsap;
   if (!gsap || movimientoReducido) return;
-  const { contenedores } = cabecera(sec);
+  const { contenedores } = partes(sec);
   sec._tl?.kill();
   sec._tl = gsap.timeline()
-    .to(contenedores, { autoAlpha: 0, duration: 0.35, ease: 'power2.in' })
-    .add(() => { prepararEntrada(sec); prepararPasos(sec); });
+    .to(contenedores, { autoAlpha: 0, duration: 0.25, ease: 'power2.in' })
+    .add(() => prepararEntrada(sec));
 }
 
-// ---------- Índice ----------
+// ---------- Índice (diálogo) ----------
 export function construirIndice({ lista, secciones, capitulos, alElegir }) {
   lista.textContent = '';
-  const principales = capitulos.filter((c) => !c.padre);
-  const grupos = [
-    { numero: 'portada', titulo: 'Portada' },
-    ...secciones.map((s) => ({ numero: s.numero, titulo: s.titulo })),
-    { numero: 'cierre', titulo: 'Cierre' },
-  ];
-  for (const g of grupos) {
-    const caps = principales.filter((c) => c.seccion === g.numero);
-    if (!caps.length) continue;
-    const li = crear('li', 'indice-seccion');
-    li.dataset.seccion = g.numero;
-    const boton = crear('button', 'indice-seccion-boton');
-    boton.type = 'button';
-    boton.append(
-      crear('span', 'indice-numero', SECCIONES_ESPECIALES[g.numero] ? '—' : g.numero),
-      crear('span', 'indice-seccion-titulo', g.titulo),
+  for (const c of capitulos) {
+    const li = document.createElement('li');
+    const b = crear('button', 'indice-capitulo');
+    b.type = 'button';
+    b.dataset.capitulo = c.id;
+    const seccion = tituloSeccion(c.seccion, secciones);
+    b.append(
+      crear('span', 'indice-capitulo-numero', c.numeroPantalla ?? ''),
+      crear('span', 'indice-capitulo-titulo', textoTitular(c) || c.id),
+      crear('span', 'indice-capitulo-seccion', SECCIONES_ESPECIALES[c.seccion] ? seccion : `${c.seccion} · ${seccion}`),
     );
-    boton.addEventListener('click', () => alElegir(caps[0].id));
-    li.append(boton);
-    if (caps.length > 1 || !SECCIONES_ESPECIALES[g.numero]) {
-      const ul = crear('ol', 'indice-capitulos');
-      for (const c of caps) {
-        const item = document.createElement('li');
-        const b = crear('button', 'indice-capitulo');
-        b.type = 'button';
-        b.dataset.capitulo = c.id;
-        b.append(crear('span', 'indice-capitulo-numero', c.numeroPantalla ?? ''), crear('span', null, textoTitular(c) || c.id));
-        b.addEventListener('click', () => alElegir(c.id));
-        item.append(b);
-        ul.append(item);
-      }
-      li.append(ul);
-    }
+    b.addEventListener('click', () => alElegir(c.id));
+    li.append(b);
     lista.append(li);
   }
 }
 
 export function marcarIndice(lista, cap) {
-  const id = cap.padre ?? cap.id;
   lista.querySelectorAll('.indice-capitulo').forEach((b) => {
-    if (b.dataset.capitulo === id) b.setAttribute('aria-current', 'true');
+    if (b.dataset.capitulo === cap.id) b.setAttribute('aria-current', 'true');
     else b.removeAttribute('aria-current');
   });
-  lista.querySelectorAll('.indice-seccion').forEach((li) => li.classList.toggle('actual', li.dataset.seccion === cap.seccion));
 }
 
-// ---------- Pie: «09 / 18», sección y pasos ----------
-export function actualizarPie({ numero, seccion, pasos }, cap, secciones, total) {
+// ---------- Pie: «09 / 14» y sección ----------
+export function actualizarPie({ numero, seccion }, cap, secciones, total) {
   const especial = SECCIONES_ESPECIALES[cap.seccion];
   numero.textContent = `${cap.numeroPantalla ?? ''} / ${total}`;
   const titulo = tituloSeccion(cap.seccion, secciones);
   seccion.textContent = especial ? titulo : `${cap.seccion} · ${titulo}`;
   seccion.setAttribute('aria-label', especial ? titulo : `Sección ${cap.seccion} de ${String(secciones.length).padStart(2, '0')}: ${titulo}`);
-  pasos.textContent = '';
 }
 
-export function marcarPasosPie(ol, paso, total) {
-  if (ol.childElementCount !== total) {
-    ol.textContent = '';
-    for (let i = 0; i < total; i++) ol.append(document.createElement('li'));
-  }
-  [...ol.children].forEach((li, i) => li.classList.toggle('hecho', i < paso));
-  ol.hidden = total === 0;
-}
-
-// ---------- Marcas de progreso ----------
-export function construirMarcas(ol, capitulos) {
+// ---------- Riel de progreso: una marca igual por pantalla ----------
+export function construirMarcas(ol, capitulos, alElegir) {
   ol.textContent = '';
-  const n = capitulos.length;
-  capitulos.forEach((c, i) => {
+  capitulos.forEach((c) => {
     const li = document.createElement('li');
-    li.style.top = `${n > 1 ? (i / (n - 1)) * 100 : 0}%`;
-    if (i === 0 || capitulos[i - 1].seccion !== c.seccion) li.classList.add('seccion-inicio');
-    if (c.padre) li.classList.add('continuacion');
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'marca';
+    b.dataset.capitulo = c.id;
+    const nombre = `${c.numeroPantalla} · ${textoTitular(c) || c.id}`;
+    b.title = nombre;
+    b.setAttribute('aria-label', nombre);
+    b.addEventListener('click', () => alElegir(c.id));
+    li.append(b);
     ol.append(li);
   });
 }
 
 export function marcarProgreso(ol, indice) {
-  [...ol.children].forEach((li, i) => li.classList.toggle('pasado', i <= indice));
+  [...ol.querySelectorAll('.marca')].forEach((b, i) => {
+    if (i === indice) b.setAttribute('aria-current', 'step');
+    else b.removeAttribute('aria-current');
+  });
 }

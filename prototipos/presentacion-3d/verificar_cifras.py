@@ -6,7 +6,7 @@ Uso, desde la raíz del repo:
 
 Lee DEFINICIONES de cifras.js con expresiones regulares simples, resuelve cada
 `ruta` en su JSON (misma sintaxis que cifras.js: puntos, índices [n], `a/b`,
-`a-b`, `a#largo`, `a#cuenta:campo`) y falla si algún respaldo difiere. Además
+`a-b`, `a#largo`, `a#cuenta:campo`, `a#n`) y falla si algún respaldo difiere. Además
 comprueba que el formato es-AR de algunas cifras coincida con lo publicado en
 docs/entrega/. Solo biblioteca estándar; no lee el CSV ni datos por VIN.
 """
@@ -64,6 +64,30 @@ PUBLICADAS = {
     "detector.bajaMitad": "66,9 %",
     "detector.alarmas": "7",
     "detector.prueba.alarmas": "16",
+    # Solución elegida por precisión (02-2, apartado B; 06).
+    "seleccion.n": "15.279",
+    "confirmacion.n": "4.626",
+    "catboost.seleccion": "18,4 %",
+    "catboost.tasaFijaSeleccion": "12,7 %",
+    "catboost.azarSeleccion": "11,2 %",
+    "catboost.confirmacion": "17,3 %",
+    "catboost.tasaFijaConfirmacion": "20,4 %",
+    "alternativas.n": "54",
+    # Azar en confirmación: solo en precision.json (azar.confirmacion); los
+    # borradores de docs/entrega/ no lo publican.
+    "catboost.azarConfirmacion": "8,8 %",
+    # Lectura 2 de la prueba final (CatBoost; research/opcion-mas-precisa.md).
+    "catboost.prueba.precision": "12,0 %",
+    "catboost.prueba.precisionRango": "9,2–14,8 %",
+    "catboost.prueba.azar": "8,2 %",
+    "catboost.prueba.veces": "1,45 ×",
+    "catboost.prueba.vecesRango": "1,14–1,76 ×",
+    # Lectura 3 (Random Forest): solo en prueba-final.json, corridas[3]; los
+    # borradores de docs/entrega/ todavía no la publican.
+    "rf.prueba.precision": "11,8 %",
+    "rf.prueba.precisionRango": "9,2–14,6 %",
+    "rf.prueba.veces": "1,44 ×",
+    "rf.prueba.vecesRango": "1,13–1,76 ×",
 }
 
 BLOQUE = re.compile(r"\{\s*clave:\s*'([^']+)'(.*?)\},\s*$", re.S | re.M)
@@ -117,6 +141,11 @@ def resolver(objeto, ruta: str):
     base, _, op = ruta.partition("#")
     if op == "largo":
         return len(leer_ruta(objeto, base))
+    if op == "n":
+        m = re.search(r"\bn = (\d+)\b", str(leer_ruta(objeto, base)))
+        if not m:
+            raise ValueError(f"sin «n = » en {base}")
+        return int(m.group(1))
     if op.startswith("cuenta:"):
         nombre = op[len("cuenta:"):]
         return sum(1 for x in leer_ruta(objeto, base) if x[nombre] is True)
@@ -147,7 +176,6 @@ def formatear(formato: str, v) -> str:
         "puntos1": lambda: numero_es_ar(v * 100, 1) + " puntos",
         "puntos2": lambda: numero_es_ar(v * 100, 2) + " puntos",
         "segundos1": lambda: numero_es_ar(v, 1) + " s",
-        "usd1": lambda: "USD " + numero_es_ar(v, 1),
     }[formato]()
 
 

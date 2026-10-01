@@ -1,6 +1,6 @@
 # Presentación 3D interactiva
 
-Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas con pasos. Todo el contenido queda a la vista: no hay nada que abrir. Sigue el [guion de la presentación](../../docs/entrega/guion-presentacion.md) y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
+Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 16 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Sigue el [guion de la presentación](../../docs/entrega/guion-presentacion.md) y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
 
 Es un **complemento** de la presentación oficial (.pptx sobre el template de Ford), no la reemplaza. El contenido sale de los borradores de [`docs/entrega/`](../../docs/entrega/) y las cifras, de los agregados de [`solucion/resultados/`](../../solucion/resultados/).
 
@@ -18,27 +18,35 @@ y abrir <http://localhost:8000/prototipos/presentacion-3d/>. En Claude Code tamb
 
 ## Cómo se recorre
 
-Cada pantalla tiene una cabecera (antetítulo, titular y bajada) y una serie de **pasos**: cifras, callouts (los puntos de la escena), figura, tarjetas y lista, en ese orden.
+Cada pantalla tiene antetítulo, titular, bajada y, según el caso, hasta 3 cifras, callouts (los puntos de la escena), una figura y hasta 3 tarjetas. Está pensada para proyector: pocas palabras, letra grande (referencia 1920×1080, titular de 108 px, nada por debajo de 18 px) y todo escala en proporción en 1366×768.
 
-- **Con scroll** (rueda, trackpad, barra): al llegar a una pantalla, todos sus pasos aparecen en cascada.
-- **Con teclado o control remoto:** al avanzar a una pantalla entra solo la cabecera; cada `→` revela un paso y, con todos a la vista, el siguiente `→` pasa a la pantalla siguiente. `←` deshace pasos y, en el primero, vuelve a la pantalla anterior completa.
-- Al revelar un callout, la escena enfoca ese punto; en la línea de producción el vehículo avanza hasta esa estación. Un click en un callout o en un punto 3D lleva a ese paso.
-- Los capítulos densos siguen en **pantallas de continuación** (numeradas «09b»), que no aparecen en el índice.
-- La URL guarda pantalla y paso (`#hoja/2`): al recargar se vuelve al mismo lugar. Sin paso (`#hoja`), la pantalla se abre completa.
-- El pie muestra `09 / 18` (pantalla / última pantalla), la sección y un punto por paso.
+- **Un toque = toda la pantalla.** `→` (o espacio, PgDn, ↓) pasa a la pantalla siguiente y muestra todo su contenido con una entrada en cascada corta (≈ 1,2 s); `←` (o PgUp, ↑) vuelve a la anterior, también completa. Las pulsaciones rápidas se encadenan sin esperar a que termine la animación.
+- **Con scroll** (rueda, trackpad, barra): al llegar a una pantalla entra con la misma cascada.
+- En las pantallas de la **línea de producción** (`proceso`, `pregunta`, `aprende`) el vehículo recorre la línea solo al llegar y la escena enfoca cada estación con callout al pasar por ella. La duración sale del campo `recorrido` de cada pantalla (por defecto 6 s): `proceso` tarda ≈ 28 s para que se aprecie cada estación, `pregunta` ≈ 18 s y `aprende` 11 s (la línea mide ≈ 162 unidades, así que 11 s equivalen a la velocidad de antes). En las pantallas con varios puntos sobre el vehículo, el foco rota entre ellos cada 3 s. El panel de escaneo del túnel de Auditoría Adicional (visible en `proceso` y `aprende`) hace un ciclo de ida y vuelta cada ≈ 14 s, con las rayas casi quietas (`VELOCIDAD_ESCANEO` y `VELOCIDAD_RAYAS` en `escena/fabrica.js`). Un click en un callout o en un punto 3D enfoca ese punto.
+- La URL guarda la pantalla (`#hoja`): al recargar se vuelve al mismo lugar.
+- El pie muestra `07 / 15` (pantalla / última pantalla; se numera desde `00`) y la sección. A la derecha, el **riel**: una marca igual por pantalla (la actual, en azul); un clic en una marca va a esa pantalla y su nombre aparece al pasar el mouse.
+- Las notas del orador (`N`) muestran las notas, el **respaldo para preguntas** (la `ampliacion` de la pantalla, que no se proyecta) y el título de la pantalla siguiente.
+
+Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `validacion` · 05 `alternativas` · 06 `solucion` · 07 `resultado` · 08 `donde-mirar` · 09 `aprende` · 10 `seguridad` · 11 `factibilidad` · 12 `hoja` · 13 `futuro` · 14 `conclusiones` · 15 cierre. La **implementación** va junta al final del cuerpo (12 y 13, sección 05): son las pantallas donde se muestran las capturas de la aplicación (la hoja y la plataforma).
+
+**La solución y el resultado** son de CatBoost con atributos del código, reentrenado cada 5 días (vida media 15 días, semilla 1):
+
+- `alternativas` cuenta la elección por precisión en cinco bloques de tiempo (propuesta aprobada el 30/09; [`precision.json`](../../solucion/resultados/precision.json)): 54 alternativas, un punto por alternativa en la figura `seleccion`, con CatBoost, el azar y el oráculo rotulados y las demás anónimas.
+- `solucion` presenta CatBoost con sus límites: es la más precisa de una familia que empata y en el último bloque (confirmación) baja, dentro del ruido.
+- `resultado` muestra solo la lectura preregistrada de CatBoost en la prueba final (`corridas[1]` de [`prueba-final.json`](../../solucion/resultados/prueba-final.json)), por tramo, y advierte que es una lectura más débil porque el equipo ya conocía otra lectura previa. Las otras lecturas quedan solo en el respaldo del orador (`ampliacion` de `resultado`).
+- Las piezas de «dónde mirar», mínimo por código, detector y la hoja de ensayo del Día 190 se evaluaron con el predictor de la primera etapa; sus rótulos lo dicen y no se atribuyen a CatBoost.
 
 ## Atajos de teclado
 
 | Tecla | Acción |
 | --- | --- |
-| → / espacio / PgDn | Paso siguiente (o pantalla siguiente si ya están todos) |
-| ← / Shift+espacio / PgUp | Paso anterior (en 0, pantalla anterior completa) |
-| ↓ / ↑ | Recorre la pantalla si no entra en la ventana; si no, paso siguiente / anterior |
-| Shift+→ / Shift+← | Saltar a la pantalla siguiente / anterior, completa |
+| → / espacio / PgDn | Pantalla siguiente, con todo su contenido |
+| ← / Shift+espacio / PgUp | Pantalla anterior, completa |
+| ↓ / ↑ | Igual que → / ← (si una pantalla no entrara en la ventana, primero la recorren) |
 | Inicio / Fin | Portada / cierre |
-| 0–6 | Ir a la portada (0) o al separador 01–06 |
-| I / Esc | Abrir o cerrar el índice |
-| N | Abrir las notas del orador en otra ventana (muestran paso, total y próximo paso; sus botones también avanzan) |
+| 0–6 | Ir a la portada (0) o a la primera pantalla de la sección 01–06 |
+| I / Esc | Abrir o cerrar el índice (las 16 pantallas) |
+| N | Abrir las notas del orador en otra ventana (notas, respaldo para preguntas y pantalla siguiente; sus botones también avanzan) |
 | F | Pantalla completa |
 | O | Activar o desactivar la órbita con el mouse (en los capítulos que la permiten) |
 | L | Calidad de la escena: alta → bajo consumo → automática |
@@ -47,7 +55,7 @@ Cada pantalla tiene una cabecera (antetítulo, titular y bajada) y una serie de 
 
 | Parámetro | Qué hace |
 | --- | --- |
-| `?nucleo=1` | Solo los capítulos de la versión núcleo (12 a 15 minutos) del guion; las continuaciones siguen a su capítulo |
+| `?nucleo=1` | Solo los capítulos con `nucleo: true` (hoy son las 16 pantallas) |
 | `?estatico=1` | Sin WebGL: diapositivas sobre un fondo CSS. Para proyectores lentos o si falla la escena |
 | `?calidad=alta` / `baja` / `auto` | Calidad inicial de la escena (la tecla `L` la cambia en vivo). `baja` es el modo de bajo consumo para notebook a batería |
 | `?limpio=1` | Oculta los chips `[PENDIENTE: …]` (el índice sigue contando cuántos hay) |
@@ -55,11 +63,11 @@ Cada pantalla tiene una cabecera (antetítulo, titular y bajada) y una serie de 
 
 Los parámetros se combinan: `?nucleo=1&limpio=1&calidad=baja`.
 
-Con **movimiento reducido** activado en el sistema operativo no hay pasos ni animaciones: cada pantalla se ve completa y las flechas pasan de pantalla en pantalla. Al **imprimir** (o guardar como PDF) sale una pantalla por página, en claro y con todo visible.
+Con **movimiento reducido** activado en el sistema operativo no hay animaciones: cada pantalla aparece completa de una vez y el vehículo queda quieto en su posición final. Al **imprimir** (o guardar como PDF) sale una pantalla por página, en claro y con todo visible.
 
 ## Figuras, ilustraciones y capturas
 
-- **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (comparación de alternativas, particiones, veces el azar en la prueba final, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo. Los colores salen de las variables `--figura-*` de `styles.css`.
+- **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (elección por precisión `seleccion`, particiones, veces el azar de CatBoost en la prueba final, comparación de alternativas en validación, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo cuando lo declara; `seleccion` y `veces_azar_prueba_final` no tienen respaldo (el SVG del informe muestra otra lectura) y, si no se pueden dibujar, la pantalla queda sin figura. Los colores salen de las variables `--figura-*` de `styles.css`.
 - **Ilustraciones a mano:** `assets/ilustraciones/` (proceso, solución y esquemas sin datos de la hoja y de la plataforma), versionadas e insertadas en línea para que tomen los colores del tema.
 - **Capturas locales:** la hoja y la plataforma muestran tasas por código, así que sus capturas **no se versionan**. Se generan con `herramientas/capturar_plataforma.ps1` (Windows) o `herramientas/capturar_plataforma.sh`, que dejan `d-hoja.png`, `d-inicio.png`, `d-codigos.png` y `d-alertas.png` en `assets/local/` (fuera de Git); la hoja también toma `assets/local/captura-hoja-dia-260.png` si existe. Sin ellas se ve el esquema sin números con un chip «Captura local pendiente».
 
@@ -100,10 +108,10 @@ Para usar el modelo 3D:
 
 ## Cómo editar el contenido
 
-- **Textos:** [`contenido.js`](contenido.js). `meta` (evento, desafío, equipo, integrantes y fecha), `secciones` (template del Informe) y `capitulos` (uno por pantalla: escena 3D, titular con su `acento`, bajada, cifras, puntos —callouts—, figura, tarjetas en `detalle` y notas del orador). Los titulares deben quedar en menos de 8 palabras.
-- **Pantallas y pasos:** `continuacion: '<id>'` crea una pantalla que sigue a otra y hereda su sección, escena, titular y notas; `pasos` cambia cómo se agrupan (`'uno'`, `'pares'`, `'todos'`); `lista` arma pasos numerados; `disposicion` decide si las tarjetas van con el texto o sobre la escena. El encabezado de `contenido.js` explica cada campo. Cada pantalla debe entrar en 1920×1080 (y razonablemente en 1366×768): si no entra, partirla en una continuación.
+- **Textos:** [`contenido.js`](contenido.js). `meta` (evento, desafío, equipo, integrantes y fecha), `secciones` (template del Informe) y `capitulos` (uno por pantalla: escena 3D, titular con su `acento`, bajada, cifras, puntos —callouts—, figura, tarjetas en `detalle`, `ampliacion` —respaldo para preguntas, solo en las notas— y notas del orador). Los titulares deben quedar en menos de 8 palabras.
+- **Disposición:** el texto va de un lado (≈ 46 % del ancho; `lado: 'izquierda' | 'derecha'`, o por sección) y la figura o el vehículo del otro. Sin figura, las tarjetas van en una banda al pie; si así la pantalla no entra en la ventana, pasan al pie de la columna del vehículo (y, si todavía no entra, también los callouts). `disposicion: 'tarjetas-texto' | 'tarjetas-escena'` fuerza dónde van las tarjetas. El encabezado de `contenido.js` explica cada campo. Cada pantalla debe entrar en 1920×1080 sin desbordar: si no entra, recortar texto antes que achicar la letra.
 - **Integrantes:** reemplazar los tres `[PENDIENTE: …]` de `meta.integrantes` por nombre (`Apellido, Nombre`), universidad y carrera. El equipo tiene dos integrantes de informática y uno de industrial.
-- **Escenas y puntos:** los ids válidos están en el contrato de la escena (`escena/escena.js`): `portada`, `linea`, `datos`, `predictor`, `validacion`, `resultado`, `seguridad`, `factibilidad`, `donde-mirar`, `futuro`, `cierre`; puntos `etiqueta-parabrisas`, `carroceria`, `pintura`, `montaje`, `gate-release`, `inspeccion-adicional`, `componente-1` a `componente-3` (zonas ilustrativas; los componentes reales están anonimizados) y `playa-despacho`.
+- **Escenas y puntos:** los ids válidos están en el contrato de la escena (`escena/escena.js`): `portada`, `linea`, `datos`, `predictor`, `validacion`, `resultado`, `seguridad`, `factibilidad`, `donde-mirar`, `futuro`, `cierre`; puntos `etiqueta-parabrisas`, `carroceria`, `pintura`, `montaje`, `gate-release`, `inspeccion-adicional`, `componente-1` a `componente-3` (zonas ilustrativas del vehículo; ninguna pantalla las usa hoy: los componentes reales están anonimizados y `donde-mirar` no tiene puntos) y `playa-despacho`.
 - **Figuras:** `figura` acepta `{ tipo: 'js', id, opciones, src }` (figuras.js, con `src` de respaldo), `{ src, respaldo }` (ilustración con respaldo) y `{ tipo: 'local', src: [candidatos], respaldo, pendiente }` (captura local). Los SVG de respaldo de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) se regeneran con el comando de [`solucion/`](../../solucion/README.md), no a mano.
 
 ## Cifras
@@ -118,14 +126,26 @@ python3 prototipos/presentacion-3d/verificar_cifras.py
 
 Falla si algún respaldo difiere de su campo. Correrlo cada vez que se regeneren los resultados o se edite `cifras.js`.
 
+Cifras que se proyectan en las pantallas de la solución:
+
+| Pantalla | Claves | Fuente |
+| --- | --- | --- |
+| `alternativas` | `alternativas.n`, `catboost.seleccion`, `catboost.azarSeleccion` | `precision.json` (`ranking#largo`, `ganadora`, `azar`) |
+| `solucion` | `catboost.seleccion`, `catboost.confirmacion`, `catboost.azarConfirmacion` | `precision.json` (`ganadora`, `azar.confirmacion`) |
+| `resultado` | `catboost.prueba.precision`, `catboost.prueba.azar`, `catboost.prueba.veces` | `prueba-final.json` → `corridas[1]` (CatBoost) |
+
+De [`prueba-final.json`](../../solucion/resultados/prueba-final.json) se proyecta solo `corridas[1]` (preregistro de precisión, CatBoost). `corridas[2]` la repite exactamente y no se lee. Las claves de `corridas[0]` y `corridas[3]` se conservan en `cifras.js` (verificadas contra el JSON) pero no se proyectan; esas lecturas solo aparecen, como texto verificado, en el respaldo del orador de `resultado`. `catboost.azarConfirmacion` y la tercera lectura no figuran en los borradores de `docs/entrega/`: su formato se comprueba solo contra el JSON.
+
 ## Archivos
 
 | Archivo | Qué es |
 | --- | --- |
-| `index.html`, `styles.css`, `ui.js`, `main.js` | Interfaz, pantallas, pasos y navegación |
+| `index.html`, `styles.css`, `ui.js`, `main.js` | Interfaz, pantallas, índice, riel y navegación |
 | `figuras.js` | Figuras de datos en SVG |
 | `herramientas/` | Capturas locales, renders y revisión de figuras |
 | `escena/` | Escena 3D (three.js): vehículo, línea de producción y materiales |
+
+**Orden de la línea (`escena/fabrica.js`, `ESTACIONES`).** Carrocería → Pintura → Montaje → Gate Release → **Playa de despacho** → Auditoría Adicional, como en el proceso real. La playa es una grilla de pickups al costado de la línea (del lado opuesto a la cámara) que empieza en su estación y se extiende hacia adelante: la cámara mira hacia adelante y a la derecha, y el degradado del texto oscurece la izquierda, así que detrás del auto no se vería. Las unidades resaltadas son las seleccionadas (≈ 5 %), y de ahí el auto sigue al túnel de Auditoría Adicional. Para mover una estación se cambia su `x` en `ESTACIONES` (y `FIN_LINEA` si hace falta); el recorrido, la cámara y las duraciones se recalculan solos. Después hay que regenerar los renders del modo estático (`herramientas/renderizar.*`).
 | `contenido.js` | Textos, capítulos y notas del orador |
 | `cifras.js` | Lectura y formato de las cifras, con respaldo |
 | `verificar_cifras.py` | Prueba de los respaldos contra los JSON |
@@ -142,6 +162,6 @@ Cada placeholder tiene el formato `[PENDIENTE: qué falta — fuente esperada]`;
 | `contenido.js` → `meta.integrantes[0..2].universidad` | `[PENDIENTE: Universidad — carátula del Informe]` (×3) | Carátula del Informe |
 | `contenido.js` → `meta.integrantes[0..2].carrera` | `[PENDIENTE: Carrera (informática) — carátula del Informe]` (×2) y `[PENDIENTE: Carrera (industrial) — carátula del Informe]` (×1) | Carátula del Informe |
 | `contenido.js` → capítulo `hoja`, `figura.pendiente` (chip dentro de la figura) | `[PENDIENTE: captura de la hoja del Día 260 (captura-hoja-dia-260.png) — salida local fuera de Git; no se versiona porque muestra tasas por código]` | Salida local de la corrida única |
-| `contenido.js` → capítulo `plataforma`, `figura.pendiente` (chip dentro de la figura) | `[PENDIENTE: capturas del prototipo de plataforma — prototipos/plataforma-web/ (shoot.sh, se generan localmente y no se versionan)]` | `prototipos/plataforma-web/shoot.sh` |
+| `contenido.js` → capítulo `futuro`, `figura.pendiente` (chip dentro de la figura) | `[PENDIENTE: capturas del prototipo de plataforma — prototipos/plataforma-web/ (shoot.sh, se generan localmente y no se versionan)]` | `prototipos/plataforma-web/shoot.sh` |
 
 Las capturas no se versionan: si se muestran, se generan localmente el día de la presentación (ver [Figuras, ilustraciones y capturas](#figuras-ilustraciones-y-capturas)). Mientras falten, el chip se ve en la figura; `?limpio=1` lo oculta. `cifras.js` no tiene cifras pendientes.
