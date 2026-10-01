@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="il-hoja-titulo il-hoja-desc">
+  <title id="il-hoja-titulo">Hoja de códigos prioritarios (esquema)</title>
+  <desc id="il-hoja-desc">Esquema ilustrativo, sin datos, de la hoja de códigos prioritarios en una notebook: una fila por código con cantidad sugerida, tasa con rango, n, veces la tasa general, acumulado y mercado de destino, y el panel «Por qué este código». La captura real se carga localmente porque muestra tasas por código.</desc>
+  <!-- Ilustración a mano: bloques esquemáticos, SIN números ni tasas. Columnas según
+       prototipos/plataforma-web/d-hoja.html. Colores por variables CSS «figura-…». -->
+  <style>
+    .il-fondo { fill: var(--figura-fondo, #00142E); }
+    .il-t { fill: var(--figura-texto, #FFFFFF); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); }
+    .il-tenue { fill: var(--figura-tenue, rgba(255, 255, 255, .72)); }
+    .il-equipo { fill: var(--figura-equipo, #0B1F3A); stroke: var(--figura-borde, rgba(255, 255, 255, .24)); stroke-width: 2; }
+    .il-base { fill: var(--figura-equipo-base, #13294A); stroke: var(--figura-borde, rgba(255, 255, 255, .24)); stroke-width: 2; }
+    .il-pantalla { fill: var(--figura-pantalla, #F0F2F7); }
+    .il-tinta { fill: var(--figura-pantalla-tinta, #00095B); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); }
+    .il-tinta-2 { fill: var(--figura-pantalla-tinta-2, rgba(0, 9, 91, .64)); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); }
+    .il-barra { fill: var(--figura-pantalla-tinta, #00095B); }
+    .il-bloque { fill: var(--figura-pantalla-bloque, rgba(0, 9, 91, .08)); }
+    .il-bloque-2 { fill: var(--figura-pantalla-bloque-2, rgba(0, 9, 91, .22)); }
+    .il-tarjeta { fill: var(--figura-pantalla-tarjeta, #FFFFFF); stroke: var(--figura-pantalla-borde, rgba(0, 9, 91, .12)); stroke-width: 1; }
+    .il-acento { fill: var(--figura-acento, #066FEF); }
+    .il-acento-suave { fill: var(--figura-acento-suave, rgba(6, 111, 239, .16)); }
+    .il-claro { fill: rgba(255, 255, 255, .85); }
+  </style>
+
+  <rect class="il-fondo" width="1200" height="675"/>
+
+  <!-- Notebook -->
+  <rect class="il-equipo" x="170" y="40" width="860" height="530" rx="22"/>
+  <rect class="il-pantalla" x="194" y="64" width="812" height="482" rx="6"/>
+  <path class="il-base" d="M90 574h1020l-34 30H124z"/>
+  <rect class="il-equipo" x="540" y="574" width="120" height="8" rx="4"/>
+
+  <!-- Encabezado de la hoja -->
+  <rect class="il-barra" x="194" y="64" width="812" height="40"/>
+  <rect class="il-claro" x="212" y="78" width="120" height="12" rx="6"/>
+  <text class="il-tinta" x="218" y="140" font-size="20" font-weight="600">Hoja de códigos prioritarios</text>
+  <rect class="il-bloque-2" x="218" y="152" width="200" height="9" rx="4.5"/>
+  <rect class="il-acento" x="866" y="124" width="116" height="26" rx="13"/>
+  <rect class="il-claro" x="884" y="134" width="80" height="6" rx="3"/>
+
+  <!-- Tabla: una fila por código -->
+  <g class="fila" style="--i:0">
+    <rect class="il-tarjeta" x="218" y="176" width="560" height="350" rx="10"/>
+    <rect class="il-bloque" x="218" y="176" width="560" height="44" rx="10"/>
+    <g class="il-tinta-2" font-size="11" font-weight="600">
+      <text x="232" y="202">#</text>
+      <text x="256" y="202">Código</text>
+      <text x="340" y="202">Cantidad</text>
+      <text x="406" y="196">Tasa</text>
+      <text x="406" y="210">(rango 95 %)</text>
+      <text x="494" y="202">n</text>
+      <text x="530" y="196">Veces la</text>
+      <text x="530" y="210">tasa general</text>
+      <text x="614" y="202">Acumulado</text>
+      <text x="692" y="196">Mercado</text>
+      <text x="692" y="210">de destino</text>
+    </g>
+  </g>
+  <g class="fila" style="--i:1">
+    <rect class="il-acento-suave" x="219" y="226" width="558" height="34"/>
+    <rect class="il-acento" x="219" y="226" width="4" height="34"/>
+    <rect class="il-barra" x="256" y="239" width="62" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="340" y="239" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="406" y="239" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="494" y="239" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="530" y="239" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="614" y="239" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="692" y="239" width="60" height="8" rx="4"/>
+  </g>
+  <g class="fila" style="--i:2">
+    <rect class="il-acento-suave" x="219" y="266" width="558" height="34"/>
+    <rect class="il-barra" x="256" y="279" width="56" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="340" y="279" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="406" y="279" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="494" y="279" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="530" y="279" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="614" y="279" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="692" y="279" width="52" height="8" rx="4"/>
+  </g>
+  <g class="fila" style="--i:3">
+    <rect class="il-barra" x="256" y="319" width="66" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="340" y="319" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="406" y="319" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="494" y="319" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="530" y="319" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="614" y="319" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="692" y="319" width="64" height="8" rx="4"/>
+    <rect class="il-bloque" x="232" y="344" width="532" height="1"/>
+    <rect class="il-barra" x="256" y="359" width="58" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="340" y="359" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="406" y="359" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="494" y="359" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="530" y="359" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="614" y="359" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="692" y="359" width="48" height="8" rx="4"/>
+    <rect class="il-bloque" x="232" y="384" width="532" height="1"/>
+    <rect class="il-barra" x="256" y="399" width="64" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="340" y="399" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="406" y="399" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="494" y="399" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="530" y="399" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="614" y="399" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="692" y="399" width="58" height="8" rx="4"/>
+    <rect class="il-bloque" x="232" y="424" width="532" height="1"/>
+    <rect class="il-barra" x="256" y="439" width="52" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="340" y="439" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="406" y="439" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="494" y="439" width="22" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="530" y="439" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="614" y="439" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="692" y="439" width="62" height="8" rx="4"/>
+  </g>
+
+  <!-- Panel lateral -->
+  <g class="fila" style="--i:4">
+    <rect class="il-tarjeta" x="794" y="176" width="188" height="170" rx="10"/>
+    <text class="il-tinta" x="810" y="204" font-size="14" font-weight="600">Por qué este código</text>
+    <rect class="il-bloque-2" x="810" y="222" width="150" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="810" y="240" width="136" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="810" y="258" width="156" height="8" rx="4"/>
+    <rect class="il-acento-suave" x="810" y="282" width="156" height="44" rx="6"/>
+    <rect class="il-acento" x="822" y="300" width="90" height="8" rx="4"/>
+  </g>
+  <g class="fila" style="--i:5">
+    <rect class="il-tarjeta" x="794" y="358" width="188" height="168" rx="10"/>
+    <text class="il-tinta" x="810" y="386" font-size="14" font-weight="600">Unidades sugeridas</text>
+    <rect class="il-bloque-2" x="810" y="406" width="120" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="810" y="426" width="104" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="810" y="446" width="128" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="810" y="466" width="96" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="810" y="486" width="116" height="8" rx="4"/>
+  </g>
+
+  <text class="il-t il-tenue" x="600" y="642" font-size="17" text-anchor="middle">Esquema de la hoja de códigos prioritarios (planilla e imprimible) · sin datos</text>
+</svg>

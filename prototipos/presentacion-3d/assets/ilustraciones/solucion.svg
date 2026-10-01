@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="il-solucion-titulo il-solucion-desc">
+  <title id="il-solucion-titulo">Cómo funciona la solución cada día</title>
+  <desc id="il-solucion-desc">Entradas (programa del día, cupo diario de Calidad de Planta, resultados de auditorías con Día ≤ t−5 desde QLS y catálogo de códigos), recálculo diario (tasa de calibración por código de la alternativa elegida en validación, mínimo por código y detector de cambios) y salidas (hoja de códigos prioritarios en planilla e imprimible con la lista de unidades sugeridas, «dónde mirar» si se sostiene y aviso del detector).</desc>
+  <!-- Ilustración a mano (sin datos). Contenido: solucion/figuras.py, diagrama_solucion.
+       Colores por variables CSS «figura-…»; los valores de respaldo son el tema oscuro Twilight. -->
+  <style>
+    .il-fondo { fill: var(--figura-fondo, #00142E); }
+    .il-t { fill: var(--figura-texto, #FFFFFF); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); }
+    .il-tenue { fill: var(--figura-tenue, rgba(255, 255, 255, .72)); }
+    .il-caja { fill: var(--figura-caja, rgba(255, 255, 255, .06)); stroke: var(--figura-borde, rgba(255, 255, 255, .24)); stroke-width: 1.5; }
+    .il-marco { fill: none; stroke: var(--figura-texto, #FFFFFF); stroke-width: 1.5; stroke-opacity: .6; }
+    .il-caja-acento { fill: var(--figura-acento-suave, rgba(6, 111, 239, .28)); stroke: var(--figura-acento, #066FEF); stroke-width: 2.5; }
+    .il-trazo { fill: none; stroke: var(--figura-tenue, rgba(255, 255, 255, .72)); stroke-width: 2; stroke-linecap: round; }
+    .il-trazo-acento { fill: none; stroke: var(--figura-acento, #066FEF); stroke-width: 3; stroke-linecap: round; }
+    .il-punta { fill: var(--figura-tenue, rgba(255, 255, 255, .72)); }
+    .il-punta-acento { fill: var(--figura-acento, #066FEF); }
+  </style>
+  <defs>
+    <marker id="il-solucion-flecha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="il-punta" d="M0 0L10 5L0 10z"/>
+    </marker>
+    <marker id="il-solucion-flecha-acento" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path class="il-punta-acento" d="M0 0L10 5L0 10z"/>
+    </marker>
+  </defs>
+
+  <rect class="il-fondo" width="1200" height="675"/>
+
+  <text class="il-t" x="48" y="62" font-size="30" font-weight="500">Cómo funciona la solución cada día</text>
+  <text class="il-t il-tenue" x="48" y="94" font-size="18">Entradas, recálculo diario y salidas. El código de catálogo es el único predictor.</text>
+
+  <g class="il-t il-tenue" font-size="14" font-weight="600" letter-spacing="1.2">
+    <text x="48" y="148">ENTRADAS</text>
+    <text x="448" y="148">RECÁLCULO DIARIO</text>
+    <text x="848" y="148">SALIDAS</text>
+  </g>
+
+  <!-- Entradas: x 48–388, alto 92 -->
+  <g class="fila" style="--i:0">
+    <rect class="il-caja" x="48" y="166" width="340" height="96" rx="12"/>
+    <text class="il-t" x="218" y="198" font-size="19" font-weight="600" text-anchor="middle">Programa del día</text>
+    <text class="il-t il-tenue" x="218" y="224" font-size="15" text-anchor="middle">desde producción: código de</text>
+    <text class="il-t il-tenue" x="218" y="244" font-size="15" text-anchor="middle">catálogo de cada unidad</text>
+    <path class="il-trazo" d="M392 214H442" marker-end="url(#il-solucion-flecha)"/>
+  </g>
+  <g class="fila" style="--i:1">
+    <rect class="il-caja" x="48" y="278" width="340" height="96" rx="12"/>
+    <text class="il-t" x="218" y="316" font-size="19" font-weight="600" text-anchor="middle">Cupo diario</text>
+    <text class="il-t il-tenue" x="218" y="344" font-size="15" text-anchor="middle">lo fija Calidad de Planta</text>
+    <path class="il-trazo" d="M392 326H442" marker-end="url(#il-solucion-flecha)"/>
+  </g>
+  <g class="fila" style="--i:2">
+    <rect class="il-caja" x="48" y="390" width="340" height="96" rx="12"/>
+    <text class="il-t" x="218" y="428" font-size="19" font-weight="600" text-anchor="middle">Resultados de auditorías</text>
+    <text class="il-t il-tenue" x="218" y="456" font-size="15" text-anchor="middle">desde QLS, solo con Día ≤ t−5</text>
+    <path class="il-trazo" d="M392 438H442" marker-end="url(#il-solucion-flecha)"/>
+  </g>
+  <g class="fila" style="--i:3">
+    <rect class="il-caja" x="48" y="502" width="340" height="96" rx="12"/>
+    <text class="il-t" x="218" y="540" font-size="19" font-weight="600" text-anchor="middle">Catálogo de códigos</text>
+    <text class="il-t il-tenue" x="218" y="568" font-size="15" text-anchor="middle">mercado de destino y agrupación</text>
+    <path class="il-trazo" d="M392 550H442" marker-end="url(#il-solucion-flecha)"/>
+  </g>
+
+  <!-- Recálculo diario: marco x 448–788 -->
+  <g class="fila" style="--i:4">
+    <rect class="il-marco" x="448" y="166" width="340" height="432" rx="16"/>
+    <rect class="il-caja" x="468" y="184" width="300" height="112" rx="12"/>
+    <text class="il-t" x="618" y="218" font-size="19" font-weight="600" text-anchor="middle">Tasa de calibración por código</text>
+    <text class="il-t il-tenue" x="618" y="246" font-size="15" text-anchor="middle">la alternativa elegida en validación;</text>
+    <text class="il-t il-tenue" x="618" y="266" font-size="15" text-anchor="middle">sin historial: tasa general o de su mercado</text>
+    <path class="il-trazo" d="M618 298V312" marker-end="url(#il-solucion-flecha)"/>
+    <rect class="il-caja" x="468" y="318" width="300" height="112" rx="12"/>
+    <text class="il-t" x="618" y="352" font-size="19" font-weight="600" text-anchor="middle">Mínimo por código</text>
+    <text class="il-t il-tenue" x="618" y="380" font-size="15" text-anchor="middle">rotación de auditorías para seguir</text>
+    <text class="il-t il-tenue" x="618" y="400" font-size="15" text-anchor="middle">aprendiendo de todos los códigos</text>
+    <path class="il-trazo" d="M618 432V446" marker-end="url(#il-solucion-flecha)"/>
+    <rect class="il-caja" x="468" y="452" width="300" height="112" rx="12"/>
+    <text class="il-t" x="618" y="486" font-size="19" font-weight="600" text-anchor="middle">Detector de cambios</text>
+    <text class="il-t il-tenue" x="618" y="514" font-size="15" text-anchor="middle">CUSUM por código: avisa si un</text>
+    <text class="il-t il-tenue" x="618" y="534" font-size="15" text-anchor="middle">código empeora o mejora</text>
+    <text class="il-t il-tenue" x="618" y="586" font-size="14" font-style="italic" text-anchor="middle">ordena los códigos del programa del día</text>
+  </g>
+
+  <!-- Salidas: x 848–1152 -->
+  <g class="fila" style="--i:5">
+    <path class="il-trazo-acento" d="M792 272H840" marker-end="url(#il-solucion-flecha-acento)"/>
+    <rect class="il-caja-acento" x="848" y="166" width="304" height="212" rx="14"/>
+    <text class="il-t" x="1000" y="202" font-size="21" font-weight="600" text-anchor="middle">Hoja de códigos prioritarios</text>
+    <g class="il-t" font-size="16">
+      <text x="872" y="240">• Planilla (CSV/XLSX) e imprimible</text>
+      <text x="872" y="268">• Cantidad sugerida por código, con</text>
+      <text x="886" y="290">tasa, rango y veces la tasa general</text>
+      <text x="872" y="318">• Lista de unidades sugeridas</text>
+      <text x="872" y="346">• «Por qué este código»</text>
+    </g>
+  </g>
+  <g class="fila" style="--i:6">
+    <path class="il-trazo" d="M792 440H840" marker-end="url(#il-solucion-flecha)"/>
+    <rect class="il-caja" x="848" y="394" width="304" height="96" rx="12"/>
+    <text class="il-t" x="1000" y="428" font-size="19" font-weight="600" text-anchor="middle">«Dónde mirar»</text>
+    <text class="il-t il-tenue" x="1000" y="454" font-size="15" text-anchor="middle">componente sugerido por código,</text>
+    <text class="il-t il-tenue" x="1000" y="474" font-size="15" text-anchor="middle">solo si se sostiene</text>
+  </g>
+  <g class="fila" style="--i:7">
+    <path class="il-trazo" d="M792 552H840" marker-end="url(#il-solucion-flecha)"/>
+    <rect class="il-caja" x="848" y="506" width="304" height="92" rx="12"/>
+    <text class="il-t" x="1000" y="542" font-size="19" font-weight="600" text-anchor="middle">Aviso del detector</text>
+    <text class="il-t il-tenue" x="1000" y="568" font-size="15" text-anchor="middle">para revisar el código señalado</text>
+  </g>
+
+  <text class="il-t il-tenue" x="48" y="640" font-size="16">Los analistas auditan lo sugerido en la playa de despacho; esos resultados vuelven a QLS y entran al recálculo con 5 días de margen.</text>
+</svg>
