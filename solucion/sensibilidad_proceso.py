@@ -107,34 +107,7 @@ def correr(tabla):
                     diarios[(semilla, nombre, escenario)].append(
                         evaluar_predicciones(tabla, evaluados, p, inicio, fin))
         print(f"sensibilidad: bloque {inicio}–{fin} listo", flush=True)
-    resultados, resumen = [], []
-    for tramo in ("seleccion", "comprobacion"):
-        ds = {k: _unir(v[:-1]) if tramo == "seleccion" else v[-1] for k, v in diarios.items()}
-        idx = remuestreos(len(next(iter(ds.values())).dias))
-        for (semilla, modelo, escenario), d in ds.items():
-            base = ds[(semilla, modelo, "catalogo")]
-            tasa = ds[(semilla, "tasa_fija", "catalogo")]
-            m, mb, mt = metricas(d, idx), metricas(base, idx), metricas(tasa, idx)
-            resultados.append({"tramo": tramo, "semilla": semilla, "modelo": modelo, "escenario": escenario,
-                               **m, "mejora_relativa_catalogo": m["precision_cupo"] / mb["precision_cupo"] - 1,
-                               "mejora_relativa_tasa_fija": m["precision_cupo"] / mt["precision_cupo"] - 1,
-                               "delta_catalogo_rango95": diferencia(base, d, idx)})
-        for modelo in MODELOS:
-            for escenario in ("catalogo", *ESCENARIOS):
-                conjunto = [ds[(s, modelo, escenario)] for s in SEMILLAS]
-                bases = [ds[(s, modelo, "catalogo")] for s in SEMILLAS]
-                tasas = [ds[(s, "tasa_fija", "catalogo")] for s in SEMILLAS]
-                promedio = lambda vs: type(vs[0])(vs[0].dias, vs[0].n, vs[0].k, vs[0].cal,
-                                                   np.mean([v.cal_elegidas for v in vs], axis=0))
-                media, base, tasa = promedio(conjunto), promedio(bases), promedio(tasas)
-                aciertos, ac_base, ac_tasa = (d.cal_elegidas.sum() for d in (media, base, tasa))
-                resumen.append({"tramo": tramo, "modelo": modelo, "escenario": escenario,
-                                "elegidos": int(media.k.sum()), "aciertos_media": float(aciertos),
-                                "aciertos_semillas": [int(d.cal_elegidas.sum()) for d in conjunto],
-                                "precision_media": float(aciertos / media.k.sum()),
-                                "mejora_relativa_catalogo": float(aciertos / ac_base - 1),
-                                "mejora_relativa_tasa_fija": float(aciertos / ac_tasa - 1),
-                                "delta_catalogo_rango95_condicional": diferencia(base, media, idx)})
+    resultados, resumen = resumir(diarios, MODELOS, SEMILLAS, ESCENARIOS)
     return {"pieza": "Sensibilidad hipotética a columnas de proceso", "fuente": tabla.fuente,
             "version_codigo": version_codigo(), "sha256_script": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "semillas": SEMILLAS, "modelos": MODELOS, "escenarios": ESCENARIOS, "columnas_normalizadas": GRUPOS,
@@ -145,6 +118,39 @@ def correr(tabla):
                          "sin ajuste por múltiples escenarios/modelos. No es evidencia de mejora real ni causalidad.",
             "coberturas": [{"semilla": s, "escenario": e, "bloques": c} for (s, e), c in coberturas.items()],
             "resumen": resumen, "resultados": resultados}
+
+
+def resumir(diarios, modelos, semillas, escenarios):
+    relativo = lambda aciertos, base: aciertos / base - 1 if base else None
+    resultados, resumen = [], []
+    for tramo in ("seleccion", "comprobacion"):
+        ds = {k: _unir(v[:-1]) if tramo == "seleccion" else v[-1] for k, v in diarios.items()}
+        idx = remuestreos(len(next(iter(ds.values())).dias))
+        for (semilla, modelo, escenario), d in ds.items():
+            base = ds[(semilla, modelo, "catalogo")]
+            tasa = ds[(semilla, "tasa_fija", "catalogo")]
+            m, mb, mt = metricas(d, idx), metricas(base, idx), metricas(tasa, idx)
+            resultados.append({"tramo": tramo, "semilla": semilla, "modelo": modelo, "escenario": escenario,
+                               **m, "mejora_relativa_catalogo": relativo(m["precision_cupo"], mb["precision_cupo"]),
+                               "mejora_relativa_tasa_fija": relativo(m["precision_cupo"], mt["precision_cupo"]),
+                               "delta_catalogo_rango95": diferencia(base, d, idx)})
+        for modelo in modelos:
+            for escenario in ("catalogo", *escenarios):
+                conjunto = [ds[(s, modelo, escenario)] for s in semillas]
+                bases = [ds[(s, modelo, "catalogo")] for s in semillas]
+                tasas = [ds[(s, "tasa_fija", "catalogo")] for s in semillas]
+                promedio = lambda vs: type(vs[0])(vs[0].dias, vs[0].n, vs[0].k, vs[0].cal,
+                                                   np.mean([v.cal_elegidas for v in vs], axis=0))
+                media, base, tasa = promedio(conjunto), promedio(bases), promedio(tasas)
+                aciertos, ac_base, ac_tasa = (d.cal_elegidas.sum() for d in (media, base, tasa))
+                resumen.append({"tramo": tramo, "modelo": modelo, "escenario": escenario,
+                                "elegidos": int(media.k.sum()), "aciertos_media": float(aciertos),
+                                "aciertos_semillas": [int(d.cal_elegidas.sum()) for d in conjunto],
+                                "precision_media": float(aciertos / media.k.sum()),
+                                "mejora_relativa_catalogo": relativo(float(aciertos), float(ac_base)),
+                                "mejora_relativa_tasa_fija": relativo(float(aciertos), float(ac_tasa)),
+                                "delta_catalogo_rango95_condicional": diferencia(base, media, idx)})
+    return resultados, resumen
 
 
 def main():
