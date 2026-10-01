@@ -1,62 +1,53 @@
-"""Control del design system de Ford sobre la web de la plataforma: .venv/bin/python -m plataforma.verificar_ds
+"""Control del design system de Ford sobre el frontend: .venv/bin/python -m plataforma.verificar_ds
 
-Falla si los CSS, el HTML o el JS de `web/` usan un color fuera de la paleta (§1), sombras (§4), más de 4 tamaños de
-letra o un peso distinto de 400/500 (§2), o alinean títulos al centro o a la derecha (§2).
+Revisa `front/src` (React + Tailwind + shadcn/ui):
+- el tema borra las paletas, sombras, tamaños y pesos por defecto de Tailwind (§1, §2, §4);
+- ningún archivo usa un color fuera de la paleta: ni hex, ni rgb/hsl/oklch, ni transparencias sobre colores. La única
+  excepción es el velo de los paneles, Twilight al 60 %, que propone §9.9;
+- no hay tamaños de letra arbitrarios ni sombras en estilos inline.
 """
 import re
 import sys
 from pathlib import Path
 
-WEB = Path(__file__).resolve().parent / "web"
+SRC = Path(__file__).resolve().parent / "front" / "src"
 PALETA = {"#00095b", "#00142e", "#066fef", "#ffffff", "#f0f0f0", "#0f0f0f", "#000000"}
-TAMANOS_MAX = 4
+TAMANOS = {"16", "20", "24", "40"}
+TEMA = ("--color-*: initial", "--shadow-*: initial", "--text-*: initial", "--font-weight-*: initial")
+VELO = "ford-twilight/60"
 
 
-def _sin_comentarios(texto):
-    return re.sub(r"/\*.*?\*/", "", texto, flags=re.S)
-
-
-def revisar(carpeta=WEB):
-    errores, tamanos = [], set()
-    for archivo in sorted(carpeta.glob("*")):
-        if archivo.suffix not in (".css", ".html", ".js"):
+def revisar(src=SRC):
+    errores = []
+    tema = (src / "index.css").read_text(encoding="utf-8")
+    errores += [f"index.css: el tema no borra los valores por defecto ({t})" for t in TEMA if t not in tema]
+    for archivo in sorted(src.rglob("*")):
+        if archivo.suffix not in (".css", ".ts", ".tsx"):
             continue
-        texto = _sin_comentarios(archivo.read_text(encoding="utf-8"))
-        nombre = archivo.name
+        texto = re.sub(r"/\*.*?\*/", "", archivo.read_text(encoding="utf-8"), flags=re.S)
+        nombre = archivo.relative_to(src)
         for h in re.findall(r"#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b", texto):
             if h.lower() not in PALETA:
                 errores.append(f"{nombre}: color fuera de la paleta {h}")
-        if re.search(r"rgba?\(|hsla?\(", texto):
-            errores.append(f"{nombre}: color por función (rgb/hsl): usar solo los tokens de la paleta")
-        if "box-shadow" in texto or "text-shadow" in texto or "drop-shadow" in texto:
-            errores.append(f"{nombre}: sombra (el sistema es plano, §4)")
-        for peso in re.findall(r"font-weight\s*:\s*([0-9]+)", texto):
-            if peso not in ("400", "500"):
-                errores.append(f"{nombre}: peso {peso} (solo 400 y 500)")
-        if re.search(r"font-weight\s*:\s*(bold|bolder|600|700|800|900)", texto):
-            errores.append(f"{nombre}: negrita: el énfasis se da con el tamaño (§2)")
-        tamanos |= set(re.findall(r"font-size\s*:\s*(\d+)px", texto))
-        tamanos |= set(re.findall(r"font-size=\"(\d+)\"", texto))
-        if re.search(r"h[1-3][^{]*\{[^}]*text-align\s*:\s*(center|right)", texto):
+        if re.search(r"\b(rgba?|hsla?|oklch|oklab)\(", texto):
+            errores.append(f"{nombre}: color por función: usar solo la paleta")
+        for m in re.findall(r"\b(?:bg|text|border|ring|fill|stroke|outline)-[a-z-]+/\d+", texto):
+            if not m.endswith(VELO):
+                errores.append(f"{nombre}: transparencia sobre un color ({m})")
+        for t in re.findall(r"text-\[(\d+)px\]", texto) + re.findall(r"fontSize:\s*(\d+)", texto):
+            if t not in TAMANOS:
+                errores.append(f"{nombre}: tamaño de letra {t}px fuera de 16/20/24/40")
+        for sombra in re.findall(r"boxShadow:\s*['\"]([^'\"]+)", texto):
+            if sombra != "none":
+                errores.append(f"{nombre}: sombra inline ({sombra})")
+        if re.search(r"text-(center|right)[^\"']*\"[^>]*>\s*<?h[1-3]|<h[1-3][^>]*text-(center|right)", texto):
             errores.append(f"{nombre}: título alineado al centro o a la derecha (§2)")
-    tokens = (carpeta / "ford-tokens.css").read_text(encoding="utf-8")
-    usados = set()
-    for archivo in carpeta.glob("*"):
-        if archivo.suffix in (".css", ".html", ".js"):
-            usados |= set(re.findall(r"font-size\s*:\s*var\(--(fs-[a-z0-9-]+)\)", archivo.read_text(encoding="utf-8")))
-    for token in usados:
-        m = re.search(rf"--{token}\s*:\s*(\d+)px", tokens)
-        if m:
-            tamanos.add(m.group(1))
-    if len(tamanos) > TAMANOS_MAX:
-        errores.append(f"Más de {TAMANOS_MAX} tamaños de letra: {sorted(tamanos, key=int)}")
-    return errores, sorted(tamanos, key=int)
+    return errores
 
 
 if __name__ == "__main__":
-    errores, tamanos = revisar()
+    errores = revisar()
     for e in errores:
         print("FAIL", e)
-    print(f"Tamaños de letra: {', '.join(tamanos)} px")
     print("PASS" if not errores else f"{len(errores)} FALLAS")
     sys.exit(1 if errores else 0)

@@ -18,3 +18,6 @@ CLAUDE.local.md
 # Prototipo de la plataforma: los datos reales y las capturas se regeneran localmente.
 prototipos/plataforma-web/data.js
 prototipos/plataforma-web/shots/
+
+# Frontend de la plataforma: dependencias de npm (el build en plataforma/web sí se versiona).
+plataforma/front/node_modules/

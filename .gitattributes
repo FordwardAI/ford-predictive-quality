@@ -1,0 +1,2 @@
+# Build de la plataforma generado por plataforma/front (npm run build).
+plataforma/web/assets/** -diff -whitespace linguist-generated
