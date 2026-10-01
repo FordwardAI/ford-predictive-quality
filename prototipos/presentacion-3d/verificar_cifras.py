@@ -75,7 +75,7 @@ PUBLICADAS = {
     "alternativas.n": "54",
     # Azar en confirmación: solo en precision.json (azar.confirmacion); los
     # borradores de docs/entrega/ no lo publican.
-    "catboost.azarConfirmacion": "9,3 %",
+    "catboost.azarConfirmacion": "8,8 %",
     # Lectura 2 de la prueba final (CatBoost; research/opcion-mas-precisa.md).
     "catboost.prueba.precision": "12,0 %",
     "catboost.prueba.precisionRango": "9,2–14,8 %",

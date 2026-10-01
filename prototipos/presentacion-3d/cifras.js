@@ -148,7 +148,7 @@ export const DEFINICIONES = [
     tramo: 'seleccion', etiqueta: 'al azar con el mismo cupo' },
   { clave: 'catboost.confirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.17333333333333334,
     tramo: 'confirmacion', etiqueta: 'de cada 100 elegidos por CatBoost en el último bloque' },
-  { clave: 'catboost.azarConfirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'azar.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.09333333333333334,
+  { clave: 'catboost.azarConfirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.confirmacion.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08784774865474905,
     tramo: 'confirmacion', etiqueta: 'al azar con el mismo cupo, en el último bloque' },
   { clave: 'alternativas.n', archivo: 'solucion/resultados/precision.json', ruta: 'ranking#largo', formato: 'entero', respaldo: 54,
     tramo: 'seleccion', etiqueta: 'alternativas compitieron' },

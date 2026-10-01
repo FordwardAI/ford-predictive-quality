@@ -267,7 +267,7 @@ export const capitulos = [
     figura: null,
     detalle: [
       { titulo: 'Se reentrena cada 5 días', texto: 'Con auditorías ya conocidas (Día ≤ t − 5). Entrega una tasa por código: la hoja no cambia.' },
-      { titulo: 'Elegida por precisión', texto: 'Entre los 12 primeros, la diferencia es ruido: es una familia, no un modelo.' },
+      { titulo: 'Elegida por precisión', texto: 'Entre los primeros, la diferencia es ruido: es una familia, no un modelo.' },
       { titulo: 'En el último bloque, más baja', texto: 'Con pocos elegidos, dentro del ruido.' },
     ],
     ampliacion: [
