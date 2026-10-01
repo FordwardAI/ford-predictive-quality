@@ -231,7 +231,7 @@ function esNumeroValido(v) {
   return typeof v === 'number' && Number.isFinite(v);
 }
 
-async function leerJson(archivo) {
+export async function leerJson(archivo) {
   const url = new URL(RAIZ + archivo, import.meta.url);
   const respuesta = await fetch(url);
   if (!respuesta.ok) throw new Error(`${archivo}: HTTP ${respuesta.status}`);
@@ -240,8 +240,8 @@ async function leerJson(archivo) {
 
 /**
  * Carga todas las cifras.
- * @returns {Promise<Map<string, {valor: string, numero: number|number[]|null, etiqueta: string,
- *   leyenda: string, fuente: string, respaldo: boolean, pendiente: boolean}>>}
+ * @returns {Promise<Map<string, {valor: string, numero: number|number[]|null, formato: string,
+ *   etiqueta: string, leyenda: string, fuente: string, respaldo: boolean, pendiente: boolean}>>}
  */
 export async function cargarCifras() {
   const archivos = [...new Set(DEFINICIONES.filter((d) => d.archivo && !d.fijo).map((d) => d.archivo))];
@@ -285,6 +285,7 @@ export async function cargarCifras() {
     cifras.set(d.clave, {
       valor: pendiente ? '[PENDIENTE]' : formatear(d.formato, numero),
       numero: pendiente ? null : numero,
+      formato: d.formato, // para el conteo animado con el mismo formatear()
       etiqueta: d.etiqueta,
       leyenda,
       fuente: d.fuente ?? (d.ruta ? `${d.archivo} → ${d.ruta}` : d.archivo),
@@ -293,4 +294,14 @@ export async function cargarCifras() {
     });
   }
   return cifras;
+}
+
+// Agregados que dibuja figuras.js, por nombre de pieza (como solucion/figuras.py:
+// p3, p4, p5, p6, eleccion, prueba-final, preparacion). Un archivo que no se
+// pueda leer queda en null y la figura usa su SVG de respaldo.
+export const PIEZAS_FIGURAS = ['p3', 'p4', 'p5', 'p6', 'eleccion', 'prueba-final', 'preparacion'];
+
+export async function cargarDatosFiguras(piezas = PIEZAS_FIGURAS) {
+  const lecturas = await Promise.allSettled(piezas.map((p) => leerJson(`solucion/resultados/${p}.json`)));
+  return Object.fromEntries(piezas.map((p, i) => [p, lecturas[i].status === 'fulfilled' ? lecturas[i].value : null]));
 }

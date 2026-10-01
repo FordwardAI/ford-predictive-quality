@@ -21,6 +21,8 @@
 // en README.md, sección «Pendientes para completar».
 
 const FIGURAS = '../../docs/entrega/figuras/';
+const ILUSTRACIONES = 'assets/ilustraciones/'; // SVG a mano, versionados
+const LOCAL = 'assets/local/'; // capturas locales: no se versionan (ver README)
 
 export const meta = {
   evento: 'Ford Innovation Challenge III — AI Edition — 2026',
@@ -56,6 +58,26 @@ export const secciones = [
 
 // Campos extra (opcionales para ui.js): `subseccion` (2.1…2.3), `diapositiva`
 // (número en el guion) y `minutos` (duración del guion).
+//
+// Pantallas y pasos (modo híbrido scroll + diapositivas):
+//   - Cada capítulo es una pantalla. `puntos` se muestran como callouts (un paso
+//     cada uno; al revelarse, la escena enfoca ese punto) y `detalle` como
+//     tarjetas siempre visibles.
+//   - `continuacion: '<id del padre>'`: pantalla que sigue a la anterior. Hereda
+//     seccion, subseccion, escena, nucleo, orbita, antetitulo, titular y notas
+//     del padre; no entra en el índice y se numera «9b». `subtitulo` es el rótulo
+//     del bloque que se movió a la continuación.
+//   - `pasos: { cifras, callouts, tarjetas }` con 'uno' | 'pares' | 'todos'.
+//     Por defecto: cifras 'uno' si son ≤3 (si no 'todos'), callouts 'uno',
+//     tarjetas 'uno' si son ≤4 (si no 'pares').
+//   - `lista: []`: pasos numerados (un paso cada uno).
+//   - `figura`: { src, alt, pie } (SVG de matplotlib), { src, respaldo } (SVG a
+//     mano con respaldo), { tipo: 'js', id, opciones, src } (figuras.js; `src`
+//     es el respaldo) o { tipo: 'local', src: [candidatos], respaldo, pendiente }
+//     (captura local fuera de Git; si falta se ve el respaldo con un chip).
+//   - `disposicion: 'tarjetas-texto' | 'tarjetas-escena'`: dónde van las tarjetas.
+//     Por defecto, con figura van en la columna de texto; sin figura, en la
+//     columna opuesta (sobre la escena, en vidrio).
 export const capitulos = [
   // 0 · Portada --------------------------------------------------------------
   {
@@ -96,14 +118,22 @@ export const capitulos = [
       { id: 'playa-despacho', titulo: 'Playa de despacho', texto: 'Las unidades liberadas esperan entre 0 y 5 días. En rondas de unas dos horas, el equipo de analistas elige al azar el cupo diario: cerca del 5 % de lo que aprueba Gate Release. Acá entra la hoja.' },
       { id: 'inspeccion-adicional', titulo: 'Auditoría Adicional', texto: 'Inspección de alta precisión por muestreo. Decide si la unidad necesita una calibración fina (CALIBRADA) o no (OK). La ficha ubica acá la herramienta predictiva.' },
     ],
-    figura: { src: FIGURAS + 'diagrama_proceso.svg', alt: 'Diagrama del proceso: Body, Pintura, Montaje, Calidad, Gate Release y Auditoría Adicional, con la hoja en la playa de despacho', pie: 'La hoja de códigos prioritarios entra en la playa de despacho, donde se elige leyendo el código del parabrisas. Fuente: docs/entrega/figuras.' },
+    figura: null,
+    detalle: [],
+    notas: 'Arrancamos por la operación, no por el modelo: dónde está la playa de despacho, quién elige y cada cuánto. Usamos el vocabulario del glosario: auditados con actividad QLS, cupo diario, precisión en el cupo, veces el azar.',
+    orbita: false,
+  },
+  {
+    id: 'proceso-b',
+    continuacion: 'proceso',
+    cifras: [],
+    puntos: [],
+    figura: { src: ILUSTRACIONES + 'proceso.svg', respaldo: FIGURAS + 'diagrama_proceso.svg', alt: 'Diagrama del proceso: Body, Pintura, Montaje, Calidad, Gate Release y Auditoría Adicional, con la hoja en la playa de despacho', pie: 'La hoja de códigos prioritarios entra en la playa de despacho, donde se elige leyendo el código del parabrisas. Fuente: docs/entrega/figuras.' },
     detalle: [
       { titulo: 'Cómo se elige hoy', texto: 'La elección es completamente aleatoria, sin criterio específico. El cupo es una cantidad fija por día que define Calidad de Planta según el programa de producción; Ford no busca ampliarlo, por costo y capacidad.' },
       { titulo: 'Qué dato está a la vista', texto: 'El código de catálogo figura en una etiqueta del parabrisas y hoy no se usa para elegir. Los códigos que se van a producir en el día se conocen de antemano.' },
       { titulo: 'Qué pide la ficha', texto: 'Anticipar qué unidades van a necesitar calibración fina en la Auditoría Adicional, a partir del historial de QLS, con un reporte accionable de las unidades priorizadas.' },
     ],
-    notas: 'Arrancamos por la operación, no por el modelo: dónde está la playa de despacho, quién elige y cada cuánto. Usamos el vocabulario del glosario: auditados con actividad QLS, cupo diario, precisión en el cupo, veces el azar.',
-    orbita: false,
   },
 
   // 2 · 01 La pregunta (núcleo) ---------------------------------------------
@@ -202,6 +232,16 @@ export const capitulos = [
     bajada: 'Tiempo hacia adelante, 5 días de margen, cupo diario y una prueba final que se abre una sola vez.',
     cifras: ['validacion.n', 'prueba.n'],
     puntos: [],
+    figura: { tipo: 'js', id: 'particiones', alt: 'Particiones por Día del VIN: entrenamiento, margen, validación, margen y prueba final', pie: 'Particiones por Día del VIN (1–284), con los márgenes de 5 días entre tramos.' },
+    detalle: [],
+    notas: 'Explicamos que el Día del VIN aproxima el día de la auditoría y que la partición es temporal porque la proporción CALIBRADA baja con el tiempo: un split mezclado inflaría el resultado.',
+    orbita: false,
+  },
+  {
+    id: 'validacion-b',
+    continuacion: 'validacion',
+    cifras: [],
+    puntos: [],
     figura: null,
     detalle: [
       { titulo: 'Particiones por Día del VIN', texto: 'Entrenamiento ≤149 · margen 150–154 · validación 155–194 · margen 195–199 · prueba final ≥200. La opción elegida se reentrena con ≤194 antes de la prueba.' },
@@ -210,8 +250,6 @@ export const capitulos = [
       { titulo: 'Incertidumbre', texto: 'Rango del 95 % por bootstrap de días, con 2.000 remuestreos. Mejora si el rango de la diferencia con el azar queda entero por encima de cero.' },
       { titulo: 'Preregistro', texto: 'Antes de la corrida se fijan la opción, sus parámetros, las semillas y los hashes. Lo que no figura en el preregistro no se lee en la prueba final.' },
     ],
-    notas: 'Explicamos que el Día del VIN aproxima el día de la auditoría y que la partición es temporal porque la proporción CALIBRADA baja con el tiempo: un split mezclado inflaría el resultado.',
-    orbita: false,
   },
 
   // 6 · 02 Comparación de alternativas (núcleo) ------------------------------
@@ -228,15 +266,23 @@ export const capitulos = [
     bajada: 'En validación todas las tasas por código superan al azar y casi todas empatan con la mejor. Gana la tasa fija: es un hallazgo, no una renuncia.',
     cifras: ['validacion.alternativas', 'validacion.empates', 'validacion.precision', 'validacion.azar', 'validacion.veces'],
     puntos: [],
-    figura: { src: FIGURAS + 'comparacion_alternativas.svg', alt: 'Precisión en el cupo de cada alternativa con su rango del 95 %, frente al azar al mismo cupo', pie: 'Validación 155–194. La línea vertical es el azar al mismo cupo; el oráculo (techo) y la versión con fuga no son elegibles.' },
+    figura: { tipo: 'js', id: 'comparacion', opciones: {}, src: FIGURAS + 'comparacion_alternativas.svg', alt: 'Precisión en el cupo de cada alternativa con su rango del 95 %, frente al azar al mismo cupo', pie: 'Validación 155–194. La línea vertical es el azar al mismo cupo; el oráculo (techo) y la versión con fuga no son elegibles.' },
+    detalle: [],
+    notas: 'Anticipamos que se esperan empates por la potencia de la validación. Si gana lo simple, lo presentamos como hallazgo: con el código como único predictor, el valor está en cómo se usa la tasa, no en el algoritmo. Los modelos que no ganaron son la evidencia.',
+    orbita: false,
+  },
+  {
+    id: 'alternativas-b',
+    continuacion: 'alternativas',
+    cifras: [],
+    puntos: [],
+    figura: null,
     detalle: [
       { titulo: 'Qué compitió', texto: 'Referencias (tasa fija, móviles, suavizado hacia el mercado, decaimiento) y nueve familias de ML sobre el código (logística, Naive Bayes, Random Forest, XGBoost, LightGBM, CatBoost, MLP, promedio y stacking), en modo fijo y reentrenado. Parámetros fijados antes de mirar la validación.' },
       { titulo: 'La regla', texto: 'Gana la mayor precisión en el cupo. Si la diferencia pareada por días con la mejor incluye 0, hay empate y gana la más simple.' },
       { titulo: 'Por qué empatan', texto: 'Con un único predictor, todo modelo estima la misma tabla de tasas por código. Con 391 elegidos, el rango de cada precisión mide unos ±3,4 a ±4,5 puntos: la validación separa del azar, pero casi no separa a las alternativas entre sí.' },
       { titulo: 'Exploratorio (1/10): ¿hay una opción más precisa?', texto: 'Exploratorio, solo Día < 195; prueba final no releída. Con esta base no aparece una opción más precisa identificable: un grupo de estimadores por código empata y su orden se invierte entre bloques de tiempo. Lo que sí importa es actualizar la tasa y contraerla hacia el mercado cuando rota la mezcla de códigos. El análisis propone Random Forest con atributos del código como opción por efectividad; contradice la tasa fija acordada el 30/09 y es una decisión pendiente del equipo (research/opcion-mas-precisa.md).' },
     ],
-    notas: 'Anticipamos que se esperan empates por la potencia de la validación. Si gana lo simple, lo presentamos como hallazgo: con el código como único predictor, el valor está en cómo se usa la tasa, no en el algoritmo. Los modelos que no ganaron son la evidencia.',
-    orbita: false,
   },
 
   // 7 · 02 La fuga, a la vista ------------------------------------------------
@@ -253,7 +299,7 @@ export const capitulos = [
     bajada: 'Usa resultados que todavía no se conocen al elegir. Por eso no se usa, y por eso el margen de 5 días es obligatorio.',
     cifras: ['validacion.fuga', 'oraculo', 'validacion.precision'],
     puntos: [],
-    figura: { src: FIGURAS + 'comparacion_alternativas.svg', alt: 'Comparación de alternativas con la versión con fuga por encima del oráculo', pie: 'Misma figura: la versión con fuga (móvil 60 días sin margen) queda incluso por encima del techo con el código.' },
+    figura: { tipo: 'js', id: 'comparacion', opciones: { resaltar: 'fuga' }, src: FIGURAS + 'comparacion_alternativas.svg', alt: 'Comparación de alternativas con la versión con fuga por encima del oráculo', pie: 'Misma figura: la versión con fuga (móvil 60 días sin margen) queda incluso por encima del techo con el código.' },
     detalle: [
       { titulo: 'Qué hace distinto', texto: 'Es la tasa móvil de 60 días sin los 5 días de margen: usa resultados de auditorías que en planta todavía no se conocerían.' },
       { titulo: 'El oráculo', texto: 'La tasa real del tramo marca el techo con el código como predictor. No es elegible: usa las etiquetas del mismo tramo que evalúa.' },
@@ -276,7 +322,17 @@ export const capitulos = [
     bajada: 'En la prueba final, abierta una sola vez, la hoja encuentra más calibraciones que el azar con el mismo cupo. El límite inferior de la diferencia es apenas positivo.',
     cifras: ['prueba.precision', 'prueba.azar', 'prueba.veces'],
     puntos: [],
-    figura: { src: FIGURAS + 'veces_azar_prueba_final.svg', alt: 'Veces el azar de la tasa fija en la prueba final, por tramo, con su rango del 95 %', pie: 'Prueba completa, prueba ≤260 y sensibilidad con la cohorte posterior a 260. La figura de validación (veces_azar.svg) queda de respaldo.' },
+    figura: { tipo: 'js', id: 'veces_azar_prueba_final', opciones: {}, src: FIGURAS + 'veces_azar_prueba_final.svg', alt: 'Veces el azar de la tasa fija en la prueba final, por tramo, con su rango del 95 %', pie: 'Prueba completa, prueba ≤260 y sensibilidad con la cohorte posterior a 260. La figura de validación (veces_azar.svg) queda de respaldo.' },
+    detalle: [],
+    notas: 'Decimos la frase permitida y nada más: «Sobre la base ficticia, entre auditados con actividad QLS, en la prueba final, de cada 100 elegidos se calibrarían 10,9 (rango del 95 %: 8,3–13,6), contra 8,2 al azar con el mismo cupo: 1,32 veces el azar. Es mejora, pero por poco: el límite inferior de la diferencia es de 0,07 puntos». Después, los límites fijos en una línea.',
+    orbita: false,
+  },
+  {
+    id: 'resultado-b',
+    continuacion: 'resultado',
+    cifras: [],
+    puntos: [],
+    figura: null,
     detalle: [
       { titulo: 'Límites fijos', texto: 'El tramo de prueba y la tasa por mercado ya se habían mirado; que los auditados se eligen al azar es un supuesto de Ford; en planta solo se conocería el resultado de lo auditado; el Día del VIN aproxima el día de la auditoría. No es una medición de planta.' },
       { titulo: 'Validación y prueba', texto: 'En validación la misma opción había dado 15,1 de cada 100; en la prueba la cifra es más baja y el azar también (8,2 contra 9,9). Puede haber optimismo por haberla elegido en validación; no lo verificamos.' },
@@ -284,8 +340,6 @@ export const capitulos = [
       { titulo: 'Prueba ≤260', texto: 'Con el tramo hasta DIA_260 da 11,1 contra 8,3 al azar: también mejora.' },
       { titulo: 'Qué no afirmamos', texto: 'Impacto ni ahorro en planta, reducción de calibraciones, que el resultado valga para VIN no auditados, ni causas.' },
     ],
-    notas: 'Decimos la frase permitida y nada más: «Sobre la base ficticia, entre auditados con actividad QLS, en la prueba final, de cada 100 elegidos se calibrarían 10,9 (rango del 95 %: 8,3–13,6), contra 8,2 al azar con el mismo cupo: 1,32 veces el azar. Es mejora, pero por poco: el límite inferior de la diferencia es de 0,07 puntos». Después, los límites fijos en una línea.',
-    orbita: false,
   },
 
   // 9 · 02 Demo: la hoja (núcleo) — 2.2.1 Información complementaria ----------
@@ -305,15 +359,30 @@ export const capitulos = [
       { id: 'etiqueta-parabrisas', titulo: 'Se lee el código', texto: 'El analista lee el código en el parabrisas y busca su fila: cantidad sugerida, tasa del código con rango y n, veces la tasa general, acumulado y mercado de destino.' },
       { id: 'playa-despacho', titulo: 'Si un código no llega', texto: 'La cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron. Solo se completa al azar si se agota el ranking.' },
     ],
-    figura: { src: FIGURAS + 'diagrama_solucion.svg', alt: 'Diagrama de la solución: entradas, recálculo de la tasa por código y salidas', pie: 'Entradas (programa del día, cupo, resultados con Día ≤ t−5 y catálogo), tasa por código con mínimo por código y detector de cambios, y la hoja en planilla e imprimible.' },
+    // Captura local (fuera de Git: muestra tasas por código). Sin ella, el mock
+    // sin números con el chip de pendiente.
+    figura: {
+      tipo: 'local',
+      src: [LOCAL + 'captura-hoja-dia-260.png', LOCAL + 'd-hoja.png'],
+      respaldo: ILUSTRACIONES + 'hoja-mock.svg',
+      alt: 'La hoja de códigos prioritarios del día',
+      pendiente: '[PENDIENTE: captura de la hoja del Día 260 (captura-hoja-dia-260.png) — salida local fuera de Git; no se versiona porque muestra tasas por código]',
+    },
+    detalle: [],
+    notas: 'Llevamos la hoja impresa y en planilla. Recorremos una fila: código, cantidad sugerida, tasa con rango y n, veces la tasa general, mercado de destino. Mostramos el traspaso cuando un código no llega. Nunca decimos «probabilidad de la unidad». En la versión núcleo, la demo baja a un minuto. Si falla el equipo, usamos las capturas de respaldo.',
+    orbita: false,
+  },
+  {
+    id: 'hoja-b',
+    continuacion: 'hoja',
+    cifras: [],
+    puntos: [],
+    figura: { src: ILUSTRACIONES + 'solucion.svg', respaldo: FIGURAS + 'diagrama_solucion.svg', alt: 'Diagrama de la solución: entradas, recálculo de la tasa por código y salidas', pie: 'Entradas (programa del día, cupo, resultados con Día ≤ t−5 y catálogo), tasa por código con mínimo por código y detector de cambios, y la hoja en planilla e imprimible.' },
     detalle: [
       { titulo: 'Qué muestra', texto: 'Arriba, la frase permitida con su calificador y los límites. Después, la tabla de códigos (primero el código, porque es lo que se lee), las filas del mínimo por código aparte y el bloque «por qué este código». Nunca «probabilidad de la unidad» ni un puntaje por vehículo.' },
       { titulo: 'Formatos', texto: 'Planilla (CSV/XLSX) e imprimible de una página: formato adaptable a la operación.' },
       { titulo: 'Hoja de ensayo y hoja final', texto: 'La del Día 190 (validación) sirve de ensayo; la final es la del Día 260, ya generada. Las dos usan identificadores ficticios y ningún VIN.' },
-      { titulo: 'Captura para la demo', texto: '[PENDIENTE: captura de la hoja del Día 260 (captura-hoja-dia-260.png) — salida local fuera de Git; no se versiona porque muestra tasas por código]' },
     ],
-    notas: 'Llevamos la hoja impresa y en planilla. Recorremos una fila: código, cantidad sugerida, tasa con rango y n, veces la tasa general, mercado de destino. Mostramos el traspaso cuando un código no llega. Nunca decimos «probabilidad de la unidad». En la versión núcleo, la demo baja a un minuto. Si falla el equipo, usamos las capturas de respaldo.',
-    orbita: false,
   },
 
   // 10 · 02 Seguridad y privacidad — 2.3 --------------------------------------
@@ -407,14 +476,22 @@ export const capitulos = [
       { id: 'componente-2', titulo: 'Zona ilustrativa 2', texto: 'Zona genérica, solo para ilustrar. La lista sale de auditorías del código con resultado ya conocido (Día ≤ t−5), suavizada hacia la distribución general.' },
       { id: 'componente-3', titulo: 'Zona ilustrativa 3', texto: 'Zona genérica, solo para ilustrar. «Asociación, no causa»: indica por dónde empezar la revisión, no por qué se calibra.' },
     ],
-    figura: { src: FIGURAS + 'donde_mirar.svg', alt: 'Acierto de los 3 primeros componentes por código frente a los 3 más frecuentes en general', pie: 'Validación 155–194, sobre todas las CALIBRADA y sobre las que eligió la tasa fija.' },
+    figura: null,
+    detalle: [],
+    notas: 'Cada pieza la decimos con su estado: evaluada en validación, leída en la prueba si estaba en el preregistro, o «solo validación» rotulado así. Las zonas del vehículo son ilustrativas: los componentes reales están anonimizados.',
+    orbita: true,
+  },
+  {
+    id: 'donde-mirar-b',
+    continuacion: 'donde-mirar',
+    cifras: [],
+    puntos: [],
+    figura: { tipo: 'js', id: 'donde_mirar', opciones: {}, src: FIGURAS + 'donde_mirar.svg', alt: 'Acierto de los 3 primeros componentes por código frente a los 3 más frecuentes en general', pie: 'Validación 155–194, sobre todas las CALIBRADA y sobre las que eligió la tasa fija.' },
     detalle: [
       { titulo: 'Cinco piezas, cada una con su estado', texto: '«Dónde mirar»: mejora en validación y en la prueba final. Selección que aprende de sus auditorías: elegida en validación. Detector de cambios: calibrado en validación. Señal por mercado de destino: evaluada en validación. Insumo para la subcategorización: no se sostiene en validación.' },
       { titulo: 'En validación', texto: 'Sobre las 59 CALIBRADA que eligió la tasa fija, los 3 primeros del código acertaron 61,0 % contra 30,5 % de la lista general; sobre todas (n = 780), 40,0 % contra 33,5 %. Entre auditados con actividad QLS, validación 155–194, base ficticia.' },
       { titulo: 'Por qué', texto: 'Los mentores señalaron que la clave está en qué componente presentó la falla. Lo usamos como lo que se predice dentro de la unidad elegida.' },
     ],
-    notas: 'Cada pieza la decimos con su estado: evaluada en validación, leída en la prueba si estaba en el preregistro, o «solo validación» rotulado así. Las zonas del vehículo son ilustrativas: los componentes reales están anonimizados.',
-    orbita: true,
   },
 
   // 14 · 04 Una selección que aprende (núcleo) --------------------------------
@@ -432,16 +509,25 @@ export const capitulos = [
     puntos: [
       { id: 'inspeccion-adicional', titulo: 'El resultado vuelve', texto: 'Cada resultado de auditoría alimenta, con 5 días de margen, la siguiente revisión de la tasa de su código.' },
     ],
-    figura: { src: FIGURAS + 'etiquetas_parciales.svg', alt: 'Precisión en el cupo de cada política de exploración con etiquetas parciales', pie: 'Validación 155–194, conociendo solo lo auditado desde el Día 155. El detector se muestra en detector_potencia.svg.' },
+    figura: { tipo: 'js', id: 'etiquetas_parciales', opciones: {}, src: FIGURAS + 'etiquetas_parciales.svg', alt: 'Precisión en el cupo de cada política de exploración con etiquetas parciales', pie: 'Validación 155–194, conociendo solo lo auditado desde el Día 155. El detector se muestra en detector_potencia.svg.' },
     detalle: [
       { titulo: 'El problema', texto: 'Si la hoja orienta todo el cupo, en planta solo se conoce lo que la hoja eligió: los códigos que nunca se eligen dejan de tener datos nuevos.' },
       { titulo: 'Mínimo por código', texto: 'Cada código que se produce recibe, por rotación, al menos una auditoría cada 40 días (elegido en validación). Con etiquetas parciales conserva la precisión del ranking puro; reservar un 20 % al azar la baja.' },
+    ],
+    notas: 'Seguimos con el estado de cada pieza. En la prueba final, el mínimo por código dio inconcluso: lo decimos así si preguntan.',
+    orbita: false,
+  },
+  {
+    id: 'aprende-b',
+    continuacion: 'aprende',
+    cifras: [],
+    puntos: [],
+    figura: { tipo: 'js', id: 'detector', opciones: {}, src: FIGURAS + 'detector_potencia.svg', alt: 'Potencia del detector de cambios ante cambios sintéticos en validación', pie: 'Validación 155–194, con cambios sintéticos en la tasa de un código.' },
+    detalle: [
       { titulo: 'Detector de cambios', texto: 'Un CUSUM de Bernoulli por código, calibrado para no superar una falsa alarma cada 30 días en todo el catálogo. Sus alarmas son observaciones, no causas, y no modifican al predictor.' },
       { titulo: 'Señal por mercado de destino', texto: 'La hoja explica cada prioridad por el mercado de destino, en el bloque «por qué este código». No prueba que el mercado cause calibraciones.' },
       { titulo: 'Subcategorización', texto: 'Agrupar códigos por perfil de fallas no da un orden estable en validación. Queda la herramienta para cuando Ford publique su subcategorización.' },
     ],
-    notas: 'Seguimos con el estado de cada pieza. En la prueba final, el mínimo por código dio inconcluso: lo decimos así si preguntan.',
-    orbita: false,
   },
 
   // 15 · 05 Implementar midiendo (núcleo) -------------------------------------
@@ -482,11 +568,17 @@ export const capitulos = [
     bajada: 'Hoja, rondas, códigos, alertas y seguimiento de los días de control en un solo lugar. Es una propuesta: hoy se entrega la hoja.',
     cifras: [],
     puntos: [],
-    figura: null,
+    // Capturas locales del prototipo (no se versionan); si faltan, el mock sin números.
+    figura: {
+      tipo: 'local',
+      src: [LOCAL + 'd-inicio.png'],
+      respaldo: ILUSTRACIONES + 'plataforma-mock.svg',
+      alt: 'Prototipo de la plataforma: hoja, rondas, códigos y alertas',
+      pendiente: '[PENDIENTE: capturas del prototipo de plataforma — prototipos/plataforma-web/ (shoot.sh, se generan localmente y no se versionan)]',
+    },
     detalle: [
       { titulo: 'Qué reúne', texto: 'Operación diaria (hoja y registro de cada ronda), códigos y mercado (tasa en el tiempo, «dónde mirar», alertas), evidencia del modelo e implementación (días de control, cupo y mínimo por código).' },
       { titulo: 'Límites', texto: 'Usa la base ficticia y cifras de validación. No hay integración con QLS ni con el programa de producción: esa integración es el trabajo principal para llevarla a planta.' },
-      { titulo: 'Capturas', texto: '[PENDIENTE: capturas del prototipo de plataforma — prototipos/plataforma-web/ (shoot.sh, se generan localmente y no se versionan)]' },
     ],
     notas: 'Si hace falta volver a unos 20 minutos, recortamos la demo o la fuga, no esta. Insistimos en que es una propuesta de implementación: la hoja sigue siendo la salida operativa y el piso.',
     orbita: false,
@@ -509,10 +601,28 @@ export const capitulos = [
     detalle: [
       { titulo: 'Valor para Ford', texto: 'Mismas auditorías, mejor elegidas. Usa el código del parabrisas y el programa del día. Explicable: cada prioridad es la tasa de una versión y un mercado. Sin riesgo operativo: si la hoja no está, se elige al azar como hoy. Sigue aprendiendo con el mínimo por código y avisa cambios con el detector.' },
       { titulo: 'Qué aprendimos', texto: 'En validación ganó la más simple entre alternativas que empatan. Con el código como único predictor, el valor está en cómo se usa la tasa. El techo con el código (oráculo) queda por encima de lo logrado.' },
-      { titulo: 'Próximos pasos, por dependencias', texto: '1. Conectar las entradas (QLS y programa del día). 2. Cargar el histórico de auditorías al azar. 3. Instalar el script y generar la primera hoja. 4. Capacitar al equipo de analistas. 5. Arrancar con días de control y mínimo por código. 6. Medir por separado con y sin actividad QLS. 7. Decidir con datos de planta si la hoja orienta todo el cupo. 8. Sumar la subcategorización cuando Ford la publique.' },
     ],
     notas: 'Una frase de resultado, tres de valor y los próximos pasos en orden. Después del feedback del 2/10, cualquier cambio al predictor se evalúa solo en validación y se presenta como «evaluado en validación; prueba final no releída». La cifra principal no cambia.',
     orbita: false,
+  },
+  {
+    id: 'conclusiones-b',
+    continuacion: 'conclusiones',
+    subtitulo: 'Próximos pasos, por dependencias',
+    cifras: [],
+    puntos: [],
+    figura: null,
+    detalle: [],
+    lista: [
+      'Conectar las entradas (QLS y programa del día).',
+      'Cargar el histórico de auditorías al azar.',
+      'Instalar el script y generar la primera hoja.',
+      'Capacitar al equipo de analistas.',
+      'Arrancar con días de control y mínimo por código.',
+      'Medir por separado con y sin actividad QLS.',
+      'Decidir con datos de planta si la hoja orienta todo el cupo.',
+      'Sumar la subcategorización cuando Ford la publique.',
+    ],
   },
 
   // 18 · Cierre ---------------------------------------------------------------
