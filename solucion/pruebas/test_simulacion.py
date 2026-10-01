@@ -102,3 +102,24 @@ def test_el_resumen_cuenta_cuantas_veces_una_opcion_es_mejor_y_cuantas_se_ve_mej
     assert fila["es_mejor_que_la_tasa_fija"] == .75 and fila["se_ve_mejor_en_los_datos"] == .75
     assert abs(fila["diferencia_verdadera_con_tasa_fija"]["media"] - 1.25) < 1e-9  # (+2 −1 +1 +3) / 4 puntos
     assert abs(fila["fraccion_del_techo"] - np.mean([.17, .14, .16, .18]) / .2) < 1e-9
+
+
+def test_la_comparacion_directa_es_pareada_por_replica_y_positiva_si_la_primera_es_mejor():
+    def replica(fija, a, b, techo):
+        def bloques(valor):
+            return [(valor * 10, valor * 10, 10)] * len(sim.BLOQUES)
+        return {"azar": bloques(.1), "tasa_fija": bloques(fija), "a": bloques(a), "b": bloques(b), "oraculo": bloques(techo)}
+
+    sim.NOMBRES.setdefault("a", "a")
+    sim.NOMBRES.setdefault("b", "b")
+    replicas = [replica(.15, .18, .17, .2), replica(.15, .16, .17, .2), replica(.15, .19, .16, .2), replica(.15, .17, .17, .2)]
+    directa = sim.resumir(replicas, ("tasa_fija", "a", "b"), pares=(("a", "b"),))["todo"]["comparaciones_directas"][0]
+    assert directa["a"] == "a" and directa["b"] == "b"
+    assert abs(directa["diferencia_verdadera"]["media"] - 0.75) < 1e-9  # (+1 −1 +3 +0) / 4 puntos
+    assert directa["a_es_mejor"] == .5 and directa["a_se_ve_mejor_en_los_datos"] == .5
+    assert sim.resumir(replicas, ("tasa_fija", "a", "b"))["todo"]["comparaciones_directas"] == []
+
+
+def test_un_subconjunto_de_escenarios_usa_la_misma_semilla_que_la_corrida_completa():
+    nombres = list(sim.ESCENARIOS)
+    assert nombres.index("mezcla_estable") == 1 and nombres.index("base") == 0  # Posiciones que fijan la semilla.

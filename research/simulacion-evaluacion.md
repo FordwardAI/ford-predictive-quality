@@ -57,6 +57,17 @@ Responde a la pregunta del 01/10: si no se puede distinguir 77 de 71 aciertos en
 
 **Cuánto ruido hay en lo que se ve en los datos.** En el mundo base, el desvío de la diferencia *realizada* entre cada opción y la tasa fija es de 1,2 a 1,4 puntos con 965 elegidos. Escalado a los 652 de la prueba final, serían unos 1,4 a 1,7 puntos. La diferencia observada entre Random Forest y la tasa fija en la prueba es 0,9 puntos (77 contra 71 aciertos): menos de un desvío. En el mundo base, donde Random Forest es mejor de verdad, se ve mejor en los datos solo el 83 % de las veces; en el mundo de mezcla estable, donde es peor de verdad, se ve mejor el 12 %.
 
+**Comparación directa entre CatBoost y Random Forest.** Corrida aparte ([`simulacion_pares.json`](../solucion/experimentos/resultados/simulacion_pares.json)): los mismos mundos de los escenarios base y mezcla estable (misma semilla), 24 réplicas, solo estas dos opciones y la tasa fija de referencia. Diferencia **pareada réplica por réplica**, CatBoost menos Random Forest, en la precisión verdadera del tramo 100–194 (965 elegidos):
+
+| Escenario | Diferencia (rango entre réplicas) | CatBoost es mejor en | Se ve mejor en los datos |
+| --- | --- | ---: | ---: |
+| Base | +0,34 puntos (−0,29 a +0,88) | 75 % de las réplicas | 71 % |
+| Mezcla estable | +0,68 puntos (+0,18 a +1,18) | 100 % de las réplicas (24 de 24) | 79 % |
+
+- **Con la mezcla que rota la diferencia no se distingue de cero** (el rango incluye 0). **Con la mezcla estable, CatBoost queda por encima en las 24 réplicas, por unos 0,7 puntos.** La ventaja es chica pero consistente en ese escenario.
+- **Aun cuando existe, casi no se ve en los datos.** El desvío de la diferencia realizada es de 0,9 a 1,2 puntos con 965 elegidos, y una diferencia de 0,3 a 0,7 puntos se ve a favor de CatBoost solo en el 71 % al 79 % de las veces. Con los 652 elegidos de la prueba final hay menos información: 78 contra 77 aciertos es lo esperable si la diferencia verdadera es de esa magnitud.
+- Límites propios de esta comparación: dos escenarios, una sola semilla por modelo (CatBoost 1, Random Forest 4) y configuración fija.
+
 ## Hipótesis
 
 - **Cuando la mezcla de códigos rota, actualizar la tasa y contraerla hacia el mercado gana unos 1,5 a 3 puntos; cuando es estable, la tasa fija es casi tan buena.** Coincide con lo que encontró el análisis de la [opción más precisa](opcion-mas-precisa.md) en los datos reales. Si la mezcla de la prueba final se parece al escenario estable (el 99,8 % de sus VIN tiene un código ya visto en 155–194), la tasa fija es una referencia fuerte. No se probó cuál escenario describe el futuro.
