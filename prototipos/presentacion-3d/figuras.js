@@ -10,8 +10,16 @@
 //       | detector | particiones
 // `datos`: lo que devuelve cargarDatos(): un JSON por clave (p3, p4, eleccion,
 //   pruebaFinal, p5, p6, preparacion), o null si ese fetch falló.
-// `opciones`: { resaltar: 'fuga' } en `comparacion`; { titulo: false } en todas
-//   para omitir el título y el subtítulo internos (la pantalla ya tiene titular).
+// `opciones`:
+//   - { titulo: false } en todas: omite el título y el subtítulo internos (la
+//     pantalla ya tiene titular).
+//   - { resumen: true } en `comparacion` (la variante de la presentación): un
+//     punto por alternativa sobre un solo eje de precisión en el cupo, en tres
+//     carriles (tasa por código, aprendizaje automático, no elegibles), con la
+//     elegida, la mejor precisión, el azar al mismo cupo y cuántas empatan con la
+//     mejor; sin rangos del 95 %. Sin `resumen`, la variante completa de 33 filas.
+//   - { resaltar: 'fuga' } en `comparacion` (con o sin `resumen`): la versión con
+//     fuga en el color de alerta.
 // Devuelve null si falta un JSON que la figura necesita; ui.js usa entonces el
 // SVG de matplotlib de respaldo (docs/entrega/figuras/).
 //
@@ -22,10 +30,18 @@
 // - Colores solo por variables CSS (--figura-*), con respaldo para el tema
 //   oscuro Twilight. Para un contenedor claro, definir las variables (ver
 //   herramientas/figuras-demo.html).
-// - Cada fila (o segmento) es un <g class="fila" style="--i: n"> para que la
-//   interfaz pueda animarlas en cascada; el SVG no anima nada por sí mismo.
-// - viewBox 1200×675 (16:9), salvo `comparacion`: 830 de ancho y alto según
-//   el contenido (~860 sin título), para letra de 14–15 px a ~830 px de ancho.
+// - Cada fila (o segmento, o punto) es un <g class="fila" style="--i: n"> para
+//   que la interfaz pueda animarlas en cascada; el SVG no anima nada por sí mismo.
+// - Tamaños (1 unidad del viewBox ≈ 1 px en un panel de ~900 px de ancho):
+//   · Las figuras de la presentación (`particiones`, `veces_azar_prueba_final` y
+//     `comparacion` con `resumen`): 900 de ancho y alto según el contenido; letra
+//     de 22 px o más en rótulos y valores, y nunca menos de 18 px (ejes, notas).
+//     Sin pies largos dentro del SVG: la pantalla tiene su pie y el detalle va en
+//     <desc>. Ningún texto depende de textLength (se acorta o se parte la línea).
+//   · `comparacion` completa: 830 de ancho, letra de 14–15 px (para el informe).
+//   · `donde_mirar`, `etiquetas_parciales` y `detector` (fuera de la presentación):
+//     viewBox 1200×675.
+//   Revisión: herramientas/figuras-demo.html?solo=<id>&ancho=900&medir=1.
 
 import { formatear } from './cifras.js';
 
@@ -141,6 +157,7 @@ const C = {
   punto: 'var(--figura-punto, #B4B6C2)',
   acento: 'var(--figura-acento, #066FEF)',
   acentoSuave: 'var(--figura-acento-suave, rgba(6, 111, 239, .28))',
+  sobreAcento: 'var(--figura-sobre-acento, #FFFFFF)', // texto sobre un relleno de acento
   alerta: 'var(--figura-alerta, #FBAE40)',
   alertaSuave: 'var(--figura-alerta-suave, rgba(251, 174, 64, .16))',
   superficie: 'var(--figura-superficie, #00142E)',
@@ -446,7 +463,213 @@ function etiquetaComparacion(r) {
   return capital(r.alternativa);
 }
 
+/**
+ * Ubica puntos de radio r alrededor de una línea (enjambre): cada punto baja o
+ * sube lo mínimo para no pisar a los ya ubicados. Los primeros de la lista
+ * (destacados) quedan sobre la línea. Con `soloAbajo`, el enjambre crece solo hacia
+ * abajo (deja libre el espacio de arriba para un rótulo). Devuelve el desplazamiento
+ * vertical de cada uno.
+ */
+function enjambre(xs, r, { separacion = 2, soloAbajo = false } = {}) {
+  const ubicados = [];
+  const minimo = 2 * r + separacion;
+  return xs.map((x) => {
+    for (let paso = 0; ; paso++) {
+      const dy = soloAbajo ? paso * 2 : (paso % 2 ? 1 : -1) * Math.ceil(paso / 2) * 2;
+      if (ubicados.every((u) => Math.hypot(u.x - x, u.dy - dy) >= minimo)) {
+        ubicados.push({ x, dy });
+        return dy;
+      }
+    }
+  });
+}
+
+/**
+ * Variante `resumen` (presentación proyectada): un punto por alternativa sobre un
+ * solo eje de precisión en el cupo, en tres carriles (tasa por código, aprendizaje
+ * automático y no elegibles). Sin rangos del 95 % (están en el informe y en la
+ * variante completa). Ancho 900, letra de 18 a 30 px.
+ */
+function figuraComparacionResumen(datos, opciones) {
+  const { p3, p4, eleccion } = datos;
+  const grupos = gruposComparacion(p3, p4);
+  const todas = grupos.flatMap((g) => g.filas);
+  if (!todas.length) return null;
+  const azar = p3.resultados.find((r) => r.familia === 'azar');
+  const comparacion = new Map((eleccion.comparacion || []).map((c) => [c.alternativa, c]));
+  const ganadora = eleccion.ganadora?.alternativa;
+  const mejor = eleccion.mejor_precision;
+  const filaGanadora = todas.find((r) => r.alternativa === ganadora);
+  const filaMejor = todas.find((r) => r.alternativa === mejor);
+  if (!filaGanadora || !filaMejor) return null;
+  const resaltarFuga = opciones.resaltar === 'fuga';
+  const calificador = todas.find((r) => r.elegible)?.calificador ?? '';
+  // Misma cuenta que la variante completa: empatan con la mejor, sin contar la ganadora ni la mejor.
+  const empatan = todas.filter((r) => r.alternativa !== ganadora && r.alternativa !== mejor
+    && comparacion.get(r.alternativa)?.empata).length;
+
+  const carriles = [
+    { clave: 'codigo', lineas: ['Tasa por código', '(referencias)'], filas: todas.filter((r) => r.elegible && r.pieza === 'p3') },
+    { clave: 'ml', lineas: ['Aprendizaje', 'automático'], filas: todas.filter((r) => r.elegible && r.pieza === 'p4') },
+    { clave: 'no-elegibles', lineas: ['No elegibles'], filas: todas.filter((r) => REFERENCIAS.includes(r.familia)) },
+  ].filter((c) => c.filas.length);
+
+  const ANCHO = 900;
+  const TAM = { carril: 24, carrilSub: 20, destacado: 30, rotulo: 22, eje: 20, nota: 22, pie: 18 };
+  const R = 9;
+  const R_GANADORA = 14;
+  const x0 = 262;
+  const x1 = 872;
+  const tope = Math.max(0.3, ...todas.map((r) => r.precision_cupo + 0.02));
+  const esc = escala(0, tope, x0, x1);
+  const titulo = 'Comparación de alternativas en validación';
+  const desc = `Precisión en el cupo diario del 5 % de cada alternativa (estimación puntual), ${calificador}. `
+    + `Elegida: ${nombre(ganadora)}, ${pct(filaGanadora.precision_cupo)}; mejor precisión: ${nombre(mejor)}, `
+    + `${pct(filaMejor.precision_cupo)}; ${empatan} alternativas más empatan con la mejor. `
+    + (azar ? `Azar al mismo cupo: ${pct(azar.azar_mismo_cupo)}. ` : '')
+    + 'El oráculo (techo) y la versión con fuga (didáctica) no son elegibles.';
+  const { svg, arriba } = lienzo('comparacion', ANCHO, 2000, {
+    titulo, desc, opciones, subtitulo: [`Precisión en el cupo diario del 5 %, ${calificador}.`],
+  });
+  svg.classList.add('figura-comparacion-resumen');
+  if (resaltarFuga) svg.classList.add('resaltar-fuga');
+
+  // Enjambre por carril: la ganadora y la mejor primero, para que queden sobre la línea.
+  // El carril de la ganadora crece hacia abajo: arriba va su rótulo, con la línea guía libre.
+  for (const c of carriles) {
+    const soloAbajo = c.filas.includes(filaGanadora);
+    const orden = [...c.filas].sort((a, b) => {
+      const peso = (r) => (r.alternativa === ganadora ? 0 : r.alternativa === mejor ? 1 : 2);
+      return peso(a) - peso(b) || a.precision_cupo - b.precision_cupo;
+    });
+    const dys = enjambre(orden.map((r) => esc(r.precision_cupo)), R + 1, { soloAbajo });
+    c.puntos = orden.map((r, j) => ({ r, dy: dys[j] }));
+    c.sobre = Math.max(R_GANADORA, ...dys.map((d) => -d + R + 1));
+    c.bajo = Math.max(R_GANADORA, ...dys.map((d) => d + R + 1));
+  }
+  // La mejor precisión se rotula a su derecha si nada de su carril queda más allá;
+  // si no, debajo del carril.
+  const carrilMejor = carriles.find((c) => c.filas.includes(filaMejor));
+  const xMejor = esc(filaMejor.precision_cupo);
+  const mejorAlLado = carrilMejor.filas.every((r) => esc(r.precision_cupo) <= xMejor + 2 * R)
+    && xMejor + R + 18 + anchoTexto('Mejor precisión', TAM.rotulo) * 1.15 <= ANCHO - 8;
+
+  // Disposición vertical: rótulo del azar, rótulo de la elegida, carriles.
+  const yAzar = arriba + 14;
+  const yElegida = yAzar + 52;
+  let y = yElegida + 22;
+  for (const c of carriles) {
+    y += Math.max(c.sobre + 12, 34);
+    c.y = y;
+    y += c.bajo + (c === carrilMejor && !mejorAlLado ? 62 : 22);
+  }
+  const yBase = y;
+
+  // Grilla, eje y rótulo del eje.
+  const g = el(svg, 'g', { class: 'eje' });
+  for (const v of ticks(tope, 4)) {
+    linea(g, esc(v), yElegida + 22, esc(v), yBase, C.linea, 1);
+    texto(g, esc(v), yBase + 24, pctEje(v), { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  }
+  linea(g, x0, yBase, x1, yBase, C.rango, 1.5);
+  texto(g, (x0 + x1) / 2, yBase + 60, 'Precisión en el cupo (CALIBRADA entre los elegidos)', {
+    tam: TAM.eje, color: C.tenue, ancla: 'middle',
+  });
+
+  // Azar al mismo cupo: línea vertical con su rótulo arriba, a la izquierda.
+  const xAzar = azar && esNumero(azar.azar_mismo_cupo) ? esc(azar.azar_mismo_cupo) : null;
+  if (xAzar !== null) {
+    const xa = xAzar;
+    const ga = el(svg, 'g', { class: 'referencia azar' });
+    linea(ga, xa, yAzar + 12, xa, yBase, C.texto, 2);
+    texto(ga, xa - 10, yAzar, `Azar al mismo cupo · ${pct(azar.azar_mismo_cupo)}`, {
+      tam: TAM.rotulo, color: C.tenue, ancla: 'end',
+    });
+  }
+
+  // Carriles.
+  let i = 0;
+  for (const c of carriles) {
+    const gc = el(svg, 'g', { class: `carril carril-${c.clave}` });
+    if (c.lineas.length > 1) {
+      texto(gc, 24, c.y - 13, c.lineas[0], { tam: TAM.carril, peso: 600 });
+      texto(gc, 24, c.y + 15, c.lineas[1], { tam: TAM.carrilSub, color: C.tenue });
+    } else {
+      texto(gc, 24, c.y, c.lineas[0], { tam: TAM.carril, peso: 600 });
+    }
+    linea(gc, x0, c.y, x1, c.y, C.linea, 1);
+    // Los destacados se dibujan al final para quedar encima.
+    const puntos = [...c.puntos].reverse();
+    for (const { r, dy } of puntos) {
+      const esGanadora = r.alternativa === ganadora;
+      const esMejor = r.alternativa === mejor;
+      const esFuga = r.familia === 'fuga';
+      const clases = [esGanadora && 'ganadora', esMejor && 'mejor', !r.elegible && 'referencia', esFuga && 'fuga']
+        .filter(Boolean).join(' ');
+      const gp = fila(svg, i++, `punto ${clases}`);
+      el(gp, 'title', {}, `${etiquetaComparacion(r)}: ${pct(r.precision_cupo)}`);
+      const x = esc(r.precision_cupo);
+      const yc = c.y + dy;
+      if (!r.elegible) {
+        const alerta = esFuga && resaltarFuga;
+        const d = R * 1.4;
+        if (alerta) el(gp, 'circle', { cx: x, cy: yc, r: d + 9, style: `fill:${C.alertaSuave}` });
+        el(gp, 'path', {
+          d: `M${x} ${yc - d}L${x + d} ${yc}L${x} ${yc + d}L${x - d} ${yc}Z`,
+          style: `fill:${C.superficie};stroke:${alerta ? C.alerta : C.texto};stroke-width:3;stroke-linejoin:round`,
+        });
+        // Oráculo a la izquierda, fuga a la derecha (la fuga es la de mayor precisión).
+        const rotulo = esFuga ? 'Con fuga' : 'Oráculo';
+        texto(gp, esFuga ? x + d + 12 : x - d - 12, yc, rotulo, {
+          tam: TAM.rotulo, ancla: esFuga ? 'start' : 'end', peso: alerta ? 600 : 400,
+          color: alerta ? C.alerta : C.texto, halo: true,
+        });
+      } else if (esGanadora) {
+        el(gp, 'circle', { cx: x, cy: yc, r: R_GANADORA + 6, style: `fill:${C.acentoSuave}` });
+        el(gp, 'circle', { cx: x, cy: yc, r: R_GANADORA, style: `fill:${C.acento};stroke:${C.superficie};stroke-width:3` });
+        linea(gp, x, yElegida + 20, x, yc - R_GANADORA - 6, C.acento, 2);
+        // El rótulo se corre a la derecha si pisaría la línea del azar.
+        const rotulo = `${FAMILIAS[r.familia] ?? capital(r.familia)} · ${pct(r.precision_cupo)}`;
+        const mitad = (anchoTexto(rotulo, TAM.destacado) * 1.15) / 2;
+        const xr = xAzar === null ? x : Math.min(Math.max(x, xAzar + 16 + mitad), x + mitad - 12);
+        texto(gp, xr, yElegida, rotulo, {
+          tam: TAM.destacado, peso: 700, ancla: 'middle', halo: true,
+        });
+      } else if (esMejor) {
+        el(gp, 'circle', { cx: x, cy: yc, r: R + 2, style: `fill:${C.texto};stroke:${C.superficie};stroke-width:2.5` });
+        if (mejorAlLado) {
+          texto(gp, x + R + 14, yc - 14, 'Mejor precisión', { tam: TAM.rotulo, peso: 600, halo: true });
+          texto(gp, x + R + 14, yc + 16, pct(r.precision_cupo), { tam: TAM.rotulo, peso: 600, halo: true });
+        } else {
+          const yr = c.y + c.bajo + 34;
+          linea(gp, x, yc + R + 4, x, yr - 16, C.texto, 1.5);
+          texto(gp, x + 10, yr, `Mejor precisión · ${pct(r.precision_cupo)}`, { tam: TAM.rotulo, peso: 600, ancla: 'end', halo: true });
+        }
+      } else {
+        el(gp, 'circle', { cx: x, cy: yc, r: R, style: `fill:${C.punto};stroke:${C.superficie};stroke-width:2` });
+      }
+    }
+  }
+
+  // Nota única y pie (debajo del eje); el alto final depende de lo que ocupen.
+  let yPie = yBase + 108;
+  if (empatan) {
+    texto(svg, 24, yPie, `Otras ${empatan} alternativas empatan con la mejor: gana la más simple.`, {
+      tam: TAM.nota, peso: 500, clase: 'nota',
+    });
+    yPie += 40;
+  }
+  texto(svg, 24, yPie, 'Cada punto, una alternativa; los rangos del 95 % están en el informe.', {
+    tam: TAM.pie, color: C.tenue, clase: 'pie',
+  });
+  const alto = Math.ceil(yPie + 24);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
+  svg.querySelector('rect')?.setAttribute('height', alto);
+  return svg;
+}
+
 function figuraComparacion(datos, opciones) {
+  if (opciones.resumen) return figuraComparacionResumen(datos, opciones);
   const { p3, p4, eleccion } = datos;
   const grupos = gruposComparacion(p3, p4);
   const azar = p3.resultados.find((r) => r.familia === 'azar');
@@ -596,28 +819,64 @@ function figuraPruebaFinal(datos, opciones) {
     return {
       etiqueta: capital(t.tramo), valor: g.veces_azar, rango: g.veces_azar_rango95, destacada: i === 0,
       valorTexto: veces(g.veces_azar),
-      valorSub: `${veces(g.veces_azar_rango95[0])} a ${veces(g.veces_azar_rango95[1])}`,
+      valorSub: `${veces(g.veces_azar_rango95[0]).replace(/\s×$/, '')} a ${veces(g.veces_azar_rango95[1])}`,
     };
   });
   const principal = tramos[0].ganadora;
   const sinPct = (x) => pct(x).replace(/\s%$/, '');
-  return figuraPuntos('veces_azar_prueba_final', opciones, {
+
+  // Pensada para ~900 px de ancho (1 unidad ≈ 1 px): rótulos de 24 px, valores de 36 px.
+  const ANCHO = 900;
+  const TAM = { rotulo: 24, valor: 36, rango: 20, eje: 20, ref: 20 };
+  const PASO = 112;
+  const { svg, arriba } = lienzo('veces_azar_prueba_final', ANCHO, 2000, {
     titulo: `Prueba final: de cada 100 elegidos se calibrarían ${sinPct(principal.precision_cupo)}, `
       + `contra ${sinPct(principal.azar_mismo_cupo)} al azar`,
-    subtitulo: [
-      `Veces el azar de la ganadora, ${principal.calificador}.`,
-      `Rango del 95 % por bootstrap de días; lectura de la prueba completa: ${principal.lectura}.`,
-    ],
-    desc: `Veces el azar de la ganadora (${nombre(corrida.ganadora?.alternativa)}) en la prueba final, por tramo: `
-      + filas.map((f) => `${f.etiqueta.toLowerCase()} ${f.valorTexto} (${f.valorSub})`).join('; ') + '.',
-    filas,
-    dominio: [0, Math.max(2.5, ...filas.map((f) => f.rango[1] + 0.1))],
-    formatoEje: (x) => x.toFixed(1).replace('.', ',') + NBSP + '×',
-    rotuloX: 'Veces el azar al mismo cupo (rango del 95 %)',
-    ref: { valor: 1, texto: `azar esperado = 1${NBSP}×` },
-    pie: 'Corrida única del preregistro acordado. El tramo >260 (cupo ~8) es solo descriptivo y no se grafica.',
-    xEtiqueta: 470, xPlot1: 1000, xValores: 1024,
+    subtitulo: [`Veces el azar de la ganadora, ${principal.calificador}.`],
+    desc: `Veces el azar de la ganadora (${nombre(corrida.ganadora?.alternativa)}) en la prueba final, por tramo, `
+      + 'con rango del 95 % por bootstrap de días: '
+      + filas.map((f) => `${f.etiqueta.toLowerCase()} ${f.valorTexto} (${f.valorSub})`).join('; ')
+      + `. Lectura de la prueba completa: ${principal.lectura}. Corrida única del preregistro acordado; `
+      + 'el tramo >260 es solo descriptivo y no se grafica.',
+    opciones,
   });
+  const xEtiqueta = 24;
+  const x0 = 318;
+  const x1 = 668;
+  const xValor = 700;
+  const dominio = Math.max(2.5, ...filas.map((f) => f.rango[1] + 0.1));
+  const esc = escala(0, dominio, x0, x1);
+  const yAzar = arriba + 14;
+  const yInicio = yAzar + 26;
+  const yBase = yInicio + PASO * filas.length;
+
+  const g = el(svg, 'g', { class: 'eje' });
+  for (const v of ticks(dominio, 5)) {
+    linea(g, esc(v), yInicio, esc(v), yBase, C.linea, 1);
+    texto(g, esc(v), yBase + 24, v.toFixed(1).replace('.', ',') + NBSP + '×', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  }
+  linea(g, x0, yBase, x1, yBase, C.rango, 1.5);
+  texto(g, (x0 + x1) / 2, yBase + 60, 'Veces el azar (rango del 95 %)', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+
+  const gr = el(svg, 'g', { class: 'referencia' });
+  linea(gr, esc(1), yAzar + 12, esc(1), yBase, C.texto, 2);
+  texto(gr, esc(1) - 10, yAzar, `Azar = 1${NBSP}×`, { tam: TAM.ref, color: C.tenue, ancla: 'end' });
+
+  filas.forEach((f, i) => {
+    const y = yInicio + PASO * (i + 0.5);
+    const gf = fila(svg, i, f.destacada ? 'destacada' : '');
+    const peso = f.destacada ? 700 : 500;
+    const lineas = anchoTexto(f.etiqueta, TAM.rotulo) > x0 - xEtiqueta - 24 ? partirEnDos(f.etiqueta) : [f.etiqueta];
+    textoLineas(gf, xEtiqueta, y, lineas, { tam: TAM.rotulo, peso });
+    puntoIntervalo(gf, esc, y, f.valor, f.rango, f.destacada ? 'destacada' : 'normal', f.destacada ? 13 : 11);
+    texto(gf, xValor, y - 14, f.valorTexto, { tam: TAM.valor, peso: 700, color: f.destacada ? C.texto : C.tenue });
+    texto(gf, xValor, y + 24, f.valorSub, { tam: TAM.rango, color: C.tenue });
+  });
+
+  const alto = Math.ceil(yBase + 84);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
+  svg.querySelector('rect')?.setAttribute('height', alto);
+  return svg;
 }
 
 // --- 3. donde_mirar (figuras.py:415-439) ----------------------------------------
@@ -757,26 +1016,31 @@ function figuraParticiones(datos, opciones) {
   const corte = tramo260.dias_del_vin[1];
   const DIA_INICIAL = 1; // base completa: Día 1–284 (cifras.js, tramo «base»)
 
-  const { svg, arriba, abajo } = lienzo('particiones', 1200, 675, {
+  // Pensada para ~900 px de ancho (1 unidad ≈ 1 px): el carril ocupa todo el ancho
+  // y su nombre va arriba; letra de 18 a 26 px.
+  const ANCHO = 900;
+  const TAM = { carril: 26, tramo: 24, detalle: 20, margen: 18, eje: 20, llave: 22 };
+  const { svg, arriba } = lienzo('particiones', ANCHO, 2000, {
     titulo: 'Cómo se separaron los días', opciones,
     subtitulo: [`Cada VIN cuenta en un solo tramo, según su Día del VIN. Entre entrenamiento y evaluación, `
       + `${valIni - hastaComparacion - 1} días de margen sin etiquetas.`],
-    pie: `Población principal: ${entero(cp.poblacion_principal.vins)} VIN con primera inspección ≤ DIA_${corte}; `
-      + `${entero(cp.cohorte_posterior_260.vins)} VIN con primera inspección posterior van aparte. Base ficticia.`,
     desc: `Elección: entrenamiento Día ${DIA_INICIAL}–${hastaComparacion} (${entero(cp.entrenamiento_comparacion.vins)} VIN), `
       + `validación ${valIni}–${valFin} (${entero(cp.validacion.vins)} VIN). Prueba final: entrenamiento ${DIA_INICIAL}–${hastaFinal} `
-      + `(${entero(cp.entrenamiento_final.vins)} VIN), prueba ${pruIni}–${pruFin} (${entero(cp.prueba_final.vins)} VIN).`,
+      + `(${entero(cp.entrenamiento_final.vins)} VIN), prueba ${pruIni}–${pruFin} (${entero(cp.prueba_final.vins)} VIN; `
+      + `>${corte}, solo descriptivo). Población principal: ${entero(cp.poblacion_principal.vins)} VIN con primera `
+      + `inspección ≤ DIA_${corte}; ${entero(cp.cohorte_posterior_260.vins)} VIN con primera inspección posterior van aparte. `
+      + 'Base ficticia.',
   });
-  const x0 = 270;
-  const x1 = 1168;
+  const x0 = 24;
+  const x1 = 876;
   const dia = escala(DIA_INICIAL - 1, pruFin, x0, x1); // el día d ocupa [dia(d - 1), dia(d)]
   const tramoX = (a, b) => [dia(a - 1), dia(b)];
-  const alto = 72;
-  const yEje = abajo - 34;
-  const espacio = yEje - arriba;
+  const alto = 76;
+  const yCarril1 = arriba + 34 + alto / 2;
+  const yCarril2 = yCarril1 + alto + 84;
   const carriles = [
     {
-      etiqueta: 'Elección', sub: 'validación', y: arriba + espacio * 0.25,
+      etiqueta: 'Elección (validación)', y: yCarril1,
       segmentos: [
         { a: DIA_INICIAL, b: hastaComparacion, t: 'Entrenamiento', d: `Día ${DIA_INICIAL}–${hastaComparacion} · ${entero(cp.entrenamiento_comparacion.vins)} VIN`, tipo: 'entrena' },
         { a: hastaComparacion + 1, b: valIni - 1, tipo: 'margen' },
@@ -784,7 +1048,7 @@ function figuraParticiones(datos, opciones) {
       ],
     },
     {
-      etiqueta: 'Prueba final', sub: 'corrida única', y: arriba + espacio * 0.62,
+      etiqueta: 'Prueba final (corrida única)', y: yCarril2,
       segmentos: [
         { a: DIA_INICIAL, b: hastaFinal, t: 'Entrenamiento final', d: `Día ${DIA_INICIAL}–${hastaFinal} · ${entero(cp.entrenamiento_final.vins)} VIN`, tipo: 'entrena' },
         { a: hastaFinal + 1, b: pruIni - 1, tipo: 'margen' },
@@ -795,54 +1059,67 @@ function figuraParticiones(datos, opciones) {
   ];
   let i = 0;
   for (const c of carriles) {
-    texto(svg, 32, c.y - 14, c.etiqueta, { tam: 26, peso: 500 });
-    texto(svg, 32, c.y + 17, c.sub, { tam: 19, color: C.tenue });
-    rect(svg, x0, c.y - alto / 2, x1 - x0, alto, C.linea, { radio: 6 });
+    const arribaBarra = c.y - alto / 2;
+    const yRotulo = arribaBarra - 22;
+    texto(svg, x0, yRotulo, c.etiqueta, { tam: TAM.carril, peso: 600 });
+    rect(svg, x0, arribaBarra, x1 - x0, alto, C.linea, { radio: 6 });
     for (const s of c.segmentos) {
       const [xa, xb] = tramoX(s.a, s.b);
       const g = fila(svg, i++, `segmento ${s.tipo}`);
       if (s.tipo === 'margen') {
-        rect(g, xa, c.y - alto / 2, xb - xa, alto, C.superficie);
-        texto(g, (xa + xb) / 2, c.y - alto / 2 - 20, `margen ${s.a}–${s.b}`, { tam: 17, color: C.tenue, ancla: 'middle' });
-        linea(g, (xa + xb) / 2, c.y - alto / 2 - 9, (xa + xb) / 2, c.y - alto / 2, C.tenue, 1.5);
+        rect(g, xa, arribaBarra, xb - xa, alto, C.superficie);
+        texto(g, (xa + xb) / 2, yRotulo, `margen ${s.a}–${s.b}`, { tam: TAM.margen, color: C.tenue, ancla: 'middle' });
+        linea(g, (xa + xb) / 2, yRotulo + 12, (xa + xb) / 2, arribaBarra, C.tenue, 1.5);
         continue;
       }
       const relleno = { entrena: C.punto, evalua: C.acento, prueba: C.acento, descriptiva: C.acentoSuave }[s.tipo];
-      rect(g, xa + 1, c.y - alto / 2, xb - xa - 2, alto, relleno, { radio: 4 });
-      const ancho = xb - xa - 20;
-      const color = s.tipo === 'entrena' ? C.superficie : C.texto;
-      // Primero adentro (dos tamaños); si no entra, a la derecha sobre la pista vacía.
-      const tam = [[21, 17], [18, 15], [16, 13]].find(([a, b]) => anchoTexto(s.t, a) <= ancho && anchoTexto(s.d, b) <= ancho);
-      if (tam) {
-        const centrado = ancho < 220;
+      rect(g, xa + 1, arribaBarra, xb - xa - 2, alto, relleno, { radio: 4 });
+      const ancho = xb - xa - 24;
+      const color = s.tipo === 'entrena' ? C.superficie : s.tipo === 'descriptiva' ? C.texto : C.sobreAcento;
+      if (anchoTexto(s.t, TAM.tramo) * 1.12 <= ancho && anchoTexto(s.d, TAM.detalle) * 1.1 <= ancho) {
+        // Adentro: a la izquierda en los tramos largos, centrado en los cortos.
+        const centrado = ancho < 260;
         const x = centrado ? (xa + xb) / 2 : xa + 14;
         const ancla = centrado ? 'middle' : 'start';
-        texto(g, x, c.y - 13, s.t, { tam: tam[0], peso: 600, color, ancla });
-        texto(g, x, c.y + 15, s.d, { tam: tam[1], color, peso: 500, ancla });
+        texto(g, x, c.y - 14, s.t, { tam: TAM.tramo, peso: 700, color, ancla });
+        texto(g, x, c.y + 18, s.d, { tam: TAM.detalle, color, peso: 500, ancla });
+      } else if (Math.max(anchoTexto(s.t, TAM.tramo), anchoTexto(s.d, TAM.detalle)) * 1.12 <= x1 - xb - 14) {
+        // A la derecha, sobre la pista vacía del carril.
+        texto(g, xb + 14, c.y - 14, s.t, { tam: TAM.tramo, peso: 700 });
+        texto(g, xb + 14, c.y + 18, s.d, { tam: TAM.detalle, color: C.tenue });
       } else {
-        texto(g, xb + 14, c.y - 13, s.t, { tam: 21, peso: 600 });
-        texto(g, xb + 14, c.y + 15, s.d, { tam: 17, color: C.tenue });
+        // Sin lugar al lado (el tramo final): arriba, con una línea guía.
+        const xm = (xa + xb) / 2;
+        texto(g, x1, yRotulo, `${s.t} · ${s.d}`, { tam: TAM.llave, peso: 600, ancla: 'end' });
+        linea(g, xm, yRotulo + 14, xm, arribaBarra, C.tenue, 1.5);
       }
     }
   }
-  // Llave bajo la prueba final y nota del tramo descriptivo.
+  // Llave bajo la prueba final.
   const [pa, pb] = tramoX(pruIni, pruFin);
-  const yLlave = carriles[1].y + alto / 2 + 14;
+  const yLlave = yCarril2 + alto / 2 + 12;
   const gl = fila(svg, i++, 'llave');
   el(gl, 'path', {
     d: `M${pa + 1} ${yLlave - 6}V${yLlave}H${pb - 1}V${yLlave - 6}`,
     style: `fill:none;stroke:${C.tenue};stroke-width:1.5`,
   });
-  texto(gl, pb, yLlave + 24, `Prueba final ${pruIni}–${pruFin} · ${entero(cp.prueba_final.vins)} VIN`, { tam: 19, ancla: 'end', peso: 500 });
-  texto(gl, pb, yLlave + 50, `>${corte}: solo descriptivo`, { tam: 17, ancla: 'end', color: C.tenue });
+  texto(gl, pb, yLlave + 26, `Prueba final ${pruIni}–${pruFin} · ${entero(cp.prueba_final.vins)} VIN`, {
+    tam: TAM.llave, ancla: 'end', peso: 600,
+  });
   // Eje de días.
+  const yEje = yLlave + 66;
   linea(svg, x0, yEje, x1, yEje, C.rango, 1.5);
   for (const d of [DIA_INICIAL, 50, 100, 150, 200, 250, pruFin]) {
     const x = d === DIA_INICIAL ? dia(d - 1) : dia(d);
     linea(svg, x, yEje, x, yEje + 6, C.rango, 1.5);
-    texto(svg, x, yEje + 22, String(d), { tam: T.eje, color: C.tenue, ancla: 'middle' });
+    texto(svg, x, yEje + 24, String(d), {
+      tam: TAM.eje, color: C.tenue, ancla: d === DIA_INICIAL ? 'start' : d === pruFin ? 'end' : 'middle',
+    });
   }
-  texto(svg, x0 - 16, yEje, 'Día del VIN', { tam: T.eje, color: C.tenue, ancla: 'end' });
+  texto(svg, (x0 + x1) / 2, yEje + 56, 'Día del VIN', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  const altoTotal = Math.ceil(yEje + 76);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${altoTotal}`);
+  svg.querySelector('rect')?.setAttribute('height', altoTotal);
   return svg;
 }
 
