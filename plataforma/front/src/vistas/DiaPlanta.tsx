@@ -95,7 +95,7 @@ export function DiaPlanta() {
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="modelo" className="flex items-center gap-1">Modelo
-                <Ayuda>{modelo(clave).detalle} {modelo(clave).advertencia}</Ayuda></Label>
+                <Ayuda>{modelo(clave).detalle}</Ayuda></Label>
               <Select value={clave} onValueChange={(v) => setClave(v as ClaveModelo)}>
                 <SelectTrigger id="modelo" className="h-12 w-full"><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -125,7 +125,7 @@ export function DiaPlanta() {
             </Button>
             <Button variant="ghost" onClick={() => setReiniciar(true)} disabled={!!ocupado}>Reiniciar en el Día {planta.inicio}</Button>
           </div>
-          {t >= planta.fin && <p className="mt-3">Fin de la validación: los días siguientes son la prueba final, que no se relee.</p>}
+          {t >= planta.fin && <p className="mt-3">La base ficticia llega hasta el Día {planta.fin}: no hay más días para simular.</p>}
         </section>
       )}
       </div>

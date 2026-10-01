@@ -33,7 +33,7 @@ export function Resultados() {
         <Cifra rotulo="Con resultado" valor={cifras.con_resultado} apoyo={`${cifras.pendientes} pendientes`} />
         <Cifra rotulo="Aciertos (CALIBRADA)" valor={cifras.calibradas} acento />
         <Cifra rotulo="Precisión de lo enviado" valor={pct(cifras.precision)} apoyo="calibradas sobre auditadas con resultado"
-          ayuda="Entre las unidades que la plataforma envió y ya tienen resultado. No es la tasa de toda la producción. Para compararla con el azar con incertidumbre, ver Evaluación." />
+          ayuda="Entre las unidades que la plataforma envió y ya tienen resultado. No es la tasa de toda la producción." />
       </section>
 
       {envios.length === 0 ? (

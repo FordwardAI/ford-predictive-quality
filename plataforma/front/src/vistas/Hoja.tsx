@@ -39,7 +39,6 @@ export function HojaDelDia({ soloLectura = false }: { soloLectura?: boolean }) {
   const sugeridas = (f: Fila) => (estado.pendientes.find((p) => p.codigo === f.codigo)?.pendiente ?? 0) + tomadas(f.codigo)
   const aAuditar = hoja.filas.filter((f) => sugeridas(f) > 0)
   const ultimo = hoja.filas.map((f) => sugeridas(f) > 0).lastIndexOf(true)
-  const evaluacion = hoja.textos.evaluacion.match(/se calibrarían ([\d,]+).*contra ([\d,]+) al azar/)
 
   return (
     <>
@@ -64,8 +63,8 @@ export function HojaDelDia({ soloLectura = false }: { soloLectura?: boolean }) {
       <section className="mb-10 grid grid-cols-2 gap-6 lg:grid-cols-4">
         <Cifra rotulo="Cupo del día" valor={hoja.cupo} acento apoyo={`${entero(hoja.programadas)} en la playa`} />
         <Cifra rotulo="Códigos a auditar" valor={aAuditar.length} apoyo={`de ${hoja.filas.length} programados`} />
-        {!soloLectura && <Cifra rotulo="Esperado en el cupo" valor={evaluacion ? `${evaluacion[1]} %` : '—'}
-          apoyo={evaluacion ? `contra ${evaluacion[2]} % al azar` : undefined} ayuda={hoja.textos.evaluacion} />}
+        <Cifra rotulo="Modelo" valor={<span className="text-2xl">{m.corto} v{hoja.version.numero}</span>}
+          apoyo={`resultados hasta el Día ${hoja.version.entrenado_hasta}`} />
         <div className="flex flex-col gap-1">
           <span>Avance</span>
           <span className="text-3xl leading-tight font-medium tracking-tight">{estado.tomadas}<span className="text-2xl"> / {estado.cupo}</span></span>
@@ -203,8 +202,8 @@ function ComoLeer({ hoja }: { hoja: Hoja }) {
         </DialogHeader>
         <div className="flex flex-col gap-6">
           <section><h3 className="mb-2 text-lg">Cómo se usa</h3><ol className="list-decimal space-y-1 pl-6">{hoja.textos.uso.map((x) => <li key={x}>{x}</li>)}</ol></section>
-          <section><h3 className="mb-2 text-lg">Qué se espera</h3><p>{hoja.textos.evaluacion}</p><p className="mt-2">{hoja.textos.corte}</p></section>
-          <section><h3 className="mb-2 text-lg">Tasas</h3><p>{hoja.textos.tasa}</p><p className="mt-2">{hoja.textos.minimo}</p><p className="mt-2">{hoja.agrupaciones}</p></section>
+          <section><h3 className="mb-2 text-lg">Modelo y cupo</h3><p>{hoja.textos.evaluacion}</p><p className="mt-2">{hoja.textos.corte}</p></section>
+          <section><h3 className="mb-2 text-lg">Tasas</h3><p>{hoja.textos.tasa}</p><p className="mt-2">{hoja.textos.minimo}</p></section>
           <section><h3 className="mb-2 text-lg">Límites</h3><ul className="list-disc space-y-1 pl-6">{hoja.limites.map((x) => <li key={x}>{x}</li>)}</ul></section>
         </div>
       </DialogContent>

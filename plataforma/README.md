@@ -11,7 +11,7 @@ Cada dispositivo elige su rol en la primera pantalla (o con un acceso directo `?
 | Rol | Dónde | Pantallas |
 | --- | --- | --- |
 | **Selección en la playa** | Tablet o celular | **Selección**: qué buscar, «¿la envío?», enviadas con su resultado y deshacer, y terminar ronda. **Prioridades del día**: la hoja en solo lectura. |
-| **Calidad de Planta** | Escritorio | **Día de planta**: entradas, cupo, modelo y armar la hoja. **Hoja del día**. **Seguimiento**. **Resultados**: acierto por unidad. **Modelo**: calendario de actualización automática, último cambio e historial. **Reporte para la línea**. **Evaluación**: la simulación frente al azar. |
+| **Calidad de Planta** | Escritorio | **Día de planta**: entradas, cupo, modelo y armar la hoja. **Hoja del día**. **Seguimiento**. **Resultados**: acierto por unidad. **Modelo**: calendario de actualización automática, último cambio e historial. **Reporte para la línea**. |
 
 ### El ciclo en planta
 
@@ -54,7 +54,7 @@ Desde la raíz, con el entorno de [`solucion/README.md`](../solucion/README.md):
 .venv/bin/python -m plataforma.servidor --csv "<Dataset QLS Inspección Adicional.csv>" --catalogo "<Códigos de catálogo.csv>"
 ```
 
-Abrir `http://127.0.0.1:8765`. La primera vez, la pantalla Evaluación tarda alrededor de un minuto: reentrena los modelos día por día con las cinco semillas. Después queda en caché fuera del repo (`~/.cache/ford-predictive-quality/plataforma/`), igual que el almacén de planta y el estado del día.
+Abrir `http://127.0.0.1:8765`. El almacén de planta y el estado del día quedan fuera del repo (`~/.cache/ford-predictive-quality/plataforma/`).
 
 ```sh
 .venv/bin/python -m plataforma.test_plataforma   # lógica del día y filtro sin VIN (sintéticas, sin CSV)
@@ -63,7 +63,7 @@ Abrir `http://127.0.0.1:8765`. La primera vez, la pantalla Evaluación tarda alr
 
 ### Frontend
 
-`front/` tiene el código: React 19, TypeScript, Vite, Tailwind v4 y componentes de [shadcn/ui](https://ui.shadcn.com) (Radix), más Recharts para el gráfico. Las versiones están fijadas en `package.json` y `package-lock.json`. El build se versiona en `web/`, así que para correr la demo alcanza con Python. Solo hace falta Node (probado con 26) para cambiar la interfaz:
+`front/` tiene el código: React 19, TypeScript, Vite, Tailwind v4 y componentes de [shadcn/ui](https://ui.shadcn.com) (Radix) y los íconos de lucide. Las versiones están fijadas en `package.json` y `package-lock.json`. El build se versiona en `web/`, así que para correr la demo alcanza con Python. Solo hace falta Node (probado con 26) para cambiar la interfaz:
 
 ```sh
 cd plataforma/front
@@ -80,7 +80,6 @@ Criterio de la interfaz: cada pantalla muestra primero la decisión, y el detall
 | Hoja | Códigos a auditar, cantidad y avance | Ranking completo (pestaña), detalle del código (panel lateral), metodología (diálogo «Cómo leerla») |
 | Día de planta | Entradas del día, versión vigente y armar la hoja | Importar CSV, el contrato de cada entrada (tooltip) |
 | Modelo | Próxima actualización programada | Qué cambió en el ranking, el historial de versiones |
-| Evaluación | Cifras y curva | Comparación y tabla por día (pestañas) |
 | Contexto | Insignia «Base ficticia» | Calificador, huellas de la fuente y límites (tooltip) |
 
 ## Qué es real y qué es supuesto
@@ -92,20 +91,16 @@ Criterio de la interfaz: cada pantalla muestra primero la decisión, y el detall
   - etiquetas parciales: el modelo solo conoce el histórico y lo auditado (`puntaje.Fuente`, como en P5). `hoja.armar` recibe esa fuente con el parámetro opcional `fuente`;
   - evaluador (`cupo.simular`, `cupo.metricas`).
 - **Modelos:**
-  - CatBoost con atributos, reentrenado cada 5 días: **por defecto**. Lo eligieron por precisión las conclusiones del informe (`docs/entrega/06-conclusiones.md`). Tiene la mejor lectura de la prueba final (78 de 652, 12,0 %) y en la comparación pareada del mundo simulado le gana a Random Forest (`research/simulacion-evaluacion.md`). La diferencia con Random Forest está dentro del ruido. En la validación de la plataforma (155–194) rinde menos: 61 de 391, contra 72.
-  - Random Forest con atributos, reentrenado: elegido por efectividad el 01/10. Tercera lectura de la prueba final: 77 de 652 (11,8 %). En el mundo simulado quedó último entre las opciones que se actualizan.
-  - Tasa fija: preregistrada el 30/09; cifra oficial de la prueba final (71 de 652, 10,9 %).
+  - CatBoost con atributos, reentrenado cada 5 días: **por defecto**, el que eligieron por precisión las conclusiones del informe (`docs/entrega/06-conclusiones.md`). Random Forest con atributos y la tasa fija siguen como opciones.
   - Semillas de los preregistros: CatBoost 1 y Random Forest 4. Los hiperparámetros y la vida media salen de `ml.ajustar` con Día ≤ 149; ajustarlos con días posteriores filtraría la validación.
-  - En la Evaluación, la tasa fija reproduce `eleccion.json` (59/391). Random Forest da 72/391; la cifra publicada, 73, viene de otra corrida de `precision.json`. Se informa el rango de aciertos entre las 5 semillas.
-- **Prueba final:** se muestran las tres lecturas ya registradas en `solucion/resultados/prueba-final.json` (tasa fija, CatBoost y Random Forest); no se recalculan.
+- **Fuera de la plataforma:** la evaluación de los modelos (validación, las tres lecturas de la prueba final, la comparación con el azar y el mundo simulado) es evidencia del equipo. Vive en `solucion/` y `research/`, y la plataforma no la muestra ni en pantalla ni en las descargas.
 - **Supuestos de la demo:**
   - Días: solo validación (155–194).
   - Gate Release: el Día del VIN lo aproxima.
   - Espera en la playa: de 0 a 5 días. Demora de los resultados: de 1 a 5 días.
   - Ronda: un código que no se marca se supone llegado.
   - Días sin Gate Release en la base: el cupo es 0, salvo que Calidad fije otro.
-  - Evaluación es la simulación fuera de línea con todas las etiquetas de validación; el ciclo de planta, en cambio, aprende solo de lo auditado. Por eso sus precisiones no coinciden.
-- **Descargas:** el texto de evaluación de los archivos lo arma `solucion/hoja.py`, que todavía dice «La prueba final todavía no se corrió». La pantalla lo reemplaza por la lectura registrada del modelo.
+- **Descargas:** usan los escritores de la E3 (`solucion/hoja.py`) con los textos de planta: qué modelo y versión ordenan y el cupo, sin las notas de evaluación (límite y pendientes de la prueba final, χ² de validación).
 
 ## Reglas de datos
 

@@ -1,16 +1,13 @@
-"""Los tres modelos que puede usar la plataforma para ordenar los códigos, con lo ya publicado de cada uno.
+"""Los modelos que puede usar la plataforma para ordenar los códigos.
 
-Las cifras de validación y de prueba final se leen de `solucion/resultados/`: la plataforma no relee la prueba final.
+Por qué CatBoost va por defecto, y cómo rinde cada uno, está en docs/entrega/06-conclusiones.md y en research/: es
+evidencia del equipo, no se muestra en la plataforma.
 """
-import json
-
 from solucion import ml, referencias  # noqa: F401  Registran las familias que reconstruye `crear`.
 from solucion.cupo import fuente_completa
-from solucion.datos import RAIZ
 from solucion.eleccion import ganadora
 from solucion.puntaje import atributos_de, crear
 
-RESULTADOS = RAIZ / "solucion" / "resultados"
 POR_DEFECTO = "catboost"
 SEMILLAS = {"rf": 4, "catboost": 1}  # Las de los preregistros (semilla 4: la corrida mediana de RF; semilla 1: CatBoost).
 
@@ -19,32 +16,18 @@ FICHAS = {
         "nombre": "CatBoost con atributos", "corto": "CatBoost",
         "detalle": "Reentrenado cada 5 días con las auditorías de resultado conocido (Día ≤ t − 5). "
                    "Entradas: el código y sus atributos (mercado, motor, tracción, versión).",
-        "origen": "Elegido por precisión en bloques de tiempo y mejor lectura de la prueba final (78 de 652, 12,0 %). "
-                  "En el mundo simulado le gana a Random Forest en la comparación pareada.",
-        "advertencia": "La diferencia con Random Forest (78 contra 77 aciertos) está dentro del ruido, y su lectura final "
-                       "ocurrió después de conocer la de la tasa fija.",
         "base": "catboost", "familia": "ml_catboost_atributos",
     },
     "rf": {
         "nombre": "Random Forest con atributos", "corto": "Random Forest",
         "detalle": "Reentrenado cada 5 días, mismas entradas que CatBoost, con la configuración preregistrada (semilla 4).",
-        "origen": "Elegido por efectividad el 01/10; tercera lectura de la prueba final: 77 de 652 (11,8 %).",
-        "advertencia": "En el mundo simulado quedó último entre las opciones que se actualizan; la tercera lectura se hizo "
-                       "conociendo las dos anteriores.",
         "base": "rf", "familia": "ml_rf_atributos",
     },
     "tasa_fija": {
         "nombre": "Tasa fija por código", "corto": "Tasa fija",
         "detalle": "Proporción CALIBRADA de cada código con los resultados conocidos, sin reentrenar entre versiones.",
-        "origen": "Ganadora preregistrada del 30/09 y cifra oficial de la prueba final (71 de 652, 10,9 %).",
-        "advertencia": "Pierde precisión cuando rota la mezcla de códigos.",
     },
 }
-
-
-def _json(nombre):
-    archivo = RESULTADOS / nombre
-    return json.loads(archivo.read_text(encoding="utf-8")) if archivo.exists() else None
 
 
 ESTOCASTICOS = ("rf", "catboost")
@@ -67,25 +50,6 @@ def construir(tabla, semilla=None):
     return salida
 
 
-def prueba_final():
-    """Lecturas ya registradas de la prueba final, por modelo (sin recalcular)."""
-    pf = _json("prueba-final.json") or {"corridas": []}
-    salida = {}
-    for corrida in pf["corridas"]:
-        familia = corrida["ganadora"]["familia"]
-        clave = {"tasa_fija": "tasa_fija", "ml_catboost_atributos": "catboost", "ml_rf_atributos": "rf"}.get(familia)
-        principal = next((t for t in corrida["tramos"] if t.get("lectura_del_tramo") == "principal"), None)
-        if clave and principal:
-            g, azar = principal["ganadora"], principal.get("azar_simulado", {})
-            salida[clave] = {"precision": g["precision_cupo"], "rango": g["precision_rango95"],
-                             "azar": g["azar_mismo_cupo"], "veces_azar": g["veces_azar"],
-                             "elegidos": g["elegidos"], "calibrada_elegidas": g["calibrada_elegidas"],
-                             "dias": principal["dias_del_vin"], "calificador": g["calificador"],
-                             "azar_simulado": azar.get("precision_cupo"), "fecha": corrida["fecha"][:10]}
-    return salida
-
-
 def fichas():
-    final = prueba_final()
-    return [{"clave": c, **{k: v for k, v in f.items() if k not in ("base", "familia")},
-             "prueba_final": final.get(c), "por_defecto": c == POR_DEFECTO} for c, f in FICHAS.items()]
+    return [{"clave": c, **{k: v for k, v in f.items() if k not in ("base", "familia")}, "por_defecto": c == POR_DEFECTO}
+            for c, f in FICHAS.items()]

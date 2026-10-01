@@ -70,8 +70,8 @@ export function useApp() {
 }
 
 // Navegación por hash. Cada rol tiene sus vistas; una vista ajena al rol lleva a la principal del rol.
-export type Vista = 'seleccion' | 'prioridades' | 'hoy' | 'hoja' | 'seguimiento' | 'resultados' | 'modelo' | 'linea' | 'simulacion'
-const VISTAS: Vista[] = ['seleccion', 'prioridades', 'hoy', 'hoja', 'seguimiento', 'resultados', 'modelo', 'linea', 'simulacion']
+export type Vista = 'seleccion' | 'prioridades' | 'hoy' | 'hoja' | 'seguimiento' | 'resultados' | 'modelo' | 'linea'
+const VISTAS: Vista[] = ['seleccion', 'prioridades', 'hoy', 'hoja', 'seguimiento', 'resultados', 'modelo', 'linea']
 
 export function useVista(): Vista | null {
   const leer = () => {

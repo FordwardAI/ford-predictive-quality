@@ -1,6 +1,6 @@
 import {
-  BadgeCheck, CalendarClock, CalendarDays, ChartLine, CircleCheck, CircleMinus, CircleX, ClipboardCheck, ClipboardList,
-  Download, Factory, Info, ListChecks, ListOrdered, Pause, Play, RefreshCw, Route, ScanSearch, SkipForward,
+  BadgeCheck, CalendarClock, CalendarDays, CircleCheck, CircleMinus, CircleX, ClipboardCheck, ClipboardList,
+  Download, Factory, Info, ListChecks, ListOrdered, RefreshCw, Route, ScanSearch,
   SquareParking, type LucideIcon,
 } from 'lucide-react'
 
@@ -19,14 +19,10 @@ const ICONOS = {
   linea: Factory,
   playa: SquareParking,
   calidad: ClipboardCheck,
-  simulacion: ChartLine,
   check: CircleCheck,
   menos: CircleMinus,
   fuera: CircleX,
   descarga: Download,
-  play: Play,
-  pausa: Pause,
-  paso: SkipForward,
   info: Info,
 } satisfies Record<string, LucideIcon>
 

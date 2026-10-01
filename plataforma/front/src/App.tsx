@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Toaster } from '@/components/ui/sonner'
@@ -15,9 +15,6 @@ import { ReporteLinea } from '@/vistas/ReporteLinea'
 import { Resultados } from '@/vistas/Resultados'
 import { Seguimiento } from '@/vistas/Seguimiento'
 import { Seleccion } from '@/vistas/Seleccion'
-
-// Recharts solo se carga al abrir la evaluación.
-const SimulacionBase = lazy(() => import('@/vistas/Simulacion').then((m) => ({ default: m.SimulacionBase })))
 
 type Item = { id: Vista; nombre: string; corto: string; icono: NombreIcono }
 const NAV: Record<Rol, { nombre: string; grupos: { grupo: string; items: Item[] }[] }> = {
@@ -50,7 +47,6 @@ const NAV: Record<Rol, { nombre: string; grupos: { grupo: string; items: Item[] 
           { id: 'linea', nombre: 'Reporte para la línea', corto: 'Línea', icono: 'linea' },
         ],
       },
-      { grupo: 'Evaluación', items: [{ id: 'simulacion', nombre: 'Evaluación', corto: 'Evaluación', icono: 'simulacion' }] },
     ],
   },
 }
@@ -66,9 +62,9 @@ function Contexto() {
           <button type="button"><Badge variant="outline">Base ficticia</Badge></button>
         </TooltipTrigger>
         <TooltipContent className="max-w-sm">
-          Entre auditados con actividad QLS. Solo días de validación {meta.validacion[0]}–{meta.validacion[1]}; la prueba
-          final no se relee. Fuente {meta.fuente.csv}, catálogo {meta.fuente.catalogo}. Ningún VIN sale del servidor.
-          Propuesta de FordwardAI: no es un sistema de Ford.
+          Datos de la base ficticia, reproducidos día por día hasta que haya conexión con Ford (días {meta.validacion[0]}–{meta.validacion[1]}).
+          Fuente {meta.fuente.csv}, catálogo {meta.fuente.catalogo}. Ningún VIN sale del servidor. Propuesta de FordwardAI:
+          no es un sistema de Ford.
         </TooltipContent>
       </Tooltip>
     </div>
@@ -141,7 +137,6 @@ export default function App() {
           {vista.id === 'linea' && <ReporteLinea />}
           {vista.id === 'hoja' && <HojaDelDia />}
           {vista.id === 'seguimiento' && <Seguimiento />}
-          {vista.id === 'simulacion' && <Suspense fallback={<p>Cargando…</p>}><SimulacionBase /></Suspense>}
         </main>
       </div>
 

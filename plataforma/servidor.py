@@ -9,13 +9,14 @@ acierto por unidad, actualiza el modelo en días programados (automático) y arm
 Mientras no haya conexión con Ford, una fuente simulada reproduce la base día por día con el mismo contrato.
 
 Corre en la notebook: los datos no salen de la máquina. Usa la tabla enmascarada (sin etiquetas de Día >= 200) y solo
-días de validación. Ninguna respuesta lleva un VIN de la base: todo pasa por `privacidad.revisar`.
+días de validación de la base ficticia. Ninguna respuesta lleva un VIN de la base: todo pasa por `privacidad.revisar`.
 """
 import argparse
 import json
 import tempfile
 import threading
 import traceback
+from contextlib import contextmanager
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -30,7 +31,6 @@ from solucion.puntaje import Fuente
 
 from . import modelo as modelo_mod
 from . import modelos as modelos_mod
-from . import simulacion
 from .estado import Dia
 from .planta import Planta, Rechazo, filas_csv, reporte_csv, reporte_linea
 from .privacidad import SinVin, revisar
@@ -39,6 +39,9 @@ from .simulador import Simulador
 WEB = Path(__file__).resolve().parent / "web"
 CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 VALIDACION = TRAMOS["validacion"]
+# Límites de la hoja para planta: sin el de la prueba final, que es un dato de la evaluación del equipo.
+LIMITES = [x for x in hoja.LIMITES if "prueba final" not in x]
+TEXTOS_E3 = hoja.textos  # El original: las descargas lo reemplazan un momento por los textos de planta.
 
 
 class Plataforma:
@@ -56,34 +59,10 @@ class Plataforma:
         self.simulador = Simulador(self.tabla, self.planta)
         self.lock = threading.RLock()
         self.h, self.dia = None, None
-        self.sim, self.sim_error = None, None  # Antes de restaurar: la hoja consulta la evaluación.
         if self.planta.dia is None:
             self.reiniciar()
         else:
             self._restaurar()
-        threading.Thread(target=self._evaluar, daemon=True).start()
-
-    # --- Evaluación (simulación fuera de línea con etiquetas completas, la de la pantalla Evaluación) ----------
-
-    def _evaluar(self):
-        try:
-            otras = {c: [] for c in modelos_mod.ESTOCASTICOS}
-            for s in modelos_mod.ml.SEMILLAS:  # Las otras semillas de cada modelo, para el rango de aciertos.
-                variante = modelos_mod.construir(self.tabla, semilla=s)
-                for c in otras:
-                    if s != modelos_mod.SEMILLAS[c]:
-                        otras[c].append(variante[c])
-            self.sim = simulacion.cacheada(self.tabla, self.modelos, self.carpeta, otras)
-        except Exception as error:  # noqa: BLE001  Se informa en la pantalla de evaluación.
-            traceback.print_exc()
-            self.sim_error = str(error)
-
-    def evaluacion(self, clave):
-        if not self.sim:
-            return None
-        m = self.sim["modelos"][clave]["metricas"]
-        return {"precision": m["precision_cupo"], "rango": m["precision_rango95"], "azar": m["azar_mismo_cupo"],
-                "lectura": m["lectura"], "calificador": self.sim["calificador"]}
 
     # --- Reloj y fuente simulada ------------------------------------------------------------------------------
 
@@ -137,7 +116,7 @@ class Plataforma:
 
     def _hoja(self, programa, t, clave, cupo, version):
         return hoja.armar(self.tabla, programa, t, cupo, predictor=self.predictor(clave, version, t),
-                          evaluacion=self.evaluacion(clave), fuente=self.fuente_dia(t))
+                          evaluacion=None, fuente=self.fuente_dia(t))
 
     def _restaurar(self):
         """Después de reiniciar el servidor, rearma la hoja del día con la misma playa, modelo y versión."""
@@ -151,16 +130,9 @@ class Plataforma:
         h = self.h
         if h is None:
             return None
-        h.evaluacion = self.evaluacion(self.dia.modelo) or h.evaluacion  # La evaluación termina después de armar.
-        tx = hoja.textos(h)
-        pf = modelos_mod.prueba_final().get(self.dia.modelo)
-        tx["evaluacion"] = tx["evaluacion"].replace("La prueba final todavía no se corrió.", (
-            f"Prueba final ya registrada (Días {pf['dias'][0]}–{pf['dias'][1]}): {hoja._pct(pf['precision'])} contra "
-            f"{hoja._pct(pf['azar'])} al azar." if pf else "Este modelo no tiene lectura en la prueba final: no se relee."))
-        gr = self.planta.gate_release(h.dia)
-        tx["corte"] = (f"Cupo del día: {h.cupo} (el 5 % de las {gr} unidades que pasaron Gate Release hoy es "
-                       f"{cupo_5(gr)}). En la playa esperan {h.programadas}, de los últimos 5 días.")
+        tx = self.textos(h)
         v = self._version(self.dia.version)
+        gr = self.planta.gate_release(h.dia)
         return {
             "dia": h.dia, "cupo": h.cupo, "programadas": h.programadas, "gate_release": gr,
             "modelo": self.dia.modelo, "predictor": h.predictor, "version": v,
@@ -173,8 +145,37 @@ class Plataforma:
             "exploracion": [{"codigo": c, "ultimo": u} for c, u in h.exploracion],
             "unidades": [{"codigo": c, "motivo": m, "ids": ids} for c, m, ids in h.unidades],
             "por_que": [{**p, "texto": hoja._por_que_txt(h, p)} for p in h.por_que],
-            "agrupaciones": hoja._agrupaciones_txt(h), "textos": tx, "limites": hoja.LIMITES,
+            "textos": tx, "limites": LIMITES,
         }
+
+    def textos(self, h):
+        """Los textos de la hoja para el uso diario: qué modelo y versión ordenan, y el cupo. La evaluación del modelo
+        (validación, prueba final, comparación con el azar) queda en solucion/ y research/: es evidencia del equipo."""
+        tx = TEXTOS_E3(h)
+        v = self._version(self.dia.version)
+        tx["evaluacion"] = (f"Ordena {modelos_mod.FICHAS[self.dia.modelo]['nombre']}, versión v{v['numero']}, con el "
+                            f"histórico y los resultados de auditoría hasta el Día {v['entrenado_hasta']}.")
+        tx["minimo"] = (f"Mínimo por código: una unidad a cada código en la playa sin resultado conocido en los últimos "
+                        f"{h.minimo[0]} días, el más antiguo primero. Mantiene al día la tasa de los códigos poco elegidos.")
+        gr = self.planta.gate_release(h.dia)
+        tx["corte"] = (f"Cupo del día: {h.cupo} (el 5 % de las {gr} unidades que pasaron Gate Release hoy es "
+                       f"{cupo_5(gr)}). En la playa esperan {h.programadas}, de los últimos 5 días.")
+        return tx
+
+    @contextmanager
+    def _textos_de_planta(self):
+        """Las descargas usan los escritores de la E3 (solucion/hoja.py); mientras escriben, toman estos textos."""
+        nombres = ("textos", "LIMITES", "PENDIENTES", "PENDIENTES_FINAL", "_agrupaciones_txt")
+        guardado = [getattr(hoja, n) for n in nombres]
+        # Sin notas de la evaluación del equipo: límite y pendientes de la prueba final, χ² de validación.
+        reemplazo = [lambda h: self.textos(h), LIMITES, [], [], lambda h: ""]
+        for n, v in zip(nombres, reemplazo):
+            setattr(hoja, n, v)
+        try:
+            yield
+        finally:
+            for n, v in zip(nombres, guardado):
+                setattr(hoja, n, v)
 
     def estado(self):
         """Avance del día con el resultado de cada enviada, si ya volvió."""
@@ -262,7 +263,7 @@ class Plataforma:
         return {"validacion": VALIDACION, "modelos": modelos_mod.fichas(),
                 "fuente": {"csv": self.tabla.fuente.get("csv_sha256", "")[:12],
                            "catalogo": self.tabla.fuente.get("catalogo_sha256", "")[:12]},
-                "simulacion_lista": self.sim is not None, "programa": modelo_mod.PROGRAMA}
+                "programa": modelo_mod.PROGRAMA}
 
 
 def _jsonable(x):
@@ -292,7 +293,7 @@ class Manejador(SimpleHTTPRequestHandler):
         super().__init__(*a, directory=str(WEB), **kw)
 
     def log_message(self, formato, *args):  # Sin ruido por cada estático.
-        if "/api/" in (args[0] if args else ""):
+        if args and "/api/" in str(args[0]):
             super().log_message(formato, *args)
 
     def _enviar(self, estado, cuerpo, tipo="application/json; charset=utf-8", nombre=None):
@@ -321,10 +322,6 @@ class Manejador(SimpleHTTPRequestHandler):
         q = {k: v[0] for k, v in parse_qs(url.query).items()}
         p, ruta = self.plataforma, url.path.removeprefix("/api/")
         try:
-            if metodo == "GET" and ruta == "simulacion":  # Fuera del lock: la evaluación corre en otro hilo.
-                if p.sim_error:
-                    return self._enviar(500, {"error": p.sim_error})
-                return self._enviar(200, {"lista": p.sim is not None, **(p.sim or {})})
             with p.lock:
                 return self._ruta(metodo, ruta, q, p)
         except AssertionError as error:  # Incluye Rechazo: datos de entrada que no se aceptan.
@@ -395,7 +392,6 @@ class Manejador(SimpleHTTPRequestHandler):
 
     def _descarga(self, formato):
         h = self.plataforma.h
-        self.plataforma.hoja_json()
         escritores = {"csv": (hoja.escribir_csv, "text/csv; charset=utf-8"),
                       "xlsx": (hoja.escribir_xlsx, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
                       "html": (hoja.escribir_html, "text/html; charset=utf-8")}
@@ -403,7 +399,8 @@ class Manejador(SimpleHTTPRequestHandler):
         escribir, tipo = escritores[formato]
         with tempfile.TemporaryDirectory() as carpeta:
             destino = Path(carpeta) / f"hoja-dia-{h.dia}.{formato}"
-            escribir(h, destino)
+            with self.plataforma._textos_de_planta():
+                escribir(h, destino)
             assert not hoja.vins_en([destino], self.plataforma.vins), "La descarga contenía un VIN"
             cuerpo = destino.read_bytes()
         return self._enviar(200, cuerpo, tipo, destino.name)

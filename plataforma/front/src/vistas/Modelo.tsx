@@ -41,8 +41,8 @@ export function Modelo() {
         </div>
         <div className="rounded-lg bg-ford-gray p-6">
           <p className="flex items-center gap-2 text-lg font-medium"><Icono nombre="info" className="size-5" />Por qué automático</p>
-          <p className="mt-2">Elegir cuándo actualizar mirando los resultados es sobreajustar. El calendario es el mismo que se
-            evaluó en validación para los modelos reentrenados, y está fijo en el código: no se cambia desde la pantalla.</p>
+          <p className="mt-2">Elegir cuándo actualizar mirando los resultados es sobreajustar. El calendario es el mismo con
+            el que se probó el modelo, y está fijo en el código: no se cambia desde la pantalla.</p>
         </div>
       </section>
 
