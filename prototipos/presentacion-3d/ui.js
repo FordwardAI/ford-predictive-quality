@@ -358,7 +358,7 @@ function crearFigura(cap, { datos, figuras }) {
 
   if (f.tipo === 'js') {
     let svg = null;
-    try { svg = figuras?.crear?.(f.id, { datos, opciones: f.opciones ?? {} }) ?? null; } catch (err) {
+    try { svg = figuras?.crear?.(f.id, { datos, opciones: { titulo: false, ...(f.opciones ?? {}) } }) ?? null; } catch (err) {
       console.warn(`[presentacion] figuras.js no pudo dibujar «${f.id}»`, err);
     }
     if (svg instanceof Element) {
