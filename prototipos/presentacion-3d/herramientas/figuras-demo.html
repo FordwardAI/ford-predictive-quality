@@ -11,8 +11,10 @@
      Abrir desde la raíz del repo: python -m http.server 8000 y
      http://localhost:8000/prototipos/presentacion-3d/herramientas/figuras-demo.html
      Parámetros: ?solo=<id> muestra una sola figura; ?tema=claro|oscuro uno solo de los fondos;
-     ?ancho=830 fija el ancho del panel (con ?solo); ?fuente=Arial (o Verdana, más ancha) prueba otra tipografía;
-     ?titulo=0 crea las figuras con { titulo: false }. */
+     ?resumen=1|0 filtra las variantes de comparacion con o sin { resumen: true }; ?ancho=900 fija el ancho del panel (con ?solo); ?fuente=Arial (o Verdana, más ancha) prueba otra tipografía;
+     ?titulo=0 crea las figuras con { titulo: false }; ?medir=1 agrega al final un <pre id="medidas"> con
+     JSON por figura: letra efectiva mínima (px en pantalla), textos que se salen del viewBox o se pisan,
+     y la lista de textos (para cotejar cifras contra los JSON con --dump-dom de Chrome headless). */
   :root { color-scheme: dark; }
   body { margin: 0; background: #000A17; color: #FFFFFF; font-family: "Ford F-1", Roboto, Arial, sans-serif; }
   header { padding: 24px 32px 8px; }
@@ -47,7 +49,7 @@
   .vacio { color: #FBAE40; font-size: 15px; }
   /* Con ?solo=…, cada panel mide lo que la columna derecha de la presentación a 1920 px. */
   .solo-uno .par { grid-template-columns: repeat(auto-fill, var(--ancho-panel, 900px)); }
-  .solo-uno .panel { padding: 0; }
+  .solo-uno .panel { padding: 0; border: 0; }
 </style>
 </head>
 <body>
@@ -72,8 +74,12 @@
   const casos = [
     ...IDS.map((id) => ({ tipo: 'figura', id, opciones: {} })),
     { tipo: 'figura', id: 'comparacion', etiqueta: 'comparacion · resaltar: fuga', opciones: { resaltar: 'fuga' } },
+    { tipo: 'figura', id: 'comparacion', etiqueta: 'comparacion · resumen (presentación)', opciones: { resumen: true } },
+    { tipo: 'figura', id: 'comparacion', etiqueta: 'comparacion · resumen · resaltar: fuga', opciones: { resumen: true, resaltar: 'fuga' } },
     ...ILUSTRACIONES.map((id) => ({ tipo: 'ilustracion', id })),
-  ].filter((c) => !solo || c.id === solo);
+  ].filter((c) => !solo || c.id === solo)
+    .filter((c) => !parametros.has('resumen') || c.id !== 'comparacion'
+      || Boolean(c.opciones?.resumen) === (parametros.get('resumen') !== '0'));
   if (solo) document.body.classList.add('solo-uno');
   if (parametros.get('ancho')) document.body.style.setProperty('--ancho-panel', `${Number(parametros.get('ancho'))}px`);
   if (parametros.get('fuente')) document.body.style.fontFamily = `"${parametros.get('fuente')}", sans-serif`;
@@ -128,6 +134,38 @@
     : `OK: ${casos.length} casos, todos los JSON leídos, sin errores.`;
   if (errores.length || faltan.length) estado.classList.add('error');
   document.title = errores.length ? `ERROR ${errores.length}` : 'Figuras de la presentación';
+
+  // ?medir=1: medidas para la revisión automática (headless).
+  if (parametros.get('medir') === '1') {
+    await document.fonts.ready;
+    const medidas = [...document.querySelectorAll('svg.figura-datos')].map((svg) => {
+      const caja = svg.viewBox.baseVal;
+      const factor = svg.getBoundingClientRect().width / caja.width;
+      const textos = [...svg.querySelectorAll('text')].map((t) => {
+        const b = t.getBBox();
+        return { texto: t.textContent, px: +(parseFloat(getComputedStyle(t).fontSize) * factor).toFixed(1),
+          comprimido: t.hasAttribute('textLength'), caja: [b.x, b.y, b.x + b.width, b.y + b.height].map((v) => +v.toFixed(1)) };
+      });
+      const fuera = textos.filter((t) => t.caja[0] < 0 || t.caja[1] < 0 || t.caja[2] > caja.width || t.caja[3] > caja.height)
+        .map((t) => t.texto);
+      const pisan = [];
+      textos.forEach((a, i) => textos.slice(i + 1).forEach((b) => {
+        const dx = Math.min(a.caja[2], b.caja[2]) - Math.max(a.caja[0], b.caja[0]);
+        const dy = Math.min(a.caja[3], b.caja[3]) - Math.max(a.caja[1], b.caja[1]);
+        if (dx > 1 && dy > 1) pisan.push([a.texto, b.texto]);
+      }));
+      return {
+        id: svg.dataset.figura, clases: svg.getAttribute('class'), tema: svg.parentElement.classList.contains('claro') ? 'claro' : 'oscuro',
+        viewBox: `${caja.width}x${caja.height}`, anchoPx: Math.round(caja.width * factor), factor: +factor.toFixed(3),
+        minPx: Math.min(...textos.map((t) => t.px)), comprimidos: textos.filter((t) => t.comprimido).map((t) => t.texto),
+        fuera, pisan, textos: textos.map((t) => `${t.px}|${t.texto}`),
+      };
+    });
+    const pre = document.createElement('pre');
+    pre.id = 'medidas';
+    pre.textContent = JSON.stringify(medidas);
+    document.body.appendChild(pre);
+  }
 </script>
 </body>
 </html>
