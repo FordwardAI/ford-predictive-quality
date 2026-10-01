@@ -1,16 +1,26 @@
 // Orquestación: carga contenido y cifras, crea la escena (o el modo respaldo),
 // vincula scroll ↔ escena y maneja el teclado del modo presentación.
 //
+// Modo híbrido scroll + diapositivas:
+//   - Llegada a una pantalla por scroll: todos sus pasos se revelan en cascada.
+//   - Llegada por teclado hacia adelante: entra la cabecera y cada →/Espacio/PgDn
+//     revela un paso; ← los deshace y, en 0, vuelve a la pantalla anterior completa.
+//   - Shift+→/← salta de pantalla. Movimiento reducido e impresión: todo visible.
+//
 // Parámetros de URL:
-//   ?estatico=1  sin WebGL (diapositivas sobre fondo CSS)
-//   ?nucleo=1    solo capítulos con `nucleo: true`
-//   ?limpio=1    oculta los marcadores [PENDIENTE: …]
+//   ?estatico=1      sin WebGL (diapositivas sobre fondo CSS)
+//   ?nucleo=1        solo capítulos con `nucleo: true` (las continuaciones heredan)
+//   ?limpio=1        oculta los marcadores [PENDIENTE: …]
+//   ?calidad=modo    alta | baja | auto (se pasa a la escena)
+//   #id/paso         pantalla y paso de llegada (sin paso: pantalla completa)
 import * as ui from './ui.js';
 
 const params = new URLSearchParams(location.search);
 const forzarEstatico = params.get('estatico') === '1';
 const soloNucleo = params.get('nucleo') === '1';
 const limpio = params.get('limpio') === '1';
+const CALIDADES = ['auto', 'alta', 'baja'];
+const calidadInicial = CALIDADES.includes(params.get('calidad')) ? params.get('calidad') : 'auto';
 const consultaMovimiento = matchMedia('(prefers-reduced-motion: reduce)');
 let movimientoReducido = consultaMovimiento.matches;
 
@@ -23,14 +33,15 @@ const dom = {
   indice: $('indice'),
   indiceLista: $('indice-lista'),
   indicePendientes: $('indice-pendientes'),
-  panel: $('detalle-panel'),
-  numero: $('indicador-numero'),
-  tituloSeccion: $('indicador-titulo'),
+  pieNumero: $('pie-numero'),
+  pieSeccion: $('pie-seccion'),
+  piePasos: $('pie-pasos'),
   relleno: $('progreso-relleno'),
   marcas: $('progreso-marcas'),
   ayudaOrbita: $('ayuda-orbita'),
   ayudaOrbitaTexto: $('ayuda-orbita-texto'),
   botonPantalla: $('boton-pantalla'),
+  aviso: $('aviso'),
 };
 
 const estado = {
@@ -38,15 +49,20 @@ const estado = {
   secciones: [],
   capitulos: [],
   elementos: [],
+  total: '00',
   actual: -1,
-  objetivo: -1,
-  tiempoNav: 0,
+  navegando: null, // { destino, hasta }: desplazamiento programático en curso
   escena: null,
   orbita: false,
+  calidad: calidadInicial,
+  tScroll: [], // progreso de la escena por scroll, por pantalla
+  tPaso: { t: 0 }, // progreso por paso de la pantalla actual (se interpola)
 };
 
 if (limpio) raiz.classList.add('limpio');
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+const sinPasos = () => movimientoReducido;
 
 // ---------- Escena ----------
 function webglDisponible() {
@@ -88,10 +104,12 @@ async function iniciarEscena() {
       capaEtiquetas: dom.etiquetas,
       modeloUrl: 'assets/ranger.glb',
       movimientoReducido,
+      calidad: estado.calidad,
     });
     if (raiz.classList.contains('estatico')) { escena?.destruir?.(); return; }
     estado.escena = escena;
-    escena.alTocarPunto?.((id) => abrirPunto(id));
+    escena.alTocarPunto?.((id) => irAPunto(id));
+    if (estado.calidad !== 'auto') enEscena((e) => e.calidad?.(estado.calidad));
     const cap = estado.capitulos[estado.actual];
     if (cap) {
       enEscena((e) => {
@@ -99,6 +117,7 @@ async function iniciarEscena() {
         e.encuadrar?.(estado.elementos[estado.actual]?.classList.contains('lado-derecha') ? 'derecha' : 'izquierda', { duracion: 0 });
         e.mostrarPuntos((cap.puntos ?? []).map((p) => p.id));
       });
+      sincronizarEscenaConPaso({ instantaneo: true });
       actualizarAyudaOrbita(cap);
     }
   } catch (err) {
@@ -111,28 +130,115 @@ window.addEventListener('error', (ev) => {
   if (estado.escena && /\/escena\//.test(ev.filename ?? '')) activarEstatico('error en tiempo de ejecución de la escena');
 });
 
-// ---------- Capítulo activo ----------
-function activar(i) {
+// ---------- Progreso de la escena: t = max(tScroll, tPaso) ----------
+function aplicarProgreso() {
+  const i = estado.actual;
+  const cap = estado.capitulos[i];
+  if (!cap) return;
+  const t = Math.max(estado.tScroll[i] ?? 0, estado.tPaso.t);
+  enEscena((e) => e.progreso(cap.escena, t));
+}
+
+// Objetivo de progreso según el paso: en `linea` con callouts, la estación del
+// último callout revelado (k / (n − 1)); en el resto, la fracción de pasos.
+function objetivoPaso(sec, cap) {
+  const pasos = sec._pasos ?? [];
+  const paso = sec._paso ?? 0;
+  if (!pasos.length) return 0;
+  const callouts = pasos.filter((p) => p.tipo === 'callout');
+  if (cap.escena === 'linea' && callouts.length) {
+    const revelados = pasos.slice(0, paso).filter((p) => p.tipo === 'callout');
+    if (!revelados.length) return 0;
+    const ultimo = revelados.at(-1);
+    // Posición real de la estación en la línea; si la escena no la conoce, reparto parejo.
+    const deEstacion = estado.escena?.progresoEstacion?.(ultimo.punto);
+    if (typeof deEstacion === 'number') return deEstacion;
+    return callouts.length > 1 ? ultimo.indiceCallout / (callouts.length - 1) : 1;
+  }
+  return paso / pasos.length;
+}
+
+function sincronizarEscenaConPaso({ instantaneo = false, duracion = 0.9 } = {}) {
+  const i = estado.actual;
+  const sec = estado.elementos[i];
+  const cap = estado.capitulos[i];
+  if (!sec || !cap) return;
+  const paso = sec._pasos?.[(sec._paso ?? 0) - 1];
+  const todo = (sec._paso ?? 0) === (sec._pasos?.length ?? 0);
+  // Foco: el callout del paso actual; con todo revelado (o sin callout), ninguno.
+  enEscena((e) => e.enfocarPunto?.(paso?.tipo === 'callout' && !(todo && sec._llegada === 'cascada') ? paso.punto : null));
+  const meta = objetivoPaso(sec, cap);
+  const gsap = window.gsap;
+  gsap?.killTweensOf(estado.tPaso);
+  if (instantaneo || movimientoReducido || !gsap) { estado.tPaso.t = meta; aplicarProgreso(); return; }
+  gsap.to(estado.tPaso, { t: meta, duration: duracion, ease: 'power2.inOut', onUpdate: aplicarProgreso });
+}
+
+// ---------- Pantalla activa ----------
+// llegada: { modo: 'pasos', paso } | { modo: 'completo' } | { modo: 'cascada' }
+function activar(i, llegada = { modo: 'cascada' }) {
   if (i === estado.actual || !estado.capitulos[i]) return;
   const anterior = estado.capitulos[estado.actual];
+  const secAnterior = estado.elementos[estado.actual];
   estado.actual = i;
   const cap = estado.capitulos[i];
   const sec = estado.elementos[i];
 
-  if (location.hash.slice(1) !== cap.id) history.replaceState(null, '', `${location.pathname}${location.search}#${cap.id}`);
-  ui.actualizarIndicador({ numero: dom.numero, titulo: dom.tituloSeccion }, cap, estado.secciones);
+  if (secAnterior) ui.animarSalida(secAnterior, { movimientoReducido });
+  ui.animarEntrada(sec, { movimientoReducido });
+  aplicarLlegada(sec, llegada);
+
+  ui.actualizarPie({ numero: dom.pieNumero, seccion: dom.pieSeccion, pasos: dom.piePasos }, cap, estado.secciones, estado.total);
   ui.marcarIndice(dom.indiceLista, cap);
   ui.marcarProgreso(dom.marcas, i);
-  ui.animarEntrada(sec, { movimientoReducido });
   raiz.classList.toggle('texto-derecha', sec.classList.contains('lado-derecha'));
-  ui.cerrarDetalle(dom.panel, { devolverFoco: false });
 
   if (estado.orbita && !cap.orbita) alternarOrbita(false);
   if (!anterior || anterior.escena !== cap.escena) enEscena((e) => e.irA(cap.escena));
   enEscena((e) => e.encuadrar?.(sec.classList.contains('lado-derecha') ? 'derecha' : 'izquierda'));
   enEscena((e) => e.mostrarPuntos((cap.puntos ?? []).map((p) => p.id)));
   actualizarAyudaOrbita(cap);
+  estado.tPaso.t = 0;
+  despuesDePaso({ duracion: llegada.modo === 'cascada' ? 1.6 : 0.9 });
+}
+
+function aplicarLlegada(sec, { modo, paso = 0 }) {
+  sec._llegada = modo;
+  if (sinPasos()) { ui.mostrarTodo(sec, { instantaneo: true }); return; }
+  ui.prepararPasos(sec);
+  if (modo === 'pasos') {
+    const k = Math.max(0, Math.min(sec._pasos.length, paso));
+    for (let j = 1; j <= k; j++) ui.mostrarPaso(sec, j, { instantaneo: true });
+  } else {
+    ui.mostrarTodo(sec, { retraso: modo === 'completo' ? 0.15 : 0.35 });
+  }
+}
+
+// Tras cada cambio de paso: escena, pie, URL y notas.
+function despuesDePaso(opciones) {
+  const sec = estado.elementos[estado.actual];
+  if (!sec) return;
+  ui.marcarPasosPie(dom.piePasos, sec._paso ?? 0, sec._pasos?.length ?? 0);
+  sincronizarEscenaConPaso(opciones);
+  actualizarHash();
   enviarEstado();
+}
+
+function actualizarHash() {
+  const cap = estado.capitulos[estado.actual];
+  const sec = estado.elementos[estado.actual];
+  if (!cap || !sec) return;
+  const total = sec._pasos?.length ?? 0;
+  const paso = sec._paso ?? total;
+  const hash = `#${cap.id}${paso < total ? `/${paso}` : ''}`;
+  if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
+}
+
+function leerHash() {
+  const [id, paso] = decodeURIComponent(location.hash.slice(1)).split('/');
+  const i = estado.capitulos.findIndex((c) => c.id === id);
+  const n = Number.parseInt(paso, 10);
+  return { i, llegada: Number.isFinite(n) ? { modo: 'pasos', paso: n } : { modo: 'completo' } };
 }
 
 function actualizarAyudaOrbita(cap) {
@@ -151,23 +257,23 @@ function alternarOrbita(forzar) {
 }
 
 // ---------- Navegación ----------
-function indiceDesdeScroll() {
-  const y = window.scrollY + window.innerHeight * 0.5;
-  let idx = 0;
-  estado.elementos.forEach((el, i) => { if (el.offsetTop <= y) idx = i; });
-  return idx;
-}
+const navegandoActivo = () => Boolean(estado.navegando && performance.now() < estado.navegando.hasta);
 
-function irA(i, { instantaneo = false } = {}) {
+function irA(i, { llegada = { modo: 'completo' }, instantaneo = false } = {}) {
   const n = estado.elementos.length;
   if (!n) return;
   const destino = Math.max(0, Math.min(n - 1, i));
-  estado.objetivo = destino;
-  estado.tiempoNav = performance.now();
   const el = estado.elementos[destino];
-  window.scrollTo({ top: el.offsetTop, behavior: instantaneo || movimientoReducido ? 'auto' : 'smooth' });
+  const suave = !(instantaneo || movimientoReducido);
+  estado.navegando = { destino, hasta: performance.now() + (suave ? 1600 : 300) };
+  window.scrollTo({ top: el.offsetTop, behavior: suave ? 'smooth' : 'auto' });
   el.focus({ preventScroll: true });
-  if (instantaneo || !window.ScrollTrigger) activar(destino);
+  if (destino === estado.actual) {
+    aplicarLlegada(el, llegada);
+    despuesDePaso();
+  } else {
+    activar(destino, llegada);
+  }
 }
 
 function irAId(id, opciones) {
@@ -176,17 +282,76 @@ function irAId(id, opciones) {
   return i >= 0;
 }
 
-function base() {
-  // Mientras dura un desplazamiento suave, encadenar sobre el destino pedido.
-  return performance.now() - estado.tiempoNav < 900 && estado.objetivo >= 0 ? estado.objetivo : indiceDesdeScroll();
+function siguiente() {
+  const i = estado.actual;
+  const sec = estado.elementos[i];
+  if (!sec) return;
+  if (!sinPasos() && sec._paso < sec._pasos.length) {
+    ui.mostrarPaso(sec, sec._paso + 1);
+    despuesDePaso();
+    return;
+  }
+  if (i < estado.elementos.length - 1) irA(i + 1, { llegada: { modo: 'pasos', paso: 0 } });
 }
-const siguiente = () => irA(base() + 1);
-const anterior = () => irA(base() - 1);
 
-// ↓/↑/PageDown/PageUp/Espacio: si el capítulo es más alto que la pantalla, primero recorrerlo.
+function anterior() {
+  const i = estado.actual;
+  const sec = estado.elementos[i];
+  if (!sec) return;
+  if (!sinPasos() && sec._paso > 0) {
+    ui.ocultarPaso(sec, sec._paso);
+    despuesDePaso();
+    return;
+  }
+  if (i > 0) irA(i - 1, { llegada: { modo: 'completo' } });
+}
+
+const saltarPantalla = (dir) => irA(estado.actual + dir, { llegada: { modo: 'completo' } });
+
+// Fija el paso k de la pantalla actual (callout tocado, punto 3D, notas).
+function fijarPaso(k) {
+  const sec = estado.elementos[estado.actual];
+  if (!sec) return;
+  if (sinPasos()) {
+    const paso = sec._pasos[k - 1];
+    sec.querySelectorAll('.callout.activo').forEach((li) => li.classList.remove('activo'));
+    if (paso?.tipo === 'callout') paso.elementos[0].classList.add('activo');
+    enEscena((e) => e.enfocarPunto?.(paso?.tipo === 'callout' ? paso.punto : null));
+    return;
+  }
+  sec._llegada = 'pasos';
+  while (sec._paso > k) ui.ocultarPaso(sec, sec._paso);
+  while (sec._paso < k) ui.mostrarPaso(sec, sec._paso + 1);
+  sec.querySelectorAll('.callout.activo').forEach((li) => li.classList.remove('activo'));
+  const paso = sec._pasos[k - 1];
+  if (paso?.tipo === 'callout') paso.elementos[0].classList.add('activo');
+  despuesDePaso();
+}
+
+function pasoDelPunto(sec, punto) {
+  return (sec?._pasos ?? []).findIndex((p) => p.tipo === 'callout' && p.punto === punto) + 1;
+}
+
+function irACallout(idCapitulo, punto) {
+  const i = estado.capitulos.findIndex((c) => c.id === idCapitulo);
+  if (i < 0) return;
+  const k = pasoDelPunto(estado.elementos[i], punto);
+  if (i === estado.actual) fijarPaso(k);
+  else irA(i, { llegada: { modo: 'pasos', paso: k } });
+}
+
+// Click en un punto 3D: ir a ese paso (en esta pantalla o en la que lo tenga).
+function irAPunto(punto) {
+  const sec = estado.elementos[estado.actual];
+  if (pasoDelPunto(sec, punto)) { fijarPaso(pasoDelPunto(sec, punto)); return; }
+  const cap = estado.capitulos.find((c) => c.puntos?.some((p) => p.id === punto));
+  if (cap) irACallout(cap.id, punto);
+}
+
+// ↓/↑: si la pantalla es más alta que la ventana, primero recorrerla.
 function desplazarDentro(direccion) {
-  if (performance.now() - estado.tiempoNav < 900) return false;
-  const el = estado.elementos[indiceDesdeScroll()];
+  if (navegandoActivo()) return false;
+  const el = estado.elementos[estado.actual];
   if (!el) return false;
   const arriba = el.offsetTop;
   const abajo = arriba + el.offsetHeight;
@@ -206,40 +371,39 @@ function desplazarDentro(direccion) {
 function irASeccion(digito) {
   const numero = digito === '0' ? 'portada' : digito.padStart(2, '0');
   const i = estado.capitulos.findIndex((c) => c.seccion === numero);
-  if (i >= 0) irA(i);
+  if (i >= 0) irA(i, { llegada: { modo: 'pasos', paso: 0 } });
+}
+
+// ---------- Calidad de la escena (L) ----------
+let temporizadorAviso = 0;
+function avisar(texto) {
+  dom.aviso.textContent = texto;
+  dom.aviso.hidden = false;
+  clearTimeout(temporizadorAviso);
+  temporizadorAviso = setTimeout(() => { dom.aviso.hidden = true; }, 1800);
+}
+
+function alternarCalidad() {
+  const orden = ['alta', 'baja', 'auto'];
+  estado.calidad = orden[(orden.indexOf(estado.calidad) + 1) % orden.length];
+  let efectiva = estado.calidad;
+  enEscena((e) => { efectiva = e.calidad?.(estado.calidad) ?? estado.calidad; });
+  const nombres = { alta: 'alta', baja: 'bajo consumo', auto: 'automática' };
+  avisar(estado.escena ? `Calidad ${nombres[estado.calidad]}${estado.calidad === 'auto' && efectiva !== 'auto' ? ` (${efectiva})` : ''}` : 'Sin escena 3D (modo estático)');
 }
 
 // ---------- Índice ----------
 function abrirIndice() {
   if (dom.indice.open) return;
-  ui.cerrarDetalle(dom.panel, { devolverFoco: false });
   dom.indice.showModal();
+  enEscena((e) => e.pausar?.(true));
   const actual = dom.indiceLista.querySelector('[aria-current="true"]') ?? dom.indiceLista.querySelector('button');
   actual?.focus();
 }
 function cerrarIndice() {
   if (dom.indice.open) dom.indice.close();
 }
-
-// ---------- Panel de hotspot ----------
-function abrirPunto(id, disparador, idCapitulo) {
-  const cap = estado.capitulos.find((c) => c.id === idCapitulo) ?? estado.capitulos[estado.actual];
-  let punto = cap?.puntos?.find((p) => p.id === id);
-  let origen = cap;
-  if (!punto) {
-    origen = estado.capitulos.find((c) => c.puntos?.some((p) => p.id === id));
-    punto = origen?.puntos.find((p) => p.id === id);
-  }
-  const boton = disparador ?? estado.elementos[estado.actual]?.querySelector(`.boton-punto[data-punto="${CSS.escape(id)}"]`);
-  // El panel se abre del lado de la escena, opuesto a la columna de texto.
-  const textoADerecha = estado.elementos[estado.actual]?.classList.contains('lado-derecha');
-  dom.panel.classList.toggle('lado-izquierda', Boolean(textoADerecha));
-  ui.abrirDetalle(dom.panel, {
-    antetitulo: origen?.antetitulo ?? '',
-    titulo: punto?.titulo ?? id.replace(/-/g, ' '),
-    texto: punto?.texto ?? '',
-  }, boton ?? document.activeElement);
-}
+dom.indice.addEventListener('close', () => enEscena((e) => e.pausar?.(false)));
 
 // ---------- Pantalla completa ----------
 function alternarPantalla() {
@@ -258,17 +422,24 @@ function enviarEstado() {
   if (!canal) return;
   const i = estado.actual;
   const cap = estado.capitulos[i];
-  if (!cap) return;
+  const sec = estado.elementos[i];
+  if (!cap || !sec) return;
   const sig = estado.capitulos[i + 1];
+  const totalPasos = sec._pasos?.length ?? 0;
+  const paso = sec._paso ?? totalPasos;
   canal.postMessage({
     tipo: 'estado',
     indice: i,
     total: estado.capitulos.length,
+    posicion: `${cap.numeroPantalla} / ${estado.total}`,
     seccion: ui.tituloSeccion(cap.seccion, estado.secciones),
     numero: cap.seccion,
     titulo: ui.textoTitular(cap),
     notas: cap.notas ?? '',
-    siguiente: sig ? ui.textoTitular(sig) : '',
+    paso,
+    totalPasos,
+    siguientePaso: paso < totalPasos ? sec._pasos[paso].rotulo : '',
+    siguiente: sig ? ui.textoTitular(sig) + (sig.padre ? ' (continúa)' : '') : '',
     limpio,
   });
 }
@@ -291,7 +462,8 @@ body{padding:32px 40px;display:flex;flex-direction:column;min-height:100vh;gap:2
 .fila b{color:#fff;font-weight:500}.reloj{margin-left:auto;font-size:40px;letter-spacing:-.03em;color:#fff;font-variant-numeric:tabular-nums}
 h1{margin:0;font-size:40px;font-weight:500;line-height:1.1}
 #notas{font-size:24px;line-height:1.5;white-space:pre-wrap;flex:1;margin:0}
-.sig{border-top:1px solid var(--w16);padding-top:16px;font-size:20px;color:var(--w72)}
+.paso{font-size:20px;margin:0;color:#fff}.paso b{color:var(--sky);font-weight:500}
+.sig{border-top:1px solid var(--w16);padding-top:16px;font-size:20px;color:var(--w72);margin:0}
 .pendiente{display:inline-block;border:2px dashed var(--warn);border-radius:9999px;padding:0 10px;font-size:16px;color:#fff}
 button{font:inherit;font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:none;border:2px solid var(--sky);border-radius:9999px;height:40px;padding:0 16px;cursor:pointer}
 button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
@@ -299,14 +471,17 @@ button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
 <div class="fila"><span id="pos">—</span><span id="sec"></span><span class="reloj" id="reloj" aria-label="Tiempo transcurrido">00:00</span></div>
 <h1 id="titulo">Esperando la presentación…</h1>
 <p id="notas"></p>
+<p class="paso" id="paso"></p>
 <p class="sig" id="sig"></p>
 <div class="fila"><button type="button" id="ant">← Anterior</button><button type="button" id="prox">Siguiente →</button><button type="button" id="reiniciar">Reiniciar reloj</button></div>
 <script>
 const c=new BroadcastChannel('fordwardai-presentacion');let t0=Date.now();
 const $=id=>document.getElementById(id);const re=/\\[PENDIENTE[^\\]]*\\]/g;
 function rico(el,txt,limpio){el.textContent='';let u=0;for(const m of String(txt||'').matchAll(re)){el.append(txt.slice(u,m.index));if(!limpio){const s=document.createElement('span');s.className='pendiente';s.textContent=m[0].slice(1,-1);el.append(s);}u=m.index+m[0].length;}el.append(String(txt||'').slice(u));}
-c.onmessage=({data:d})=>{if(!d||d.tipo!=='estado')return;$('pos').textContent=(d.indice+1)+' / '+d.total;$('sec').textContent=(/^\\d/.test(d.numero)?d.numero+' · ':'')+d.seccion;
-rico($('titulo'),d.titulo,d.limpio);rico($('notas'),d.notas||'Sin notas para este capítulo.',d.limpio);$('sig').textContent=d.siguiente?'Sigue: '+d.siguiente:'Último capítulo';document.title=(d.indice+1)+' · Notas';};
+c.onmessage=({data:d})=>{if(!d||d.tipo!=='estado')return;$('pos').textContent=d.posicion||((d.indice+1)+' / '+d.total);$('sec').textContent=(/^\\d/.test(d.numero)?d.numero+' · ':'')+d.seccion;
+rico($('titulo'),d.titulo,d.limpio);rico($('notas'),d.notas||'Sin notas para este capítulo.',d.limpio);
+const p=$('paso');p.textContent='';if(d.totalPasos){const b=document.createElement('b');b.textContent='Paso '+d.paso+' / '+d.totalPasos;p.append(b);if(d.siguientePaso)p.append(' · Próximo paso: '+d.siguientePaso);}
+$('sig').textContent=d.siguiente?'Pantalla siguiente: '+d.siguiente:'Última pantalla';document.title=(d.posicion||d.indice+1)+' · Notas';};
 const nav=a=>c.postMessage({tipo:'navegar',accion:a});$('ant').onclick=()=>nav('anterior');$('prox').onclick=()=>nav('siguiente');$('reiniciar').onclick=()=>{t0=Date.now();tick();};
 addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)&&!(e.target instanceof HTMLButtonElement)){e.preventDefault();nav('siguiente');}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();nav('anterior');}});
 function tick(){const s=Math.floor((Date.now()-t0)/1000);$('reloj').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
@@ -329,7 +504,7 @@ function abrirNotas() {
 
 // ---------- Teclado ----------
 function enControlInteractivo(t) {
-  return t instanceof Element && Boolean(t.closest('button, summary, a[href], input, textarea, select, [contenteditable="true"]'));
+  return t instanceof Element && Boolean(t.closest('button, a[href], input, textarea, select, [contenteditable="true"]'));
 }
 
 document.addEventListener('keydown', (e) => {
@@ -342,56 +517,74 @@ document.addEventListener('keydown', (e) => {
     return; // Esc lo cierra el <dialog>
   }
 
-  if (k === 'Escape') {
-    e.preventDefault();
-    if (!ui.cerrarDetalle(dom.panel)) abrirIndice();
-    return;
-  }
-  if (k === ' ' && enControlInteractivo(e.target)) return;
+  if (k === 'Escape') { e.preventDefault(); abrirIndice(); return; }
+  if ((k === ' ' || k === 'Enter') && enControlInteractivo(e.target)) return;
 
   switch (k) {
     case 'ArrowRight':
-      e.preventDefault(); siguiente(); break;
-    case 'ArrowDown': case 'PageDown':
-      e.preventDefault(); if (!desplazarDentro(1)) siguiente(); break;
-    case ' ':
       e.preventDefault();
-      if (e.shiftKey) { if (!desplazarDentro(-1)) anterior(); } else if (!desplazarDentro(1)) siguiente();
+      if (e.shiftKey) saltarPantalla(1); else siguiente();
       break;
     case 'ArrowLeft':
+      e.preventDefault();
+      if (e.shiftKey) saltarPantalla(-1); else anterior();
+      break;
+    case 'PageDown':
+      e.preventDefault(); siguiente(); break;
+    case 'PageUp':
       e.preventDefault(); anterior(); break;
-    case 'ArrowUp': case 'PageUp':
-      e.preventDefault(); if (!desplazarDentro(-1)) anterior(); break;
+    case ' ':
+      e.preventDefault();
+      if (e.shiftKey) anterior(); else siguiente();
+      break;
+    case 'ArrowDown':
+      e.preventDefault();
+      if (e.shiftKey) saltarPantalla(1); else if (!desplazarDentro(1)) siguiente();
+      break;
+    case 'ArrowUp':
+      e.preventDefault();
+      if (e.shiftKey) saltarPantalla(-1); else if (!desplazarDentro(-1)) anterior();
+      break;
     case 'Home': e.preventDefault(); irA(0); break;
     case 'End': e.preventDefault(); irA(estado.elementos.length - 1); break;
     case 'i': case 'I': e.preventDefault(); abrirIndice(); break;
     case 'n': case 'N': e.preventDefault(); abrirNotas(); break;
     case 'f': case 'F': e.preventDefault(); alternarPantalla(); break;
     case 'o': case 'O': e.preventDefault(); alternarOrbita(); break;
+    case 'l': case 'L': e.preventDefault(); alternarCalidad(); break;
     default:
       if (/^[0-6]$/.test(k)) { e.preventDefault(); irASeccion(k); }
   }
 });
 
 // ---------- Scroll ----------
+function alScrollearAMano() { estado.navegando = null; }
+window.addEventListener('wheel', alScrollearAMano, { passive: true });
+window.addEventListener('touchstart', alScrollearAMano, { passive: true });
+window.addEventListener('scrollend', () => { if (estado.navegando) estado.navegando.hasta = Math.min(estado.navegando.hasta, performance.now() + 120); });
+
+function activarPorScroll(i) {
+  if (navegandoActivo()) return; // la navegación programática ya activó su destino
+  activar(i, { modo: 'cascada' });
+}
+
 function vincularScroll() {
   const { gsap, ScrollTrigger } = window;
   if (gsap && ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
     estado.elementos.forEach((sec, i) => {
-      const cap = estado.capitulos[i];
       ScrollTrigger.create({
         trigger: sec,
-        start: 'top center',
-        end: 'bottom center',
-        onToggle: (self) => { if (self.isActive) activar(i); },
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onToggle: (self) => { if (self.isActive) activarPorScroll(i); },
       });
       const proxy = { t: 0 };
       gsap.to(proxy, {
         t: 1,
         ease: 'none',
         scrollTrigger: { trigger: sec, start: 'top top', end: 'bottom top', scrub: movimientoReducido ? true : 0.6 },
-        onUpdate: () => enEscena((e) => e.progreso(cap.escena, proxy.t)),
+        onUpdate: () => { estado.tScroll[i] = proxy.t; if (i === estado.actual) aplicarProgreso(); },
       });
     });
     ScrollTrigger.create({
@@ -401,10 +594,10 @@ function vincularScroll() {
     });
     return;
   }
-  // Respaldo sin GSAP: IntersectionObserver para el capítulo activo.
+  // Respaldo sin GSAP: IntersectionObserver para la pantalla activa.
   console.warn('[presentacion] GSAP/ScrollTrigger no disponible: navegación sin scrub');
   const io = new IntersectionObserver((entradas) => {
-    for (const en of entradas) if (en.isIntersecting) activar(Number(en.target.dataset.indice));
+    for (const en of entradas) if (en.isIntersecting) activarPorScroll(Number(en.target.dataset.indice));
   }, { rootMargin: '-50% 0px -50% 0px' });
   estado.elementos.forEach((s) => io.observe(s));
   window.addEventListener('scroll', () => {
@@ -426,43 +619,57 @@ function mostrarError(mensaje) {
 async function cargarModulos() {
   const contenido = await import('./contenido.js');
   let cifras = new Map();
+  let formatear = null;
+  let leerJson;
   try {
     const modCifras = await import('./cifras.js');
+    formatear = modCifras.formatear;
+    leerJson = modCifras.leerJson;
     cifras = await modCifras.cargarCifras();
   } catch (err) {
     console.error('[presentacion] no se pudieron cargar las cifras', err);
   }
-  return { contenido, cifras };
+  // Figuras de datos (figuras.js): si falla, cada figura usa su SVG de respaldo.
+  let figuras = null;
+  let datos = {};
+  try {
+    figuras = await import('./figuras.js');
+    datos = (await figuras.cargarDatos?.(leerJson)) ?? {};
+  } catch (err) {
+    console.warn('[presentacion] figuras.js no disponible: se usan los SVG de respaldo', err);
+  }
+  return { contenido, cifras, datos, formatear, figuras };
 }
 
 let temporizadorResize = 0;
 function alRedimensionar() {
   clearTimeout(temporizadorResize);
   temporizadorResize = setTimeout(() => {
-    estado.elementos.forEach((sec) => {
+    estado.elementos.forEach((sec, i) => {
       ui.dividirLineas(sec.querySelector('.titular'));
-      if (!ui.estaAnimado(sec)) ui.prepararEntrada(sec);
+      if (i !== estado.actual && !movimientoReducido) ui.prepararEntrada(sec);
     });
     window.ScrollTrigger?.refresh();
   }, 200);
 }
 
 async function iniciar() {
-  let contenido;
-  let cifras;
+  let mods;
   try {
-    ({ contenido, cifras } = await cargarModulos());
+    mods = await cargarModulos();
   } catch (err) {
     console.error(err);
     mostrarError('No se pudo cargar el contenido de la presentación (contenido.js).');
     return;
   }
+  const { contenido, cifras, datos, formatear, figuras } = mods;
 
   estado.meta = contenido.meta ?? {};
   estado.secciones = contenido.secciones ?? [];
-  const todos = contenido.capitulos ?? [];
+  const todos = ui.normalizarCapitulos(contenido.capitulos ?? []);
   estado.capitulos = soloNucleo ? todos.filter((c) => c.nucleo) : todos;
   if (!estado.capitulos.length) { mostrarError('No hay capítulos para mostrar.'); return; }
+  estado.total = ui.numerarCapitulos(estado.capitulos);
 
   estado.elementos = ui.renderizarCapitulos({
     main: dom.main,
@@ -470,13 +677,16 @@ async function iniciar() {
     secciones: estado.secciones,
     capitulos: estado.capitulos,
     cifras,
-    alTocarPunto: (id, boton, idCapitulo) => abrirPunto(id, boton, idCapitulo),
+    datos,
+    figuras,
+    formatearCifra: formatear,
+    alTocarCallout: (idCapitulo, punto) => irACallout(idCapitulo, punto),
   });
   ui.construirIndice({
     lista: dom.indiceLista,
     secciones: estado.secciones,
     capitulos: estado.capitulos,
-    alElegir: (id) => { cerrarIndice(); irAId(id); },
+    alElegir: (id) => { cerrarIndice(); irAId(id, { llegada: { modo: 'pasos', paso: 0 } }); },
   });
   ui.construirMarcas(dom.marcas, estado.capitulos);
 
@@ -490,14 +700,16 @@ async function iniciar() {
   try { await document.fonts?.ready; } catch { /* sin Font Loading API */ }
   estado.elementos.forEach((sec) => {
     ui.dividirLineas(sec.querySelector('.titular'));
-    if (!movimientoReducido) ui.prepararEntrada(sec);
+    if (movimientoReducido) ui.mostrarTodo(sec, { instantaneo: true });
+    else { ui.prepararEntrada(sec); ui.prepararPasos(sec); }
   });
 
   // Leer el deep link antes de crear los ScrollTrigger (al crearse activan la portada y reescriben el hash).
-  const inicial = Math.max(0, estado.capitulos.findIndex((c) => c.id === decodeURIComponent(location.hash.slice(1))));
+  const { i: desdeHash, llegada } = leerHash();
+  const inicial = Math.max(0, desdeHash);
   vincularScroll();
   requestAnimationFrame(() => {
-    irA(inicial, { instantaneo: true });
+    irA(inicial, { instantaneo: true, llegada: desdeHash >= 0 ? llegada : { modo: 'pasos', paso: 0 } });
     window.ScrollTrigger?.refresh();
   });
 
@@ -509,20 +721,17 @@ $('boton-indice').addEventListener('click', abrirIndice);
 $('cerrar-indice').addEventListener('click', cerrarIndice);
 $('boton-notas').addEventListener('click', abrirNotas);
 dom.botonPantalla.addEventListener('click', alternarPantalla);
-$('detalle-cerrar').addEventListener('click', () => ui.cerrarDetalle(dom.panel));
 dom.indice.addEventListener('click', (e) => { if (e.target === dom.indice) cerrarIndice(); });
-window.addEventListener('hashchange', () => irAId(decodeURIComponent(location.hash.slice(1))));
-window.addEventListener('resize', alRedimensionar);
-consultaMovimiento.addEventListener?.('change', (e) => { movimientoReducido = e.matches; });
-
-// Impresión: abrir tarjetas de detalle y restaurarlas después.
-let abiertasAntes = [];
-window.addEventListener('beforeprint', () => {
-  abiertasAntes = [...document.querySelectorAll('details.detalle')].map((d) => d.open);
-  document.querySelectorAll('details.detalle').forEach((d) => { d.open = true; });
+window.addEventListener('hashchange', () => {
+  const { i, llegada } = leerHash();
+  if (i >= 0) irA(i, { llegada });
 });
-window.addEventListener('afterprint', () => {
-  document.querySelectorAll('details.detalle').forEach((d, i) => { d.open = abiertasAntes[i] ?? false; });
+window.addEventListener('resize', alRedimensionar);
+// Impresión: el CSS deja todo visible; acá solo se terminan los conteos en curso.
+window.addEventListener('beforeprint', () => ui.terminarConteos());
+consultaMovimiento.addEventListener?.('change', (e) => {
+  movimientoReducido = e.matches;
+  if (movimientoReducido) estado.elementos.forEach((sec) => ui.mostrarTodo(sec, { instantaneo: true }));
 });
 
 iniciar();

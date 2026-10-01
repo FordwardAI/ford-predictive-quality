@@ -97,7 +97,9 @@ export function crearMaterialXray({
       #endif
       ${NIEBLA_GLSL}
       void main() {
-        float f = pow(1.0 - abs(dot(normalize(vNormal), normalize(vVista))), uPotencia);
+        // max(): con MSAA los varyings se extrapolan y |dot| puede pasar de 1 → pow(negativo) = NaN,
+        // que el bloom esparce por toda la pantalla
+        float f = pow(max(1.0 - abs(dot(normalize(vNormal), normalize(vVista))), 0.0), uPotencia);
         vec3 col = uColor * (f * uIntensidad + uBase);
         #ifdef USE_BARRIDO
           float banda = smoothstep(0.92, 1.0, sin(vMundo.y * 3.0 - uTiempo * 1.6) * 0.5 + 0.5);
@@ -175,68 +177,88 @@ export function crearMaterialBordes({ color = PALETA.skyview, opacidad = 0.9, co
 export function crearMaterialRelleno({ color = new THREE.Color('#031a3a'), opacidad = 1 } = {}) {
   return new THREE.MeshBasicMaterial({
     color,
-    transparent: true,
+    transparent: opacidad < 1,
     opacity: opacidad,
     fog: true,
   });
 }
 
-// Pintura metalizada Ford Blue con clearcoat (requiere scene.environment).
-export function crearMaterialPintura() {
-  return new THREE.MeshPhysicalMaterial({
-    color: PALETA.fordBlue.clone().multiplyScalar(1.35),
-    metalness: 0.6,
-    roughness: 0.32,
-    clearcoat: 1,
-    clearcoatRoughness: 0.03,
-    envMapIntensity: 2.2,
-    transparent: true,
-    opacity: 1,
-  });
+// Opacidad base guardada en userData: los grupos se atenúan multiplicando por ella.
+function conBase(mat, base = 1) {
+  mat.userData.opacidadBase = base;
+  return mat;
 }
 
-export function crearMaterialVidrio() {
-  return new THREE.MeshPhysicalMaterial({
-    color: new THREE.Color('#02060f'),
+// Pintura metalizada Ford Blue con clearcoat (requiere scene.environment). El azul Ford es muy
+// oscuro: con metalness alto refleja sólo el entorno y queda negro, así que se usa un metalizado
+// moderado sobre un azul algo más claro y el clearcoat aporta los reflejos nítidos.
+// Opaca por defecto: `fijarOpacidadMaterial` la vuelve transparente sólo durante los fundidos.
+export function crearMaterialPintura() {
+  return conBase(new THREE.MeshPhysicalMaterial({
+    color: PALETA.fordBlue.clone().lerp(PALETA.skyview, 0.12).multiplyScalar(1.15),
+    metalness: 0.5,
+    roughness: 0.34,
+    clearcoat: 1,
+    clearcoatRoughness: 0.05,
+    envMapIntensity: 1.5,
+    transparent: false,
+    opacity: 1,
+  }));
+}
+
+// Vidrio: siempre transparente y sin escribir profundidad, así no tapa el interior ni produce
+// cortes al ordenar; se dibuja después de lo opaco (renderOrder 1).
+export function crearMaterialVidrio({ opacidad = 0.82, color = '#02060f' } = {}) {
+  const mat = conBase(new THREE.MeshPhysicalMaterial({
+    color: new THREE.Color(color),
     metalness: 0.2,
     roughness: 0.05,
     clearcoat: 1,
     clearcoatRoughness: 0.02,
     envMapIntensity: 1.6,
     transparent: true,
-    opacity: 1,
-  });
+    depthWrite: false,
+    opacity: opacidad,
+  }), opacidad);
+  mat.userData.siempreTransparente = true;
+  return mat;
 }
 
 export function crearMaterialOscuro(color = '#07090d', rugosidad = 0.75, metal = 0.1) {
-  return new THREE.MeshPhysicalMaterial({
+  return conBase(new THREE.MeshPhysicalMaterial({
     color: new THREE.Color(color),
     metalness: metal,
     roughness: rugosidad,
     envMapIntensity: 0.8,
-    transparent: true,
-    opacity: 1,
-  });
+  }));
 }
 
 export function crearMaterialMetal() {
-  return new THREE.MeshPhysicalMaterial({
+  return conBase(new THREE.MeshPhysicalMaterial({
     color: new THREE.Color('#4a525e'),
     metalness: 1,
     roughness: 0.3,
     envMapIntensity: 1.0,
-    transparent: true,
-    opacity: 1,
-  });
+  }));
 }
 
 export function crearMaterialEmisivo(color = PALETA.blanco, intensidad = 2.5) {
-  return new THREE.MeshBasicMaterial({
+  return conBase(new THREE.MeshBasicMaterial({
     color: color.clone().multiplyScalar(intensidad),
-    transparent: true,
-    opacity: 1,
     toneMapped: true,
-  });
+  }));
+}
+
+// Fija la opacidad de un material estándar (no shader) y conmuta `transparent` sólo cuando hace
+// falta: un material opaco se ordena y escribe profundidad bien; uno transparente con opacidad 1
+// produce artefactos de orden entre piezas del mismo modelo.
+export function fijarOpacidadMaterial(mat, valor, { siempreTransparente = false } = {}) {
+  mat.opacity = valor;
+  const transparente = siempreTransparente || valor < 0.997;
+  if (mat.transparent !== transparente) {
+    mat.transparent = transparente;
+    mat.needsUpdate = true;
+  }
 }
 
 // Puntos aditivos redondos con tamaño atenuado por distancia.
@@ -333,8 +355,62 @@ export function crearMaterialPiso() {
   });
 }
 
-// Ajusta la opacidad de un material sin importar su tipo.
-export function fijarOpacidad(material, valor) {
+// Ajusta la opacidad de un material sin importar su tipo. Los materiales estándar que nacieron
+// opacos (base 1) se vuelven transparentes sólo mientras se funden.
+export function fijarOpacidad(material, valor, base = 1) {
   if (material.uniforms && material.uniforms.uOpacidad) material.uniforms.uOpacidad.value = valor;
+  else if (base >= 1 && !material.userData.siempreTransparente) fijarOpacidadMaterial(material, valor);
   else material.opacity = valor;
 }
+
+// Pass final propio: FXAA (sólo cuando no hay MSAA) + viñeta suave.
+// Va después del OutputPass, así trabaja sobre color ya convertido a sRGB, que es lo que FXAA espera.
+export const SHADER_FINAL = {
+  name: 'PassFinal',
+  uniforms: {
+    tDiffuse: { value: null },
+    uResolucion: { value: new THREE.Vector2(1, 1) },
+    uFxaa: { value: 0 },
+    uVineta: { value: 0.32 },
+  },
+  vertexShader: /* glsl */ `
+    varying vec2 vUv;
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
+  `,
+  fragmentShader: /* glsl */ `
+    uniform sampler2D tDiffuse;
+    uniform vec2 uResolucion;
+    uniform float uFxaa;
+    uniform float uVineta;
+    varying vec2 vUv;
+    float luma(vec3 c) { return dot(c, vec3(0.299, 0.587, 0.114)); }
+    // FXAA «simple» (Lottes): detecta bordes por luminancia y promedia a lo largo del borde.
+    vec3 fxaa(vec2 uv) {
+      vec2 px = 1.0 / uResolucion;
+      vec3 nw = texture2D(tDiffuse, uv + vec2(-1.0, -1.0) * px).rgb;
+      vec3 ne = texture2D(tDiffuse, uv + vec2(1.0, -1.0) * px).rgb;
+      vec3 sw = texture2D(tDiffuse, uv + vec2(-1.0, 1.0) * px).rgb;
+      vec3 se = texture2D(tDiffuse, uv + vec2(1.0, 1.0) * px).rgb;
+      vec3 m = texture2D(tDiffuse, uv).rgb;
+      float lNW = luma(nw), lNE = luma(ne), lSW = luma(sw), lSE = luma(se), lM = luma(m);
+      float lMin = min(lM, min(min(lNW, lNE), min(lSW, lSE)));
+      float lMax = max(lM, max(max(lNW, lNE), max(lSW, lSE)));
+      vec2 dir = vec2(-((lNW + lNE) - (lSW + lSE)), ((lNW + lSW) - (lNE + lSE)));
+      float red = max((lNW + lNE + lSW + lSE) * 0.03125, 0.0078125);
+      float inv = 1.0 / (min(abs(dir.x), abs(dir.y)) + red);
+      dir = clamp(dir * inv, vec2(-8.0), vec2(8.0)) * px;
+      vec3 a = 0.5 * (texture2D(tDiffuse, uv + dir * (1.0 / 3.0 - 0.5)).rgb + texture2D(tDiffuse, uv + dir * (2.0 / 3.0 - 0.5)).rgb);
+      vec3 b = a * 0.5 + 0.25 * (texture2D(tDiffuse, uv - dir * 0.5).rgb + texture2D(tDiffuse, uv + dir * 0.5).rgb);
+      float lB = luma(b);
+      return (lB < lMin || lB > lMax) ? a : b;
+    }
+    void main() {
+      vec4 base = texture2D(tDiffuse, vUv);
+      vec3 c = uFxaa > 0.5 ? fxaa(vUv) : base.rgb;
+      vec2 q = vUv - 0.5;
+      float v = 1.0 - uVineta * smoothstep(0.25, 0.85, dot(q, q) * 2.2);
+      c *= v;
+      gl_FragColor = vec4(c, 1.0);
+    }
+  `,
+};

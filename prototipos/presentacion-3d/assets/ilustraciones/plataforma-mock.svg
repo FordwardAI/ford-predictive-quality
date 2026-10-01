@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="il-plataforma-titulo il-plataforma-desc">
+  <title id="il-plataforma-titulo">Plataforma web propuesta (esquema)</title>
+  <desc id="il-plataforma-desc">Esquema ilustrativo, sin datos, de la plataforma web propuesta en una notebook: navegación lateral, indicadores, un gráfico y una tabla de códigos. Las capturas reales se cargan localmente porque muestran tasas por código.</desc>
+  <!-- Ilustración a mano: bloques esquemáticos, SIN números ni tasas.
+       Colores por variables CSS «figura-…»; los valores de respaldo son el tema oscuro Twilight. -->
+  <style>
+    .il-fondo { fill: var(--figura-fondo, #00142E); }
+    .il-t { fill: var(--figura-texto, #FFFFFF); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); }
+    .il-tenue { fill: var(--figura-tenue, rgba(255, 255, 255, .72)); }
+    .il-equipo { fill: var(--figura-equipo, #0B1F3A); stroke: var(--figura-borde, rgba(255, 255, 255, .24)); stroke-width: 2; }
+    .il-base { fill: var(--figura-equipo-base, #13294A); stroke: var(--figura-borde, rgba(255, 255, 255, .24)); stroke-width: 2; }
+    .il-pantalla { fill: var(--figura-pantalla, #F0F2F7); }
+    .il-barra { fill: var(--figura-pantalla-tinta, #00095B); }
+    .il-bloque { fill: var(--figura-pantalla-bloque, rgba(0, 9, 91, .10)); }
+    .il-bloque-2 { fill: var(--figura-pantalla-bloque-2, rgba(0, 9, 91, .22)); }
+    .il-tarjeta { fill: var(--figura-pantalla-tarjeta, #FFFFFF); stroke: var(--figura-pantalla-borde, rgba(0, 9, 91, .12)); stroke-width: 1; }
+    .il-acento { fill: var(--figura-acento, #066FEF); }
+    .il-acento-suave { fill: var(--figura-acento-suave, rgba(6, 111, 239, .28)); }
+    .il-claro { fill: rgba(255, 255, 255, .85); }
+  </style>
+
+  <rect class="il-fondo" width="1200" height="675"/>
+
+  <!-- Notebook -->
+  <rect class="il-equipo" x="170" y="40" width="860" height="530" rx="22"/>
+  <rect class="il-pantalla" x="194" y="64" width="812" height="482" rx="6"/>
+  <path class="il-base" d="M90 574h1020l-34 30H124z"/>
+  <rect class="il-equipo" x="540" y="574" width="120" height="8" rx="4"/>
+
+  <!-- Barra superior y navegación -->
+  <rect class="il-barra" x="194" y="64" width="812" height="40"/>
+  <rect class="il-claro" x="212" y="78" width="120" height="12" rx="6"/>
+  <rect class="il-acento" x="910" y="76" width="80" height="16" rx="8"/>
+  <rect class="il-bloque" x="194" y="104" width="150" height="442"/>
+  <rect class="il-acento" x="206" y="122" width="126" height="22" rx="11"/>
+  <rect class="il-bloque-2" x="214" y="160" width="100" height="10" rx="5"/>
+  <rect class="il-bloque-2" x="214" y="186" width="84" height="10" rx="5"/>
+  <rect class="il-bloque-2" x="214" y="212" width="108" height="10" rx="5"/>
+  <rect class="il-bloque-2" x="214" y="238" width="76" height="10" rx="5"/>
+  <rect class="il-bloque-2" x="214" y="264" width="96" height="10" rx="5"/>
+
+  <!-- Título de la pantalla -->
+  <rect class="il-barra" x="366" y="122" width="220" height="18" rx="4"/>
+  <rect class="il-bloque-2" x="366" y="150" width="320" height="10" rx="5"/>
+
+  <!-- Indicadores (sin valores) -->
+  <g class="fila" style="--i:0">
+    <rect class="il-tarjeta" x="366" y="176" width="196" height="84" rx="10"/>
+    <rect class="il-bloque-2" x="382" y="192" width="90" height="9" rx="4.5"/>
+    <rect class="il-barra" x="382" y="214" width="120" height="22" rx="4"/>
+    <rect class="il-acento-suave" x="382" y="244" width="70" height="6" rx="3"/>
+  </g>
+  <g class="fila" style="--i:1">
+    <rect class="il-tarjeta" x="576" y="176" width="196" height="84" rx="10"/>
+    <rect class="il-bloque-2" x="592" y="192" width="110" height="9" rx="4.5"/>
+    <rect class="il-barra" x="592" y="214" width="96" height="22" rx="4"/>
+    <rect class="il-acento-suave" x="592" y="244" width="90" height="6" rx="3"/>
+  </g>
+  <g class="fila" style="--i:2">
+    <rect class="il-tarjeta" x="786" y="176" width="200" height="84" rx="10"/>
+    <rect class="il-bloque-2" x="802" y="192" width="80" height="9" rx="4.5"/>
+    <rect class="il-barra" x="802" y="214" width="110" height="22" rx="4"/>
+    <rect class="il-acento-suave" x="802" y="244" width="60" height="6" rx="3"/>
+  </g>
+
+  <!-- Gráfico esquemático: sin ejes ni rótulos -->
+  <g class="fila" style="--i:3">
+    <rect class="il-tarjeta" x="366" y="276" width="300" height="250" rx="10"/>
+    <rect class="il-bloque-2" x="382" y="292" width="130" height="10" rx="5"/>
+    <rect class="il-bloque" x="382" y="500" width="268" height="2"/>
+    <rect class="il-acento" x="392" y="400" width="26" height="100" rx="3"/>
+    <rect class="il-acento" x="428" y="370" width="26" height="130" rx="3"/>
+    <rect class="il-acento" x="464" y="420" width="26" height="80" rx="3"/>
+    <rect class="il-acento-suave" x="500" y="440" width="26" height="60" rx="3"/>
+    <rect class="il-acento-suave" x="536" y="452" width="26" height="48" rx="3"/>
+    <rect class="il-acento-suave" x="572" y="462" width="26" height="38" rx="3"/>
+    <rect class="il-acento-suave" x="608" y="470" width="26" height="30" rx="3"/>
+  </g>
+
+  <!-- Tabla esquemática -->
+  <g class="fila" style="--i:4">
+    <rect class="il-tarjeta" x="682" y="276" width="304" height="250" rx="10"/>
+    <rect class="il-bloque-2" x="698" y="292" width="120" height="10" rx="5"/>
+    <rect class="il-bloque" x="698" y="314" width="272" height="20" rx="3"/>
+    <rect class="il-acento-suave" x="698" y="342" width="272" height="24" rx="3"/>
+    <rect class="il-barra" x="708" y="350" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="800" y="350" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="870" y="350" width="80" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="708" y="382" width="64" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="800" y="382" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="870" y="382" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="708" y="412" width="76" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="800" y="412" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="870" y="412" width="88" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="708" y="442" width="58" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="800" y="442" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="870" y="442" width="64" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="708" y="472" width="70" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="800" y="472" width="40" height="8" rx="4"/>
+    <rect class="il-bloque-2" x="870" y="472" width="76" height="8" rx="4"/>
+  </g>
+
+  <text class="il-t il-tenue" x="600" y="642" font-size="17" text-anchor="middle">Esquema ilustrativo de la plataforma web propuesta · sin datos</text>
+</svg>

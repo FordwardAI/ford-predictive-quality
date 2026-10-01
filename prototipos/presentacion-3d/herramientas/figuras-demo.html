@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Figuras de la presentación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Página de prueba de figuras.js y de assets/ilustraciones/.
+     Abrir desde la raíz del repo: python -m http.server 8000 y
+     http://localhost:8000/prototipos/presentacion-3d/herramientas/figuras-demo.html
+     Parámetros: ?solo=<id> muestra una sola figura; ?tema=claro|oscuro uno solo de los fondos;
+     ?ancho=830 fija el ancho del panel (con ?solo); ?fuente=Arial (o Verdana, más ancha) prueba otra tipografía;
+     ?titulo=0 crea las figuras con { titulo: false }. */
+  :root { color-scheme: dark; }
+  body { margin: 0; background: #000A17; color: #FFFFFF; font-family: "Ford F-1", Roboto, Arial, sans-serif; }
+  header { padding: 24px 32px 8px; }
+  h1 { font-size: 28px; font-weight: 500; margin: 0 0 4px; }
+  header p { margin: 0; color: rgba(255, 255, 255, .72); font-size: 15px; }
+  #estado { margin-top: 8px; font-size: 14px; color: rgba(255, 255, 255, .72); }
+  #estado.error { color: #FBAE40; }
+  section { padding: 16px 32px 24px; }
+  h2 { font-size: 18px; font-weight: 500; margin: 0 0 12px; color: rgba(255, 255, 255, .72); }
+  .par { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .panel { border-radius: 16px; padding: 24px; min-height: 120px; }
+  /* Tema oscuro: los valores por defecto de figuras.js (sin definir variables). */
+  .oscuro { background: rgba(0, 20, 46, .88); border: 1px solid rgba(255, 255, 255, .16); }
+  /* Tema claro: las variables que la interfaz define para impresión o paneles claros. */
+  .claro {
+    background: #FFFFFF; color: #00095B;
+    --figura-fondo: transparent;
+    --figura-texto: #00095B;
+    --figura-tenue: rgba(0, 9, 91, .72);
+    --figura-linea: rgba(0, 9, 91, .16);
+    --figura-rango: #B4B6C2;
+    --figura-punto: #6B6B6B;
+    --figura-acento: #066FEF;
+    --figura-acento-suave: rgba(6, 111, 239, .16);
+    --figura-alerta: #D62C14;
+    --figura-alerta-suave: rgba(214, 44, 20, .08);
+    --figura-superficie: #FFFFFF;
+    --figura-caja: #F0F0F0;
+    --figura-borde: rgba(0, 9, 91, .16);
+  }
+  .panel img, .panel svg { display: block; width: 100%; height: auto; }
+  .vacio { color: #FBAE40; font-size: 15px; }
+  /* Con ?solo=…, cada panel mide lo que la columna derecha de la presentación a 1920 px. */
+  .solo-uno .par { grid-template-columns: repeat(auto-fill, var(--ancho-panel, 900px)); }
+  .solo-uno .panel { padding: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Figuras de la presentación</h1>
+  <p>figuras.js (SVG generado desde solucion/resultados/*.json) e ilustraciones de assets/ilustraciones/, sobre fondo oscuro y claro.</p>
+  <div id="estado">Cargando…</div>
+</header>
+<main id="principal"></main>
+<script type="module">
+  import { IDS, crear, cargarDatos } from '../figuras.js';
+
+  const parametros = new URLSearchParams(location.search);
+  const solo = parametros.get('solo');
+  const tema = parametros.get('tema');
+  const principal = document.getElementById('principal');
+  const estado = document.getElementById('estado');
+  const errores = [];
+  window.addEventListener('error', (e) => errores.push(e.message));
+
+  const ILUSTRACIONES = ['proceso', 'solucion', 'plataforma-mock', 'hoja-mock'];
+  const casos = [
+    ...IDS.map((id) => ({ tipo: 'figura', id, opciones: {} })),
+    { tipo: 'figura', id: 'comparacion', etiqueta: 'comparacion · resaltar: fuga', opciones: { resaltar: 'fuga' } },
+    ...ILUSTRACIONES.map((id) => ({ tipo: 'ilustracion', id })),
+  ].filter((c) => !solo || c.id === solo);
+  if (solo) document.body.classList.add('solo-uno');
+  if (parametros.get('ancho')) document.body.style.setProperty('--ancho-panel', `${Number(parametros.get('ancho'))}px`);
+  if (parametros.get('fuente')) document.body.style.fontFamily = `"${parametros.get('fuente')}", sans-serif`;
+  const sinTitulo = parametros.get('titulo') === '0';
+
+  const datos = await cargarDatos();
+  const faltan = Object.entries(datos).filter(([, v]) => !v).map(([k]) => k);
+
+  async function ilustracionInline(id) {
+    const r = await fetch(`../assets/ilustraciones/${id}.svg`);
+    if (!r.ok) throw new Error(`${id}.svg: HTTP ${r.status}`);
+    const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
+    if (doc.querySelector('parsererror')) throw new Error(`${id}.svg: XML inválido`);
+    return document.importNode(doc.documentElement, true);
+  }
+
+  for (const caso of casos) {
+    const seccion = document.createElement('section');
+    seccion.dataset.id = caso.id;
+    seccion.innerHTML = `<h2>${caso.etiqueta ?? caso.id}${caso.tipo === 'ilustracion' ? ' (ilustración; a la izquierda como &lt;img&gt;, a la derecha en línea)' : ''}</h2>`;
+    const par = document.createElement('div');
+    par.className = 'par';
+    for (const t of ['oscuro', 'claro']) {
+      if (tema && tema !== t) continue;
+      const panel = document.createElement('div');
+      panel.className = `panel ${t}`;
+      try {
+        let nodo;
+        if (caso.tipo === 'figura') {
+          nodo = crear(caso.id, { datos, opciones: { ...caso.opciones, ...(sinTitulo ? { titulo: false } : {}) } });
+        } else if (t === 'oscuro') {
+          nodo = new Image();
+          nodo.src = `../assets/ilustraciones/${caso.id}.svg`;
+          nodo.alt = caso.id;
+        } else {
+          nodo = await ilustracionInline(caso.id);
+        }
+        if (nodo) panel.appendChild(nodo);
+        else panel.innerHTML = '<p class="vacio">crear() devolvió null: se usaría el respaldo de matplotlib.</p>';
+      } catch (error) {
+        errores.push(`${caso.id}: ${error.message}`);
+        panel.innerHTML = `<p class="vacio">${error.message}</p>`;
+      }
+      par.appendChild(panel);
+    }
+    seccion.appendChild(par);
+    principal.appendChild(seccion);
+  }
+
+  estado.textContent = errores.length || faltan.length
+    ? `Problemas: ${[...errores, ...faltan.map((k) => `sin JSON ${k}`)].join(' · ')}`
+    : `OK: ${casos.length} casos, todos los JSON leídos, sin errores.`;
+  if (errores.length || faltan.length) estado.classList.add('error');
+  document.title = errores.length ? `ERROR ${errores.length}` : 'Figuras de la presentación';
+</script>
+</body>
+</html>
