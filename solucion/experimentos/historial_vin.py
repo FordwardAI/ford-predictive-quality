@@ -23,13 +23,13 @@ import numpy as np
 import scipy.sparse as sp
 from scipy.optimize import minimize
 
-from . import ml
-from .cupo import diferencia, fuente_completa, remuestreos, resultado, simular
-from .datos import MARGEN, PRUEBA_DESDE
-from .precision import BLOQUES_SELECCION, CONFIRMACION, _etiqueta, _precision, _unir
-from .puntaje import Puntaje, atributos_de, suavizada
-from .datos import EVENTO_COLUMNAS
-from .referencias import Azar, TasaFija
+from .. import ml
+from ..cupo import diferencia, fuente_completa, remuestreos, resultado, simular
+from ..datos import MARGEN, PRUEBA_DESDE
+from ..precision import BLOQUES_SELECCION, CONFIRMACION, _etiqueta, _precision, _unir
+from ..puntaje import Puntaje, atributos_de, suavizada
+from ..datos import EVENTO_COLUMNAS
+from ..referencias import Azar, TasaFija
 
 SUPUESTOS = {"A": 0, "B": MARGEN}  # Días de retraso con que un evento queda disponible.
 MIN_FICHA = 30  # Una ficha entra si aparece en al menos tantos VIN de entrenamiento.

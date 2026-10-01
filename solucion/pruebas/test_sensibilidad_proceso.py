@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from solucion.sensibilidad_proceso import generar, particiones
+from solucion.experimentos.sensibilidad_proceso import generar, particiones
 
 
 def test_senal_ruido_cobertura_y_limite_temporal():
@@ -37,7 +37,7 @@ def test_experimento_completo_no_publica_filas_y_conserva_cupo():
     import json
     from unittest.mock import patch
 
-    from solucion import sensibilidad_proceso as experimento
+    from solucion.experimentos import sensibilidad_proceso as experimento
     from solucion.datos import Tabla, Vin
 
     vins = [Vin(f"SINTETICO_{dia}_{i}", "A" if i % 2 else "B", dia, dia,
@@ -56,7 +56,7 @@ def test_experimento_completo_no_publica_filas_y_conserva_cupo():
 
 
 def test_correccion_congelada_y_rechazo_de_control_distinto():
-    from solucion.sensibilidad_candidatos import ajustar_correccion, corregir, verificar_controles
+    from solucion.experimentos.sensibilidad_candidatos import ajustar_correccion, corregir, verificar_controles
 
     y = np.tile([0, 1], 100)
     p = np.full(len(y), .5)
@@ -81,7 +81,7 @@ def test_candidatos_completo_respeta_poblacion_margen_y_controles():
     import json
     from unittest.mock import patch
 
-    from solucion import sensibilidad_candidatos as sc
+    from solucion.experimentos import sensibilidad_candidatos as sc
     from solucion.cupo import metricas, remuestreos, simular
     from solucion.pruebas.sintetico import tabla
 

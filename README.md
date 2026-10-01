@@ -6,6 +6,24 @@ El [mapa de decisiones](https://github.com/FordwardAI/ford-predictive-quality/is
 
 [Plan de acción](docs/plan-de-accion.md) · [Mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) · [Tablero del proyecto](https://github.com/orgs/FordwardAI/projects/1) · [Vocabulario](CONTEXT.md) · [Alcance de entrega](docs/alcance-entrega.md)
 
+## Recorrido de entrega
+
+- **Entradas:** CSV QLS y catálogo fuera del repo, identificados por SHA-256 en [datos locales](docs/datos-locales.md).
+- **Entorno y comandos:** [reproducción](solucion/README.md). Desde la raíz, con Python 3.13 y `requirements.txt`:
+
+  ```sh
+  .venv/bin/python -m solucion.run --csv '<CSV vigente>' --catalogo '<catálogo vigente>'
+  .venv/bin/python -m solucion.pruebas
+  .venv/bin/python -m solucion.empaquetar --destino '<ruta externa>/reproduccion.zip' --salida '<hoja generada>'
+  ```
+
+- **Salidas:** agregados de validación en `solucion/resultados/`; hoja de desarrollo del Día 190 en la salida externa.
+  Las dos lecturas de prueba final ya registradas se consultan en [prueba-final.json](solucion/resultados/prueba-final.json), sin repetirlas.
+- **Entregables:** [borradores del informe y presentación](docs/entrega/README.md); hoja y ZIP fuera del repo.
+  Los borradores conservan su alcance acordado; esta limpieza no elige otro modelo.
+- **Exploración:** [experimentos y comandos](solucion/experimentos/README.md), separados del flujo principal
+  y rotulados también en el ZIP. El [prototipo web](https://github.com/FordwardAI/ford-predictive-quality/tree/main/prototipos/plataforma-web) es una propuesta aparte.
+
 ## Estudio de alternativas
 
 El [estudio comparativo de modelos, columnas y ensembles](research/busqueda-amplia.md) reúne el objetivo,

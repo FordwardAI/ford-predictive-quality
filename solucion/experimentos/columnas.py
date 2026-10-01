@@ -5,9 +5,9 @@ import numpy as np
 import scipy.sparse as sp
 from sklearn.feature_extraction import DictVectorizer
 
-from . import ml
-from .datos import MISSING, day, table
-from .puntaje import atributos_de
+from .. import ml
+from ..datos import MISSING, day, table
+from ..puntaje import atributos_de
 
 EXCLUIDAS = {"VIN", "Auditoría Adicional", "Componente Auditoría Adicional", "Código de Catálogo"}
 NUMERICAS = {"Fecha Inspección", "Fecha Reparación", "Hora Inspección", "Hora Reparación"}

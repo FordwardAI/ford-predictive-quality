@@ -3,7 +3,8 @@ import numpy as np
 import scipy.sparse as sp
 from scipy.optimize import check_grad
 
-from solucion import datos, historial_vin as hv
+from solucion import datos
+from solucion.experimentos import historial_vin as hv
 from solucion.datos import construir
 from solucion.pruebas.sintetico import CATALOGO, evento, tabla
 

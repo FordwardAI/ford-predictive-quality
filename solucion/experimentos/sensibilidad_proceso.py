@@ -10,10 +10,10 @@ import numpy as np
 import scipy.sparse as sp
 
 from . import columnas
-from .cupo import diferencia, fuente_completa, metricas, remuestreos, simular, version_codigo
-from .datos import cargar
-from .precision import BLOQUES_SELECCION, CONFIRMACION, _unir
-from .referencias import TasaFija
+from ..cupo import diferencia, fuente_completa, metricas, remuestreos, simular, version_codigo
+from ..datos import cargar
+from ..precision import BLOQUES_SELECCION, CONFIRMACION, _unir
+from ..referencias import TasaFija
 
 SEMILLAS = (1, 2, 3, 4, 5)
 MODELOS = ("logistica", "rf", "lightgbm")

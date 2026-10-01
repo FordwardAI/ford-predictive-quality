@@ -18,7 +18,7 @@ La primera sensibilidad usó estimadores genéricos de logística, RF y LightGBM
 
 ## Protocolo y supuestos
 
-Se reutiliza el mismo [generador](../solucion/sensibilidad_proceso.py): 13 proxies normalizados en cuatro dimensiones, latentes gaussianas condicionadas deliberadamente a etiquetas, incluso en evaluación. Se mantienen seis escenarios (señal nula, débil, moderada, fuerte, fuerte degradada por ruido/cobertura y fuerte invertida), semillas 1–5 y el cupo diario. Las columnas no son mediciones de torque, geometría, lotes ni ambiente observadas; sus nombres ilustran mecanismos. No se inventan valores físicos de planta ni nuevas etiquetas.
+Se reutiliza el mismo [generador](../solucion/experimentos/sensibilidad_proceso.py): 13 proxies normalizados en cuatro dimensiones, latentes gaussianas condicionadas deliberadamente a etiquetas, incluso en evaluación. Se mantienen seis escenarios (señal nula, débil, moderada, fuerte, fuerte degradada por ruido/cobertura y fuerte invertida), semillas 1–5 y el cupo diario. Las columnas no son mediciones de torque, geometría, lotes ni ambiente observadas; sus nombres ilustran mecanismos. No se inventan valores físicos de planta ni nuevas etiquetas.
 
 Fuente: CSV SHA-256 `a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b`; catálogo `89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047`. Unidad: VIN entre auditados con actividad QLS de la base ficticia, misma población, sin exclusiones nuevas. No se desbloquea la tabla ni se lee Día ≥195. No resuelve las etiquetas ausentes de no auditados ni la cobertura de auditados sin QLS.
 
@@ -100,23 +100,23 @@ Para Ford: «Si las mediciones anteriores a selección aportan señal estable y 
 
 ### Evidencia conservada
 
-[JSON completo](../solucion/resultados/sensibilidad_candidatos.json): 420 registros por candidato/escenario/semilla/tramo, 84 resúmenes y 25 ajustes de bloque/semilla. La verificación reconcilia población, cupo y aciertos de los cinco controles históricos para cada semilla y ambos tramos. Tasa fija también coincide con 94/740 y 46/225 de la referencia publicada.
+[JSON completo](../solucion/experimentos/resultados/sensibilidad_candidatos.json): 420 registros por candidato/escenario/semilla/tramo, 84 resúmenes y 25 ajustes de bloque/semilla. La verificación reconcilia población, cupo y aciertos de los cinco controles históricos para cada semilla y ambos tramos. Tasa fija también coincide con 94/740 y 46/225 de la referencia publicada.
 
 Código publicado en `4f2537d`; el registro de ejecución añade `+cambios` porque la documentación seguía sin commitear. El SHA del script queda en el JSON. La pequeña refactorización del resumen permite escenarios/semillas explícitos y devuelve nulo cuando una mejora relativa no está definida por falta de aciertos del control; los controles de la fuente completa son todos positivos.
 
 ## Reproducción y verificación
 
 ```sh
-.venv/bin/python -m solucion.sensibilidad_candidatos \
+.venv/bin/python -m solucion.experimentos.sensibilidad_candidatos \
   --csv '<CSV vigente>' --catalogo '<catálogo vigente>' \
-  --historico solucion/resultados/semillas_busqueda.json \
-  --salida solucion/resultados/sensibilidad_candidatos.json
+  --historico solucion/experimentos/resultados/semillas_busqueda.json \
+  --salida solucion/experimentos/resultados/sensibilidad_candidatos.json
 .venv/bin/python -m solucion.pruebas
 python3 research/test_audit_dataset.py
 git diff --check
 ```
 
-Código: [sensibilidad_candidatos.py](../solucion/sensibilidad_candidatos.py); generación y resumen se reutilizan de [sensibilidad_proceso.py](../solucion/sensibilidad_proceso.py). Sin nuevas dependencias. El JSON guarda ajustes, semillas, agregados e identificación de fuente/código; no publica VIN, valores por unidad ni predicciones.
+Código: [sensibilidad_candidatos.py](../solucion/experimentos/sensibilidad_candidatos.py); generación y resumen se reutilizan de [sensibilidad_proceso.py](../solucion/experimentos/sensibilidad_proceso.py). Sin nuevas dependencias. El JSON guarda ajustes, semillas, agregados e identificación de fuente/código; no publica VIN, valores por unidad ni predicciones.
 
 Pruebas: corrección nula reproduce el puntaje original, corrección aprendida identifica señal sintética conocida y una discrepancia con los aciertos históricos se rechaza. Una integración con datos sintéticos comprueba margen de entrenamiento, cupo, población, controles que permanecen intactos y ausencia de VIN en resultados. La reproducción sobre la fuente completa se verifica antes de guardar el JSON.
 

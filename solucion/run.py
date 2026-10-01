@@ -4,7 +4,8 @@
         --catalogo "<Códigos de catálogo.csv>" [--salida DIR] [--cache DIR] [--piezas p3,p4]
 
 Cada pieza es un módulo con `correr(tabla, opciones) -> dict`; el resultado se guarda en
-solucion/resultados/<pieza>.json (solo agregados, sin VIN ni tasas por código). La prueba
+solucion/resultados/<pieza>.json; los experimentos, en solucion/experimentos/resultados/
+(solo agregados, sin VIN ni tasas por código). La prueba
 final no se corre desde acá: ver `python -m solucion.preregistro correr --help`.
 """
 import argparse
@@ -17,6 +18,7 @@ from pathlib import Path
 from . import datos
 
 RESULTADOS = datos.RAIZ / "solucion" / "resultados"
+RESULTADOS_EXPERIMENTALES = datos.RAIZ / "solucion" / "experimentos" / "resultados"
 PIEZAS = {  # Orden de dependencias del plan de acción.
     "preparacion": "solucion.preparacion",
     "p3": "solucion.referencias",
@@ -27,23 +29,19 @@ PIEZAS = {  # Orden de dependencias del plan de acción.
     "p8": "solucion.hoja",
     "p9": "solucion.figuras",
     "precision": "solucion.precision",  # Opcional: ~30 min; no entra en el comando por defecto.
-    "historial_vin": "solucion.historial_vin",  # Opcional: experimento de validación sobre el historial del VIN.
-    "ensemble": "solucion.ensemble",  # Opcional: CatBoost + tasa móvil, solo Día <195.
-    "busqueda": "solucion.busqueda",  # Opcional: individuales, columnas, aumento y combinaciones amplias.
-    "semillas_busqueda": "solucion.semillas_busqueda",  # Estabilidad, sin elegir otra mezcla.
+    "historial_vin": "solucion.experimentos.historial_vin",  # Opcional: experimento de validación sobre el historial del VIN.
+    "ensemble": "solucion.experimentos.ensemble",  # Opcional: CatBoost + tasa móvil, solo Día <195.
+    "busqueda": "solucion.experimentos.busqueda",  # Opcional: individuales, columnas, aumento y combinaciones amplias.
+    "semillas_busqueda": "solucion.experimentos.semillas_busqueda",  # Estabilidad, sin elegir otra mezcla.
 }
 OPCIONALES = ("precision", "historial_vin", "ensemble", "busqueda", "semillas_busqueda")
 CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 
 
-def leer(pieza):
-    """Resultado ya guardado de otra pieza."""
-    return json.loads((RESULTADOS / f"{pieza}.json").read_text(encoding="utf-8"))
-
-
 def guardar(pieza, resultado):
-    RESULTADOS.mkdir(parents=True, exist_ok=True)
-    destino = RESULTADOS / f"{pieza}.json"
+    carpeta = RESULTADOS_EXPERIMENTALES if PIEZAS[pieza].startswith("solucion.experimentos.") else RESULTADOS
+    carpeta.mkdir(parents=True, exist_ok=True)
+    destino = carpeta / f"{pieza}.json"
     destino.write_text(json.dumps(resultado, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     return destino
 

@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 RAIZ = Path(__file__).resolve().parents[1]
-RESULTADOS = RAIZ / "solucion" / "resultados"
+RESULTADOS = RAIZ / "solucion" / "experimentos" / "resultados"
 TRAMOS = ("seleccion", "confirmacion")
 COMPARADOS = (
     ("Tasa fija", "tasa_fija"),
@@ -124,9 +124,9 @@ def anexo(b, r, semillas):
     lineas += ["", "## Evidencia detallada", "",
                "Los JSON conservan rangos bootstrap, treinta máximos, pesos, controles, ajustes por bloque y metas. "
                "Las bandas por búsqueda son condicionales; consultar el informe antes de interpretar diferencias.", "",
-               "- [Búsqueda principal](../solucion/resultados/busqueda.json)",
-               "- [Catálogo y diagnóstico adaptativo](../solucion/resultados/robustez_busqueda.json)",
-               "- [Cinco semillas](../solucion/resultados/semillas_busqueda.json)", ""]
+               "- [Búsqueda principal](../solucion/experimentos/resultados/busqueda.json)",
+               "- [Catálogo y diagnóstico adaptativo](../solucion/experimentos/resultados/robustez_busqueda.json)",
+               "- [Cinco semillas](../solucion/experimentos/resultados/semillas_busqueda.json)", ""]
     return "\n".join(lineas)
 
 

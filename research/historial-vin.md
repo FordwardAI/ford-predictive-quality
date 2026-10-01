@@ -1,6 +1,6 @@
 # Historial del VIN: experimento de validación
 
-Responde a la propuesta del 30/09 de modelar el historial de eventos de cada VIN (representación por VIN, riesgo por combinaciones, CatBoost/LightGBM, MIL con atención, learning to rank). **Evaluado en validación (Día < 195); prueba final no releída; disponibilidad del historial no verificada.** Código: [`solucion/historial_vin.py`](../solucion/historial_vin.py). Resultados agregados: [`historial_vin.json`](../solucion/resultados/historial_vin.json). Fuente: CSV y catálogo vigentes ([datos locales](../docs/datos-locales.md)). Unidad de análisis: VIN.
+Responde a la propuesta del 30/09 de modelar el historial de eventos de cada VIN (representación por VIN, riesgo por combinaciones, CatBoost/LightGBM, MIL con atención, learning to rank). **Evaluado en validación (Día < 195); prueba final no releída; disponibilidad del historial no verificada.** Código: [`solucion/experimentos/historial_vin.py`](../solucion/experimentos/historial_vin.py). Resultados agregados: [`historial_vin.json`](../solucion/experimentos/resultados/historial_vin.json). Fuente: CSV y catálogo vigentes ([datos locales](../docs/datos-locales.md)). Unidad de análisis: VIN.
 
 ## Método
 

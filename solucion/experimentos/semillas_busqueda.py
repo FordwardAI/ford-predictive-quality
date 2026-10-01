@@ -4,12 +4,13 @@ import types
 
 import numpy as np
 
-from . import columnas, ml
-from .cupo import diferencia, fuente_completa, metricas, remuestreos, simular, version_codigo
+from . import columnas
+from .. import ml
+from ..cupo import diferencia, fuente_completa, metricas, remuestreos, simular, version_codigo
 from .ensemble import Mezcla
-from .precision import BLOQUES_SELECCION, CONFIRMACION, _unir
-from .puntaje import atributos_de
-from .referencias import Jerarquico
+from ..precision import BLOQUES_SELECCION, CONFIRMACION, _unir
+from ..puntaje import atributos_de
+from ..referencias import Jerarquico
 
 
 def correr(tabla, opciones=None):

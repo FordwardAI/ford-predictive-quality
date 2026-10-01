@@ -21,12 +21,12 @@ Esta autorización amplía el alcance anterior, que era solo documental. Se cons
 - Entrenamiento por bloque con Día ≤ inicio−6. Bloques 100–118, 119–137, 138–156 y 157–174; comprobación 175–194. Son períodos ya explorados, no evaluación independiente.
 - Selección acumulada: 15.279 VIN, 67 días, 1.702 CALIBRADA, 740 inspecciones. Comprobación: 4.626 VIN, 19 días, 408 CALIBRADA, 225 inspecciones. Cupo por día `max(1, N_d // 20)`, sin aumentarlo para sensores.
 - Semillas 1–5 para generación y modelos; desempate 20261002; bootstrap por días 20261003, 2.000 remuestreos. Las semillas comparten VIN y etiquetas; no son muestras nuevas.
-- Código: [sensibilidad_proceso.py](../solucion/sensibilidad_proceso.py); entorno existente en `requirements.txt`, sin dependencias nuevas. Solo se guarda [JSON agregado](../solucion/resultados/sensibilidad_proceso.json), sin columnas por VIN ni predicciones individuales.
+- Código: [sensibilidad_proceso.py](../solucion/experimentos/sensibilidad_proceso.py); entorno existente en `requirements.txt`, sin dependencias nuevas. Solo se guarda [JSON agregado](../solucion/experimentos/resultados/sensibilidad_proceso.json), sin columnas por VIN ni predicciones individuales.
 
 ```sh
-.venv/bin/python -m solucion.sensibilidad_proceso \
+.venv/bin/python -m solucion.experimentos.sensibilidad_proceso \
   --csv '<CSV vigente>' --catalogo '<catálogo vigente>' \
-  --salida solucion/resultados/sensibilidad_proceso.json
+  --salida solucion/experimentos/resultados/sensibilidad_proceso.json
 .venv/bin/python -m solucion.pruebas
 python3 research/test_audit_dataset.py
 git diff --check

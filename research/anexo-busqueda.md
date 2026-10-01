@@ -427,6 +427,6 @@ Ordenados por aciertos de selección, con desempate por nombre para presentar la
 
 Los JSON conservan rangos bootstrap, treinta máximos, pesos, controles, ajustes por bloque y metas. Las bandas por búsqueda son condicionales; consultar el informe antes de interpretar diferencias.
 
-- [Búsqueda principal](../solucion/resultados/busqueda.json)
-- [Catálogo y diagnóstico adaptativo](../solucion/resultados/robustez_busqueda.json)
-- [Cinco semillas](../solucion/resultados/semillas_busqueda.json)
+- [Búsqueda principal](../solucion/experimentos/resultados/busqueda.json)
+- [Catálogo y diagnóstico adaptativo](../solucion/experimentos/resultados/robustez_busqueda.json)
+- [Cinco semillas](../solucion/experimentos/resultados/semillas_busqueda.json)
