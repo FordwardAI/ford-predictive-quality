@@ -4,6 +4,11 @@ Evaluación solicitada por Facundo después de integrar la [PR #48](https://gith
 
 ## Conclusión
 
+**Ampliación posterior del alcance:** Facundo autorizó además simular columnas nuevas.
+El [experimento de sensibilidad](sensibilidad-proceso.md) mide escenarios de señal inventada,
+ruido, cobertura e inversión temporal. Sus ganancias son condicionadas al generador y no
+cambian las conclusiones de causalidad ni disponibilidad de este informe documental.
+
 **Tiene sentido investigar datos cuantitativos de proceso: podrían diferenciar unidades del mismo catálogo que hoy reciben la misma recomendación. No se puede calcular cuánto mejoraría la selección sin esas mediciones y sus resultados de auditoría vinculados.** La PR #48 no ensayó torque, metrología, soldadura, lotes o ambiente: ensayó las columnas de la entrega QLS y sus representaciones.
 
 La primera necesidad es definir qué ajuste físico representa cada resultado `CALIBRADA` y recuperar todas las auditorías, incluidas las de VIN sin actividad QLS, con sus fechas reales. Después, solicitar exportaciones existentes de una operación relevante, antes de proponer sensores nuevos. Torque/ángulo y geometría tienen prioridad técnica condicionada al componente; trazabilidad de lotes y estación tiene prioridad práctica si ya existe. Ambiente y soldadura se incorporarían cuando ingeniería fundamente su vínculo con ese ajuste.

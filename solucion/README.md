@@ -50,6 +50,23 @@ ni releer la prueba final. Usar únicamente la caché local propia (pickle no es
 ```
 
 Cobertura, resultados y límites de estos experimentos en [búsqueda amplia](../research/busqueda-amplia.md).
+
+## Escenarios de datos de proceso inventados
+
+La simulación de sensibilidad añade 13 proxies normalizados de cuatro dimensiones de proceso
+a catálogo/atributos y compara logística, RF y LightGBM en cinco semillas. **Las columnas se
+generan condicionadas a las etiquetas para imponer una señal hipotética**, también en evaluación;
+no son mediciones de planta ni un predictor desplegable. Incluye señal nula/débil/moderada/fuerte,
+ruido/faltantes y una inversión temporal. Solo Día <195, en los mismos bloques ya explorados.
+No forma parte del comando por defecto ni modifica el preregistro.
+
+```sh
+.venv/bin/python -m solucion.sensibilidad_proceso \
+  --csv '<CSV vigente>' --catalogo '<catálogo vigente>' \
+  --salida solucion/resultados/sensibilidad_proceso.json
+```
+
+Informe y límites: [sensibilidad a datos de proceso](../research/sensibilidad-proceso.md).
 El [anexo completo](../research/anexo-busqueda.md) presenta todos los pipelines y columnas. Para regenerar
 el anexo y las figuras desde los agregados publicados, sin entrenar ni abrir el dataset:
 
