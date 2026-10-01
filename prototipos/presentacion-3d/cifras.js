@@ -6,15 +6,27 @@
 // es el valor publicado en docs/entrega/ y se marca `respaldo: true`.
 //
 // Fuentes:
-//   - solucion/resultados/prueba-final.json  corrida única de la prueba final
-//     (corridas[0]: tasa fija, preregistro.json). Las corridas[1] y [2] son la
-//     segunda lectura (CatBoost, preregistro-precision.json) y no se muestran.
+//   - solucion/resultados/prueba-final.json  lecturas de la prueba final. Se
+//     usa la primera corrida de cada preregistro:
+//       corridas[0]  lectura 1, tasa fija (preregistro.json): la cifra oficial.
+//       corridas[1]  lectura 2, CatBoost (preregistro-precision.json).
+//       corridas[2]  repetición exacta de corridas[1] (mismos tramos y piezas;
+//                    la anterior falló al imprimir en la consola de Windows). Se
+//                    conserva en el JSON y no se lee aquí.
+//       corridas[3]  lectura 3, Random Forest (preregistro-efectividad.json,
+//                    pedida el 01/10; no consta acuerdo del resto del equipo).
+//     La presentación proyecta solo la lectura 2 (CatBoost, la solución
+//     elegida); la 1 y la 3 quedan en el respaldo del orador (contenido.js,
+//     `resultado` › ampliacion) y sus claves se conservan sin proyectarse.
+//   - solucion/resultados/precision.json  elección por precisión en bloques de
+//     tiempo (propuesta del 30/09): selección 100–174 y confirmación 175–194,
+//     todo con Día < 195 (prueba final no releída).
 //   - solucion/resultados/eleccion.json, p3.json, p5.json, p6.json, p8.json,
 //     preparacion.json  validación 155–194 y preparación de los datos.
 //   - research/audit-csv.json  auditoría del CSV vigente (SHA-256 a24860d8…c5a82b).
 //   - research/catalog-groups.json  solo `cobertura.codigos_base`; no se pide
 //     desde el navegador porque el archivo trae tasas por mercado (fijo: true).
-//   - docs/entrega/03-factibilidad-economica.md  tiempos y precios públicos,
+//   - docs/entrega/03-factibilidad-economica.md  tiempos medidos,
 //     sin JSON (archivo: null).
 //
 // Regla de leyenda (guion de la presentación): toda cifra en pantalla lleva
@@ -24,7 +36,9 @@
 // campo en el JSON y falla si difieren. Mantener el formato de DEFINICIONES:
 // un objeto por definición, con los campos clave, archivo, ruta, formato y
 // respaldo en ese orden, `ruta` con puntos e índices ([0]) y, para cifras
-// derivadas, `a/b` (cociente), `a-b` (diferencia), `a#largo` o `a#cuenta:campo`.
+// derivadas, `a/b` (cociente), `a-b` (diferencia), `a#largo`, `a#cuenta:campo`
+// o `a#n` (el entero que sigue a «n = » en un texto de calificador; precision.json
+// no trae el n de selección y confirmación como número aparte).
 
 const RAIZ = '../../'; // relativo a prototipos/presentacion-3d/
 
@@ -36,9 +50,11 @@ const TRAMOS = {
   prueba: { texto: 'prueba final Día 200–284', n: 'prueba.n', unidad: 'VIN' },
   prueba260: { texto: 'prueba final Día 200–260', n: 'prueba.hasta260.n', unidad: 'VIN' },
   pruebaParcial: { texto: 'prueba final Día 200–284, etiquetas parciales', n: 'prueba.n', unidad: 'VIN' },
-  dondeMirar: { texto: 'validación 155–194', n: 'dondeMirar.n', unidad: 'VIN CALIBRADA elegidos por la tasa fija' },
-  dondeMirarPrueba: { texto: 'prueba final Día 200–284', n: 'dondeMirar.prueba.n', unidad: 'VIN CALIBRADA elegidos por la tasa fija' },
+  dondeMirar: { texto: 'validación 155–194', n: 'dondeMirar.n', unidad: 'VIN CALIBRADA elegidos por el predictor de la primera etapa' },
+  dondeMirarPrueba: { texto: 'prueba final Día 200–284', n: 'dondeMirar.prueba.n', unidad: 'VIN CALIBRADA elegidos por el predictor de la primera etapa' },
   hoja190: { texto: 'hoja de desarrollo del Día 190 (validación)', n: 'validacion.n', unidad: 'VIN en validación; unidades con identificadores ficticios' },
+  seleccion: { texto: 'selección 100–174 (prueba final no releída)', n: 'seleccion.n', unidad: 'VIN' },
+  confirmacion: { texto: 'confirmación 175–194 (prueba final no releída)', n: 'confirmacion.n', unidad: 'VIN' },
 };
 
 export const DEFINICIONES = [
@@ -68,7 +84,7 @@ export const DEFINICIONES = [
   { clave: 'validacion.dias', archivo: 'solucion/resultados/p3.json', ruta: 'resultados[1].dias', formato: 'entero', respaldo: 35,
     tramo: 'validacion', etiqueta: 'días con VIN' },
   { clave: 'validacion.precision', archivo: 'solucion/resultados/eleccion.json', ruta: 'ganadora.precision_cupo', formato: 'pct1', respaldo: 0.15089514066496162,
-    tramo: 'validacion', etiqueta: 'de cada 100 elegidos por la tasa fija se calibran' },
+    tramo: 'validacion', etiqueta: 'de cada 100 elegidos por el predictor de la primera etapa se calibran' },
   { clave: 'validacion.precisionRango', archivo: 'solucion/resultados/eleccion.json', ruta: 'ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.11573925307055127, 0.1876652842676362],
     tramo: 'validacion', etiqueta: 'rango del 95 % de la precisión en el cupo' },
   { clave: 'validacion.azar', archivo: 'solucion/resultados/p3.json', ruta: 'resultados[1].azar_mismo_cupo', formato: 'pct1', respaldo: 0.09877906979341364,
@@ -88,7 +104,7 @@ export const DEFINICIONES = [
   { clave: 'oraculo', archivo: 'solucion/resultados/p3.json', ruta: 'resultados[14].precision_cupo', formato: 'pct1', respaldo: 0.2020460358056266,
     tramo: 'validacion', etiqueta: 'techo con el código (oráculo, no elegible)' },
 
-  // --- Prueba final (corrida única, tasa fija ≤194) -------------------------
+  // --- Prueba final, primera lectura, corridas[0] (no se proyecta) ---------
   { clave: 'prueba.n', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.vins', formato: 'entero', respaldo: 13312,
     tramo: 'prueba', etiqueta: 'VIN en la prueba final' },
   { clave: 'prueba.elegidos', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.elegidos', formato: 'entero', respaldo: 652,
@@ -98,11 +114,11 @@ export const DEFINICIONES = [
   { clave: 'prueba.calibradasElegidas', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.calibrada_elegidas', formato: 'entero', respaldo: 71,
     tramo: 'prueba', etiqueta: 'CALIBRADA entre los elegidos' },
   { clave: 'prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.10889570552147239,
-    tramo: 'prueba', etiqueta: 'de cada 100 elegidos se calibran' },
+    tramo: 'prueba', etiqueta: 'se calibran con el predictor de la primera etapa (no se proyecta)' },
   { clave: 'prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.08274629051053826, 0.13609099666968646],
     tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo' },
   { clave: 'prueba.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08228066604795758,
-    tramo: 'prueba', etiqueta: 'de cada 100 elegidos al azar con el mismo cupo' },
+    tramo: 'prueba', etiqueta: 'al azar con el mismo cupo' },
   { clave: 'prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.3234665049745966,
     tramo: 'prueba', etiqueta: 'veces el azar' },
   { clave: 'prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.0078349707617178, 1.6396184187210794],
@@ -118,15 +134,58 @@ export const DEFINICIONES = [
   { clave: 'prueba.hasta260.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[1].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08324409192158382,
     tramo: 'prueba260', etiqueta: 'al azar con el mismo cupo (prueba ≤260)' },
 
+  // --- La solución elegida: CatBoost con atributos del código -----------------
+  // Elección por precisión (propuesta aprobada el 30/09): precision.json.
+  { clave: 'seleccion.n', archivo: 'solucion/resultados/precision.json', ruta: 'calificador_seleccion#n', formato: 'entero', respaldo: 15279,
+    tramo: 'seleccion', etiqueta: 'VIN en selección (cuatro bloques)' },
+  { clave: 'confirmacion.n', archivo: 'solucion/resultados/precision.json', ruta: 'calificador_confirmacion#n', formato: 'entero', respaldo: 4626,
+    tramo: 'confirmacion', etiqueta: 'VIN en confirmación' },
+  { clave: 'catboost.seleccion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.precision_seleccion', formato: 'pct1', respaldo: 0.1837837837837838,
+    tramo: 'seleccion', etiqueta: 'de cada 100 elegidos por CatBoost se calibran' },
+  { clave: 'catboost.tasaFijaSeleccion', archivo: 'solucion/resultados/precision.json', ruta: 'tasa_fija.precision_seleccion', formato: 'pct1', respaldo: 0.12702702702702703,
+    tramo: 'seleccion', etiqueta: 'con el predictor de la primera etapa, reajustado en cada bloque (no se proyecta)' },
+  { clave: 'catboost.azarSeleccion', archivo: 'solucion/resultados/precision.json', ruta: 'azar.precision_seleccion', formato: 'pct1', respaldo: 0.11216216216216217,
+    tramo: 'seleccion', etiqueta: 'al azar con el mismo cupo' },
+  { clave: 'catboost.confirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.17333333333333334,
+    tramo: 'confirmacion', etiqueta: 'de cada 100 elegidos por CatBoost en el último bloque' },
+  { clave: 'catboost.azarConfirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.confirmacion.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08784774865474905,
+    tramo: 'confirmacion', etiqueta: 'al azar con el mismo cupo, en el último bloque' },
+  { clave: 'alternativas.n', archivo: 'solucion/resultados/precision.json', ruta: 'ranking#largo', formato: 'entero', respaldo: 54,
+    tramo: 'seleccion', etiqueta: 'alternativas compitieron' },
+  { clave: 'catboost.tasaFijaConfirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'tasa_fija.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.20444444444444446,
+    tramo: 'confirmacion', etiqueta: 'predictor de la primera etapa en el último bloque (no se proyecta)' },
+
+  // Prueba final de CatBoost, corridas[1] (corridas[2] la repite igual): la que se proyecta.
+  { clave: 'catboost.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.1196319018404908,
+    tramo: 'prueba', etiqueta: 'se calibran con CatBoost' },
+  { clave: 'catboost.prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.09162573707704177, 0.1475946322603848],
+    tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo' },
+  { clave: 'catboost.prueba.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08228066604795758,
+    tramo: 'prueba', etiqueta: 'al azar con el mismo cupo' },
+  { clave: 'catboost.prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.4539491181411064,
+    tramo: 'prueba', etiqueta: 'veces el azar' },
+  { clave: 'catboost.prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.143937851209665, 1.7606161509632392],
+    tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar' },
+
+  // Prueba final, tercera lectura, corridas[3] (sin acuerdo del resto del equipo; no se proyecta).
+  { clave: 'rf.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.11809815950920245,
+    tramo: 'prueba', etiqueta: 'se calibran · tercera lectura (no se proyecta)' },
+  { clave: 'rf.prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.09223003256939673, 0.14618075150777565],
+    tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo · tercera lectura (no se proyecta)' },
+  { clave: 'rf.prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.4353087448316049,
+    tramo: 'prueba', etiqueta: 'veces el azar · tercera lectura (no se proyecta)' },
+  { clave: 'rf.prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.1318838968651415, 1.7603055447500682],
+    tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar · tercera lectura (no se proyecta)' },
+
   // --- Valor diferencial ---------------------------------------------------
   { clave: 'dondeMirar.n', archivo: 'solucion/resultados/p6.json', ruta: 'componente.calibrada_elegidas_por_la_ganadora.calibrada_evaluadas', formato: 'entero', respaldo: 59,
-    tramo: 'dondeMirar', etiqueta: 'CALIBRADA elegidas por la tasa fija en validación' },
+    tramo: 'dondeMirar', etiqueta: 'CALIBRADA elegidas por el predictor de la primera etapa en validación' },
   { clave: 'dondeMirar.codigo', archivo: 'solucion/resultados/p6.json', ruta: 'componente.calibrada_elegidas_por_la_ganadora.acierto_codigo', formato: 'pct1', respaldo: 0.6101694915254238,
     tramo: 'dondeMirar', etiqueta: 'aciertan mirando primero los 3 componentes de su código' },
   { clave: 'dondeMirar.general', archivo: 'solucion/resultados/p6.json', ruta: 'componente.calibrada_elegidas_por_la_ganadora.acierto_general', formato: 'pct1', respaldo: 0.3050847457627119,
     tramo: 'dondeMirar', etiqueta: 'aciertan con los 3 componentes más frecuentes en general' },
   { clave: 'dondeMirar.prueba.n', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].piezas.p6.resultado.componente.prueba_final.calibrada_elegidas_por_la_ganadora.calibrada_evaluadas', formato: 'entero', respaldo: 71,
-    tramo: 'dondeMirarPrueba', etiqueta: 'CALIBRADA elegidas por la tasa fija en la prueba final' },
+    tramo: 'dondeMirarPrueba', etiqueta: 'CALIBRADA elegidas por el predictor de la primera etapa en la prueba final' },
   { clave: 'dondeMirar.prueba.codigo', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].piezas.p6.resultado.componente.prueba_final.calibrada_elegidas_por_la_ganadora.acierto_codigo', formato: 'pct1', respaldo: 0.6338028169014085,
     tramo: 'dondeMirarPrueba', etiqueta: 'aciertan con los 3 componentes de su código (prueba final)' },
   { clave: 'dondeMirar.prueba.general', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].piezas.p6.resultado.componente.prueba_final.calibrada_elegidas_por_la_ganadora.acierto_general', formato: 'pct1', respaldo: 0.352112676056338,
@@ -164,9 +223,6 @@ export const DEFINICIONES = [
   { clave: 'factibilidad.corrida', archivo: null, ruta: null, formato: 'segundos1', respaldo: 2.4,
     leyenda: 'corrida diaria en una notebook Apple M1 Pro, medida el 29/09/2026 (lectura del CSV 2,2 s + hoja 0,2 s)',
     fuente: 'docs/entrega/03-factibilidad-economica.md', etiqueta: 'por día para leer QLS y armar la hoja' },
-  { clave: 'factibilidad.vmMes', archivo: null, ruta: null, formato: 'usd1', respaldo: 24.5,
-    leyenda: 'techo de referencia: AWS t3.small en São Paulo encendida 730 h, precio público a demanda consultado el 29/09/2026, sin disco',
-    fuente: 'docs/entrega/03-factibilidad-economica.md', etiqueta: 'por mes si se usara una VM de nube (no hace falta)' },
 ];
 
 // --- Formato es-AR, sin depender de Intl (agrupa también los números de 4 cifras).
@@ -186,7 +242,6 @@ const FORMATOS = {
   puntos1: (x) => numeroEsAR(x * 100, 1) + NBSP + 'puntos',
   puntos2: (x) => numeroEsAR(x * 100, 2) + NBSP + 'puntos',
   segundos1: (x) => numeroEsAR(x, 1) + NBSP + 's',
-  usd1: (x) => 'USD' + NBSP + numeroEsAR(x, 1),
 };
 
 export function formatear(formato, valor) {
@@ -195,7 +250,7 @@ export function formatear(formato, valor) {
   return f(valor);
 }
 
-// --- Lectura de rutas del tipo 'a.b[0].c', 'x/y', 'x-y', 'x#largo', 'x#cuenta:campo'.
+// --- Lectura de rutas del tipo 'a.b[0].c', 'x/y', 'x-y', 'x#largo', 'x#cuenta:campo', 'x#n'.
 function leerRuta(objeto, ruta) {
   let valor = objeto;
   for (const parte of ruta.split('.')) {
@@ -211,6 +266,11 @@ function leerRuta(objeto, ruta) {
 export function resolver(objeto, ruta) {
   const [base, op] = ruta.split('#');
   if (op === 'largo') return leerRuta(objeto, base).length;
+  if (op === 'n') {
+    const m = String(leerRuta(objeto, base)).match(/\bn = (\d+)\b/);
+    if (!m) throw new Error(`Sin «n = » en: ${base}`);
+    return Number(m[1]);
+  }
   if (op?.startsWith('cuenta:')) {
     const campo = op.slice('cuenta:'.length);
     return leerRuta(objeto, base).filter((x) => x[campo] === true).length;

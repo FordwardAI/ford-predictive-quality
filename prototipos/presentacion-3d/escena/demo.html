@@ -33,7 +33,7 @@
   <script type="module">
     // Parámetros: ?escena=<id>&p=<0..1> · ?env=room|estudio · ?calidad=alta|baja|auto
     // ?captura=1 (sin UI; escribe el render en #salida para herramientas/renderizar.*)
-    // ?anclas=1 (marca y mueve las anclas de la Ranger) · ?modelo=procedural · ?orbita · ?reducido · ?caja · ?debug
+    // ?lado=izquierda|derecha (encuadre para texto a ese lado) · ?anclas=1 (marca y mueve las anclas de la Ranger) · ?modelo=procedural · ?orbita · ?reducido · ?caja · ?debug
     import { crearEscena, IDS_ESCENA } from './escena.js';
     const puntosPorEscena = {
       linea: ['carroceria', 'pintura', 'montaje', 'gate-release', 'inspeccion-adicional'],
@@ -101,6 +101,8 @@
     panel.append(botonFoco, botonCalidad);
     escena.alTocarPunto((id) => { estado.textContent = 'punto tocado: ' + id; escena.enfocarPunto(id); });
     ir(actual, 0);
+    // ?lado=izquierda|derecha: lado del texto en la presentación (encuadrar corre el sujeto al opuesto)
+    if (params.get('lado')) escena.encuadrar(params.get('lado'), { duracion: 0 });
 
     if (captura) {
       // Espera a que asienten bloom, crecimiento de columnas y partículas (tiempo virtual).

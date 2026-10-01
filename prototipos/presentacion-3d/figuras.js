@@ -7,13 +7,28 @@
 //   ajustar(svg)  (ya en el documento: comprime textos que no entren)
 //
 // `id`: comparacion | veces_azar_prueba_final | donde_mirar | etiquetas_parciales
-//       | detector | particiones
+//       | detector | particiones | seleccion
 // `datos`: lo que devuelve cargarDatos(): un JSON por clave (p3, p4, eleccion,
-//   pruebaFinal, p5, p6, preparacion), o null si ese fetch falló.
-// `opciones`: { resaltar: 'fuga' } en `comparacion`; { titulo: false } en todas
-//   para omitir el título y el subtítulo internos (la pantalla ya tiene titular).
+//   pruebaFinal, p5, p6, preparacion, precision), o null si ese fetch falló.
+// `opciones`:
+//   - { titulo: false } en todas: omite el título y el subtítulo internos (la
+//     pantalla ya tiene titular).
+//   - { resumen: true } en `comparacion` (la variante de la presentación): un
+//     punto por alternativa sobre un solo eje de precisión en el cupo, en tres
+//     carriles (tasa por código, aprendizaje automático, no elegibles), con la
+//     elegida, la mejor precisión, el azar al mismo cupo y cuántas empatan con la
+//     mejor; sin rangos del 95 %. Sin `resumen`, la variante completa de 33 filas.
+//   - { resaltar: 'fuga' } en `comparacion` (con o sin `resumen`): la versión con
+//     fuga en el color de alerta.
 // Devuelve null si falta un JSON que la figura necesita; ui.js usa entonces el
-// SVG de matplotlib de respaldo (docs/entrega/figuras/).
+// SVG de matplotlib de respaldo (docs/entrega/figuras/) si la pantalla lo
+// declara. `seleccion` y `veces_azar_prueba_final` no tienen respaldo en la
+// presentación: sin figura, la pantalla queda sin figura.
+//   - `seleccion`: elección por precisión (precision.json): un punto por
+//     alternativa del ranking sobre un eje de precisión en selección, con
+//     CatBoost destacado, el azar y el oráculo; ninguna otra alternativa rotulada.
+//   - `veces_azar_prueba_final`: CatBoost en la prueba final (primera corrida
+//     de solucion/preregistro-precision.json), una fila por tramo.
 //
 // Reglas:
 // - Ninguna cifra escrita a mano: todo número sale del JSON. Los textos fijos
@@ -22,10 +37,25 @@
 // - Colores solo por variables CSS (--figura-*), con respaldo para el tema
 //   oscuro Twilight. Para un contenedor claro, definir las variables (ver
 //   herramientas/figuras-demo.html).
-// - Cada fila (o segmento) es un <g class="fila" style="--i: n"> para que la
-//   interfaz pueda animarlas en cascada; el SVG no anima nada por sí mismo.
-// - viewBox 1200×675 (16:9), salvo `comparacion`: 830 de ancho y alto según
-//   el contenido (~860 sin título), para letra de 14–15 px a ~830 px de ancho.
+// - Cada fila (o segmento, o punto) es un <g class="fila" style="--i: n"> para
+//   que la interfaz pueda animarlas en cascada; el SVG no anima nada por sí mismo.
+// - Tamaños. En index.html a 1920×1080 el panel de figura (.figura-marco) mide
+//   746 px; la escala viewBox→px es ancho del panel / ancho del viewBox. Toda la
+//   página escala con el viewport (a 1366×768 el panel mide 531 px), así que la
+//   proporción con el resto de la pantalla se mantiene.
+//   · `particiones`, `seleccion` y `comparacion` con `resumen`: 740 de ancho (escala ≈ 1,0 a
+//     1920 px) y alto según el contenido; letra de 22 px o más en rótulos y
+//     valores principales y nunca menos de 18 px (ejes, «margen»).
+//   · `veces_azar_prueba_final`: 900 de ancho con letra de 23 a 40 (≈ 19 a 33 px
+//     efectivos en el panel de 746 px).
+//   · Sin pies dentro de esas figuras: la pantalla tiene su pie y el detalle va
+//     en <desc>. Ningún texto depende de textLength (se acorta o se parte la línea).
+//   · `comparacion` completa: 830 de ancho, letra de 14–15 px (para el informe).
+//   · `donde_mirar`, `etiquetas_parciales` y `detector` (fuera de la presentación):
+//     viewBox 1200×675.
+//   Revisión: herramientas/figuras-demo.html?solo=<id>&ancho=746&medir=1.
+// - Las clases de los textos llevan prefijo cuando chocan con la página
+//   (`figura-pie`, no `pie`: styles.css usa `.pie` para el pie fijo).
 
 import { formatear } from './cifras.js';
 
@@ -36,6 +66,7 @@ export const IDS = [
   'etiquetas_parciales',
   'detector',
   'particiones',
+  'seleccion',
 ];
 
 // JSON que necesita cada figura (clave en `datos`).
@@ -46,6 +77,7 @@ const REQUISITOS = {
   etiquetas_parciales: ['p5'],
   detector: ['p6'],
   particiones: ['preparacion', 'p3', 'eleccion', 'pruebaFinal'],
+  seleccion: ['precision'],
 };
 
 const ARCHIVOS = {
@@ -56,6 +88,7 @@ const ARCHIVOS = {
   p5: 'solucion/resultados/p5.json',
   p6: 'solucion/resultados/p6.json',
   preparacion: 'solucion/resultados/preparacion.json',
+  precision: 'solucion/resultados/precision.json',
 };
 
 const RAIZ = '../../'; // relativo a prototipos/presentacion-3d/
@@ -141,6 +174,7 @@ const C = {
   punto: 'var(--figura-punto, #B4B6C2)',
   acento: 'var(--figura-acento, #066FEF)',
   acentoSuave: 'var(--figura-acento-suave, rgba(6, 111, 239, .28))',
+  sobreAcento: 'var(--figura-sobre-acento, #FFFFFF)', // texto sobre un relleno de acento
   alerta: 'var(--figura-alerta, #FBAE40)',
   alertaSuave: 'var(--figura-alerta-suave, rgba(251, 174, 64, .16))',
   superficie: 'var(--figura-superficie, #00142E)',
@@ -290,7 +324,7 @@ function lienzo(id, ancho, alto, { titulo, subtitulo = [], desc, pie, opciones, 
   if (pie) {
     const tam = T.pie * k;
     const lineas = partir(pie, Math.floor(util / (tam * LETRA)));
-    lineas.forEach((l, i) => texto(svg, margen, alto - 20 - (lineas.length - 1 - i) * tam * 1.3, l, { tam, color: C.tenue, clase: 'pie' }));
+    lineas.forEach((l, i) => texto(svg, margen, alto - 20 - (lineas.length - 1 - i) * tam * 1.3, l, { tam, color: C.tenue, clase: 'figura-pie' }));
     abajo = alto - 20 - lineas.length * tam * 1.3 - 8;
   }
   if (opciones.titulo === false) return { svg, arriba: 24, abajo };
@@ -446,7 +480,216 @@ function etiquetaComparacion(r) {
   return capital(r.alternativa);
 }
 
+/**
+ * Ubica puntos de radio r alrededor de una línea (enjambre): cada punto baja o
+ * sube lo mínimo para no pisar a los ya ubicados. Los primeros de la lista
+ * (destacados) quedan sobre la línea. Con `soloAbajo`, el enjambre crece solo hacia
+ * abajo (deja libre el espacio de arriba para un rótulo). Devuelve el desplazamiento
+ * vertical de cada uno.
+ */
+function enjambre(xs, r, { separacion = 2, soloAbajo = false } = {}) {
+  const ubicados = [];
+  const minimo = 2 * r + separacion;
+  return xs.map((x) => {
+    for (let paso = 0; ; paso++) {
+      const dy = soloAbajo ? paso * 2 : (paso % 2 ? 1 : -1) * Math.ceil(paso / 2) * 2;
+      if (ubicados.every((u) => Math.hypot(u.x - x, u.dy - dy) >= minimo)) {
+        ubicados.push({ x, dy });
+        return dy;
+      }
+    }
+  });
+}
+
+/**
+ * Variante `resumen` (presentación proyectada): un punto por alternativa sobre un
+ * solo eje de precisión en el cupo, en tres carriles (tasa por código, aprendizaje
+ * automático y no elegibles). Sin rangos del 95 % (están en el informe y en la
+ * variante completa). Ancho 740 (el panel de la pantalla mide ~746 px a 1920 px,
+ * así 1 unidad ≈ 1 px): letra de 18 a 28 px.
+ */
+function figuraComparacionResumen(datos, opciones) {
+  const { p3, p4, eleccion } = datos;
+  const grupos = gruposComparacion(p3, p4);
+  const todas = grupos.flatMap((g) => g.filas);
+  if (!todas.length) return null;
+  const azar = p3.resultados.find((r) => r.familia === 'azar');
+  const comparacion = new Map((eleccion.comparacion || []).map((c) => [c.alternativa, c]));
+  const ganadora = eleccion.ganadora?.alternativa;
+  const mejor = eleccion.mejor_precision;
+  const filaGanadora = todas.find((r) => r.alternativa === ganadora);
+  const filaMejor = todas.find((r) => r.alternativa === mejor);
+  if (!filaGanadora || !filaMejor) return null;
+  const resaltarFuga = opciones.resaltar === 'fuga';
+  const calificador = todas.find((r) => r.elegible)?.calificador ?? '';
+  // Misma cuenta que la variante completa: empatan con la mejor, sin contar la ganadora ni la mejor.
+  const empatan = todas.filter((r) => r.alternativa !== ganadora && r.alternativa !== mejor
+    && comparacion.get(r.alternativa)?.empata).length;
+
+  const carriles = [
+    { clave: 'codigo', lineas: ['Tasa por código', '(referencias)'], filas: todas.filter((r) => r.elegible && r.pieza === 'p3') },
+    { clave: 'ml', lineas: ['Aprendizaje', 'automático'], filas: todas.filter((r) => r.elegible && r.pieza === 'p4') },
+    { clave: 'no-elegibles', lineas: ['No elegibles'], filas: todas.filter((r) => REFERENCIAS.includes(r.familia)) },
+  ].filter((c) => c.filas.length);
+
+  const ANCHO = 740;
+  const TAM = { carril: 24, carrilSub: 20, destacado: 28, rotulo: 22, eje: 20, nota: 22 };
+  const R = 8;
+  const R_GANADORA = 13;
+  const x0 = 232;
+  const x1 = 712;
+  const tope = Math.max(0.3, ...todas.map((r) => r.precision_cupo + 0.02));
+  const esc = escala(0, tope, x0, x1);
+  const titulo = 'Comparación de alternativas en validación';
+  const desc = `Precisión en el cupo diario del 5 % de cada alternativa (estimación puntual), ${calificador}. `
+    + `Elegida: ${nombre(ganadora)}, ${pct(filaGanadora.precision_cupo)}; mejor precisión: ${nombre(mejor)}, `
+    + `${pct(filaMejor.precision_cupo)}; ${empatan} alternativas más empatan con la mejor. `
+    + (azar ? `Azar al mismo cupo: ${pct(azar.azar_mismo_cupo)}. ` : '')
+    + 'El oráculo (techo) y la versión con fuga (didáctica) no son elegibles.';
+  const { svg, arriba } = lienzo('comparacion', ANCHO, 2000, {
+    titulo, desc, opciones, subtitulo: [`Precisión en el cupo diario del 5 %, ${calificador}.`],
+  });
+  svg.classList.add('figura-comparacion-resumen');
+  if (resaltarFuga) svg.classList.add('resaltar-fuga');
+
+  // Enjambre por carril: la ganadora y la mejor primero, para que queden sobre la línea.
+  // El carril de la ganadora crece hacia abajo: arriba va su rótulo, con la línea guía libre.
+  for (const c of carriles) {
+    const soloAbajo = c.filas.includes(filaGanadora);
+    const orden = [...c.filas].sort((a, b) => {
+      const peso = (r) => (r.alternativa === ganadora ? 0 : r.alternativa === mejor ? 1 : 2);
+      return peso(a) - peso(b) || a.precision_cupo - b.precision_cupo;
+    });
+    const dys = enjambre(orden.map((r) => esc(r.precision_cupo)), R + 1, { soloAbajo });
+    c.puntos = orden.map((r, j) => ({ r, dy: dys[j] }));
+    c.sobre = Math.max(R_GANADORA, ...dys.map((d) => -d + R + 1));
+    c.bajo = Math.max(R_GANADORA, ...dys.map((d) => d + R + 1));
+  }
+  // La mejor precisión se rotula a su derecha (en dos o tres líneas) si nada de su
+  // carril queda más allá; si no, debajo del carril.
+  const carrilMejor = carriles.find((c) => c.filas.includes(filaMejor));
+  const xMejor = esc(filaMejor.precision_cupo);
+  const lineasMejor = carrilMejor.filas.every((r) => esc(r.precision_cupo) <= xMejor + 2 * R)
+    ? [['Mejor precisión', pct(filaMejor.precision_cupo)], ['Mejor', 'precisión', pct(filaMejor.precision_cupo)]]
+      .find((ls) => xMejor + R + 18 + Math.max(...ls.map((l) => anchoTexto(l, TAM.rotulo))) * 1.15 <= ANCHO - 8)
+    : undefined;
+  const mejorAlLado = Boolean(lineasMejor);
+
+  // Disposición vertical: rótulo del azar, rótulo de la elegida, carriles.
+  const yAzar = arriba + 14;
+  const yElegida = yAzar + 52;
+  let y = yElegida + 22;
+  for (const c of carriles) {
+    y += Math.max(c.sobre + 12, 34);
+    c.y = y;
+    y += c.bajo + (c === carrilMejor && !mejorAlLado ? 62 : 22);
+  }
+  const yBase = y;
+
+  // Grilla, eje y rótulo del eje.
+  const g = el(svg, 'g', { class: 'eje' });
+  for (const v of ticks(tope, 4)) {
+    linea(g, esc(v), yElegida + 22, esc(v), yBase, C.linea, 1);
+    texto(g, esc(v), yBase + 24, pctEje(v), { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  }
+  linea(g, x0, yBase, x1, yBase, C.rango, 1.5);
+  texto(g, (x0 + x1) / 2, yBase + 60, 'Precisión en el cupo (% CALIBRADA)', {
+    tam: TAM.eje, color: C.tenue, ancla: 'middle',
+  });
+
+  // Azar al mismo cupo: línea vertical con su rótulo arriba, a la izquierda.
+  const xAzar = azar && esNumero(azar.azar_mismo_cupo) ? esc(azar.azar_mismo_cupo) : null;
+  if (xAzar !== null) {
+    const xa = xAzar;
+    const ga = el(svg, 'g', { class: 'referencia azar' });
+    linea(ga, xa, yAzar + 12, xa, yBase, C.texto, 2);
+    texto(ga, xa - 10, yAzar, `Azar al mismo cupo · ${pct(azar.azar_mismo_cupo)}`, {
+      tam: TAM.rotulo, color: C.tenue, ancla: 'end',
+    });
+  }
+
+  // Carriles.
+  let i = 0;
+  for (const c of carriles) {
+    const gc = el(svg, 'g', { class: `carril carril-${c.clave}` });
+    if (c.lineas.length > 1) {
+      texto(gc, 20, c.y - 13, c.lineas[0], { tam: TAM.carril, peso: 600 });
+      texto(gc, 20, c.y + 15, c.lineas[1], { tam: TAM.carrilSub, color: C.tenue });
+    } else {
+      texto(gc, 20, c.y, c.lineas[0], { tam: TAM.carril, peso: 600 });
+    }
+    linea(gc, x0, c.y, x1, c.y, C.linea, 1);
+    // Los destacados se dibujan al final para quedar encima.
+    const puntos = [...c.puntos].reverse();
+    for (const { r, dy } of puntos) {
+      const esGanadora = r.alternativa === ganadora;
+      const esMejor = r.alternativa === mejor;
+      const esFuga = r.familia === 'fuga';
+      const clases = [esGanadora && 'ganadora', esMejor && 'mejor', !r.elegible && 'referencia', esFuga && 'fuga']
+        .filter(Boolean).join(' ');
+      const gp = fila(svg, i++, `punto ${clases}`);
+      el(gp, 'title', {}, `${etiquetaComparacion(r)}: ${pct(r.precision_cupo)}`);
+      const x = esc(r.precision_cupo);
+      const yc = c.y + dy;
+      if (!r.elegible) {
+        const alerta = esFuga && resaltarFuga;
+        const d = R * 1.4;
+        if (alerta) el(gp, 'circle', { cx: x, cy: yc, r: d + 9, style: `fill:${C.alertaSuave}` });
+        el(gp, 'path', {
+          d: `M${x} ${yc - d}L${x + d} ${yc}L${x} ${yc + d}L${x - d} ${yc}Z`,
+          style: `fill:${C.superficie};stroke:${alerta ? C.alerta : C.texto};stroke-width:3;stroke-linejoin:round`,
+        });
+        // Oráculo a la izquierda, fuga a la derecha (la fuga es la de mayor precisión).
+        const rotulo = esFuga ? 'Con fuga' : 'Oráculo';
+        texto(gp, esFuga ? x + d + 12 : x - d - 12, yc, rotulo, {
+          tam: TAM.rotulo, ancla: esFuga ? 'start' : 'end', peso: alerta ? 600 : 400,
+          color: alerta ? C.alerta : C.texto, halo: true,
+        });
+      } else if (esGanadora) {
+        el(gp, 'circle', { cx: x, cy: yc, r: R_GANADORA + 6, style: `fill:${C.acentoSuave}` });
+        el(gp, 'circle', { cx: x, cy: yc, r: R_GANADORA, style: `fill:${C.acento};stroke:${C.superficie};stroke-width:3` });
+        linea(gp, x, yElegida + 20, x, yc - R_GANADORA - 6, C.acento, 2);
+        // El rótulo se corre a la derecha si pisaría la línea del azar.
+        const rotulo = `${FAMILIAS[r.familia] ?? capital(r.familia)} · ${pct(r.precision_cupo)}`;
+        const mitad = (anchoTexto(rotulo, TAM.destacado) * 1.15) / 2;
+        const xr = Math.min(xAzar === null ? x : Math.min(Math.max(x, xAzar + 16 + mitad), x + mitad - 12), ANCHO - 8 - mitad);
+        texto(gp, xr, yElegida, rotulo, {
+          tam: TAM.destacado, peso: 700, ancla: 'middle', halo: true,
+        });
+      } else if (esMejor) {
+        el(gp, 'circle', { cx: x, cy: yc, r: R + 2, style: `fill:${C.texto};stroke:${C.superficie};stroke-width:2.5` });
+        if (mejorAlLado) {
+          lineasMejor.forEach((l, k) => texto(gp, x + R + 14, yc + (k - (lineasMejor.length - 1) / 2) * 27 + 8, l, {
+            tam: TAM.rotulo, peso: 600, halo: true,
+          }));
+        } else {
+          const yr = c.y + c.bajo + 34;
+          linea(gp, x, yc + R + 4, x, yr - 16, C.texto, 1.5);
+          texto(gp, x + 10, yr, `Mejor precisión · ${pct(r.precision_cupo)}`, { tam: TAM.rotulo, peso: 600, ancla: 'end', halo: true });
+        }
+      } else {
+        el(gp, 'circle', { cx: x, cy: yc, r: R, style: `fill:${C.punto};stroke:${C.superficie};stroke-width:2` });
+      }
+    }
+  }
+
+  // Nota única debajo del eje (sin pie: la pantalla tiene el suyo y los rangos del
+  // 95 % están en el informe); el alto final depende de si hay nota.
+  let yFin = yBase + 84;
+  if (empatan) {
+    texto(svg, 20, yBase + 108, `Otras ${empatan} empatan con la mejor: gana la más simple.`, {
+      tam: TAM.nota, peso: 500, clase: 'nota',
+    });
+    yFin = yBase + 132;
+  }
+  const alto = Math.ceil(yFin);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
+  svg.querySelector('rect')?.setAttribute('height', alto);
+  return svg;
+}
+
 function figuraComparacion(datos, opciones) {
+  if (opciones.resumen) return figuraComparacionResumen(datos, opciones);
   const { p3, p4, eleccion } = datos;
   const grupos = gruposComparacion(p3, p4);
   const azar = p3.resultados.find((r) => r.familia === 'azar');
@@ -572,7 +815,7 @@ function figuraComparacion(datos, opciones) {
   const tamPie = T.pie * k;
   let yPie = yBase + 64 * k + 22;
   for (const l of partir(pie, Math.floor((ANCHO - 64) / (tamPie * LETRA)))) {
-    texto(svg, 32, yPie, l, { tam: tamPie, color: C.tenue, clase: 'pie' });
+    texto(svg, 32, yPie, l, { tam: tamPie, color: C.tenue, clase: 'figura-pie' });
     yPie += tamPie * 1.3;
   }
   const alto = Math.ceil(yPie + 4);
@@ -581,43 +824,88 @@ function figuraComparacion(datos, opciones) {
   return svg;
 }
 
-// --- 2. veces_azar_prueba_final (figuras.py:297-344) ----------------------------
+// --- 2. veces_azar_prueba_final: CatBoost en la prueba final, por tramo -------
+
+const PREREGISTRO_CATBOOST = 'solucion/preregistro-precision.json';
+// Tramos que se grafican (prueba-final.json → corridas[].tramos[].tramo) y su rótulo.
+const TRAMOS_PRUEBA = [
+  ['prueba completa', 'Prueba completa', (t) => `Día ${t.dias_del_vin[0]}–${t.dias_del_vin[1]}`],
+  ['prueba ≤260', 'Prueba ≤260', (t) => `Día ${t.dias_del_vin[0]}–${t.dias_del_vin[1]}`],
+  ['sensibilidad con la cohorte posterior a 260', 'Sensibilidad con la', () => 'cohorte posterior a 260'],
+];
 
 function figuraPruebaFinal(datos, opciones) {
-  // corridas[0] es la corrida única del preregistro (tasa fija ≤194), la misma
-  // que publica docs/entrega/figuras/veces_azar_prueba_final.svg y cifras.js.
-  // corridas[1] y [2] son la segunda lectura (CatBoost) y no se grafican.
-  const corrida = datos.pruebaFinal.corridas[0];
-  const tramos = corrida.tramos.filter((t) => esRango(t.ganadora?.veces_azar_rango95)
-    && !String(t.lectura_del_tramo ?? '').startsWith('descriptiva'));
-  if (!tramos.length) return null;
-  const filas = tramos.map((t, i) => {
-    const g = t.ganadora;
-    return {
-      etiqueta: capital(t.tramo), valor: g.veces_azar, rango: g.veces_azar_rango95, destacada: i === 0,
+  // La primera corrida del preregistro de CatBoost (corridas[1]); corridas[2]
+  // la repite exactamente y no se grafica. Una fila por tramo.
+  const corrida = datos.pruebaFinal.corridas.find((c) => c.preregistro === PREREGISTRO_CATBOOST);
+  if (!corrida) return null;
+  const filas = [];
+  for (const [clave, linea1, linea2] of TRAMOS_PRUEBA) {
+    const t = corrida.tramos?.find((x) => x.tramo === clave);
+    const g = t?.ganadora;
+    if (!g || !esNumero(g.veces_azar) || !esRango(g.veces_azar_rango95) || !esRango(t.dias_del_vin)) continue;
+    filas.push({
+      linea1, linea2: linea2(t), g, valor: g.veces_azar, rango: g.veces_azar_rango95, destacada: !filas.length,
       valorTexto: veces(g.veces_azar),
-      valorSub: `${veces(g.veces_azar_rango95[0])} a ${veces(g.veces_azar_rango95[1])}`,
-    };
-  });
-  const principal = tramos[0].ganadora;
+      valorSub: `${veces(g.veces_azar_rango95[0]).replace(/\s×$/, '')} a ${veces(g.veces_azar_rango95[1])}`,
+    });
+  }
+  if (!filas.length) return null;
+  const principal = filas[0].g;
   const sinPct = (x) => pct(x).replace(/\s%$/, '');
-  return figuraPuntos('veces_azar_prueba_final', opciones, {
-    titulo: `Prueba final: de cada 100 elegidos se calibrarían ${sinPct(principal.precision_cupo)}, `
-      + `contra ${sinPct(principal.azar_mismo_cupo)} al azar`,
-    subtitulo: [
-      `Veces el azar de la ganadora, ${principal.calificador}.`,
-      `Rango del 95 % por bootstrap de días; lectura de la prueba completa: ${principal.lectura}.`,
-    ],
-    desc: `Veces el azar de la ganadora (${nombre(corrida.ganadora?.alternativa)}) en la prueba final, por tramo: `
-      + filas.map((f) => `${f.etiqueta.toLowerCase()} ${f.valorTexto} (${f.valorSub})`).join('; ') + '.',
-    filas,
-    dominio: [0, Math.max(2.5, ...filas.map((f) => f.rango[1] + 0.1))],
-    formatoEje: (x) => x.toFixed(1).replace('.', ',') + NBSP + '×',
-    rotuloX: 'Veces el azar al mismo cupo (rango del 95 %)',
-    ref: { valor: 1, texto: `azar esperado = 1${NBSP}×` },
-    pie: 'Corrida única del preregistro acordado. El tramo >260 (cupo ~8) es solo descriptivo y no se grafica.',
-    xEtiqueta: 470, xPlot1: 1000, xValores: 1024,
+
+  // Pensada para ~900 px de ancho (1 unidad ≈ 1 px). El panel de la pantalla la
+  // muestra a ~0,8: rótulos de 28 y valores de 40 (≥ 22 px efectivos), rangos y
+  // eje de 23 (≥ 18 px efectivos).
+  const ANCHO = 900;
+  const TAM = { rotulo: 28, valor: 40, rango: 23, eje: 23, ref: 23 };
+  const PASO = 120;
+  const { svg, arriba } = lienzo('veces_azar_prueba_final', ANCHO, 2000, {
+    titulo: 'Prueba final: veces el azar de CatBoost',
+    subtitulo: [`Prueba completa: ${sinPct(principal.precision_cupo)} de cada 100 elegidos, `
+      + `contra ${sinPct(principal.azar_mismo_cupo)} al azar; ${principal.calificador}.`],
+    desc: `Veces el azar en la prueba final de ${nombre(corrida.ganadora?.alternativa)} (preregistro de precisión, `
+      + 'primera corrida), con rango del 95 % por bootstrap de días: '
+      + filas.map((f) => `${f.linea1} ${f.linea2}: ${pct(f.g.precision_cupo)} contra ${pct(f.g.azar_mismo_cupo)} al azar, `
+        + `${f.valorTexto} (${f.valorSub}), lectura ${f.g.lectura}, ${f.g.calificador}`).join('; ') + '.',
+    opciones,
   });
+  const xEtiqueta = 24;
+  const x0 = 400;
+  const x1 = 680;
+  const xValor = 706;
+  const dominio = Math.max(2.5, ...filas.map((f) => f.rango[1] + 0.1));
+  const esc = escala(0, dominio, x0, x1);
+  const yAzar = arriba + 14;
+  const yInicio = yAzar + 26;
+  const yBase = yInicio + PASO * filas.length;
+
+  const g = el(svg, 'g', { class: 'eje' });
+  for (const v of ticks(dominio, 3)) {
+    linea(g, esc(v), yInicio, esc(v), yBase, C.linea, 1);
+    texto(g, esc(v), yBase + 26, v.toFixed(1).replace('.', ',') + NBSP + '×', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  }
+  linea(g, x0, yBase, x1, yBase, C.rango, 1.5);
+  texto(g, (x0 + x1) / 2, yBase + 64, 'Veces el azar (rango del 95 %)', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+
+  const gr = el(svg, 'g', { class: 'referencia' });
+  linea(gr, esc(1), yAzar + 12, esc(1), yBase, C.texto, 2);
+  texto(gr, esc(1) - 10, yAzar, `Azar = 1${NBSP}×`, { tam: TAM.ref, color: C.tenue, ancla: 'end' });
+
+  filas.forEach((f, i) => {
+    const y = yInicio + PASO * (i + 0.5);
+    const gf = fila(svg, i, f.destacada ? 'destacada' : '');
+    texto(gf, xEtiqueta, y - 17, f.linea1, { tam: TAM.rotulo, peso: 700, color: f.destacada ? C.texto : C.tenue });
+    texto(gf, xEtiqueta, y + 17, f.linea2, { tam: TAM.rotulo, peso: f.destacada ? 600 : 400 });
+    puntoIntervalo(gf, esc, y, f.valor, f.rango, f.destacada ? 'destacada' : 'normal', f.destacada ? 13 : 11);
+    texto(gf, xValor, y - 15, f.valorTexto, { tam: TAM.valor, peso: 700, color: f.destacada ? C.texto : C.tenue });
+    texto(gf, xValor, y + 26, f.valorSub, { tam: TAM.rango, color: C.tenue });
+  });
+
+  const alto = Math.ceil(yBase + 90);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
+  svg.querySelector('rect')?.setAttribute('height', alto);
+  return svg;
 }
 
 // --- 3. donde_mirar (figuras.py:415-439) ----------------------------------------
@@ -757,26 +1045,31 @@ function figuraParticiones(datos, opciones) {
   const corte = tramo260.dias_del_vin[1];
   const DIA_INICIAL = 1; // base completa: Día 1–284 (cifras.js, tramo «base»)
 
-  const { svg, arriba, abajo } = lienzo('particiones', 1200, 675, {
+  // Ancho 740 (el panel de la pantalla mide ~746 px a 1920 px, así 1 unidad ≈ 1 px):
+  // el carril ocupa todo el ancho y su nombre va arriba; letra de 18 a 26 px.
+  const ANCHO = 740;
+  const TAM = { carril: 26, tramo: 24, detalle: 22, margen: 18, eje: 20, llave: 22 };
+  const { svg, arriba } = lienzo('particiones', ANCHO, 2000, {
     titulo: 'Cómo se separaron los días', opciones,
     subtitulo: [`Cada VIN cuenta en un solo tramo, según su Día del VIN. Entre entrenamiento y evaluación, `
       + `${valIni - hastaComparacion - 1} días de margen sin etiquetas.`],
-    pie: `Población principal: ${entero(cp.poblacion_principal.vins)} VIN con primera inspección ≤ DIA_${corte}; `
-      + `${entero(cp.cohorte_posterior_260.vins)} VIN con primera inspección posterior van aparte. Base ficticia.`,
     desc: `Elección: entrenamiento Día ${DIA_INICIAL}–${hastaComparacion} (${entero(cp.entrenamiento_comparacion.vins)} VIN), `
       + `validación ${valIni}–${valFin} (${entero(cp.validacion.vins)} VIN). Prueba final: entrenamiento ${DIA_INICIAL}–${hastaFinal} `
-      + `(${entero(cp.entrenamiento_final.vins)} VIN), prueba ${pruIni}–${pruFin} (${entero(cp.prueba_final.vins)} VIN).`,
+      + `(${entero(cp.entrenamiento_final.vins)} VIN), prueba ${pruIni}–${pruFin} (${entero(cp.prueba_final.vins)} VIN; `
+      + `>${corte}, solo descriptivo). Población principal: ${entero(cp.poblacion_principal.vins)} VIN con primera `
+      + `inspección ≤ DIA_${corte}; ${entero(cp.cohorte_posterior_260.vins)} VIN con primera inspección posterior van aparte. `
+      + 'Base ficticia.',
   });
-  const x0 = 270;
-  const x1 = 1168;
+  const x0 = 16;
+  const x1 = 724;
   const dia = escala(DIA_INICIAL - 1, pruFin, x0, x1); // el día d ocupa [dia(d - 1), dia(d)]
   const tramoX = (a, b) => [dia(a - 1), dia(b)];
-  const alto = 72;
-  const yEje = abajo - 34;
-  const espacio = yEje - arriba;
+  const alto = 92;
+  const yCarril1 = arriba + 34 + alto / 2;
+  const yCarril2 = yCarril1 + alto + 84;
   const carriles = [
     {
-      etiqueta: 'Elección', sub: 'validación', y: arriba + espacio * 0.25,
+      etiqueta: 'Elección (validación)', y: yCarril1,
       segmentos: [
         { a: DIA_INICIAL, b: hastaComparacion, t: 'Entrenamiento', d: `Día ${DIA_INICIAL}–${hastaComparacion} · ${entero(cp.entrenamiento_comparacion.vins)} VIN`, tipo: 'entrena' },
         { a: hastaComparacion + 1, b: valIni - 1, tipo: 'margen' },
@@ -784,7 +1077,7 @@ function figuraParticiones(datos, opciones) {
       ],
     },
     {
-      etiqueta: 'Prueba final', sub: 'corrida única', y: arriba + espacio * 0.62,
+      etiqueta: 'Prueba final (corrida única)', y: yCarril2,
       segmentos: [
         { a: DIA_INICIAL, b: hastaFinal, t: 'Entrenamiento final', d: `Día ${DIA_INICIAL}–${hastaFinal} · ${entero(cp.entrenamiento_final.vins)} VIN`, tipo: 'entrena' },
         { a: hastaFinal + 1, b: pruIni - 1, tipo: 'margen' },
@@ -793,56 +1086,195 @@ function figuraParticiones(datos, opciones) {
       ],
     },
   ];
+  // Líneas para rotular un tramo a su derecha ([nombre, detalle] o [nombre, días, VIN]), o null.
+  const alLado = (s, xb) => [[s.d], s.d.split(' · ')].map((partes) => [s.t, ...partes]).find((lineas) =>
+    Math.max(...lineas.map((l, k) => anchoTexto(l, k ? TAM.detalle : TAM.tramo))) * 1.12 <= x1 - xb - 14) ?? null;
   let i = 0;
   for (const c of carriles) {
-    texto(svg, 32, c.y - 14, c.etiqueta, { tam: 26, peso: 500 });
-    texto(svg, 32, c.y + 17, c.sub, { tam: 19, color: C.tenue });
-    rect(svg, x0, c.y - alto / 2, x1 - x0, alto, C.linea, { radio: 6 });
+    const arribaBarra = c.y - alto / 2;
+    const yRotulo = arribaBarra - 22;
+    texto(svg, x0, yRotulo, c.etiqueta, { tam: TAM.carril, peso: 600 });
+    rect(svg, x0, arribaBarra, x1 - x0, alto, C.linea, { radio: 6 });
     for (const s of c.segmentos) {
       const [xa, xb] = tramoX(s.a, s.b);
       const g = fila(svg, i++, `segmento ${s.tipo}`);
       if (s.tipo === 'margen') {
-        rect(g, xa, c.y - alto / 2, xb - xa, alto, C.superficie);
-        texto(g, (xa + xb) / 2, c.y - alto / 2 - 20, `margen ${s.a}–${s.b}`, { tam: 17, color: C.tenue, ancla: 'middle' });
-        linea(g, (xa + xb) / 2, c.y - alto / 2 - 9, (xa + xb) / 2, c.y - alto / 2, C.tenue, 1.5);
+        rect(g, xa, arribaBarra, xb - xa, alto, C.superficie);
+        // Solo «margen»: los días de cada margen están en el pie de la pantalla y en <desc>.
+        texto(g, (xa + xb) / 2, yRotulo, 'margen', { tam: TAM.margen, color: C.tenue, ancla: 'middle' });
+        linea(g, (xa + xb) / 2, yRotulo + 12, (xa + xb) / 2, arribaBarra, C.tenue, 1.5);
         continue;
       }
       const relleno = { entrena: C.punto, evalua: C.acento, prueba: C.acento, descriptiva: C.acentoSuave }[s.tipo];
-      rect(g, xa + 1, c.y - alto / 2, xb - xa - 2, alto, relleno, { radio: 4 });
-      const ancho = xb - xa - 20;
-      const color = s.tipo === 'entrena' ? C.superficie : C.texto;
-      // Primero adentro (dos tamaños); si no entra, a la derecha sobre la pista vacía.
-      const tam = [[21, 17], [18, 15], [16, 13]].find(([a, b]) => anchoTexto(s.t, a) <= ancho && anchoTexto(s.d, b) <= ancho);
-      if (tam) {
-        const centrado = ancho < 220;
+      rect(g, xa + 1, arribaBarra, xb - xa - 2, alto, relleno, { radio: 4 });
+      const ancho = xb - xa - 24;
+      const color = s.tipo === 'entrena' ? C.superficie : s.tipo === 'descriptiva' ? C.texto : C.sobreAcento;
+      if (anchoTexto(s.t, TAM.tramo) * 1.12 <= ancho && anchoTexto(s.d, TAM.detalle) * 1.1 <= ancho) {
+        // Adentro: a la izquierda en los tramos largos, centrado en los cortos.
+        const centrado = ancho < 260;
         const x = centrado ? (xa + xb) / 2 : xa + 14;
         const ancla = centrado ? 'middle' : 'start';
-        texto(g, x, c.y - 13, s.t, { tam: tam[0], peso: 600, color, ancla });
-        texto(g, x, c.y + 15, s.d, { tam: tam[1], color, peso: 500, ancla });
+        texto(g, x, c.y - 14, s.t, { tam: TAM.tramo, peso: 700, color, ancla });
+        texto(g, x, c.y + 18, s.d, { tam: TAM.detalle, color, peso: 500, ancla });
+      } else if (alLado(s, xb)) {
+        // A la derecha, sobre la pista vacía del carril: en dos líneas o, si no entra, en tres.
+        const lineas = alLado(s, xb);
+        lineas.forEach((l, k) => {
+          const yl = c.y + (k - (lineas.length - 1) / 2) * 28;
+          texto(g, xb + 14, yl, l, k ? { tam: TAM.detalle, color: C.tenue } : { tam: TAM.tramo, peso: 700 });
+        });
       } else {
-        texto(g, xb + 14, c.y - 13, s.t, { tam: 21, peso: 600 });
-        texto(g, xb + 14, c.y + 15, s.d, { tam: 17, color: C.tenue });
+        // Sin lugar al lado (el tramo final): arriba, con una línea guía.
+        const xm = (xa + xb) / 2;
+        texto(g, x1, yRotulo, `${s.t} · ${s.d}`, { tam: TAM.llave, peso: 600, ancla: 'end' });
+        linea(g, xm, yRotulo + 14, xm, arribaBarra, C.tenue, 1.5);
       }
     }
   }
-  // Llave bajo la prueba final y nota del tramo descriptivo.
+  // Llave bajo la prueba final.
   const [pa, pb] = tramoX(pruIni, pruFin);
-  const yLlave = carriles[1].y + alto / 2 + 14;
+  const yLlave = yCarril2 + alto / 2 + 12;
   const gl = fila(svg, i++, 'llave');
   el(gl, 'path', {
     d: `M${pa + 1} ${yLlave - 6}V${yLlave}H${pb - 1}V${yLlave - 6}`,
     style: `fill:none;stroke:${C.tenue};stroke-width:1.5`,
   });
-  texto(gl, pb, yLlave + 24, `Prueba final ${pruIni}–${pruFin} · ${entero(cp.prueba_final.vins)} VIN`, { tam: 19, ancla: 'end', peso: 500 });
-  texto(gl, pb, yLlave + 50, `>${corte}: solo descriptivo`, { tam: 17, ancla: 'end', color: C.tenue });
+  texto(gl, pb, yLlave + 26, `Prueba final ${pruIni}–${pruFin} · ${entero(cp.prueba_final.vins)} VIN`, {
+    tam: TAM.llave, ancla: 'end', peso: 600,
+  });
   // Eje de días.
+  const yEje = yLlave + 66;
   linea(svg, x0, yEje, x1, yEje, C.rango, 1.5);
   for (const d of [DIA_INICIAL, 50, 100, 150, 200, 250, pruFin]) {
     const x = d === DIA_INICIAL ? dia(d - 1) : dia(d);
     linea(svg, x, yEje, x, yEje + 6, C.rango, 1.5);
-    texto(svg, x, yEje + 22, String(d), { tam: T.eje, color: C.tenue, ancla: 'middle' });
+    texto(svg, x, yEje + 24, String(d), {
+      tam: TAM.eje, color: C.tenue, ancla: d === DIA_INICIAL ? 'start' : d === pruFin ? 'end' : 'middle',
+    });
   }
-  texto(svg, x0 - 16, yEje, 'Día del VIN', { tam: T.eje, color: C.tenue, ancla: 'end' });
+  texto(svg, (x0 + x1) / 2, yEje + 56, 'Día del VIN', { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  const altoTotal = Math.ceil(yEje + 76);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${altoTotal}`);
+  svg.querySelector('rect')?.setAttribute('height', altoTotal);
+  return svg;
+}
+
+// --- 7. seleccion: elección por precisión en bloques de tiempo (precision.json) --
+
+/**
+ * Un punto por alternativa del ranking (estimación puntual en selección), sobre un
+ * solo eje. Solo se rotulan CatBoost (la ganadora), el azar y el oráculo; las demás
+ * alternativas quedan anónimas. Ancho 740 (≈ 1 px por unidad en el panel de 746 px):
+ * letra de 20 a 28 px.
+ */
+function figuraSeleccion(datos, opciones) {
+  const p = datos.precision;
+  const ranking = (Array.isArray(p.ranking) ? p.ranking : [])
+    .filter((r) => r.elegible !== false && esNumero(r.precision_seleccion));
+  const ganadora = ranking.find((r) => r.clave === p.ganadora?.clave);
+  const azar = p.azar?.precision_seleccion;
+  const oraculo = p.oraculo?.precision_seleccion;
+  const bloques = p.protocolo?.bloques_seleccion;
+  const elegidos = p.ganadora?.elegidos_seleccion;
+  if (!ganadora || !esNumero(azar) || !esNumero(oraculo) || !Array.isArray(bloques) || !bloques.length
+    || !esNumero(elegidos)) return null;
+  const diaIni = bloques[0][0];
+  const diaFin = bloques[bloques.length - 1][1];
+
+  const ANCHO = 740;
+  const TAM = { destacado: 28, rotulo: 22, eje: 20, nota: 22 };
+  const R = 8;
+  const R_GANADORA = 13;
+  const x0 = 40;
+  const x1 = 700;
+  // Dominio en múltiplos de 5 puntos que contienen todos los valores.
+  const valores = [azar, oraculo, ...ranking.map((r) => r.precision_seleccion)];
+  const dmin = Math.floor(Math.min(...valores) * 20) / 20;
+  const dmax = Math.ceil(Math.max(...valores) * 20) / 20;
+  const esc = escala(dmin, dmax, x0, x1);
+  const desc = `Precisión en el cupo diario del 5 % de cada una de las ${ranking.length} alternativas elegibles, `
+    + `selección Día ${diaIni}–${diaFin} (${entero(elegidos)} elegidos por alternativa), ${p.calificador_seleccion ?? ''}. `
+    + `CatBoost con atributos del código: ${pct(ganadora.precision_seleccion)}; azar: ${pct(azar)}; `
+    + `oráculo (techo con el código, no elegible): ${pct(oraculo)}. Los primeros empatan: es una familia.`;
+  const { svg, arriba } = lienzo('seleccion', ANCHO, 2000, {
+    titulo: 'Elección por precisión en bloques de tiempo', desc, opciones,
+    subtitulo: [`Precisión en el cupo, selección Día ${diaIni}–${diaFin}.`],
+  });
+
+  // Enjambre hacia abajo: CatBoost primero (queda sobre la línea), después de
+  // izquierda a derecha.
+  const orden = [ganadora, ...ranking.filter((r) => r !== ganadora)
+    .sort((a, b) => a.precision_seleccion - b.precision_seleccion)];
+  const dys = enjambre(orden.map((r) => esc(r.precision_seleccion)), R + 1, { soloAbajo: true });
+  const bajo = Math.max(R_GANADORA, ...dys.map((dy) => dy + R + 1));
+
+  // Disposición vertical: rótulos del azar y del oráculo, rótulo de CatBoost,
+  // puntos, eje y nota.
+  const yRef = arriba + 14;
+  const yGanadora = yRef + 52;
+  const yLinea = yGanadora + 22 + R_GANADORA + 18;
+  const yBase = yLinea + bajo + 22;
+
+  const g = el(svg, 'g', { class: 'eje' });
+  for (let k = 0; dmin + k * 0.05 <= dmax + 1e-9; k++) {
+    const v = +(dmin + k * 0.05).toFixed(4);
+    linea(g, esc(v), yGanadora + 22, esc(v), yBase, C.linea, 1);
+    texto(g, esc(v), yBase + 24, pctEje(v), { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
+  }
+  linea(g, x0, yBase, x1, yBase, C.rango, 1.5);
+  texto(g, (x0 + x1) / 2, yBase + 60, `Precisión en el cupo (${entero(elegidos)} elegidos)`, {
+    tam: TAM.eje, color: C.tenue, ancla: 'middle',
+  });
+
+  // Azar: línea vertical, rótulo arriba a su derecha.
+  const xAzar = esc(azar);
+  const ga = el(svg, 'g', { class: 'referencia azar' });
+  linea(ga, xAzar, yRef + 14, xAzar, yBase, C.texto, 2);
+  texto(ga, xAzar + 10, yRef, `Azar · ${pct(azar)}`, { tam: TAM.rotulo, color: C.tenue });
+
+  let i = 0;
+  // Oráculo: rombo hueco sobre la línea, rótulo arriba con línea guía.
+  const xOr = esc(oraculo);
+  const go = fila(svg, i++, 'punto referencia oraculo');
+  el(go, 'title', {}, `Oráculo (techo con el código, no elegible): ${pct(oraculo)}`);
+  const d = R * 1.5;
+  el(go, 'path', {
+    d: `M${xOr} ${yLinea - d}L${xOr + d} ${yLinea}L${xOr} ${yLinea + d}L${xOr - d} ${yLinea}Z`,
+    style: `fill:${C.superficie};stroke:${C.texto};stroke-width:3;stroke-linejoin:round`,
+  });
+  const rotuloOr = `Oráculo · ${pct(oraculo)}`;
+  const mitadOr = (anchoTexto(rotuloOr, TAM.rotulo) * 1.15) / 2;
+  texto(go, Math.min(xOr, ANCHO - 8 - mitadOr), yRef, rotuloOr, { tam: TAM.rotulo, ancla: 'middle', halo: true });
+  linea(go, xOr, yRef + 16, xOr, yLinea - d - 6, C.tenue, 1.5);
+
+  // Alternativas: de izquierda a derecha para la cascada; CatBoost al final, encima.
+  const puntos = orden.map((r, j) => ({ r, dy: dys[j] })).slice(1)
+    .sort((a, b) => a.r.precision_seleccion - b.r.precision_seleccion);
+  for (const { r, dy } of puntos) {
+    const gp = fila(svg, i++, 'punto');
+    el(gp, 'title', {}, pct(r.precision_seleccion));
+    el(gp, 'circle', {
+      cx: esc(r.precision_seleccion), cy: yLinea + dy, r: R,
+      style: `fill:${C.punto};stroke:${C.superficie};stroke-width:2`,
+    });
+  }
+  const xG = esc(ganadora.precision_seleccion);
+  const gg = fila(svg, i++, 'punto ganadora');
+  el(gg, 'title', {}, `CatBoost con atributos del código: ${pct(ganadora.precision_seleccion)}`);
+  el(gg, 'circle', { cx: xG, cy: yLinea, r: R_GANADORA + 6, style: `fill:${C.acentoSuave}` });
+  el(gg, 'circle', { cx: xG, cy: yLinea, r: R_GANADORA, style: `fill:${C.acento};stroke:${C.superficie};stroke-width:3` });
+  linea(gg, xG, yGanadora + 20, xG, yLinea - R_GANADORA - 6, C.acento, 2);
+  const rotuloG = `CatBoost · ${pct(ganadora.precision_seleccion)}`;
+  const mitadG = (anchoTexto(rotuloG, TAM.destacado) * 1.15) / 2;
+  texto(gg, Math.max(xAzar + 16 + mitadG, Math.min(xG, ANCHO - 8 - mitadG)), yGanadora, rotuloG, {
+    tam: TAM.destacado, peso: 700, ancla: 'middle', halo: true,
+  });
+
+  const gn = fila(svg, i++, 'nota');
+  texto(gn, 20, yBase + 106, 'Los primeros empatan: es una familia.', { tam: TAM.nota, peso: 500, clase: 'nota' });
+  const alto = Math.ceil(yBase + 130);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
+  svg.querySelector('rect')?.setAttribute('height', alto);
   return svg;
 }
 
@@ -853,4 +1285,5 @@ const CONSTRUCTORES = {
   etiquetas_parciales: figuraEtiquetasParciales,
   detector: figuraDetector,
   particiones: figuraParticiones,
+  seleccion: figuraSeleccion,
 };

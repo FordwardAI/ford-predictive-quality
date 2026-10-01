@@ -88,7 +88,7 @@ function crearEstudio() {
         vec3 c = mix(vec3(0.002, 0.008, 0.02), vec3(0.01, 0.045, 0.12), smoothstep(-0.25, 0.35, h));
         c = mix(c, vec3(0.004, 0.015, 0.04), smoothstep(0.35, 1.0, h));
         float dh = (h - 0.04) * 22.0;
-        c += vec3(0.35, 0.5, 0.8) * exp(-dh * dh) * 0.9;
+        c += vec3(0.35, 0.5, 0.8) * exp(-dh * dh) * 0.6;
         gl_FragColor = vec4(c, 1.0);
       }`,
   }));
@@ -99,13 +99,13 @@ function crearEstudio() {
     m.lookAt(mirar);
     s.add(m);
   };
-  const blanco = new THREE.Color(5, 5, 5.4);
-  const azul = PALETA.skyview.clone().multiplyScalar(5);
+  const blanco = new THREE.Color(2.6, 2.6, 2.8);
+  const azul = PALETA.skyview.clone().multiplyScalar(2.8);
   caja(26, 3.5, blanco, v3(0, 22, 0), v3(0, 0, 0));
   caja(26, 1.6, blanco, v3(0, 16, 14), v3(0, 0, 0));
   caja(2.2, 16, azul, v3(-26, 6, -6), v3(0, 0, 0));
   caja(2.2, 16, azul, v3(24, 6, 10), v3(0, 0, 0));
-  caja(14, 1.2, new THREE.Color(2.5, 2.6, 3), v3(-10, 4, 24), v3(0, 0, 0));
+  caja(14, 1.2, new THREE.Color(1.4, 1.45, 1.7), v3(-10, 4, 24), v3(0, 0, 0));
   return s;
 }
 
@@ -280,7 +280,7 @@ function crearColumnas() {
           float f = pow(max(1.0 - abs(dot(normalize(vN), normalize(vV))), 0.0), 1.6);
           float top = smoothstep(0.86, 1.0, vY);
           float lineas = 0.85 + 0.15 * sin(vY * 60.0 - uTiempo * 2.0);
-          vec3 c = uColor * (0.1 + f * 0.9 + top * 1.2) * lineas * uBrillo;
+          vec3 c = uColor * (0.1 + f * 0.8 + top * 0.7) * lineas * uBrillo;
           gl_FragColor = vec4(c * uOpacidad, 1.0);
         }
       `,
@@ -290,7 +290,7 @@ function crearColumnas() {
     const columna = new THREE.Mesh(geo, mat);
     columna.position.x = x;
     columna.scale.y = alto;
-    const anilloMat = new THREE.MeshBasicMaterial({ color: color.clone().multiplyScalar(2.2 * brillo * brillo), transparent: true, opacity: 1 });
+    const anilloMat = new THREE.MeshBasicMaterial({ color: color.clone().multiplyScalar(1.4 * brillo * brillo), transparent: true, opacity: 1 });
     materiales.push({ mat: anilloMat, base: 1 });
     const tapa = new THREE.Mesh(new THREE.TorusGeometry(0.86, 0.025, 8, 72), anilloMat);
     tapa.rotation.x = Math.PI / 2;
@@ -335,7 +335,7 @@ function crearEscudo() {
     fragmentShader: /* glsl */ `
       uniform vec3 uColor; uniform float uOpacidad; uniform float uNiebla; varying float vOnda; varying float vProf;
       void main(){ float d = uNiebla * vProf; float nb = exp(-d*d);
-        vec3 c = uColor * (0.35 + 1.4 * pow(vOnda, 6.0)); gl_FragColor = vec4(c * uOpacidad * nb, 1.0); }
+        vec3 c = uColor * (0.26 + 0.9 * pow(vOnda, 6.0)); gl_FragColor = vec4(c * uOpacidad * nb, 1.0); }
     `,
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
   });
@@ -359,7 +359,7 @@ function crearEscudo() {
   }
   inst.count = k;
   grupo.add(inst);
-  const burbuja = crearMaterialXray({ intensidad: 0.55, base: 0.01, potencia: 3.0, barrido: false });
+  const burbuja = crearMaterialXray({ intensidad: 0.4, base: 0.008, potencia: 3.0, barrido: false });
   materiales.push({ mat: burbuja, base: 1 });
   const esfera = new THREE.Mesh(new THREE.SphereGeometry(radio * 1.01, 64, 32, 0, Math.PI * 2, 0, Math.PI * 0.54), burbuja);
   esfera.position.copy(centro);
@@ -397,7 +397,7 @@ function estadoBase() {
   return {
     cam: v3(7, 2, 8), mira: v3(0, 1, 0), fov: 35,
     vehX: 0, vehRot: 0, modo: 0, veh: 1, halos: 0,
-    bloom: 0.85, alternar: 0, grilla: 1, playaMezcla: 0,
+    bloom: 0.4, alternar: 0, grilla: 1, playaMezcla: 0,
     opac: Object.fromEntries(CAPAS.map((c) => [c, 0])),
   };
 }
@@ -505,13 +505,15 @@ export async function crearEscena({
   const camara = new THREE.PerspectiveCamera(35, 1, 0.1, 400);
   camara.position.set(7, 2, 8);
 
-  // Luces: rasante + contraluz frío para la variante pintada
-  escena.add(new THREE.HemisphereLight(0x2a4a80, 0x00142e, 0.5));
-  const clave = new THREE.DirectionalLight(0xffffff, 3.2);
+  // Luces: rasante + contraluz frío para la variante pintada. Valores de estudio sobrios (ronda 2:
+  // antes clave 3,2 · contraluz 4,0 · cenital 0,9 quemaban la pintura y los vidrios; la cenital
+  // dejaba un punto blanco en la línea de cintura de la portada).
+  escena.add(new THREE.HemisphereLight(0x2a4a80, 0x00142e, 0.6));
+  const clave = new THREE.DirectionalLight(0xffffff, 2.6);
   clave.position.set(-7, 1.6, 6);
-  const contra = new THREE.DirectionalLight(0x6fa8ff, 4.0);
+  const contra = new THREE.DirectionalLight(0x6fa8ff, 2.0);
   contra.position.set(6, 3.5, -7);
-  const cenital = new THREE.DirectionalLight(0xdfe8ff, 0.9);
+  const cenital = new THREE.DirectionalLight(0xdfe8ff, 0.55);
   cenital.position.set(0, 10, 2);
   escena.add(clave, contra, cenital);
 
@@ -563,7 +565,9 @@ export async function crearEscena({
   const rtComposer = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: CALIDADES.alta.muestras });
   const composer = new EffectComposer(renderer, rtComposer);
   composer.addPass(new RenderPass(escena, camara));
-  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.9, 0.5, 0.55);
+  // Bloom sutil: el umbral alto (luminancia lineal ≥ 0,9) deja florecer sólo emisivos y líneas
+  // intensas, no la pintura ni los reflejos; la intensidad la fija cada escena (≈ 0,3–0,5).
+  const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), 0.4, 0.35, 0.9);
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
   const passFinal = new ShaderPass(SHADER_FINAL);
@@ -624,8 +628,8 @@ export async function crearEscena({
   const ESCENAS = {
     portada(p) {
       const e = estadoBase();
-      e.modo = 1; e.vehRot = 0.55 + idle(0.12); e.bloom = 0.65;
-      e.cam.set(5.4, 0.85, 6.9).multiplyScalar(1 + p * 0.15);
+      e.modo = 1; e.vehRot = 0.55 + idle(0.12); e.bloom = 0.28;
+      e.cam.set(5.4, 0.85, 6.9).multiplyScalar(1.14 + p * 0.15);
       e.mira.set(0.2, 0.85, 0);
       e.opac.anillo = 1; e.grilla = 0.7; e.fov = 32;
       return e;
@@ -633,7 +637,7 @@ export async function crearEscena({
     linea(p) {
       const e = estadoBase();
       e.vehX = THREE.MathUtils.lerp(ESTACIONES.carroceria - 8, ESTACIONES['inspeccion-adicional'] + 6, p);
-      e.vehRot = 0; e.modo = 0; e.bloom = 0.94;
+      e.vehRot = 0; e.modo = 0; e.bloom = 0.4;
       e.cam.set(e.vehX - 5.5, 2.7, 11);
       e.mira.set(e.vehX + 1.2, 1.7, 0);
       e.opac.linea = 1; e.opac.playa = 1;
@@ -641,14 +645,14 @@ export async function crearEscena({
     },
     datos(p) {
       const e = estadoBase();
-      e.veh = 0.22; e.vehRot = 0.4 + idle(0.05); e.bloom = 0.99;
+      e.veh = 0.22; e.vehRot = 0.4 + idle(0.05); e.bloom = 0.5;
       e.cam.set(1.5, 3.4, 19 - p * 2.5); e.mira.set(0, 2.6, 0);
       e.opac.datos = 1; e.grilla = 0.5;
       return e;
     },
     predictor(p) {
       const e = estadoBase();
-      e.vehRot = 0; e.modo = 0; e.bloom = 1.07; e.fov = 30;
+      e.vehRot = 0; e.modo = 0; e.bloom = 0.38; e.fov = 30;
       const a = posVehiculo(anclaLocal('etiqueta-parabrisas'), 0, 0);
       const s = THREE.MathUtils.lerp(1.1, 0.85, p);
       e.cam.copy(a).add(v3(3.4, 1.1, -3.6).multiplyScalar(s));
@@ -657,28 +661,28 @@ export async function crearEscena({
     },
     validacion(p) {
       const e = estadoBase();
-      e.veh = 0; e.bloom = 0.94;
-      e.cam.set(-3 + p * 4, 6.2, 17); e.mira.set(0.5 + p * 2.5, 0.4, 0);
+      e.veh = 0; e.bloom = 0.45;
+      e.cam.set(-2.5 + p * 4, 7, 19.5); e.mira.set(1.4 + p * 2.5, 0.4, 0);
       e.opac.timeline = 1; e.grilla = 0.6;
       return e;
     },
     resultado(p) {
       const e = estadoBase();
-      e.veh = 0; e.bloom = 1.04;
+      e.veh = 0; e.bloom = 0.45;
       e.cam.set(0.8, 3.4, 13.5 - p * 1.5); e.mira.set(0, 2.4, 0);
       e.opac.columnas = 1; e.grilla = 0.6;
       return e;
     },
     seguridad(p) {
       const e = estadoBase();
-      e.modo = 0; e.vehRot = -0.5 + idle(0.06); e.bloom = 0.99;
-      e.cam.set(9.5, 3.6, 10.5).multiplyScalar(1 - p * 0.12); e.mira.set(0, 1.4, 0);
+      e.modo = 0; e.vehRot = -0.5 + idle(0.06); e.bloom = 0.4;
+      e.cam.set(9.5, 3.6, 10.5).multiplyScalar(1.1 - p * 0.12); e.mira.set(0, 1.4, 0);
       e.opac.escudo = 1;
       return e;
     },
     factibilidad(p) {
       const e = estadoBase();
-      e.veh = 0; e.bloom = 0.89;
+      e.veh = 0; e.bloom = 0.42;
       e.cam.set(CENTRO_PLAYA.x + 1, 54 - p * 5, CENTRO_PLAYA.z + 12); e.mira.copy(CENTRO_PLAYA);
       e.opac.playa = 1; e.opac.linea = 0.35;
       e.playaMezcla = suave(0.25, 0.75, p);
@@ -686,20 +690,20 @@ export async function crearEscena({
     },
     'donde-mirar'(p) {
       const e = estadoBase();
-      e.modo = 0; e.vehRot = 0; e.halos = 1; e.bloom = 1.04;
-      e.cam.set(4.6, 3.1, -7.2).multiplyScalar(1 - p * 0.1); e.mira.set(0.1, 0.95, 0);
+      e.modo = 0; e.vehRot = 0; e.halos = 0; e.bloom = 0.38; // sin halos: no hay zonas de componentes que resaltar
+      e.cam.set(4.6, 3.1, -7.2).multiplyScalar(1.08 - p * 0.1); e.mira.set(0.1, 0.95, 0);
       return e;
     },
     futuro(p) {
       const e = estadoBase();
-      e.veh = 0; e.bloom = 0.94; e.alternar = 1;
+      e.veh = 0; e.bloom = 0.45; e.alternar = 1;
       e.cam.set(-10 + p * 12, 17, 33); e.mira.set(4 + p * 8, 0.5, 0);
       e.opac.linea = 1; e.opac.playa = 1; e.opac.convoy = 1;
       return e;
     },
     cierre(p) {
       const e = estadoBase();
-      e.modo = 1; e.vehRot = -0.6 + idle(0.1); e.bloom = 1.17;
+      e.modo = 1; e.vehRot = -0.6 + idle(0.1); e.bloom = 0.32;
       const s = 1 + p * 0.9;
       e.cam.set(6.2 * s, 1.4 + p * 3.5, 7.4 * s); e.mira.set(0, 0.9 + p * 0.2, 0);
       e.opac.anillo = 1; e.grilla = 0.8; e.fov = 32;
@@ -793,10 +797,13 @@ export async function crearEscena({
 
   // Encuadre: corre el centro óptico para que el sujeto quede del lado opuesto al texto.
   // desplazamiento ∈ [-1, 1]: negativo = sujeto a la izquierda, positivo = a la derecha.
+  // 0,24 del ancho: con la columna de texto de la ronda 2 (≈ 46 % del ancho) el sujeto queda
+  // centrado en el 54 % libre (≈ 73 % del ancho) en vez de asomar bajo el velo.
   const encuadre = { x: 0 };
+  const CORRIMIENTO_ENCUADRE = 0.24;
   function aplicarEncuadre(w = canvas.clientWidth || window.innerWidth, h = canvas.clientHeight || window.innerHeight) {
     const angosto = w < 900; // en mobile el texto ocupa todo el ancho: sin corrimiento
-    const dx = angosto ? 0 : -encuadre.x * w * 0.2;
+    const dx = angosto ? 0 : -encuadre.x * w * CORRIMIENTO_ENCUADRE;
     if (dx === 0) camara.clearViewOffset();
     else camara.setViewOffset(w, h, dx, 0, w, h);
     camara.updateProjectionMatrix();
