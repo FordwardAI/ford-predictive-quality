@@ -11,7 +11,7 @@
      Abrir desde la raíz del repo: python -m http.server 8000 y
      http://localhost:8000/prototipos/presentacion-3d/herramientas/figuras-demo.html
      Parámetros: ?solo=<id> muestra una sola figura; ?tema=claro|oscuro uno solo de los fondos;
-     ?resumen=1|0 filtra las variantes de comparacion con o sin { resumen: true }; ?ancho=900 fija el ancho del panel (con ?solo); ?fuente=Arial (o Verdana, más ancha) prueba otra tipografía;
+     ?resumen=1|0 filtra las variantes de comparacion con o sin { resumen: true }; ?ancho=746 fija el ancho del panel (con ?solo; 746 px es el panel de index.html a 1920×1080); ?fuente=Arial (o Verdana, más ancha) prueba otra tipografía;
      ?titulo=0 crea las figuras con { titulo: false }; ?medir=1 agrega al final un <pre id="medidas"> con
      JSON por figura: letra efectiva mínima (px en pantalla), textos que se salen del viewBox o se pisan,
      y la lista de textos (para cotejar cifras contra los JSON con --dump-dom de Chrome headless). */
@@ -47,8 +47,8 @@
   }
   .panel img, .panel svg { display: block; width: 100%; height: auto; }
   .vacio { color: #FBAE40; font-size: 15px; }
-  /* Con ?solo=…, cada panel mide lo que la columna derecha de la presentación a 1920 px. */
-  .solo-uno .par { grid-template-columns: repeat(auto-fill, var(--ancho-panel, 900px)); }
+  /* Con ?solo=…, cada panel mide lo que el panel de figura de la presentación a 1920 px. */
+  .solo-uno .par { grid-template-columns: repeat(auto-fill, var(--ancho-panel, 746px)); }
   .solo-uno .panel { padding: 0; border: 0; }
 </style>
 </head>
