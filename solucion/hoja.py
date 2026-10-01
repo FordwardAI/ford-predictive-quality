@@ -259,8 +259,12 @@ def evaluacion_ganadora():
 
 
 def armar(tabla, programa, t, cupo_dia=None, predictor=None, minimo=None, evaluacion="eleccion",
-          programa_simulado=False, prueba_final=False):
-    """Arma la hoja del día t. Las tasas usan solo resultados de Día <= t−5."""
+          programa_simulado=False, prueba_final=False, fuente=None):
+    """Arma la hoja del día t. Las tasas usan solo resultados de Día <= t−5.
+
+    `fuente` (opcional): las etiquetas conocidas; por defecto, todas las de la tabla. En planta (plataforma/) son
+    solo las del histórico y las de lo auditado.
+    """
     predictor = predictor or ganadora(tabla)
     assert not getattr(predictor, "por_vin", False), "La hoja prioriza códigos, no unidades"
     minimo = minimo or minimo_p()
@@ -268,7 +272,7 @@ def armar(tabla, programa, t, cupo_dia=None, predictor=None, minimo=None, evalua
     programadas = collections.Counter(c for _, c in programa)
     cupo_5 = cupo_mod.cupo(len(programa))
     cupo_dia = cupo_5 if cupo_dia is None else cupo_dia
-    fuente = fuente_completa(tabla)
+    fuente = fuente_completa(tabla) if fuente is None else fuente
     ctx = Contexto(fuente, t)
     codigos = sorted(programadas)
     tasas = predictor.puntuar(ctx, codigos)
