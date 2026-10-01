@@ -14,6 +14,10 @@ El [anexo completo](research/anexo-busqueda.md) lista los 238 pipelines, las 37 
 cobertura de las 458.098 configuraciones. Todo usa períodos ya explorados, Día <195, de la base ficticia;
 es evidencia exploratoria y no reemplaza la solución acordada ni la prueba final.
 
+La [evaluación de datos de proceso](research/datos-proceso.md) propone qué telemetría,
+trazabilidad y mediciones pedir a Ford, con sus requisitos de unión por VIN y un piloto
+para medir el aporte incremental. No estima mejoras sin una nueva entrega.
+
 ## Trabajo en equipo
 
 Consultar [CONTRIBUTING.md](CONTRIBUTING.md) para nombres de ramas, mensajes de commit y títulos de PR.
