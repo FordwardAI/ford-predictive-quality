@@ -21,3 +21,4 @@ prototipos/plataforma-web/shots/
 
 # Frontend de la plataforma: dependencias de npm (el build en plataforma/web sí se versiona).
 plataforma/front/node_modules/
+plataforma/front/*.tsbuildinfo

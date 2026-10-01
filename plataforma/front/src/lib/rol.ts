@@ -6,6 +6,12 @@ export type Rol = 'seleccion' | 'calidad'
 const CLAVE = 'plataforma-fordwardai-rol'
 
 function leer(): Rol | null {
+  // Un acceso directo (?rol=seleccion en la tablet de la playa) fija el rol del dispositivo.
+  const pedido = new URLSearchParams(location.search).get('rol')
+  if (pedido === 'seleccion' || pedido === 'calidad') {
+    try { localStorage.setItem(CLAVE, pedido) } catch { /* sin almacenamiento */ }
+    return pedido
+  }
   try {
     const v = localStorage.getItem(CLAVE)
     return v === 'seleccion' || v === 'calidad' ? v : null

@@ -62,7 +62,7 @@ export function HojaDelDia({ soloLectura = false }: { soloLectura?: boolean }) {
         } />
 
       <section className="mb-10 grid grid-cols-2 gap-6 lg:grid-cols-4">
-        <Cifra rotulo="Cupo del día" valor={hoja.cupo} acento apoyo={`de ${entero(hoja.programadas)} programadas`} />
+        <Cifra rotulo="Cupo del día" valor={hoja.cupo} acento apoyo={`${entero(hoja.programadas)} en la playa`} />
         <Cifra rotulo="Códigos a auditar" valor={aAuditar.length} apoyo={`de ${hoja.filas.length} programados`} />
         {!soloLectura && <Cifra rotulo="Esperado en el cupo" valor={evaluacion ? `${evaluacion[1]} %` : '—'}
           apoyo={evaluacion ? `contra ${evaluacion[2]} % al azar` : undefined} ayuda={hoja.textos.evaluacion} />}
@@ -159,7 +159,7 @@ function DetalleCodigo({ fila, hoja, tomadas, alCerrar }: { fila: Fila | null; h
           <>
             <SheetHeader className="p-6 pb-0">
               <SheetTitle className="text-3xl">{fila.codigo}</SheetTitle>
-              <SheetDescription>Puesto {hoja.filas.indexOf(fila) + 1} de {hoja.filas.length} · {fila.programadas} programadas hoy</SheetDescription>
+              <SheetDescription>Puesto {hoja.filas.indexOf(fila) + 1} de {hoja.filas.length} · {fila.programadas} en la playa hoy</SheetDescription>
             </SheetHeader>
             <div className="flex flex-col gap-8 p-6">
               <div className="grid grid-cols-2 gap-6">

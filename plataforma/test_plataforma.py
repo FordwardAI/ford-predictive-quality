@@ -1,11 +1,14 @@
 """Pruebas sintéticas de la plataforma: .venv/bin/python -m plataforma.test_plataforma (no requieren el CSV)."""
 import sys
 import tempfile
+from pathlib import Path
 import traceback
 from types import SimpleNamespace as NS
 
 from plataforma.estado import AUDITAR, FUERA, NO_AUDITAR, Dia
 from plataforma.privacidad import SinVin, revisar
+from plataforma import modelo
+from plataforma.planta import Planta, Rechazo, filas_csv, reporte_linea
 
 
 def _dia():
@@ -94,6 +97,99 @@ def test_sin_vin():
         pass
     else:
         raise AssertionError("Un VIN en la respuesta tenía que fallar")
+
+
+def _planta(carpeta):
+    p = Planta(Path(carpeta) / "planta.db", {"A", "B", "C"})
+    p.escribir("dia", 160)
+    return p
+
+
+def _rechaza(f, texto):
+    try:
+        f()
+    except Rechazo as e:
+        assert texto in str(e), str(e)
+    else:
+        raise AssertionError(f"Tenía que rechazar: {texto}")
+
+
+def test_ingreso_valida_y_es_todo_o_nada():
+    with tempfile.TemporaryDirectory() as c:
+        p = _planta(c)
+        _rechaza(lambda: p.ingresar([{"unidad": "X1", "codigo": "Z", "dia": "160"}], "archivo"), "no está en el catálogo")
+        _rechaza(lambda: p.ingresar([{"unidad": "X1", "codigo": "A", "dia": "160"}, {"unidad": "X1", "codigo": "B", "dia": "160"}],
+                                    "archivo"), "ya fue ingresada")
+        assert p.playa(160) == []  # Nada entró por la fila repetida.
+        _rechaza(lambda: filas_csv("unidad,dia\nX1,160\n", ["unidad", "codigo", "dia"]), "columnas")
+        assert p.ingresar(filas_csv("unidad,codigo,dia\nX1,a,160\n", ["unidad", "codigo", "dia"]), "archivo") == 1
+
+
+def test_playa_dura_cinco_dias_y_respeta_el_despacho():
+    with tempfile.TemporaryDirectory() as c:
+        p = _planta(c)
+        p.ingresar([{"unidad": "V", "codigo": "A", "dia": 154}, {"unidad": "N", "codigo": "B", "dia": 155},
+                    {"unidad": "D", "codigo": "C", "dia": 158}], "simulada")
+        assert [u for u, *_ in p.playa(160)] == ["N", "D"]  # V pasó los 5 días.
+        p.despachar(["D"], 159)
+        assert [u for u, *_ in p.playa(160)] == ["N"]
+        p.enviar("N", 160, 1, 1, 0.2, 1, "rf")
+        assert p.playa(160) == []
+
+
+def test_resultado_solo_de_lo_enviado():
+    with tempfile.TemporaryDirectory() as c:
+        p = _planta(c)
+        p.ingresar([{"unidad": "E", "codigo": "A", "dia": 160}, {"unidad": "S", "codigo": "B", "dia": 160}], "simulada")
+        p.enviar("E", 160, 1, 1, 0.2, 1, "rf")
+        _rechaza(lambda: p.registrar_resultados([{"unidad": "S", "resultado": "OK", "dia": 162}], "archivo"), "no fue enviada")
+        _rechaza(lambda: p.registrar_resultados([{"unidad": "E", "resultado": "MAL", "dia": 162}], "archivo"), "OK o CALIBRADA")
+        p.registrar_resultados([{"unidad": "E", "resultado": "calibrada", "dia": 162, "componente": "V12"}], "archivo")
+        _rechaza(lambda: p.deshacer("E"), "ya tiene resultado")
+        assert p.registros(160, 162) == [(160, "A", True)] and p.registros(160, 161) == [] and p.registros(159, 162) == []
+
+
+def test_version_congelada_no_ve_resultados_nuevos():
+    with tempfile.TemporaryDirectory() as c:
+        p = _planta(c)
+        p.ingresar([{"unidad": "E", "codigo": "A", "dia": 160}], "simulada")
+        p.enviar("E", 160, 1, 1, 0.2, 1, "tasa_fija")
+        p.registrar_resultados([{"unidad": "E", "resultado": "CALIBRADA", "dia": 161}], "simulada")
+        historico = [(100, "A", False), (100, "B", True), (100, "B", False), (100, "B", False)]
+        vieja = modelo.predictor("tasa_fija", None, 149, modelo.fuente(historico, p, 149, 170), 1)
+        nueva = modelo.predictor("tasa_fija", None, 165, modelo.fuente(historico, p, 165, 170), 2)
+        filas = {f["codigo"]: f for f in modelo.comparar(vieja, nueva, 170, ["A", "B"])}
+        assert filas["A"]["tasa_actual"] == 0 and filas["A"]["tasa_nueva"] == 0.5
+        assert filas["A"]["puesto_actual"] == 2 and filas["A"]["puesto_nuevo"] == 1
+
+
+def test_recomendacion_y_posponer():
+    with tempfile.TemporaryDirectory() as c:
+        p = _planta(c)
+        p.nueva_version(149, 155, "inicio", 0)
+        p.ingresar([{"unidad": f"U{i}", "codigo": "A", "dia": 156} for i in range(40)], "simulada")
+        for i in range(40):
+            p.enviar(f"U{i}", 156, 1, 1, 0.2, 1, "rf")
+        p.registrar_resultados([{"unidad": f"U{i}", "resultado": "OK", "dia": 158} for i in range(40)], "simulada")
+        assert not modelo.recomendacion(p, 159)["recomendar"]  # 4 días y resultados todavía no utilizables.
+        r = modelo.recomendacion(p, 161)
+        assert r["recomendar"] and r["nuevos"] == 40
+        p.decidir("posponer", 161, r["nuevos"])
+        assert not modelo.recomendacion(p, 162)["recomendar"] and modelo.recomendacion(p, 163)["recomendar"]
+        p.nueva_version(158, 163, "Gerente de Calidad", 40)
+        assert not modelo.recomendacion(p, 163)["recomendar"]
+
+
+def test_reporte_solo_agrega_lo_auditado():
+    envios = [{"codigo": "A", "dia": 161, "resultado": "CALIBRADA", "componente": "V1"},
+              {"codigo": "A", "dia": 162, "resultado": "OK", "componente": None},
+              {"codigo": "B", "dia": 168, "resultado": "CALIBRADA", "componente": "V1"},
+              {"codigo": "B", "dia": 169, "resultado": None, "componente": None}]
+    atr = lambda c: {"mercado": "M" + c, "version": "V", "motor": "X", "traccion": "4X4"}  # noqa: E731
+    r = reporte_linea(envios, atr)
+    assert r["auditadas"] == 3 and r["calibradas"] == 2
+    assert [(f["grupo"], f["n"], f["calibradas"]) for f in r["por_codigo"]] == [("B", 1, 1), ("A", 2, 1)]
+    assert r["componentes"] == [{"componente": "V1", "n": 2, "parte": 1.0}] and len(r["semanas"]) == 2
 
 
 if __name__ == "__main__":

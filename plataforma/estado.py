@@ -30,16 +30,17 @@ class Dia:
     rondas: list = dataclasses.field(default_factory=list)
     azar: int = 0  # Cantidad que solo se completa al azar (ranking agotado).
     enviadas: list = dataclasses.field(default_factory=list)  # [{unidad, codigo, ronda}] en orden de envío.
+    version: int = 0  # Versión del modelo con la que se armó la hoja.
 
     @classmethod
-    def desde_hoja(cls, h, programa, modelo):
+    def desde_hoja(cls, h, programa, modelo, version=0):
         sugeridas, motivos = {}, {}
         for c, motivo, _ in h.unidades:
             q = 1 if motivo == "Mínimo por código" else next(f.sugerida for f in h.filas if f.codigo == c)
             sugeridas[c] = sugeridas.get(c, 0) + q
             motivos.setdefault(c, motivo)
         return cls(dia=h.dia, cupo=h.cupo, modelo=modelo, ranking=[f.codigo for f in h.filas],
-                   programa=[list(p) for p in programa], sugeridas=sugeridas, motivos=motivos)
+                   programa=[list(p) for p in programa], sugeridas=sugeridas, motivos=motivos, version=version)
 
     # --- Consultas --------------------------------------------------------------------------------------------
 
@@ -119,7 +120,8 @@ class Dia:
     # --- Persistencia (fuera del repo) ------------------------------------------------------------------------
 
     def resumen(self):
-        return {"dia": self.dia, "cupo": self.cupo, "modelo": self.modelo, "tomadas": self.tomadas_total(),
+        return {"dia": self.dia, "cupo": self.cupo, "modelo": self.modelo, "version": self.version,
+                "tomadas": self.tomadas_total(),
                 "pendientes": [{"codigo": c, "pendiente": q, "motivo": self.motivos.get(c, "Prioridad"),
                                 "posicion": self.ranking.index(c) + 1, "programadas": self.programadas(c),
                                 "tomadas": self.tomadas.get(c, [])} for c, q in self.pendientes()],

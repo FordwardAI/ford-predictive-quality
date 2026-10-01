@@ -12,6 +12,7 @@ import { Progress } from '@/components/ui/progress'
 import { api, type Decision, type Estado, type Ronda } from '@/lib/api'
 import { useApp, useSincronizar } from '@/lib/estado'
 import { cn } from '@/lib/utils'
+import { ResultadoBadge } from '@/vistas/Resultados'
 
 // La pantalla del responsable de la selección, en la playa de despacho. Una ronda (cada ~2 h): mirar qué buscar,
 // leer el código de cada vehículo, enviar los que correspondan y, al terminar, avisar qué no estaba.
@@ -53,7 +54,8 @@ export function Seleccion() {
       const r = await api<{ unidad: string; decision: Decision; estado: Estado }>('tomar', { codigo: decision.codigo })
       setEstado(r.estado)
       setDecision(r.decision)
-      toast.success(`${r.decision.codigo}: unidad ${r.unidad} enviada a auditoría`, {
+      const env = r.estado.enviadas.find((e) => e.unidad === r.unidad)
+      toast.success(`${r.decision.codigo}: unidad ${r.unidad}${env?.dia_gr != null ? ` (Gate Release Día ${env.dia_gr})` : ''} enviada a auditoría`, {
         action: { label: 'Deshacer', onClick: () => deshacer(r.unidad) },
       })
       setCodigo('')
@@ -89,8 +91,11 @@ export function Seleccion() {
 
       {cubierto ? (
         <section className="mb-8 rounded-lg bg-ford-blue p-8 text-white" aria-live="polite">
-          <p className="flex items-center gap-3 text-3xl font-medium tracking-tight"><Icono nombre="check" className="size-10" />Cupo del día cubierto</p>
-          <p className="mt-3">No hace falta enviar más unidades hoy.</p>
+          <p className="flex items-center gap-3 text-3xl font-medium tracking-tight"><Icono nombre="check" className="size-10" />
+            {estado.cupo === 0 ? 'Hoy no se audita' : 'Cupo del día cubierto'}</p>
+          <p className="mt-3">{estado.cupo === 0
+            ? 'El cupo de hoy es 0: no hubo unidades nuevas de Gate Release. Si Calidad de Planta fija otro cupo, aparece acá.'
+            : 'No hace falta enviar más unidades hoy.'}</p>
         </section>
       ) : (
         <>
@@ -126,8 +131,11 @@ export function Seleccion() {
           <ul className="divide-y-2 divide-ford-gray">
             {estado.enviadas.slice().reverse().map((e) => (
               <li key={e.unidad} className="flex min-h-12 items-center justify-between gap-3 py-2">
-                <span><b>{e.codigo}</b> · {e.unidad} · ronda {e.ronda}</span>
-                {ultimas.has(e.unidad) && (
+                <span className="flex flex-col gap-1">
+                  <span><b>{e.codigo}</b> · {e.unidad} · ronda {e.ronda}</span>
+                  <ResultadoBadge e={{ resultado: e.resultado, componente: null, dia_resultado: null }} />
+                </span>
+                {ultimas.has(e.unidad) && !e.resultado && (
                   <Button variant="ghost" size="sm" onClick={() => deshacer(e.unidad)}><Undo2 />Deshacer</Button>
                 )}
               </li>

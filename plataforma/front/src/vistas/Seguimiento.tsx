@@ -1,21 +1,15 @@
-import { useState } from 'react'
-
 import { Cifra, Encabezado, Vacio } from '@/components/comunes'
 import { Icono } from '@/components/iconos'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { api, type Cierre } from '@/lib/api'
 import { useApp, useSincronizar } from '@/lib/estado'
-import { dec, entero, pct } from '@/lib/formato'
 
-// Calidad de Planta sigue el día desde el escritorio: cuánto se envió de cada código, qué pasó en cada ronda y el
-// cierre. Se actualiza solo con lo que registra la tablet de la playa.
+// Calidad de Planta sigue el día desde el escritorio: cuánto se envió de cada código y qué pasó en cada ronda.
+// Se actualiza solo con lo que registra la tablet de la playa.
 export function Seguimiento() {
-  const { hoja, estado, refrescar } = useApp()
-  const [cierre, setCierre] = useState<Cierre | null>(null)
+  const { hoja, estado, refrescar, planta } = useApp()
   useSincronizar(refrescar)
 
   if (!hoja || !estado) {
@@ -37,12 +31,12 @@ export function Seguimiento() {
     <>
       <Encabezado ojo={`Calidad de Planta · Día ${hoja.dia}`} titulo="Seguimiento del" acento="día"
         bajada="Lo que registra el responsable de la selección en la playa, actualizado cada 15 segundos."
-        acciones={<Button variant="outline" onClick={() => api<Cierre>('cierre').then(setCierre)}><Icono nombre="check" />Cerrar el día</Button>} />
+        acciones={<Button variant="outline" asChild><a href="#resultados"><Icono nombre="check" />Ver resultados</a></Button>} />
 
       <section className="mb-10 grid grid-cols-2 gap-6 lg:grid-cols-4">
         <Cifra rotulo="Enviadas" valor={estado.tomadas} acento apoyo={`de un cupo de ${estado.cupo}`} />
         <Cifra rotulo="Pendientes" valor={pendientes} />
-        <Cifra rotulo="Rondas" valor={estado.rondas.length} apoyo="cada 2 h aprox." />
+        <Cifra rotulo="Resultados recibidos" valor={planta.con_resultado} apoyo={`de ${planta.enviadas_total} enviadas en total`} />
         <Cifra rotulo="Al azar" valor={estado.azar} apoyo={estado.azar ? 'se agotó el ranking' : 'no hizo falta'} />
       </section>
 
@@ -83,7 +77,7 @@ export function Seguimiento() {
             <ol className="flex flex-col gap-4 border-l-2 border-ford-skyview pl-4">
               {estado.rondas.slice().reverse().map((r) => (
                 <li key={r.numero}>
-                  <p className="font-medium">Ronda {r.numero} · {r.tomadas} enviadas al cierre</p>
+                  <p className="font-medium">Ronda {r.numero} · {r.tomadas} enviadas al terminar</p>
                   {r.cambios.length ? r.cambios.map((c) => (
                     <p key={c.codigo}>{c.codigo}: {c.antes} → {c.despues} <Badge variant="outline">{c.despues > c.antes ? 'recibe' : 'no llegó'}</Badge></p>
                   )) : <p>Encontró todo lo que buscaba.</p>}
@@ -95,22 +89,6 @@ export function Seguimiento() {
         </aside>
       </div>
 
-      <Dialog open={!!cierre} onOpenChange={(o) => !o && setCierre(null)}>
-        <DialogContent className="sm:max-w-xl">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">Resultado del Día {hoja.dia}</DialogTitle>
-            <DialogDescription>{cierre?.aclaracion ?? cierre?.motivo}</DialogDescription>
-          </DialogHeader>
-          {cierre?.disponible && (
-            <div className="grid grid-cols-3 gap-6">
-              <Cifra rotulo="Auditadas" valor={cierre.tomadas} apoyo={`cupo ${cierre.cupo}`} />
-              <Cifra rotulo="Se calibraron" valor={cierre.calibradas} acento apoyo={pct(cierre.tomadas ? cierre.calibradas! / cierre.tomadas : null)} />
-              <Cifra rotulo="Al azar" valor={dec(cierre.esperado_azar, 1)} apoyo={`${pct(cierre.tasa_dia)} de ${entero(cierre.unidades_dia!)}`} />
-            </div>
-          )}
-          <p>Un solo día dice poco. La comparación con incertidumbre está en Evaluación.</p>
-        </DialogContent>
-      </Dialog>
     </>
   )
 }

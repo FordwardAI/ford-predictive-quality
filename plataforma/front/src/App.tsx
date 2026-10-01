@@ -9,7 +9,10 @@ import { useRol, type Rol } from '@/lib/rol'
 import { cn } from '@/lib/utils'
 import { ElegirRol } from '@/vistas/ElegirRol'
 import { HojaDelDia } from '@/vistas/Hoja'
-import { Hoy } from '@/vistas/Hoy'
+import { DiaPlanta } from '@/vistas/DiaPlanta'
+import { Modelo } from '@/vistas/Modelo'
+import { ReporteLinea } from '@/vistas/ReporteLinea'
+import { Resultados } from '@/vistas/Resultados'
 import { Seguimiento } from '@/vistas/Seguimiento'
 import { Seleccion } from '@/vistas/Seleccion'
 
@@ -34,9 +37,17 @@ const NAV: Record<Rol, { nombre: string; grupos: { grupo: string; items: Item[] 
       {
         grupo: 'Operación del día',
         items: [
-          { id: 'hoy', nombre: 'Preparar el día', corto: 'Preparar', icono: 'hoy' },
+          { id: 'hoy', nombre: 'Día de planta', corto: 'Día', icono: 'hoy' },
           { id: 'hoja', nombre: 'Hoja del día', corto: 'Hoja', icono: 'hoja' },
           { id: 'seguimiento', nombre: 'Seguimiento', corto: 'Seguimiento', icono: 'ronda' },
+        ],
+      },
+      {
+        grupo: 'Retorno de la auditoría',
+        items: [
+          { id: 'resultados', nombre: 'Resultados', corto: 'Resultados', icono: 'check' },
+          { id: 'modelo', nombre: 'Modelo', corto: 'Modelo', icono: 'info' },
+          { id: 'linea', nombre: 'Reporte para la línea', corto: 'Línea', icono: 'descarga' },
         ],
       },
       { grupo: 'Evaluación', items: [{ id: 'simulacion', nombre: 'Evaluación', corto: 'Evaluación', icono: 'simulacion' }] },
@@ -65,6 +76,7 @@ function Contexto() {
 }
 
 export default function App() {
+  const { planta } = useApp()
   const [rol, setRol] = useRol()
   const vistaHash = useVista()
   const nav = rol ? NAV[rol] : null
@@ -96,6 +108,7 @@ export default function App() {
                     className={cn('flex min-h-10 items-center gap-3 rounded-full px-3 transition-colors duration-300',
                       vista.id === i.id ? 'bg-white font-medium text-ford-blue' : 'hover:bg-ford-twilight')}>
                     <Icono nombre={i.icono} />{i.nombre}
+                    {i.id === 'modelo' && planta.recomendacion?.recomendar && <Badge className="ml-auto" aria-label="Actualización recomendada">1</Badge>}
                   </a>
                 </li>
               ))}
@@ -124,15 +137,18 @@ export default function App() {
         <main className="w-full max-w-[1280px] px-4 pt-6 pb-28 md:px-12 md:pt-8 md:pb-16">
           {vista.id === 'seleccion' && <Seleccion />}
           {vista.id === 'prioridades' && <HojaDelDia soloLectura />}
-          {vista.id === 'hoy' && <Hoy />}
+          {vista.id === 'hoy' && <DiaPlanta />}
+          {vista.id === 'resultados' && <Resultados />}
+          {vista.id === 'modelo' && <Modelo />}
+          {vista.id === 'linea' && <ReporteLinea />}
           {vista.id === 'hoja' && <HojaDelDia />}
           {vista.id === 'seguimiento' && <Seguimiento />}
           {vista.id === 'simulacion' && <Suspense fallback={<p>Cargando…</p>}><SimulacionBase /></Suspense>}
         </main>
       </div>
 
-      <nav aria-label="Secciones" className={cn('fixed inset-x-0 bottom-0 z-40 grid border-t-2 border-ford-gray bg-white md:hidden',
-        items.length === 2 ? 'grid-cols-2' : 'grid-cols-4')}>
+      <nav aria-label="Secciones" className={cn('fixed inset-x-0 bottom-0 z-40 border-t-2 border-ford-gray bg-white md:hidden',
+        items.length <= 4 ? 'grid grid-cols-2' : 'flex overflow-x-auto [&>a]:min-w-24')}>
         {items.map((i) => (
           <a key={i.id} href={`#${i.id}`} aria-current={vista.id === i.id ? 'page' : undefined}
             className={cn('flex flex-col items-center gap-1 py-2', vista.id === i.id ? 'font-medium text-ford-skyview' : 'text-ford-blue')}>

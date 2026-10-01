@@ -1,15 +1,17 @@
-"""Plataforma FordwardAI (MVP): servidor local con la hoja del día, las decisiones en la playa y la simulación.
+"""Plataforma FordwardAI (MVP): de Gate Release al resultado de la auditoría, con el retorno al modelo y a la línea.
 
     .venv/bin/python -m plataforma.servidor --csv "<Dataset QLS Inspección Adicional.csv>" \\
         --catalogo "<Códigos de catálogo.csv>" [--puerto 8765]
 
-Corre en la notebook: los datos no salen de la máquina. Usa la tabla enmascarada (sin etiquetas de Día >= 200) y
-solo días de validación. Ninguna respuesta lleva un VIN: todo pasa por `privacidad.revisar`.
+Ciclo de planta: entran las unidades que pasaron Gate Release (`POST /api/ingreso`), el responsable de la selección
+elige cuáles van a Auditoría Adicional, vuelven los resultados (`POST /api/resultados`) y la plataforma muestra el
+acierto por unidad, recomienda cuándo actualizar el modelo (decide el gerente) y arma el reporte para la línea.
+Mientras no haya conexión con Ford, una fuente simulada reproduce la base día por día con el mismo contrato.
+
+Corre en la notebook: los datos no salen de la máquina. Usa la tabla enmascarada (sin etiquetas de Día >= 200) y solo
+días de validación. Ninguna respuesta lleva un VIN de la base: todo pasa por `privacidad.revisar`.
 """
 import argparse
-import collections
-import csv
-import io
 import json
 import tempfile
 import threading
@@ -23,21 +25,25 @@ import numpy as np
 
 from solucion import datos, hoja
 from solucion.cupo import cupo as cupo_5
-from solucion.datos import TRAMOS
+from solucion.datos import MARGEN, TRAMOS
+from solucion.puntaje import Fuente
 
+from . import modelo as modelo_mod
 from . import modelos as modelos_mod
 from . import simulacion
-from .estado import Dia, normalizar
+from .estado import Dia
+from .planta import Planta, Rechazo, filas_csv, reporte_csv, reporte_linea
 from .privacidad import SinVin, revisar
+from .simulador import Simulador
 
 WEB = Path(__file__).resolve().parent / "web"
 CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 VALIDACION = TRAMOS["validacion"]
-DIA_INICIAL = 190
+GERENTE = "Gerente de Calidad"
 
 
 class Plataforma:
-    """Estado del servidor: tabla, modelos, simulación y el día en curso."""
+    """Estado del servidor: tabla, modelos, almacén de planta, fuente simulada y el día en curso."""
 
     def __init__(self, csv_path, catalogo_path, cache=CACHE):
         self.carpeta = cache / "plataforma"
@@ -45,15 +51,22 @@ class Plataforma:
         assert not self.tabla.desbloqueada, "La plataforma usa la tabla enmascarada"
         self.vins = {v.vin for v in self.tabla.vins} | {v.vin for v in self.tabla.cohorte}
         self.modelos = modelos_mod.construir(self.tabla)
-        self.dias = {t: len(vs) for t, vs in self.tabla.por_dia(*VALIDACION).items()}
-        self.lock = threading.Lock()
+        # Histórico de auditorías al azar: etiquetas completas hasta el Día 149 (el punto de partida en planta).
+        self.historico = [(v.dia, v.codigo, v.calibrada) for v in self.tabla.vins if v.dia <= modelo_mod.HISTORICO_HASTA]
+        self.planta = Planta(self.carpeta / "planta.db", self.tabla.catalogo)
+        self.simulador = Simulador(self.tabla, self.planta)
+        self.lock = threading.RLock()
+        self.h, self.dia = None, None
+        if self.planta.dia is None:
+            self.reiniciar()
+        else:
+            self._restaurar()
         self.sim, self.sim_error = None, None
-        self.h, self.dia, self.privado = None, None, {}
-        threading.Thread(target=self._simular, daemon=True).start()
+        threading.Thread(target=self._evaluar, daemon=True).start()
 
-    # --- Simulación ------------------------------------------------------------------------------------------
+    # --- Evaluación (simulación fuera de línea con etiquetas completas, la de la pantalla Evaluación) ----------
 
-    def _simular(self):
+    def _evaluar(self):
         try:
             otras = {c: [] for c in modelos_mod.ESTOCASTICOS}
             for s in modelos_mod.ml.SEMILLAS[1:]:
@@ -61,62 +74,94 @@ class Plataforma:
                 for c in otras:
                     otras[c].append(variante[c])
             self.sim = simulacion.cacheada(self.tabla, self.modelos, self.carpeta, otras)
-        except Exception as error:  # noqa: BLE001  Se informa en la pantalla de simulación.
+        except Exception as error:  # noqa: BLE001  Se informa en la pantalla de evaluación.
             traceback.print_exc()
             self.sim_error = str(error)
 
     def evaluacion(self, clave):
-        """Cifra de validación del modelo, en el formato que usan los textos de la hoja."""
         if not self.sim:
             return None
         m = self.sim["modelos"][clave]["metricas"]
         return {"precision": m["precision_cupo"], "rango": m["precision_rango95"], "azar": m["azar_mismo_cupo"],
                 "lectura": m["lectura"], "calificador": self.sim["calificador"]}
 
+    # --- Reloj y fuente simulada ------------------------------------------------------------------------------
+
+    def reiniciar(self):
+        for f in self.carpeta.glob("dia-*.json"):
+            f.unlink()
+        self.simulador.iniciar()
+        self.h, self.dia = None, None
+
+    def avanzar(self):
+        r = self.simulador.avanzar()
+        self.h, self.dia = None, None
+        return r
+
+    # --- Modelo: versiones congeladas -------------------------------------------------------------------------
+
+    def _version(self, numero=None):
+        if numero is None:
+            return self.planta.version()
+        return next(v for v in self.planta.versiones() if v["numero"] == numero)
+
+    def predictor(self, familia, version, t, entrenado_hasta=None):
+        hasta = version["entrenado_hasta"] if entrenado_hasta is None else entrenado_hasta
+        f = modelo_mod.fuente(self.historico, self.planta, hasta, t)
+        return modelo_mod.predictor(familia, self.modelos[familia], hasta, f, version["numero"])
+
+    def fuente_dia(self, t):
+        """Todo lo conocido el día t (histórico y resultados recibidos de Día ≤ t − 5): tasas observadas y mínimo."""
+        return Fuente(self.historico + self.planta.registros(t - MARGEN, t))
+
     # --- Día ---------------------------------------------------------------------------------------------------
 
-    def programa_simulado(self, t):
-        """El programa de `hoja.simular_programa` y, aparte y solo en memoria, qué VIN hay detrás de cada id."""
-        programa = hoja.simular_programa(self.tabla, t)
-        por_codigo = collections.defaultdict(list)
-        for v in self.tabla.por_dia(t, t).get(t, []):
-            por_codigo[v.codigo].append(v)
-        privado = {}
-        for u, c in programa:
-            privado[u] = por_codigo[c].pop(0)
-        return programa, privado
-
-    def armar(self, t, clave, cupo=None, programa_csv=None):
-        t = int(t)
-        assert VALIDACION[0] <= t <= VALIDACION[1], "Solo días de validación (155–194)"
+    def armar(self, clave=None, cupo=None):
+        t = self.planta.dia
+        clave = clave or modelos_mod.POR_DEFECTO
         assert clave in self.modelos, f"Modelo desconocido: {clave}"
-        if programa_csv:
-            programa, privado = leer_programa(programa_csv, self.tabla.catalogo), {}
-        else:
-            programa, privado = self.programa_simulado(t)
-        cupo = int(cupo) if cupo else None
-        h = hoja.armar(self.tabla, programa, t, cupo, predictor=self.modelos[clave], evaluacion=self.evaluacion(clave),
-                       programa_simulado=not programa_csv)
-        with self.lock:
-            self.h, self.privado = h, privado
-            self.dia = Dia.desde_hoja(h, programa, clave)
-            self.dia.guardar(self.carpeta)
+        assert not (self.dia and self.dia.dia == t and self.dia.enviadas), \
+            "Ya hay unidades enviadas hoy: la hoja se rearma mañana"
+        playa = self.planta.playa(t)
+        assert playa, "No hay unidades en la playa de despacho"
+        programa = [(u, c) for u, c, _ in playa]
+        # El cupo lo fija Calidad de Planta; por defecto, el 5 % de lo que pasó Gate Release hoy (0 si no hubo).
+        cupo = int(cupo) if cupo not in (None, "") else cupo_5(self.planta.gate_release(t))
+        v = self._version()
+        self.h = self._hoja(programa, t, clave, cupo, v)
+        self.dia = Dia.desde_hoja(self.h, programa, clave, v["numero"])
+        self.dia.guardar(self.carpeta)
         return self.hoja_json()
+
+    def _hoja(self, programa, t, clave, cupo, version):
+        return hoja.armar(self.tabla, programa, t, cupo, predictor=self.predictor(clave, version, t),
+                          evaluacion=self.evaluacion(clave), fuente=self.fuente_dia(t))
+
+    def _restaurar(self):
+        """Después de reiniciar el servidor, rearma la hoja del día con la misma playa, modelo y versión."""
+        archivo = self.carpeta / f"dia-{self.planta.dia}.json"
+        if archivo.exists():
+            d = Dia.leer(archivo)
+            self.h = self._hoja([tuple(p) for p in d.programa], d.dia, d.modelo, d.cupo, self._version(d.version))
+            self.dia = d
 
     def hoja_json(self):
         h = self.h
         if h is None:
             return None
-        h.evaluacion = self.evaluacion(self.dia.modelo) or h.evaluacion  # La simulación termina después de armar.
+        h.evaluacion = self.evaluacion(self.dia.modelo) or h.evaluacion  # La evaluación termina después de armar.
         tx = hoja.textos(h)
         pf = modelos_mod.prueba_final().get(self.dia.modelo)
         tx["evaluacion"] = tx["evaluacion"].replace("La prueba final todavía no se corrió.", (
             f"Prueba final ya registrada (Días {pf['dias'][0]}–{pf['dias'][1]}): {hoja._pct(pf['precision'])} contra "
-            f"{hoja._pct(pf['azar'])} al azar." if pf else
-            "Este modelo no tiene lectura en la prueba final: no se relee."))
+            f"{hoja._pct(pf['azar'])} al azar." if pf else "Este modelo no tiene lectura en la prueba final: no se relee."))
+        gr = self.planta.gate_release(h.dia)
+        tx["corte"] = (f"Cupo del día: {h.cupo} (el 5 % de las {gr} unidades que pasaron Gate Release hoy es "
+                       f"{cupo_5(gr)}). En la playa esperan {h.programadas}, de los últimos 5 días.")
+        v = self._version(self.dia.version)
         return {
-            "dia": h.dia, "cupo": h.cupo, "cupo_5": h.cupo_5, "programadas": h.programadas,
-            "modelo": self.dia.modelo, "predictor": h.predictor, "programa_simulado": h.programa_simulado,
+            "dia": h.dia, "cupo": h.cupo, "programadas": h.programadas, "gate_release": gr,
+            "modelo": self.dia.modelo, "predictor": h.predictor, "version": v,
             "general": h.general, "n_ventana": h.n_ventana, "ventana": h.ventana, "sin_cubrir": h.sin_cubrir,
             "minimo": {"P": h.minimo[0], "origen": h.minimo[1]},
             "filas": [{"codigo": f.codigo, "sugerida": f.sugerida, "tasa": f.tasa, "rango": f.rango, "n": f.n,
@@ -129,55 +174,120 @@ class Plataforma:
             "agrupaciones": hoja._agrupaciones_txt(h), "textos": tx, "limites": hoja.LIMITES,
         }
 
-    def cierre(self):
-        """Solo con programa simulado: cuántas tomadas resultaron CALIBRADA, en agregado, frente al azar."""
-        d = self.dia
-        assert d is not None, "Primero hay que armar la hoja del día"
-        if not self.privado:
-            return {"disponible": False, "motivo": "El resultado solo se puede revelar con el programa simulado."}
-        tomadas = [u for us in d.tomadas.values() for u in us]
-        todos = list(self.privado.values())
-        tasa_dia = sum(v.calibrada for v in todos) / len(todos)
-        por_codigo = {c: {"tomadas": len(us), "calibradas": sum(self.privado[u].calibrada for u in us)}
-                      for c, us in d.tomadas.items() if us}
-        return {"disponible": True, "dia": d.dia, "tomadas": len(tomadas), "cupo": d.cupo,
-                "calibradas": sum(self.privado[u].calibrada for u in tomadas),
-                "esperado_azar": tasa_dia * len(tomadas), "tasa_dia": tasa_dia, "unidades_dia": len(todos),
-                "por_codigo": por_codigo,
-                "aclaracion": "Día de validación de la base ficticia: el resultado ya se conoce. En planta se "
-                              "conocería después de la Auditoría Adicional."}
+    def estado(self):
+        """Avance del día con el resultado de cada enviada, si ya volvió."""
+        if not self.dia:
+            return None
+        r = self.dia.resumen()
+        por_unidad = {e["unidad"]: e for e in self.planta.envios()}
+        r["enviadas"] = [{**e, "dia_gr": por_unidad.get(e["unidad"], {}).get("dia_gr"),
+                          "resultado": por_unidad.get(e["unidad"], {}).get("resultado")} for e in r["enviadas"]]
+        return r
+
+    def enviar(self, codigo):
+        d, h = self.dia, self.h
+        unidad = d.tomar(codigo)
+        fila = next(i for i, f in enumerate(h.filas) if f.codigo == d.enviadas[-1]["codigo"])
+        self.planta.enviar(unidad, d.dia, len(d.rondas) + 1, fila + 1, h.filas[fila].tasa, d.version, d.modelo)
+        d.guardar(self.carpeta)
+        return unidad
+
+    def deshacer(self, unidad):
+        self.planta.deshacer(unidad)
+        codigo = self.dia.deshacer(unidad)
+        self.dia.guardar(self.carpeta)
+        return codigo
+
+    # --- Lecturas de planta -----------------------------------------------------------------------------------
+
+    def resumen_planta(self):
+        t = self.planta.dia
+        envios = self.planta.envios()
+
+        def ultima(entrada):
+            v = self.planta.leer(f"ultima_{entrada}")
+            if not v:
+                return None
+            dia, n = v.split("|")
+            return {"dia": int(dia) if dia else None, "n": int(n)}
+        playa = self.planta.playa(t)
+        return {
+            "dia": t, "modo": self.planta.leer("modo", "archivo"), "inicio": VALIDACION[0], "fin": VALIDACION[1],
+            "gate_release_hoy": self.planta.gate_release(t), "playa": len(playa),
+            "playa_dias_anteriores": sum(1 for *_, d in playa if d < t),
+            "cupo_sugerido": cupo_5(self.planta.gate_release(t)),
+            "enviadas_total": len(envios), "con_resultado": sum(1 for e in envios if e["resultado"]),
+            "entradas": {"ingreso": ultima("ingreso"), "resultados": ultima("resultados")},
+            "hoja_armada": bool(self.h and self.h.dia == t), "version": self.planta.version(),
+            "recomendacion": modelo_mod.recomendacion(self.planta, t),
+        }
+
+    def envios(self):
+        e = self.planta.envios()
+        con = [x for x in e if x["resultado"]]
+        cal = sum(x["resultado"] == "CALIBRADA" for x in con)
+        return {"envios": e, "cifras": {"enviadas": len(e), "con_resultado": len(con), "calibradas": cal,
+                                        "pendientes": len(e) - len(con), "precision": cal / len(con) if con else None}}
+
+    def atributos(self, codigo):
+        mercado, version, motor, traccion = hoja._atributos(self.tabla, codigo)
+        return {"mercado": mercado, "version": version, "motor": motor, "traccion": traccion}
+
+    def linea(self):
+        return reporte_linea(self.planta.envios(), self.atributos)
+
+    def propuesta(self):
+        t = self.planta.dia
+        v = self._version()
+        clave = self.dia.modelo if self.dia else modelos_mod.POR_DEFECTO
+        codigos = sorted({c for _, c, _ in self.planta.playa(t)})
+        actual = self.predictor(clave, v, t)
+        candidata = self.predictor(clave, {**v, "numero": v["numero"] + 1}, t, entrenado_hasta=t - MARGEN)
+        filas = modelo_mod.comparar(actual, candidata, t, codigos)
+        return {"modelo": clave, "version": v, "candidata_hasta": t - MARGEN,
+                "nuevos": modelo_mod.nuevos(self.planta, v, t), "filas": filas,
+                "suben": sum(f["puesto_nuevo"] < f["puesto_actual"] for f in filas),
+                "bajan": sum(f["puesto_nuevo"] > f["puesto_actual"] for f in filas)}
+
+    def actualizar_modelo(self):
+        t = self.planta.dia
+        v = self._version()
+        hasta = t - MARGEN
+        assert hasta > v["entrenado_hasta"], "No hay resultados nuevos que la versión vigente no use"
+        n = modelo_mod.nuevos(self.planta, v, t)
+        numero = self.planta.nueva_version(hasta, t, GERENTE, n)
+        self.planta.decidir("actualizar", t, n)
+        return numero
+
+    def posponer_modelo(self):
+        t = self.planta.dia
+        self.planta.decidir("posponer", t, modelo_mod.nuevos(self.planta, self._version(), t))
 
     def meta(self):
-        return {"dias": [{"dia": t, "unidades": n, "cupo": cupo_5(n)} for t, n in self.dias.items()],
-                "dia_inicial": DIA_INICIAL, "validacion": VALIDACION, "modelos": modelos_mod.fichas(),
+        return {"validacion": VALIDACION, "modelos": modelos_mod.fichas(),
                 "fuente": {"csv": self.tabla.fuente.get("csv_sha256", "")[:12],
                            "catalogo": self.tabla.fuente.get("catalogo_sha256", "")[:12]},
-                "simulacion_lista": self.sim is not None, "dia_activo": self.h.dia if self.h else None}
-
-
-def leer_programa(texto, catalogo):
-    """Programa `unidad,codigo` recibido como texto; errores legibles para la pantalla."""
-    filas = list(csv.DictReader(io.StringIO(texto.lstrip("﻿"))))
-    assert filas, "El archivo está vacío"
-    assert {"unidad", "codigo"} <= set(filas[0]), "El archivo necesita las columnas unidad,codigo"
-    programa = [((r["unidad"] or "").strip(), normalizar(r["codigo"])) for r in filas]
-    vacias = [i + 2 for i, (u, c) in enumerate(programa) if not u or not c]
-    assert not vacias, f"Filas con datos vacíos: {', '.join(map(str, vacias[:5]))}"
-    repetidas = [u for u, n in collections.Counter(u for u, _ in programa).items() if n > 1]
-    assert not repetidas, f"Unidades repetidas: {', '.join(repetidas[:5])}"
-    desconocidos = sorted({c for _, c in programa} - set(catalogo))
-    assert not desconocidos, f"Códigos fuera del catálogo: {', '.join(desconocidos[:5])}"
-    return programa
+                "simulacion_lista": self.sim is not None, "regla": modelo_mod.REGLA}
 
 
 def _jsonable(x):
-    if isinstance(x, (np.integer,)):
+    if isinstance(x, np.integer):
         return int(x)
-    if isinstance(x, (np.floating,)):
+    if isinstance(x, np.floating):
         return float(x)
-    if isinstance(x, tuple):
+    if isinstance(x, (tuple, set)):
         return list(x)
     raise TypeError(type(x))
+
+
+def _filas(cuerpo, columnas):
+    """Filas de una entrada: JSON `{"filas": [...]}` o `{"csv": "..."}` con encabezado."""
+    if "csv" in cuerpo:
+        return filas_csv(cuerpo["csv"], columnas)
+    filas = cuerpo.get("filas")
+    if not isinstance(filas, list) or not filas:
+        raise Rechazo("Faltan las filas (JSON «filas» o texto «csv»)")
+    return filas
 
 
 class Manejador(SimpleHTTPRequestHandler):
@@ -216,55 +326,89 @@ class Manejador(SimpleHTTPRequestHandler):
         q = {k: v[0] for k, v in parse_qs(url.query).items()}
         p, ruta = self.plataforma, url.path.removeprefix("/api/")
         try:
-            if metodo == "GET" and ruta == "meta":
-                return self._enviar(200, p.meta())
-            if metodo == "GET" and ruta == "hoja":
-                return self._enviar(200, {"hoja": p.hoja_json(), "estado": p.dia.resumen() if p.dia else None})
-            if metodo == "POST" and ruta == "dia":
-                b = self._cuerpo()
-                hoja_ = p.armar(b["dia"], b.get("modelo", modelos_mod.POR_DEFECTO), b.get("cupo"), b.get("programa"))
-                return self._enviar(200, {"hoja": hoja_, "estado": p.dia.resumen()})
-            if p.dia is None and ruta in ("decidir", "tomar", "deshacer", "ronda", "estado", "cierre", "descarga"):
-                return self._enviar(409, {"error": "Primero hay que armar la hoja del día"})
-            if metodo == "GET" and ruta == "estado":
-                return self._enviar(200, p.dia.resumen())
-            if metodo == "POST" and ruta == "decidir":
-                return self._enviar(200, p.dia.decidir(self._cuerpo().get("codigo")))
-            if metodo == "POST" and ruta == "tomar":
-                b = self._cuerpo()
-                with p.lock:
-                    unidad = p.dia.tomar(b.get("codigo"), b.get("unidad"))
-                    p.dia.guardar(p.carpeta)
-                return self._enviar(200, {"unidad": unidad, "decision": p.dia.decidir(b.get("codigo")),
-                                          "estado": p.dia.resumen()})
-            if metodo == "POST" and ruta == "deshacer":
-                with p.lock:
-                    codigo = p.dia.deshacer(self._cuerpo().get("unidad"))
-                    p.dia.guardar(p.carpeta)
-                return self._enviar(200, {"decision": p.dia.decidir(codigo), "estado": p.dia.resumen()})
-            if metodo == "POST" and ruta == "ronda":
-                with p.lock:
-                    ronda = p.dia.registrar_ronda(self._cuerpo().get("en_playa", {}))
-                    p.dia.guardar(p.carpeta)
-                return self._enviar(200, {"ronda": ronda, "estado": p.dia.resumen()})
-            if metodo == "GET" and ruta == "cierre":
-                return self._enviar(200, p.cierre())
-            if metodo == "GET" and ruta == "simulacion":
+            if metodo == "GET" and ruta == "simulacion":  # Fuera del lock: la evaluación corre en otro hilo.
                 if p.sim_error:
                     return self._enviar(500, {"error": p.sim_error})
                 return self._enviar(200, {"lista": p.sim is not None, **(p.sim or {})})
-            if metodo == "GET" and ruta == "descarga":
-                return self._descarga(q.get("formato", "csv"))
-            return self._enviar(404, {"error": f"Ruta desconocida: {ruta}"})
-        except AssertionError as error:
+            with p.lock:
+                return self._ruta(metodo, ruta, q, p)
+        except AssertionError as error:  # Incluye Rechazo: datos de entrada que no se aceptan.
             return self._enviar(400, {"error": str(error)})
         except Exception as error:  # noqa: BLE001
             traceback.print_exc()
             return self._enviar(500, {"error": f"Error interno: {error}"})
 
+    def _ruta(self, metodo, ruta, q, p):
+        b = self._cuerpo() if metodo == "POST" else {}
+        # Planta: reloj, entradas y lecturas.
+        if metodo == "GET" and ruta == "meta":
+            return self._enviar(200, p.meta())
+        if metodo == "GET" and ruta == "planta":
+            return self._enviar(200, p.resumen_planta())
+        if metodo == "POST" and ruta == "planta/avanzar":
+            r = p.avanzar()
+            return self._enviar(200, {"avance": r, "planta": p.resumen_planta()})
+        if metodo == "POST" and ruta == "planta/reiniciar":
+            p.reiniciar()
+            return self._enviar(200, {"planta": p.resumen_planta()})
+        if metodo == "POST" and ruta == "ingreso":
+            n = p.planta.ingresar(_filas(b, ["unidad", "codigo", "dia"]), "archivo")
+            return self._enviar(200, {"ingresadas": n, "planta": p.resumen_planta()})
+        if metodo == "POST" and ruta == "resultados":
+            n = p.planta.registrar_resultados(_filas(b, ["unidad", "resultado", "dia", "componente?"]), "archivo")
+            return self._enviar(200, {"recibidos": n, "planta": p.resumen_planta()})
+        if metodo == "POST" and ruta == "despacho":
+            filas = _filas(b, ["unidad", "dia"])
+            for f in filas:
+                p.planta.despachar([f["unidad"]], int(f["dia"]))
+            return self._enviar(200, {"despachadas": len(filas)})
+        if metodo == "GET" and ruta == "envios":
+            return self._enviar(200, p.envios())
+        if metodo == "GET" and ruta == "linea":
+            return self._enviar(200, p.linea())
+        if metodo == "GET" and ruta == "linea.csv":
+            return self._enviar(200, reporte_csv(p.linea()).encode("utf-8"), "text/csv; charset=utf-8",
+                                f"reporte-linea-dia-{p.planta.dia}.csv")
+        # Modelo: recomendación y decisión del gerente.
+        if metodo == "GET" and ruta == "modelo":
+            return self._enviar(200, {"versiones": p.planta.versiones(), "decision": p.planta.ultima_decision(),
+                                      "recomendacion": modelo_mod.recomendacion(p.planta, p.planta.dia)})
+        if metodo == "GET" and ruta == "modelo/propuesta":
+            return self._enviar(200, p.propuesta())
+        if metodo == "POST" and ruta == "modelo/actualizar":
+            return self._enviar(200, {"version": p.actualizar_modelo(), "planta": p.resumen_planta()})
+        if metodo == "POST" and ruta == "modelo/posponer":
+            p.posponer_modelo()
+            return self._enviar(200, {"planta": p.resumen_planta()})
+        # Hoja y selección del día.
+        if metodo == "GET" and ruta == "hoja":
+            return self._enviar(200, {"hoja": p.hoja_json(), "estado": p.estado()})
+        if metodo == "POST" and ruta == "dia":
+            hoja_ = p.armar(b.get("modelo"), b.get("cupo"))
+            return self._enviar(200, {"hoja": hoja_, "estado": p.estado()})
+        if p.dia is None and ruta in ("decidir", "tomar", "deshacer", "ronda", "estado", "descarga"):
+            return self._enviar(409, {"error": "Primero hay que armar la hoja del día"})
+        if metodo == "GET" and ruta == "estado":
+            return self._enviar(200, p.estado())
+        if metodo == "POST" and ruta == "decidir":
+            return self._enviar(200, p.dia.decidir(b.get("codigo")))
+        if metodo == "POST" and ruta == "tomar":
+            unidad = p.enviar(b.get("codigo"))
+            return self._enviar(200, {"unidad": unidad, "decision": p.dia.decidir(b.get("codigo")), "estado": p.estado()})
+        if metodo == "POST" and ruta == "deshacer":
+            codigo = p.deshacer(b.get("unidad"))
+            return self._enviar(200, {"decision": p.dia.decidir(codigo), "estado": p.estado()})
+        if metodo == "POST" and ruta == "ronda":
+            ronda = p.dia.registrar_ronda(b.get("en_playa", {}))
+            p.dia.guardar(p.carpeta)
+            return self._enviar(200, {"ronda": ronda, "estado": p.estado()})
+        if metodo == "GET" and ruta == "descarga":
+            return self._descarga(q.get("formato", "csv"))
+        return self._enviar(404, {"error": f"Ruta desconocida: {ruta}"})
+
     def _descarga(self, formato):
         h = self.plataforma.h
-        self.plataforma.hoja_json()  # Actualiza la evaluación del modelo si la simulación ya terminó.
+        self.plataforma.hoja_json()
         escritores = {"csv": (hoja.escribir_csv, "text/csv; charset=utf-8"),
                       "xlsx": (hoja.escribir_xlsx, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
                       "html": (hoja.escribir_html, "text/html; charset=utf-8")}
