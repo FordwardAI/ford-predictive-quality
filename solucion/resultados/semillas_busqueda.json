@@ -1,0 +1,2039 @@
+{
+  "pieza": "Estabilidad de la mezcla de catálogo elegida",
+  "fuente": {
+    "csv": "Dataset QLS Inspección Adicional.csv",
+    "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+    "catalogo": "Códigos de catálogo.csv",
+    "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+  },
+  "version_codigo": "7e55ff5cc0367f04d96eb9b4d7c8ccbfd6184d79+cambios",
+  "mezcla": {
+    "stacking_fijo": 0.6,
+    "jerarquico_60_peso20": 0.4
+  },
+  "protocolo": "Semillas 1–5, pesos y componentes congelados; selección 100–174 y comprobación 175–194. Exploratorio, datos ya vistos, base ficticia, auditados con actividad QLS; prueba final no releída.",
+  "ajustes_por_bloque": [
+    {
+      "bloque": [
+        100,
+        118
+      ],
+      "bases": {
+        "logistica": {
+          "hiperparametros": {
+            "C": 1.0
+          },
+          "vida": null
+        },
+        "nb": {
+          "hiperparametros": {
+            "alpha": 0.1
+          },
+          "vida": null
+        },
+        "rf": {
+          "hiperparametros": {
+            "min_samples_leaf": 5
+          },
+          "vida": null
+        },
+        "xgboost": {
+          "hiperparametros": {
+            "reg_lambda": 10.0
+          },
+          "vida": null
+        },
+        "lightgbm": {
+          "hiperparametros": {
+            "min_child_weight": 1.0
+          },
+          "vida": null
+        },
+        "catboost": {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": null
+        },
+        "mlp": {
+          "hiperparametros": {
+            "alpha": 0.01
+          },
+          "vida": null
+        }
+      },
+      "rf_atributos": {
+        "hiperparametros": {
+          "min_samples_leaf": 50
+        },
+        "vida": null,
+        "log_loss_interna": 0.39374080821844043,
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": null,
+            "log_loss": 0.3938616970669848
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": null,
+            "log_loss": 0.39374080821844043
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": null,
+            "log_loss": 0.3942883323798231
+          }
+        ],
+        "semilla_ajuste": 1
+      }
+    },
+    {
+      "bloque": [
+        119,
+        137
+      ],
+      "bases": {
+        "logistica": {
+          "hiperparametros": {
+            "C": 0.01
+          },
+          "vida": null
+        },
+        "nb": {
+          "hiperparametros": {
+            "alpha": 1.0
+          },
+          "vida": null
+        },
+        "rf": {
+          "hiperparametros": {
+            "min_samples_leaf": 50
+          },
+          "vida": null
+        },
+        "xgboost": {
+          "hiperparametros": {
+            "reg_lambda": 1.0
+          },
+          "vida": null
+        },
+        "lightgbm": {
+          "hiperparametros": {
+            "min_child_weight": 1.0
+          },
+          "vida": null
+        },
+        "catboost": {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": null
+        },
+        "mlp": {
+          "hiperparametros": {
+            "alpha": 0.0001
+          },
+          "vida": null
+        }
+      },
+      "rf_atributos": {
+        "hiperparametros": {
+          "min_samples_leaf": 200
+        },
+        "vida": null,
+        "log_loss_interna": 0.4004019518345033,
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": null,
+            "log_loss": 0.40089298210533353
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": null,
+            "log_loss": 0.40049999439133077
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": null,
+            "log_loss": 0.4004019518345033
+          }
+        ],
+        "semilla_ajuste": 1
+      }
+    },
+    {
+      "bloque": [
+        138,
+        156
+      ],
+      "bases": {
+        "logistica": {
+          "hiperparametros": {
+            "C": 0.01
+          },
+          "vida": null
+        },
+        "nb": {
+          "hiperparametros": {
+            "alpha": 100.0
+          },
+          "vida": null
+        },
+        "rf": {
+          "hiperparametros": {
+            "min_samples_leaf": 50
+          },
+          "vida": null
+        },
+        "xgboost": {
+          "hiperparametros": {
+            "reg_lambda": 10.0
+          },
+          "vida": null
+        },
+        "lightgbm": {
+          "hiperparametros": {
+            "min_child_weight": 1.0
+          },
+          "vida": null
+        },
+        "catboost": {
+          "hiperparametros": {
+            "l2_leaf_reg": 100.0
+          },
+          "vida": null
+        },
+        "mlp": {
+          "hiperparametros": {
+            "alpha": 0.0001
+          },
+          "vida": null
+        }
+      },
+      "rf_atributos": {
+        "hiperparametros": {
+          "min_samples_leaf": 50
+        },
+        "vida": null,
+        "log_loss_interna": 0.3696113529450006,
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": null,
+            "log_loss": 0.37487472404264666
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": null,
+            "log_loss": 0.3696113529450006
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": null,
+            "log_loss": 0.36992972261423485
+          }
+        ],
+        "semilla_ajuste": 1
+      }
+    },
+    {
+      "bloque": [
+        157,
+        174
+      ],
+      "bases": {
+        "logistica": {
+          "hiperparametros": {
+            "C": 0.1
+          },
+          "vida": null
+        },
+        "nb": {
+          "hiperparametros": {
+            "alpha": 1.0
+          },
+          "vida": null
+        },
+        "rf": {
+          "hiperparametros": {
+            "min_samples_leaf": 50
+          },
+          "vida": null
+        },
+        "xgboost": {
+          "hiperparametros": {
+            "reg_lambda": 10.0
+          },
+          "vida": null
+        },
+        "lightgbm": {
+          "hiperparametros": {
+            "min_child_weight": 1.0
+          },
+          "vida": null
+        },
+        "catboost": {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": null
+        },
+        "mlp": {
+          "hiperparametros": {
+            "alpha": 0.01
+          },
+          "vida": null
+        }
+      },
+      "rf_atributos": {
+        "hiperparametros": {
+          "min_samples_leaf": 50
+        },
+        "vida": null,
+        "log_loss_interna": 0.32657974013568064,
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": null,
+            "log_loss": 0.3280094981776989
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": null,
+            "log_loss": 0.32657974013568064
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": null,
+            "log_loss": 0.32804392749016975
+          }
+        ],
+        "semilla_ajuste": 1
+      }
+    },
+    {
+      "bloque": [
+        175,
+        194
+      ],
+      "bases": {
+        "logistica": {
+          "hiperparametros": {
+            "C": 1.0
+          },
+          "vida": null
+        },
+        "nb": {
+          "hiperparametros": {
+            "alpha": 0.1
+          },
+          "vida": null
+        },
+        "rf": {
+          "hiperparametros": {
+            "min_samples_leaf": 5
+          },
+          "vida": null
+        },
+        "xgboost": {
+          "hiperparametros": {
+            "reg_lambda": 10.0
+          },
+          "vida": null
+        },
+        "lightgbm": {
+          "hiperparametros": {
+            "min_child_weight": 10.0
+          },
+          "vida": null
+        },
+        "catboost": {
+          "hiperparametros": {
+            "l2_leaf_reg": 1.0
+          },
+          "vida": null
+        },
+        "mlp": {
+          "hiperparametros": {
+            "alpha": 0.01
+          },
+          "vida": null
+        }
+      },
+      "rf_atributos": {
+        "hiperparametros": {
+          "min_samples_leaf": 5
+        },
+        "vida": null,
+        "log_loss_interna": 0.34140943376987104,
+        "grilla": [
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 5
+            },
+            "vida": null,
+            "log_loss": 0.34140943376987104
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 50
+            },
+            "vida": null,
+            "log_loss": 0.34198829109151424
+          },
+          {
+            "hiperparametros": {
+              "min_samples_leaf": 200
+            },
+            "vida": null,
+            "log_loss": 0.3434771619152621
+          }
+        ],
+        "semilla_ajuste": 1
+      }
+    }
+  ],
+  "resultados": [
+    {
+      "semilla": 1,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 147,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.19864864864864865,
+          "precision_rango95": [
+            0.16781269527914713,
+            0.22913976269315672
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.7717901994199834,
+          "veces_azar_rango95": [
+            1.4882376401965607,
+            2.0554337333752577
+          ],
+          "recupero": 0.0863689776733255,
+          "recupero_rango95": [
+            0.07253256850165292,
+            0.10056032662031816
+          ],
+          "diferencia_con_azar_rango95": [
+            0.055098053379568135,
+            0.11766400961039891
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 100,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.13513513513513514,
+          "precision_rango95": [
+            0.11051875583935968,
+            0.16052986740630495
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.2052994553877439,
+          "veces_azar_rango95": [
+            1.0044906713057695,
+            1.4063578032374346
+          ],
+          "recupero": 0.05875440658049354,
+          "recupero_rango95": [
+            0.04877808087291399,
+            0.06845718534342492
+          ],
+          "diferencia_con_azar_rango95": [
+            0.0004846904090502865,
+            0.04600912835206046
+          ],
+          "lectura": "mejora"
+        },
+        "jerarquico": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14483716682121467,
+            0.20887772444807273
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.2892693376152782,
+            1.8796228602135632
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06270996640537514,
+            0.09152219711277441
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03273031031166129,
+            0.09761879498923388
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 142,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.1918918918918919,
+          "precision_rango95": [
+            0.16520143725616906,
+            0.21892714143102066
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.7115252266505965,
+          "veces_azar_rango95": [
+            1.4697545403268013,
+            1.977847834340464
+          ],
+          "recupero": 0.08343125734430082,
+          "recupero_rango95": [
+            0.07119283935118703,
+            0.09660789981630168
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05287290894796392,
+            0.10684080531739805
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 139,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.18783783783783783,
+          "precision_rango95": [
+            0.16404551292211778,
+            0.212852701127089
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.675366242988964,
+          "veces_azar_rango95": [
+            1.4381836531874572,
+            1.922914450087927
+          ],
+          "recupero": 0.08166862514688601,
+          "recupero_rango95": [
+            0.06997431450006639,
+            0.09440115548513986
+          ],
+          "diferencia_con_azar_rango95": [
+            0.050577920325712046,
+            0.10127278199649398
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            0.03042328042328042,
+            0.0950551378183646
+          ],
+          "jerarquico": [
+            0.0,
+            0.04421470321304724
+          ],
+          "conjunto_catboost": [
+            -0.023022966242390704,
+            0.034529615213920235
+          ],
+          "rf_atributos": [
+            -0.016084831925173758,
+            0.037249728594564775
+          ]
+        }
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 46,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.15928983401576188,
+            0.2521406727828746
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "veces_azar_rango95": [
+            1.8789607714982937,
+            2.7890094652940847
+          ],
+          "recupero": 0.11274509803921569,
+          "recupero_rango95": [
+            0.09090909090909091,
+            0.1353938253981255
+          ],
+          "diferencia_con_azar_rango95": [
+            0.07429194053873707,
+            0.1610851340308403
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 44,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19555555555555557,
+          "precision_rango95": [
+            0.14285714285714285,
+            0.24870824478880635
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.226073616571662,
+          "veces_azar_rango95": [
+            1.6903231984683365,
+            2.751433977657862
+          ],
+          "recupero": 0.10784313725490197,
+          "recupero_rango95": [
+            0.08142603375494624,
+            0.13390607101947308
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05759394346904328,
+            0.15572832360755332
+          ],
+          "lectura": "mejora"
+        },
+        "jerarquico": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 41,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18222222222222223,
+          "precision_rango95": [
+            0.13478260869565217,
+            0.23113334347737877
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.0742958699872305,
+          "veces_azar_rango95": [
+            1.5424079981354917,
+            2.5932707117352023
+          ],
+          "recupero": 0.10049019607843138,
+          "recupero_rango95": [
+            0.07454867780440674,
+            0.12531361039674904
+          ],
+          "diferencia_con_azar_rango95": [
+            0.04725347980840735,
+            0.1411027178143025
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 39,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.17333333333333334,
+          "precision_rango95": [
+            0.11472838315654131,
+            0.23478260869565218
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 1.9731107055976094,
+          "veces_azar_rango95": [
+            1.3356982684649537,
+            2.6166400678416175
+          ],
+          "recupero": 0.09558823529411764,
+          "recupero_rango95": [
+            0.0643211289092296,
+            0.12649836969309888
+          ],
+          "diferencia_con_azar_rango95": [
+            0.028412482898458526,
+            0.1433490279801662
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 46,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.1522383027284988,
+            0.25471698113207547
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "veces_azar_rango95": [
+            1.7920081145725308,
+            2.860496602847134
+          ],
+          "recupero": 0.11274509803921569,
+          "recupero_rango95": [
+            0.08644787700473058,
+            0.13917525773195877
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06760040789033675,
+            0.16370321040068295
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            -0.020725926085180486,
+            0.03419913419913414
+          ],
+          "jerarquico": [
+            0.0,
+            0.05371900826446281
+          ],
+          "conjunto_catboost": [
+            0.005341454763723671,
+            0.061228965270318625
+          ],
+          "rf_atributos": [
+            -0.03798073046843506,
+            0.02868901482469213
+          ]
+        }
+      }
+    },
+    {
+      "semilla": 2,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 126,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17027027027027028,
+          "precision_rango95": [
+            0.14230704697986576,
+            0.20133778337531483
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5186773137885574,
+          "veces_azar_rango95": [
+            1.2572378020902977,
+            1.7942432757394429
+          ],
+          "recupero": 0.07403055229142186,
+          "recupero_rango95": [
+            0.061412353273288665,
+            0.08792094888194511
+          ],
+          "diferencia_con_azar_rango95": [
+            0.029928422874290192,
+            0.08911365408699135
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 95,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.12837837837837837,
+          "precision_rango95": [
+            0.10015023112480739,
+            0.15564738292011018
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.1450344826183567,
+          "veces_azar_rango95": [
+            0.9056426567260436,
+            1.3602806651887205
+          ],
+          "recupero": 0.05581668625146886,
+          "recupero_rango95": [
+            0.044206694570847666,
+            0.0664782175435423
+          ],
+          "diferencia_con_azar_rango95": [
+            -0.010535184854279098,
+            0.04098350605156403
+          ],
+          "lectura": "inconcluso"
+        },
+        "jerarquico": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14483716682121467,
+            0.20887772444807273
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.2892693376152782,
+            1.8796228602135632
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06270996640537514,
+            0.09152219711277441
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03273031031166129,
+            0.09761879498923388
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 130,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17567567567567569,
+          "precision_rango95": [
+            0.1502050675369916,
+            0.2021280156085334
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5668892920040671,
+          "veces_azar_rango95": [
+            1.3180684362985808,
+            1.831731472243053
+          ],
+          "recupero": 0.07638072855464159,
+          "recupero_rango95": [
+            0.06407418024370208,
+            0.08951675470452293
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03613883109624789,
+            0.09117020437763552
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 135,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.18243243243243243,
+          "precision_rango95": [
+            0.15633212601078167,
+            0.2081660802251935
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.6271542647734543,
+          "veces_azar_rango95": [
+            1.3762449385366067,
+            1.8826499488241455
+          ],
+          "recupero": 0.07931844888366628,
+          "recupero_rango95": [
+            0.06711729521192054,
+            0.09228133024830125
+          ],
+          "diferencia_con_azar_rango95": [
+            0.0435133375699364,
+            0.09697118680643495
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            0.0027386183214562643,
+            0.07924524880313356
+          ],
+          "jerarquico": [
+            -0.03179198859455482,
+            0.019074220013308003
+          ],
+          "conjunto_catboost": [
+            -0.03202690322777659,
+            0.020954678559975667
+          ],
+          "rf_atributos": [
+            -0.04000942126514132,
+            0.015957552644669176
+          ]
+        }
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 44,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19555555555555557,
+          "precision_rango95": [
+            0.14814814814814814,
+            0.24597618385507702
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.226073616571662,
+          "veces_azar_rango95": [
+            1.7167773291753523,
+            2.737731289605636
+          ],
+          "recupero": 0.10784313725490197,
+          "recupero_rango95": [
+            0.08311688311688312,
+            0.13228520728520723
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06275707703707743,
+            0.15530234018132802
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.13692152461283813,
+            0.23577427519558214
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.6016705918621053,
+            2.629843121349158
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.07727966271185348,
+            0.12784256078224102
+          ],
+          "diferencia_con_azar_rango95": [
+            0.051866876034183204,
+            0.14499099745449892
+          ],
+          "lectura": "mejora"
+        },
+        "jerarquico": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 41,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18222222222222223,
+          "precision_rango95": [
+            0.13478260869565217,
+            0.23113334347737877
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.0742958699872305,
+          "veces_azar_rango95": [
+            1.5424079981354917,
+            2.5932707117352023
+          ],
+          "recupero": 0.10049019607843138,
+          "recupero_rango95": [
+            0.07454867780440674,
+            0.12531361039674904
+          ],
+          "diferencia_con_azar_rango95": [
+            0.04725347980840735,
+            0.1411027178143025
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.13930348258706468,
+            0.2398190045248869
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.646006183416521,
+            2.665299235071297
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.0794392523364486,
+            0.12912252221462747
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05497912363313321,
+            0.14844926004239106
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 46,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.1522383027284988,
+            0.25471698113207547
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "veces_azar_rango95": [
+            1.7920081145725308,
+            2.860496602847134
+          ],
+          "recupero": 0.11274509803921569,
+          "recupero_rango95": [
+            0.08644787700473058,
+            0.13917525773195877
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06760040789033675,
+            0.16370321040068295
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            -0.02752610662495244,
+            0.04000806451612899
+          ],
+          "jerarquico": [
+            0.0,
+            0.029411764705882353
+          ],
+          "conjunto_catboost": [
+            -0.008265320119337472,
+            0.02688232315926515
+          ],
+          "rf_atributos": [
+            -0.04846351019453433,
+            0.024390243902439025
+          ]
+        }
+      }
+    },
+    {
+      "semilla": 3,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 126,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17027027027027028,
+          "precision_rango95": [
+            0.14054540406451746,
+            0.2008251206650932
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5186773137885574,
+          "veces_azar_rango95": [
+            1.247532552761452,
+            1.7891221667058208
+          ],
+          "recupero": 0.07403055229142186,
+          "recupero_rango95": [
+            0.06096098221917598,
+            0.08734797237528186
+          ],
+          "diferencia_con_azar_rango95": [
+            0.027990584541973885,
+            0.08810425113467683
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 100,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.13513513513513514,
+          "precision_rango95": [
+            0.11023569130471594,
+            0.1610804100983299
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.2052994553877439,
+          "veces_azar_rango95": [
+            0.9876862632224978,
+            1.4319199095023154
+          ],
+          "recupero": 0.05875440658049354,
+          "recupero_rango95": [
+            0.047974123264676524,
+            0.06968859987981801
+          ],
+          "diferencia_con_azar_rango95": [
+            -0.001399122458118938,
+            0.04836269423769153
+          ],
+          "lectura": "inconcluso"
+        },
+        "jerarquico": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14483716682121467,
+            0.20887772444807273
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.2892693376152782,
+            1.8796228602135632
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06270996640537514,
+            0.09152219711277441
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03273031031166129,
+            0.09761879498923388
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 134,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.1810810810810811,
+          "precision_rango95": [
+            0.15452468897657345,
+            0.20624123056969357
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.6151012702195768,
+          "veces_azar_rango95": [
+            1.3586831926743403,
+            1.867383278991053
+          ],
+          "recupero": 0.07873090481786134,
+          "recupero_rango95": [
+            0.06586256695830284,
+            0.09115460680994662
+          ],
+          "diferencia_con_azar_rango95": [
+            0.04081363847555131,
+            0.09575250734834898
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 127,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17162162162162162,
+          "precision_rango95": [
+            0.14247900988071469,
+            0.19837090427355308
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5307303083424346,
+          "veces_azar_rango95": [
+            1.2591329028553542,
+            1.7925059184108763
+          ],
+          "recupero": 0.0746180963572268,
+          "recupero_rango95": [
+            0.06113035486952486,
+            0.08784232032166009
+          ],
+          "diferencia_con_azar_rango95": [
+            0.029588411305692154,
+            0.08770832393733391
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            0.014665497076023392,
+            0.05867058823529409
+          ],
+          "jerarquico": [
+            -0.033947453830773605,
+            0.01902343500606524
+          ],
+          "conjunto_catboost": [
+            -0.03980224952625466,
+            0.01870676637551847
+          ],
+          "rf_atributos": [
+            -0.03073274844598316,
+            0.026856718897567217
+          ]
+        }
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 46,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.15928983401576188,
+            0.2521406727828746
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "veces_azar_rango95": [
+            1.8789607714982937,
+            2.7890094652940847
+          ],
+          "recupero": 0.11274509803921569,
+          "recupero_rango95": [
+            0.09090909090909091,
+            0.1353938253981255
+          ],
+          "diferencia_con_azar_rango95": [
+            0.07429194053873707,
+            0.1610851340308403
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 44,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19555555555555557,
+          "precision_rango95": [
+            0.14285714285714285,
+            0.24870824478880635
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.226073616571662,
+          "veces_azar_rango95": [
+            1.6903231984683365,
+            2.751433977657862
+          ],
+          "recupero": 0.10784313725490197,
+          "recupero_rango95": [
+            0.08142603375494624,
+            0.13390607101947308
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05759394346904328,
+            0.15572832360755332
+          ],
+          "lectura": "mejora"
+        },
+        "jerarquico": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 41,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18222222222222223,
+          "precision_rango95": [
+            0.13478260869565217,
+            0.23113334347737877
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.0742958699872305,
+          "veces_azar_rango95": [
+            1.5424079981354917,
+            2.5932707117352023
+          ],
+          "recupero": 0.10049019607843138,
+          "recupero_rango95": [
+            0.07454867780440674,
+            0.12531361039674904
+          ],
+          "diferencia_con_azar_rango95": [
+            0.04725347980840735,
+            0.1411027178143025
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 41,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18222222222222223,
+          "precision_rango95": [
+            0.13332618025751072,
+            0.23636972402597398
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.0742958699872305,
+          "veces_azar_rango95": [
+            1.5545574658265737,
+            2.648381557283038
+          ],
+          "recupero": 0.10049019607843138,
+          "recupero_rango95": [
+            0.07526881720430108,
+            0.12827582753983918
+          ],
+          "diferencia_con_azar_rango95": [
+            0.048269960820145584,
+            0.14644005517117004
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 46,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.1522383027284988,
+            0.25471698113207547
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "veces_azar_rango95": [
+            1.7920081145725308,
+            2.860496602847134
+          ],
+          "recupero": 0.11274509803921569,
+          "recupero_rango95": [
+            0.08644787700473058,
+            0.13917525773195877
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06760040789033675,
+            0.16370321040068295
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            -0.020725926085180486,
+            0.03419913419913414
+          ],
+          "jerarquico": [
+            0.0,
+            0.05371900826446281
+          ],
+          "conjunto_catboost": [
+            0.004484304932735426,
+            0.04390243902439024
+          ],
+          "rf_atributos": [
+            -0.03798073046843506,
+            0.02868901482469213
+          ]
+        }
+      }
+    },
+    {
+      "semilla": 4,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14666620111731843,
+            0.20849961854708826
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.2983197220241285,
+            1.8669301242060459
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06346409284402577,
+            0.09124537607891492
+          ],
+          "diferencia_con_azar_rango95": [
+            0.0337789790195153,
+            0.09609164022930926
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 103,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.13918918918918918,
+          "precision_rango95": [
+            0.11657198699795986,
+            0.16303072737211258
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.2414584390493761,
+          "veces_azar_rango95": [
+            1.052497413319635,
+            1.4373916548182688
+          ],
+          "recupero": 0.060517038777908344,
+          "recupero_rango95": [
+            0.05119913581966324,
+            0.07004111278460423
+          ],
+          "diferencia_con_azar_rango95": [
+            0.0059333243604340604,
+            0.04921855011421433
+          ],
+          "lectura": "mejora"
+        },
+        "jerarquico": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14483716682121467,
+            0.20887772444807273
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.2892693376152782,
+            1.8796228602135632
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06270996640537514,
+            0.09152219711277441
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03273031031166129,
+            0.09761879498923388
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 127,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17162162162162162,
+          "precision_rango95": [
+            0.14569309002256023,
+            0.1965725703301442
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5307303083424346,
+          "veces_azar_rango95": [
+            1.2887213072290014,
+            1.7718131969053437
+          ],
+          "recupero": 0.0746180963572268,
+          "recupero_rango95": [
+            0.06284909598265763,
+            0.08701024006533707
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03314220477876243,
+            0.08546426429651574
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 133,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17972972972972973,
+          "precision_rango95": [
+            0.15287274037712326,
+            0.20723887669360797
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.6030482756656994,
+          "veces_azar_rango95": [
+            1.3436199912227424,
+            1.871593449526785
+          ],
+          "recupero": 0.0781433607520564,
+          "recupero_rango95": [
+            0.06534703924051252,
+            0.09129744014983299
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03937948150423721,
+            0.09544791388104794
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            0.009960317460317461,
+            0.06676328070226686
+          ],
+          "jerarquico": [
+            -0.02442940927077445,
+            0.023741473524748095
+          ],
+          "conjunto_catboost": [
+            -0.020202360532549212,
+            0.03244074331874049
+          ],
+          "rf_atributos": [
+            -0.03571684404420794,
+            0.03034620557086368
+          ]
+        }
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 44,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19555555555555557,
+          "precision_rango95": [
+            0.14814814814814814,
+            0.24597618385507702
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.226073616571662,
+          "veces_azar_rango95": [
+            1.7167773291753523,
+            2.737731289605636
+          ],
+          "recupero": 0.10784313725490197,
+          "recupero_rango95": [
+            0.08311688311688312,
+            0.13228520728520723
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06275707703707743,
+            0.15530234018132802
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 42,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18666666666666668,
+          "precision_rango95": [
+            0.13692152461283813,
+            0.23577427519558214
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.124888452182041,
+          "veces_azar_rango95": [
+            1.6016705918621053,
+            2.629843121349158
+          ],
+          "recupero": 0.10294117647058823,
+          "recupero_rango95": [
+            0.07727966271185348,
+            0.12784256078224102
+          ],
+          "diferencia_con_azar_rango95": [
+            0.051866876034183204,
+            0.14499099745449892
+          ],
+          "lectura": "mejora"
+        },
+        "jerarquico": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 41,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18222222222222223,
+          "precision_rango95": [
+            0.13478260869565217,
+            0.23113334347737877
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.0742958699872305,
+          "veces_azar_rango95": [
+            1.5424079981354917,
+            2.5932707117352023
+          ],
+          "recupero": 0.10049019607843138,
+          "recupero_rango95": [
+            0.07454867780440674,
+            0.12531361039674904
+          ],
+          "diferencia_con_azar_rango95": [
+            0.04725347980840735,
+            0.1411027178143025
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 38,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.1688888888888889,
+          "precision_rango95": [
+            0.11109972677595628,
+            0.22869955156950672
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 1.9225181234027988,
+          "veces_azar_rango95": [
+            1.2867893066257725,
+            2.5569286047283537
+          ],
+          "recupero": 0.09313725490196079,
+          "recupero_rango95": [
+            0.06264309034699951,
+            0.12427965728705141
+          ],
+          "diferencia_con_azar_rango95": [
+            0.02519598121532431,
+            0.13888456501638818
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 46,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.1522383027284988,
+            0.25471698113207547
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "veces_azar_rango95": [
+            1.7920081145725308,
+            2.860496602847134
+          ],
+          "recupero": 0.11274509803921569,
+          "recupero_rango95": [
+            0.08644787700473058,
+            0.13917525773195877
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06760040789033675,
+            0.16370321040068295
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            -0.02752610662495244,
+            0.04000806451612899
+          ],
+          "jerarquico": [
+            0.0,
+            0.029411764705882353
+          ],
+          "conjunto_catboost": [
+            0.009614234449760766,
+            0.043668122270742356
+          ],
+          "rf_atributos": [
+            -0.04846351019453433,
+            0.024390243902439025
+          ]
+        }
+      }
+    },
+    {
+      "semilla": 5,
+      "seleccion": {
+        "mezcla": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 129,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17432432432432432,
+          "precision_rango95": [
+            0.14445925637261237,
+            0.20661374836254748
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5548362974501895,
+          "veces_azar_rango95": [
+            1.28615050181951,
+            1.845477677154144
+          ],
+          "recupero": 0.07579318448883667,
+          "recupero_rango95": [
+            0.062428374373964965,
+            0.0902539656492725
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03251496728277523,
+            0.09439759094349368
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 92,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.12432432432432433,
+          "precision_rango95": [
+            0.10108750359505321,
+            0.14958981461751542
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.1088754989567244,
+          "veces_azar_rango95": [
+            0.9093521495565808,
+            1.3158335911175232
+          ],
+          "recupero": 0.05405405405405406,
+          "recupero_rango95": [
+            0.04423746731510595,
+            0.06422018348623854
+          ],
+          "diferencia_con_azar_rango95": [
+            -0.00984870482311524,
+            0.035521566754198236
+          ],
+          "lectura": "inconcluso"
+        },
+        "jerarquico": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 131,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17702702702702702,
+          "precision_rango95": [
+            0.14483716682121467,
+            0.20887772444807273
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.5789422865579446,
+          "veces_azar_rango95": [
+            1.2892693376152782,
+            1.8796228602135632
+          ],
+          "recupero": 0.07696827262044653,
+          "recupero_rango95": [
+            0.06270996640537514,
+            0.09152219711277441
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03273031031166129,
+            0.09761879498923388
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 133,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.17972972972972973,
+          "precision_rango95": [
+            0.15246486894798686,
+            0.20839308578745197
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.6030482756656994,
+          "veces_azar_rango95": [
+            1.3488611400581685,
+            1.8760576669117834
+          ],
+          "recupero": 0.0781433607520564,
+          "recupero_rango95": [
+            0.06554055068594428,
+            0.09208308895405669
+          ],
+          "diferencia_con_azar_rango95": [
+            0.03955185341067975,
+            0.09681941163214573
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 67,
+          "vins": 15279,
+          "elegidos": 740,
+          "calibrada_elegidas": 135,
+          "calibrada_tramo": 1702,
+          "precision_cupo": 0.18243243243243243,
+          "precision_rango95": [
+            0.15599696169088506,
+            0.2097008840129738
+          ],
+          "azar_mismo_cupo": 0.11211747796871133,
+          "veces_azar": 1.6271542647734543,
+          "veces_azar_rango95": [
+            1.3812687053781092,
+            1.887718756468579
+          ],
+          "recupero": 0.07931844888366628,
+          "recupero_rango95": [
+            0.06696099813062936,
+            0.09213114323795411
+          ],
+          "diferencia_con_azar_rango95": [
+            0.04304566720616707,
+            0.09775246870832358
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            0.018567482800485636,
+            0.08096964476034103
+          ],
+          "jerarquico": [
+            -0.02008864176599964,
+            0.015784199858805296
+          ],
+          "conjunto_catboost": [
+            -0.03291552175651792,
+            0.02426997641071291
+          ],
+          "rf_atributos": [
+            -0.03767021950252407,
+            0.023985899914687792
+          ]
+        }
+      },
+      "confirmacion": {
+        "mezcla": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 45,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.2,
+          "precision_rango95": [
+            0.14977855779877028,
+            0.2510822510822511
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.2766661987664722,
+          "veces_azar_rango95": [
+            1.7613543324696463,
+            2.7790166412691533
+          ],
+          "recupero": 0.11029411764705882,
+          "recupero_rango95": [
+            0.08465506715506715,
+            0.13529560308972072
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06493272669096284,
+            0.16004847520886697
+          ],
+          "lectura": "mejora"
+        },
+        "stacking": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 44,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.19555555555555557,
+          "precision_rango95": [
+            0.14285714285714285,
+            0.24870824478880635
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.226073616571662,
+          "veces_azar_rango95": [
+            1.6903231984683365,
+            2.751433977657862
+          ],
+          "recupero": 0.10784313725490197,
+          "recupero_rango95": [
+            0.08142603375494624,
+            0.13390607101947308
+          ],
+          "diferencia_con_azar_rango95": [
+            0.05759394346904328,
+            0.15572832360755332
+          ],
+          "lectura": "mejora"
+        },
+        "jerarquico": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 41,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.18222222222222223,
+          "precision_rango95": [
+            0.13478260869565217,
+            0.23113334347737877
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.0742958699872305,
+          "veces_azar_rango95": [
+            1.5424079981354917,
+            2.5932707117352023
+          ],
+          "recupero": 0.10049019607843138,
+          "recupero_rango95": [
+            0.07454867780440674,
+            0.12531361039674904
+          ],
+          "diferencia_con_azar_rango95": [
+            0.04725347980840735,
+            0.1411027178143025
+          ],
+          "lectura": "mejora"
+        },
+        "conjunto_catboost": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 40,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.17777777777777778,
+          "precision_rango95": [
+            0.13041659086774604,
+            0.22944292549555706
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.02370328779242,
+          "veces_azar_rango95": [
+            1.5185306685120599,
+            2.5620041015124166
+          ],
+          "recupero": 0.09803921568627451,
+          "recupero_rango95": [
+            0.07387176379197193,
+            0.12410583491070692
+          ],
+          "diferencia_con_azar_rango95": [
+            0.044515457284944104,
+            0.13888502269974717
+          ],
+          "lectura": "mejora"
+        },
+        "rf_atributos": {
+          "dias": 19,
+          "vins": 4626,
+          "elegidos": 225,
+          "calibrada_elegidas": 46,
+          "calibrada_tramo": 408,
+          "precision_cupo": 0.20444444444444446,
+          "precision_rango95": [
+            0.1522383027284988,
+            0.25471698113207547
+          ],
+          "azar_mismo_cupo": 0.08784774865474905,
+          "veces_azar": 2.327258780961283,
+          "veces_azar_rango95": [
+            1.7920081145725308,
+            2.860496602847134
+          ],
+          "recupero": 0.11274509803921569,
+          "recupero_rango95": [
+            0.08644787700473058,
+            0.13917525773195877
+          ],
+          "diferencia_con_azar_rango95": [
+            0.06760040789033675,
+            0.16370321040068295
+          ],
+          "lectura": "mejora"
+        },
+        "diferencias_mezcla": {
+          "stacking": [
+            -0.023714021500404574,
+            0.02871506830316895
+          ],
+          "jerarquico": [
+            -0.004762474367737526,
+            0.0502092050209205
+          ],
+          "conjunto_catboost": [
+            0.0,
+            0.04629922644163149
+          ],
+          "rf_atributos": [
+            -0.04092263306641545,
+            0.02252507031918795
+          ]
+        }
+      }
+    }
+  ]
+}

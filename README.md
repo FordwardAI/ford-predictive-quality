@@ -6,6 +6,14 @@ El [mapa de decisiones](https://github.com/FordwardAI/ford-predictive-quality/is
 
 [Plan de acción](docs/plan-de-accion.md) · [Mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) · [Tablero del proyecto](https://github.com/orgs/FordwardAI/projects/1) · [Vocabulario](CONTEXT.md) · [Alcance de entrega](docs/alcance-entrega.md)
 
+## Estudio de alternativas
+
+El [estudio comparativo de modelos, columnas y ensembles](research/busqueda-amplia.md) reúne el objetivo,
+el protocolo temporal, los números relevantes, dos gráficos y la recomendación provisional para elegir candidatos.
+El [anexo completo](research/anexo-busqueda.md) lista los 238 pipelines, las 37 columnas adicionales y la
+cobertura de las 458.098 configuraciones. Todo usa períodos ya explorados, Día <195, de la base ficticia;
+es evidencia exploratoria y no reemplaza la solución acordada ni la prueba final.
+
 ## Trabajo en equipo
 
 Consultar [CONTRIBUTING.md](CONTRIBUTING.md) para nombres de ramas, mensajes de commit y títulos de PR.

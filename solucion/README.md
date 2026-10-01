@@ -25,10 +25,37 @@ Los datos quedan fuera del repo y se pasan por argumento. El código verifica su
 - `--piezas preparacion,p3,p4,eleccion,p6,p5,p8,p9` corre un subconjunto, en ese orden de dependencias.
 - `--piezas precision` corre la elección por mayor precisión en origen móvil (opcional, unos 30 minutos; no entra en el
   comando por defecto). Escribe `solucion/resultados/precision.json` y usa solo Día < 195.
+- `--piezas ensemble` compara CatBoost con atributos y la tasa móvil suavizada hacia mercado, solos y mezclados
+  (pesos 25/50/75 %, ventanas 30/60/120 días). Elige en 100–174 y comprueba en 175–194, ya visto: exploratorio.
+  Escribe `solucion/resultados/ensemble.json`; no modifica el preregistro ni lee la prueba final.
+- `--piezas busqueda` amplía los individuales, columnas y datos sintéticos de entrenamiento; prueba parejas,
+  conjuntos de familias, pesos discretos/continuos, mediana, rangos y stacking temporal. Usa Día <195 y
+  predicciones previas de 70–94 para arrancar el meta-modelo. Guarda predicciones solo en la caché externa y
+  publica agregados en `solucion/resultados/busqueda.json`. Es exploratorio y no modifica el preregistro.
+- `--piezas semillas_busqueda` comprueba con semillas 1–5 la mezcla de catálogo elegida, con pesos
+  congelados: 60 % stacking fijo + 40 % jerárquico 60 días, peso 20. Compara sus componentes,
+  CatBoost conjunto y RF con atributos; escribe `solucion/resultados/semillas_busqueda.json`.
 - `--cache` (por defecto `~/.cache/ford-predictive-quality`) guarda la tabla por VIN ya enmascarada, fuera del repo.
 - `--salida` (por defecto `~/.cache/ford-predictive-quality/salida`) recibe la hoja de códigos prioritarios, que tiene tasas por código y no se versiona.
 
 Cada pieza escribe `solucion/resultados/<pieza>.json`: solo agregados por alternativa y por día, sin VIN ni tasas por código.
+
+La revisión de catálogo y elección adaptativa reutiliza la caché de predicciones de `busqueda`, sin entrenar
+ni releer la prueba final. Usar únicamente la caché local propia (pickle no es un formato seguro para archivos externos):
+
+```sh
+.venv/bin/python -m solucion.robustez_busqueda \
+  --predicciones '<cache>/busqueda-<hash>.pickle' \
+  --salida solucion/resultados/robustez_busqueda.json
+```
+
+Cobertura, resultados y límites de estos experimentos en [búsqueda amplia](../research/busqueda-amplia.md).
+El [anexo completo](../research/anexo-busqueda.md) presenta todos los pipelines y columnas. Para regenerar
+el anexo y las figuras desde los agregados publicados, sin entrenar ni abrir el dataset:
+
+```sh
+MPLCONFIGDIR='<carpeta temporal>' .venv/bin/python research/documentar_busqueda.py
+```
 
 ## Segunda lectura de la prueba final (propuesta)
 
