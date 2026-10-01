@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="il-proceso-titulo il-proceso-desc">
+  <title id="il-proceso-titulo">Dónde entra la hoja de códigos prioritarios</title>
+  <desc id="il-proceso-desc">Proceso Body, Pintura, Montaje, Calidad, Gate Release, Playa de despacho y Auditoría Adicional. La hoja de códigos prioritarios entra en la playa de despacho, donde el equipo de analistas elige las unidades en rondas de unas dos horas leyendo el código en la etiqueta del parabrisas, con el cupo diario que fija Calidad de Planta. El resultado de la auditoría vuelve a QLS y entra al recálculo con Día ≤ t−5.</desc>
+  <!-- Ilustración a mano (sin datos). Contenido: solucion/figuras.py, diagrama_proceso.
+       Colores por variables CSS «figura-…»; los valores de respaldo son el tema oscuro Twilight. -->
+  <style>
+    .il-fondo { fill: var(--figura-fondo, #00142E); }
+    .il-t { fill: var(--figura-texto, #FFFFFF); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); }
+    .il-tenue { fill: var(--figura-tenue, rgba(255, 255, 255, .72)); }
+    .il-caja { fill: var(--figura-caja, rgba(255, 255, 255, .06)); stroke: var(--figura-borde, rgba(255, 255, 255, .24)); stroke-width: 1.5; }
+    .il-caja-acento { fill: var(--figura-acento-suave, rgba(6, 111, 239, .28)); stroke: var(--figura-acento, #066FEF); stroke-width: 2.5; }
+    .il-icono { fill: none; stroke: var(--figura-texto, #FFFFFF); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .il-icono-acento { stroke: var(--figura-acento, #066FEF); }
+    .il-trazo { fill: none; stroke: var(--figura-tenue, rgba(255, 255, 255, .72)); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .il-trazo-acento { fill: none; stroke: var(--figura-acento, #066FEF); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .il-punta { fill: var(--figura-tenue, rgba(255, 255, 255, .72)); }
+    .il-punta-acento { fill: var(--figura-acento, #066FEF); }
+    .il-guion { stroke-dasharray: 6 6; }
+  </style>
+  <defs>
+    <marker id="il-proceso-flecha" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="il-punta" d="M0 0L10 5L0 10z"/>
+    </marker>
+    <marker id="il-proceso-flecha-acento" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path class="il-punta-acento" d="M0 0L10 5L0 10z"/>
+    </marker>
+  </defs>
+
+  <rect class="il-fondo" width="1200" height="675"/>
+
+  <text class="il-t" x="48" y="62" font-size="30" font-weight="500">Dónde entra la hoja de códigos prioritarios</text>
+  <text class="il-t il-tenue" x="48" y="94" font-size="18">Proceso de la planta (ficha técnica) y operación de selección informada por Ford el 29/09</text>
+
+  <!-- La hoja, sobre la playa de despacho -->
+  <g class="fila" style="--i:7">
+    <rect class="il-caja-acento" x="660" y="124" width="380" height="96" rx="14"/>
+    <path class="il-icono il-icono-acento" d="M684 146h22l8 8v40h-30z M706 146v8h8 M690 166h18 M690 176h18 M690 186h12"/>
+    <text class="il-t" x="732" y="160" font-size="20" font-weight="600">Hoja de códigos prioritarios</text>
+    <text class="il-t il-tenue" x="732" y="185" font-size="15">al inicio del día, con el programa del día</text>
+    <text class="il-t il-tenue" x="732" y="205" font-size="15">y el cupo diario de Calidad de Planta</text>
+    <path class="il-trazo-acento" d="M920 220V280" marker-end="url(#il-proceso-flecha-acento)"/>
+  </g>
+
+  <!-- Estaciones: x0 = 50, ancho 140, separación 20 -->
+  <g class="fila" style="--i:0">
+    <rect class="il-caja" x="50" y="290" width="140" height="150" rx="14"/>
+    <path class="il-icono" transform="translate(100 306)" d="M2 28V20l8-9h17l9 9h3v8z M10 11l-2 9 M27 11l2 9 M2 20h37"/>
+    <text class="il-t" x="120" y="380" font-size="20" font-weight="600" text-anchor="middle">Body</text>
+  </g>
+  <path class="il-trazo" d="M194 365h12" marker-end="url(#il-proceso-flecha)"/>
+
+  <g class="fila" style="--i:1">
+    <rect class="il-caja" x="210" y="290" width="140" height="150" rx="14"/>
+    <path class="il-icono" transform="translate(260 304)" d="M20 4c6 9 11 15 11 21a11 11 0 0 1-22 0c0-6 5-12 11-21z M15 27a5 5 0 0 0 5 5"/>
+    <text class="il-t" x="280" y="380" font-size="20" font-weight="600" text-anchor="middle">Pintura</text>
+  </g>
+  <path class="il-trazo" d="M354 365h12" marker-end="url(#il-proceso-flecha)"/>
+
+  <g class="fila" style="--i:2">
+    <rect class="il-caja" x="370" y="290" width="140" height="150" rx="14"/>
+    <path class="il-icono" transform="translate(420 304)" d="M28 6a8 8 0 0 0-9 10L6 29a3.5 3.5 0 0 0 5 5l13-13a8 8 0 0 0 10-9l-5 5-5-1-1-5z"/>
+    <text class="il-t" x="440" y="380" font-size="20" font-weight="600" text-anchor="middle">Montaje</text>
+  </g>
+  <path class="il-trazo" d="M514 365h12" marker-end="url(#il-proceso-flecha)"/>
+
+  <g class="fila" style="--i:3">
+    <rect class="il-caja" x="530" y="290" width="140" height="150" rx="14"/>
+    <path class="il-icono" transform="translate(580 304)" d="M9 7h22v29H9z M15 4h10v6H15z M14 23l5 5 8-9"/>
+    <text class="il-t" x="600" y="380" font-size="20" font-weight="600" text-anchor="middle">Calidad</text>
+    <text class="il-t il-tenue" x="600" y="406" font-size="14" text-anchor="middle">verificación</text>
+    <text class="il-t il-tenue" x="600" y="424" font-size="14" text-anchor="middle">de calidad</text>
+  </g>
+  <path class="il-trazo" d="M674 365h12" marker-end="url(#il-proceso-flecha)"/>
+
+  <g class="fila" style="--i:4">
+    <rect class="il-caja" x="690" y="290" width="140" height="150" rx="14"/>
+    <path class="il-icono" transform="translate(740 304)" d="M8 36V8 M3 36h10 M8 14h30v8H8 M16 14l-6 8 M24 14l-6 8 M32 14l-6 8"/>
+    <text class="il-t" x="760" y="376" font-size="20" font-weight="600" text-anchor="middle">Gate</text>
+    <text class="il-t" x="760" y="400" font-size="20" font-weight="600" text-anchor="middle">Release</text>
+  </g>
+  <path class="il-trazo" d="M834 365h12" marker-end="url(#il-proceso-flecha)"/>
+
+  <g class="fila" style="--i:5">
+    <rect class="il-caja-acento" x="850" y="290" width="140" height="150" rx="14"/>
+    <path class="il-icono il-icono-acento" transform="translate(900 304)" d="M2 4v32 M20 4v32 M38 4v32 M6 9h10v10H6z M24 9h10v10H24z M6 23h10v10H6z"/>
+    <text class="il-t" x="920" y="376" font-size="20" font-weight="600" text-anchor="middle">Playa de</text>
+    <text class="il-t" x="920" y="400" font-size="20" font-weight="600" text-anchor="middle">despacho</text>
+    <text class="il-t il-tenue" x="920" y="419" font-size="13" text-anchor="middle">selección de</text>
+    <text class="il-t il-tenue" x="920" y="434" font-size="13" text-anchor="middle">unidades</text>
+  </g>
+  <path class="il-trazo" d="M994 365h12" marker-end="url(#il-proceso-flecha)"/>
+
+  <g class="fila" style="--i:6">
+    <rect class="il-caja" x="1010" y="290" width="140" height="150" rx="14"/>
+    <path class="il-icono" transform="translate(1060 304)" d="M17 5a12 12 0 1 1 0 24a12 12 0 0 1 0-24z M26 26l10 10"/>
+    <text class="il-t" x="1080" y="376" font-size="20" font-weight="600" text-anchor="middle">Auditoría</text>
+    <text class="il-t" x="1080" y="400" font-size="20" font-weight="600" text-anchor="middle">Adicional</text>
+    <text class="il-t il-tenue" x="1080" y="424" font-size="14" text-anchor="middle">OK o CALIBRADA</text>
+  </g>
+
+  <!-- El resultado vuelve a QLS -->
+  <g class="fila" style="--i:8">
+    <path class="il-trazo il-guion" d="M1080 290V172H1048" marker-end="url(#il-proceso-flecha)"/>
+    <path class="il-trazo" d="M1080 440V468"/>
+    <text class="il-t" x="1170" y="492" font-size="16" font-weight="600" text-anchor="end">Resultado a QLS:</text>
+    <text class="il-t il-tenue" x="1170" y="516" font-size="16" text-anchor="end">entra al recálculo</text>
+    <text class="il-t il-tenue" x="1170" y="540" font-size="16" text-anchor="end">con Día ≤ t−5</text>
+  </g>
+
+  <!-- Operación en la playa -->
+  <g class="fila" style="--i:9">
+    <path class="il-trazo" d="M920 440V468"/>
+    <text class="il-t" x="990" y="492" font-size="16" text-anchor="end">Equipo de analistas, en rondas de ~2 h</text>
+    <text class="il-t il-tenue" x="990" y="516" font-size="16" text-anchor="end">Lee el código de catálogo en la etiqueta del parabrisas</text>
+    <text class="il-t il-tenue" x="990" y="540" font-size="16" text-anchor="end">Hoy: 5 % al azar. Con la hoja: por código prioritario</text>
+  </g>
+
+  <text class="il-t il-tenue" x="48" y="628" font-size="16">La herramienta predictiva no cambia el proceso ni el cupo: cambia qué unidades se eligen para la Auditoría Adicional después de Gate Release.</text>
+</svg>
