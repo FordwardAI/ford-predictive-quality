@@ -7,7 +7,7 @@ Experimento autorizado por Facundo el 30/09/2026, seguido en [#33](https://githu
 - CSV vigente: SHA-256 `a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b`.
 - Catálogo vigente: SHA-256 `89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047`.
 - Unidad VIN; población principal acordada, entre auditados con actividad QLS, base ficticia. Se conserva la exclusión acordada de la cohorte cuya primera inspección es posterior a DIA_260; no se agregan filtros ni deduplicación.
-- [Código](../solucion/ensemble.py), [resultados agregados](../solucion/resultados/ensemble.json). Entorno fijado en `requirements.txt`; versiones efectivas y versión del código en los resultados.
+- [Código](../solucion/experimentos/ensemble.py), [resultados agregados](../solucion/experimentos/resultados/ensemble.json). Entorno fijado en `requirements.txt`; versiones efectivas y versión del código en los resultados.
 
 Desde la raíz, sin rutas personales en el código:
 

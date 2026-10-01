@@ -4,11 +4,11 @@ import platform
 import catboost
 import numpy as np
 
-from . import ml
-from .cupo import diferencia, elegir_por_precision, fuente_completa, metricas, remuestreos, resultado, simular
-from .precision import BLOQUES_SELECCION, CONFIRMACION, _precision, _unir
-from .puntaje import Puntaje, atributos_de
-from .referencias import MovilMercado, PESO, VENTANAS
+from .. import ml
+from ..cupo import diferencia, elegir_por_precision, fuente_completa, metricas, remuestreos, resultado, simular
+from ..precision import BLOQUES_SELECCION, CONFIRMACION, _precision, _unir
+from ..puntaje import Puntaje, atributos_de
+from ..referencias import MovilMercado, PESO, VENTANAS
 
 PESOS_CATBOOST = (0.25, 0.5, 0.75)
 

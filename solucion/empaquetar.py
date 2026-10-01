@@ -17,8 +17,9 @@ from pathlib import Path
 
 from solucion.datos import RAIZ
 
-PREFIJOS = {"solucion/": None, "research/": {".py", ".json"}}  # Prefijo versionado -> extensiones admitidas (None: todas).
-RAIZ_INCLUIDA = {"requirements.txt", ".python-version"}
+PREFIJOS = {"solucion/": None, "research/": {".py", ".json", ".md", ".png", ".svg"},
+            "docs/": {".md", ".png", ".svg"}}
+RAIZ_INCLUIDA = {"requirements.txt", ".python-version", "README.md", "AGENTS.md", "CLAUDE.md", "CONTEXT.md", "CONTRIBUTING.md"}
 EXCLUIDOS = ("/__pycache__/", "/.venv/", "prototipos/")
 DATOS_CRUDOS = {".csv", ".xlsx", ".xls", ".pickle", ".pkl", ".parquet"}
 CARPETA_HOJA, CARPETA_ANEXOS = "hoja/", "anexos/"
@@ -44,15 +45,20 @@ catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: hay que ten
    .venv/bin/python -m solucion.run --csv "/ruta/Dataset QLS Inspección Adicional.csv" \\
      --catalogo "/ruta/Códigos de catálogo.csv" --salida ../salida
    ```
-4. Comparar `solucion/resultados/*.json` (incluidos acá) con los recién escritos. Coinciden `preparacion`, `p3`, `p5`,
+4. Comparar solo los resultados del comando por defecto en `solucion/resultados/` con los recién escritos. Coinciden `preparacion`, `p3`, `p5`,
    `p8` y `p9` salvo nombres de archivo y `version_codigo`; en `p4` y `eleccion` (modelos de ML) y en `p6` puede variar
    la 3.ª cifra decimal o la semilla mediana según la plataforma, sin cambiar la alternativa ganadora.
 
-5. **La prueba final no se vuelve a correr.** Fue una corrida única, con el preregistro acordado (`solucion/preregistro.json`);
-   su registro agregado está en `solucion/resultados/prueba-final.json`. Reproducir E1 a E3 es recalcular la validación y
-   regenerar la hoja (pasos 3 y 4); las cifras de la prueba final se leen de ese registro.
+5. **La prueba final no se vuelve a correr.** Las dos lecturas del 30/09 (tasa fija y CatBoost con atributos)
+   tienen sus preregistros en `solucion/preregistro.json` y `solucion/preregistro-precision.json`.
+   Su registro agregado está en `solucion/resultados/prueba-final.json`. El comando regenera validación y
+   la hoja de desarrollo del Día 190; las cifras finales se leen del registro y la hoja final incluida se conserva.
 
-Contenido: `solucion/` (código y pruebas), `research/` (auditoría y particiones), `solucion/resultados/` (solo
+Los experimentos opcionales y sus agregados están en `solucion/experimentos/`:
+ver [sus comandos y límites](solucion/experimentos/README.md). No son la solución acordada ni corren por defecto.
+Sus informes están en `research/`; los borradores de entrega y fuentes, en `docs/`.
+
+Contenido: `solucion/` (código y pruebas), `research/` (auditoría, particiones e informes), `docs/` (documentación), `solucion/resultados/` (solo
 agregados), `{hoja}` (hoja de códigos prioritarios, sin VIN) y `{anexos}` (material de apoyo).
 Todas las cifras valen entre auditados con actividad QLS, base ficticia.
 """

@@ -39,4 +39,23 @@ def test_lo_versionado_incluye_codigo_y_excluye_datos_y_prototipo():
         return  # Dentro del .zip de reproducción no hay repositorio.
     archivos = empaquetar.archivos_versionados()
     assert "solucion/run.py" in archivos and "requirements.txt" in archivos and ".python-version" in archivos
-    assert not [a for a in archivos if a.startswith(("prototipos/", "docs/")) or a.endswith((".csv", ".xlsx"))]
+    assert not [a for a in archivos if a.startswith("prototipos/") or a.endswith((".csv", ".xlsx"))]
+    assert {"docs/datos-locales.md", "solucion/experimentos/README.md", "research/busqueda-amplia.md",
+            "solucion/experimentos/resultados/busqueda.json", "solucion/preregistro.json",
+            "solucion/preregistro-precision.json", "solucion/resultados/prueba-final.json"} <= set(archivos)
+
+
+def test_comando_separa_salidas_y_no_corre_experimentos_por_defecto():
+    import importlib
+    from unittest.mock import patch
+    from solucion import run
+
+    for pieza, modulo in run.PIEZAS.items():
+        assert importlib.import_module(modulo)
+        if modulo.startswith("solucion.experimentos."):
+            assert pieza in run.OPCIONALES
+    with tempfile.TemporaryDirectory() as d, patch.object(run, "RESULTADOS", Path(d) / "principal"), \
+         patch.object(run, "RESULTADOS_EXPERIMENTALES", Path(d) / "experimentos"):
+        assert run.guardar("p3", {"sintetico": True}).parent.name == "principal"
+        assert run.guardar("precision", {"sintetico": True}).parent.name == "principal"
+        assert run.guardar("busqueda", {"sintetico": True}).parent.name == "experimentos"

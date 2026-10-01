@@ -145,7 +145,7 @@ Evalúa lo que piden la ficha y el resumen del challenge (historial de incidenci
 Se reabrió el historial con siete modelos (incluidos MIL con atención y un ranker por día), cada uno contra su par sin historial, en los bloques de tiempo de la sección anterior y con dos supuestos de disponibilidad (todos los eventos, o solo los de hasta 5 días antes). **Ninguno aporta**: los rangos del 95 % de la diferencia con el par incluyen 0 y el AUC queda en 0,53–0,54 con o sin historial. Con el supuesto conservador el 89–95 % de los VIN no tiene eventos disponibles. Evaluado en validación; prueba final no releída; disponibilidad no verificada ([informe][hvin]; [`historial_vin.json`][hvinj]).
 
 [hvin]: ../../research/historial-vin.md
-[hvinj]: ../../solucion/resultados/historial_vin.json
+[hvinj]: ../../solucion/experimentos/resultados/historial_vin.json
 
 | Configuración | CALIBRADA / elegidos | Precisión en el cupo (rango 95 %) | Lectura frente al azar | Frente a la tasa fija |
 | --- | ---: | ---: | --- | --- |

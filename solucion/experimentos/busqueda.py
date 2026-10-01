@@ -11,13 +11,14 @@ from scipy.stats import rankdata
 from sklearn.linear_model import LogisticRegression
 from threadpoolctl import threadpool_limits
 
-from . import columnas, ml
-from .cupo import (SEMILLA_DESEMPATE, cupo, diario, diferencia, fuente_completa, metricas, remuestreos,
+from . import columnas
+from .. import ml
+from ..cupo import (SEMILLA_DESEMPATE, cupo, diario, diferencia, fuente_completa, metricas, remuestreos,
                   seleccionar, version_codigo)
-from .datos import MARGEN
+from ..datos import MARGEN
 from .historial_vin import MODELOS, ModeloVin
-from .precision import BLOQUES_SELECCION, CONFIRMACION, grupos_del_bloque
-from .puntaje import Contexto, atributos_de, semilla_dia
+from ..precision import BLOQUES_SELECCION, CONFIRMACION, grupos_del_bloque
+from ..puntaje import Contexto, atributos_de, semilla_dia
 
 CALIBRACION = (70, 94)
 PESOS_PARES = tuple(i / 10 for i in range(1, 10))
@@ -59,8 +60,10 @@ def recoger(tabla, opciones, semilla=1):
     assert not tabla.desbloqueada
     columnas_csv, eventos = columnas.leer_eventos(opciones.csv, tabla)
     huella = hashlib.sha256()
+    carpeta = Path(__file__).parent
     for modulo in ("busqueda", "columnas", "ml", "historial_vin", "datos", "referencias", "puntaje"):
-        huella.update(Path(__file__).with_name(modulo + ".py").read_bytes())
+        base = carpeta if modulo in ("busqueda", "columnas", "historial_vin") else carpeta.parent
+        huella.update((base / f"{modulo}.py").read_bytes())
     huella.update(repr((tabla.fuente, semilla, CALIBRACION, BLOQUES_SELECCION, CONFIRMACION)).encode())
     cache = Path(opciones.cache) / f"busqueda-{huella.hexdigest()[:16]}.pickle"
     if cache.exists():

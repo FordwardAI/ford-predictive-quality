@@ -10,12 +10,13 @@ import scipy.sparse as sp
 from scipy.optimize import minimize
 from scipy.special import expit, logit
 
-from . import columnas, ml
-from .cupo import fuente_completa, version_codigo
-from .datos import cargar
-from .precision import BLOQUES_SELECCION, CONFIRMACION
-from .puntaje import Contexto, atributos_de
-from .referencias import Jerarquico, TasaFija
+from . import columnas
+from .. import ml
+from ..cupo import fuente_completa, version_codigo
+from ..datos import cargar
+from ..precision import BLOQUES_SELECCION, CONFIRMACION
+from ..puntaje import Contexto, atributos_de
+from ..referencias import Jerarquico, TasaFija
 from .sensibilidad_proceso import ESCENARIOS, GRUPOS, SEMILLAS, evaluar_predicciones, generar, particiones, resumir
 
 MODELOS = ("rf_atributos", "conjunto_catboost", "stacking", "mezcla", "jerarquico", "tasa_fija")
@@ -156,7 +157,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--csv", required=True)
     parser.add_argument("--catalogo", required=True)
-    parser.add_argument("--historico", default="solucion/resultados/semillas_busqueda.json")
+    parser.add_argument("--historico", default="solucion/experimentos/resultados/semillas_busqueda.json")
     parser.add_argument("--salida", required=True)
     args = parser.parse_args()
     historico = json.loads(Path(args.historico).read_text())

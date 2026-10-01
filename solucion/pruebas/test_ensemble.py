@@ -1,5 +1,5 @@
 """La mezcla conserva los extremos, cambia el orden con el peso y respeta el margen temporal."""
-from solucion.ensemble import Mezcla, correr
+from solucion.experimentos.ensemble import Mezcla, correr
 from solucion.puntaje import Contexto, Fuente
 from solucion.pruebas.sintetico import tabla
 from solucion.referencias import MovilMercado, TasaFija
@@ -36,7 +36,7 @@ def test_mezcla_y_margen_temporal():
 def test_experimento_sintetico_completo():
     import json
     from unittest.mock import patch
-    from solucion import ensemble
+    from solucion.experimentos import ensemble
     t = tabla(dias=range(1, 51), por_dia=40)
     with patch.object(ensemble, "BLOQUES_SELECCION", ((40, 44),)), \
          patch.object(ensemble, "CONFIRMACION", (45, 49)), \

@@ -2,10 +2,27 @@
 import numpy as np
 import scipy.sparse as sp
 
-from solucion import busqueda, columnas
+from solucion.experimentos import busqueda, columnas
 from solucion.puntaje import semilla_dia
 from solucion.cupo import SEMILLA_DESEMPATE, seleccionar
 from solucion.pruebas.sintetico import tabla
+
+
+def test_cache_de_busqueda_resuelve_los_modulos_reubicados():
+    import pickle
+    import tempfile
+    import types
+    from pathlib import Path
+    from unittest.mock import patch
+
+    t = tabla(dias=range(10, 11))
+    with tempfile.TemporaryDirectory() as d:
+        Path(d, "busqueda-sintetico.pickle").write_bytes(pickle.dumps({"terminado": True}))
+        with patch.object(columnas, "leer_eventos", return_value=([], {})), \
+             patch.object(busqueda.hashlib, "sha256") as hash_:
+            hash_.return_value.hexdigest.return_value = "sintetico"
+            assert busqueda.recoger(t, types.SimpleNamespace(csv=None, cache=d)) == {"terminado": True}
+            assert hash_.return_value.update.call_count == 8  # Siete módulos y protocolo/fuente.
 
 
 def test_vectorizacion_equivale_al_evaluador_incluso_con_empates():
@@ -68,7 +85,7 @@ def test_todas_las_columnas_politicas_y_objetivo_conjunto_sinteticos():
 
 
 def test_eleccion_adaptativa_no_mira_el_bloque_futuro_ni_el_margen():
-    from solucion.robustez_busqueda import seleccionar_en_el_pasado, solo_catalogo
+    from solucion.experimentos.robustez_busqueda import seleccionar_en_el_pasado, solo_catalogo
     dias = [{"t": 100}, {"t": 113}, {"t": 118}, {"t": 119}, {"t": 125}]
     cuentas = np.array([[2, 3, 0, 0, 0], [0, 0, 10, 10, 10]])
     resultado, decisiones = seleccionar_en_el_pasado(cuentas, dias, [0, 1], ((119, 125),))
@@ -82,7 +99,7 @@ def test_eleccion_adaptativa_no_mira_el_bloque_futuro_ni_el_margen():
 def test_semillas_evalua_vin_originales_y_entrena_con_margen():
     import types
     from unittest.mock import patch
-    from solucion import semillas_busqueda as s
+    from solucion.experimentos import semillas_busqueda as s
     t = tabla(dias=range(1, 51), por_dia=40)
     modelo = types.SimpleNamespace(parametros={}, puntuar=lambda ctx, codigos: {c: .1 for c in codigos})
     cortes = []

@@ -20,9 +20,9 @@ La pregunta operativa es qué enfoque concentra más VIN CALIBRADA dentro del cu
 | --- | --- | --- |
 | Exploraciones previas | ¿Qué señal ofrecen catálogo e historial? | [Experimentos anteriores](experimentos-modelado.md), [historial por VIN](historial-vin.md) |
 | Elección por precisión temporal | ¿Qué alternativas concentran más calibradas con atributos y origen móvil? | [Código](../solucion/precision.py), [agregados](../solucion/resultados/precision.json) |
-| Mezcla inicial | ¿CatBoost + tasa móvil mejora a sus componentes? | [Informe](ensemble-catalogo.md), [agregados](../solucion/resultados/ensemble.json) |
-| Búsqueda amplia | ¿Ayudan otros campos, objetivos, aumentación y más integrantes? | Este informe y [búsqueda](../solucion/resultados/busqueda.json) |
-| Robustez | ¿Qué queda con catálogo disponible y cinco semillas? | [Catálogo/adaptación](../solucion/resultados/robustez_busqueda.json), [semillas](../solucion/resultados/semillas_busqueda.json) |
+| Mezcla inicial | ¿CatBoost + tasa móvil mejora a sus componentes? | [Informe](ensemble-catalogo.md), [agregados](../solucion/experimentos/resultados/ensemble.json) |
+| Búsqueda amplia | ¿Ayudan otros campos, objetivos, aumentación y más integrantes? | Este informe y [búsqueda](../solucion/experimentos/resultados/busqueda.json) |
+| Robustez | ¿Qué queda con catálogo disponible y cinco semillas? | [Catálogo/adaptación](../solucion/experimentos/resultados/robustez_busqueda.json), [semillas](../solucion/experimentos/resultados/semillas_busqueda.json) |
 
 Las etapas anteriores explican la evolución del análisis, pero no se mezclan sus cifras como si pertenecieran a una corrida común. El contraste principal de este informe se recalculó en los mismos bloques. Ninguna etapa convierte períodos ya explorados en datos nuevos.
 
@@ -31,11 +31,11 @@ Las etapas anteriores explican la evolución del análisis, pero no se mezclan s
 - CSV vigente: SHA-256 `a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b`.
 - Catálogo: SHA-256 `89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047`.
 - Unidad VIN, entre auditados con actividad QLS, base ficticia. Se conservan la población y los filtros acordados, sin deduplicación nueva. La auditoría completa reconcilia 195.808 eventos y 59.681 VIN. Resultados de selección/comprobación se dan con sus propios denominadores.
-- Código: [`busqueda.py`](../solucion/busqueda.py), [`columnas.py`](../solucion/columnas.py). Entorno en `requirements.txt` y Python 3.13. Semilla primaria 1; desempate 20261002; bootstrap 20261003, 2.000 remuestreos.
+- Código: [`busqueda.py`](../solucion/experimentos/busqueda.py), [`columnas.py`](../solucion/experimentos/columnas.py). Entorno en `requirements.txt` y Python 3.13. Semilla primaria 1; desempate 20261002; bootstrap 20261003, 2.000 remuestreos.
 
 ```sh
 .venv/bin/python -m solucion.run --csv '<CSV>' --catalogo '<catálogo>' --cache '<carpeta fuera del repo>' --salida '<carpeta fuera del repo>' --piezas busqueda
-.venv/bin/python -m solucion.robustez_busqueda --predicciones '<cache>/busqueda-<hash>.pickle' --salida solucion/resultados/robustez_busqueda.json
+.venv/bin/python -m solucion.experimentos.robustez_busqueda --predicciones '<cache>/busqueda-<hash>.pickle' --salida solucion/experimentos/resultados/robustez_busqueda.json
 .venv/bin/python -m solucion.run --csv '<CSV>' --catalogo '<catálogo>' --cache '<carpeta fuera del repo>' --salida '<carpeta fuera del repo>' --piezas semillas_busqueda
 MPLCONFIGDIR='<carpeta temporal>' .venv/bin/python research/documentar_busqueda.py
 .venv/bin/python -m solucion.pruebas
@@ -205,7 +205,7 @@ La auditoría completa mantiene hashes y reconciliación de eventos/VIN; las pru
 
 La búsqueda amplia emitió siete avisos de falta de convergencia de logística (`lbfgs`, límite 2.000 iteraciones); terminó sin errores. No se atribuyen aquí a un candidato específico: la sensibilidad numérica de esos ajustes queda sin resolver. Además, el CatBoost básico local no reproduce exactamente una cifra histórica de otra corrida, como registra [el experimento previo](ensemble-catalogo.md). Las comparaciones publicadas usan controles calculados en la misma corrida; no se reemplaza esa discrepancia por una explicación inventada.
 
-Evidencia: [búsqueda principal](../solucion/resultados/busqueda.json), [catálogo y selección adaptativa](../solucion/resultados/robustez_busqueda.json), [cinco semillas](../solucion/resultados/semillas_busqueda.json).
+Evidencia: [búsqueda principal](../solucion/experimentos/resultados/busqueda.json), [catálogo y selección adaptativa](../solucion/experimentos/resultados/robustez_busqueda.json), [cinco semillas](../solucion/experimentos/resultados/semillas_busqueda.json).
 
 El [anexo](anexo-busqueda.md) permite revisar cada pipeline y los máximos por método/tamaño sin buscar dentro de un JSON. Conserva la lista completa de columnas y representantes; los ajustes por bloque, pesos y rangos quedan en los agregados enlazados. Solo se publican resultados agregados revisados, sin VIN, extractos individuales ni rutas personales.
 

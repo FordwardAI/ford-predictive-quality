@@ -9,8 +9,8 @@ from scipy.stats import rankdata
 from threadpoolctl import threadpool_limits
 
 from . import busqueda
-from .cupo import diferencia, metricas, remuestreos, version_codigo
-from .precision import BLOQUES_SELECCION, CONFIRMACION
+from ..cupo import diferencia, metricas, remuestreos, version_codigo
+from ..precision import BLOQUES_SELECCION, CONFIRMACION
 
 
 def solo_catalogo(nombre):
