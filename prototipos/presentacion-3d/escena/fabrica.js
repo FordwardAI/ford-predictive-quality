@@ -14,17 +14,33 @@ import {
 } from './materiales.js';
 import { crearGeometriaPickupSimple } from './vehiculo.js';
 
+// Playa de despacho: una grilla de pickups estacionadas AL COSTADO de la línea (del lado opuesto a la cámara),
+// entre Gate Release y el túnel de Auditoría Adicional. `z0` es la fila más cercana a la línea; las demás
+// quedan más lejos. El auto que sale de Gate Release pasa por la playa y de ahí va a la auditoría.
+// La cámara de la escena `linea` mira hacia adelante y a la derecha, y el degradado del texto oscurece la
+// izquierda: por eso la playa EMPIEZA donde se marca la estación y se extiende hacia adelante, para que
+// quede en la parte libre de la pantalla mientras el auto la recorre.
+export const PLAYA = { x0: 60, z0: -14.5, columnas: 12, filas: 5, pasoX: 2.7, pasoZ: 6.6 };
+export const CENTRO_PLAYA = new THREE.Vector3(
+  PLAYA.x0 + ((PLAYA.columnas - 1) * PLAYA.pasoX) / 2, 0, PLAYA.z0 - ((PLAYA.filas - 1) / 2) * PLAYA.pasoZ);
+
+// Posición (x) de cada estación sobre la línea, en el orden del recorrido del vehículo:
+// Carrocería → Pintura → Montaje → Gate Release → Playa de despacho → Auditoría Adicional.
 export const ESTACIONES = {
   carroceria: -36,
   pintura: -18,
   montaje: 0,
   'gate-release': 18,
-  'inspeccion-adicional': 34,
+  'playa-despacho': PLAYA.x0 - 3, // entrada de la playa; la playa se extiende hacia adelante
+  'inspeccion-adicional': 112,
 };
+// Panel de escaneo del túnel de Auditoría Adicional: ciclos por segundo de ida y vuelta, y cuánto se
+// desplazan las rayas del panel. Es lo que más tiempo está a la vista (las pantallas 01 y 10 se quedan
+// ahí un minuto), así que va lento y sin parpadeo.
+const VELOCIDAD_ESCANEO = 0.07; // un ciclo completo cada ~14 s (antes 0,22: cada ~4,5 s)
+const VELOCIDAD_RAYAS = 1.8; // rad/s del movimiento de las rayas (antes 6)
 export const INICIO_LINEA = -50;
-export const FIN_LINEA = 46;
-export const PLAYA = { x0: 52, columnas: 12, filas: 5, pasoX: 2.7, pasoZ: 6.6 };
-export const CENTRO_PLAYA = new THREE.Vector3(PLAYA.x0 + ((PLAYA.columnas - 1) * PLAYA.pasoX) / 2, 0, 0);
+export const FIN_LINEA = 126;
 
 const tmpM = new THREE.Matrix4();
 const tmpV = new THREE.Vector3();
@@ -142,9 +158,12 @@ export function crearFabrica() {
   linea.grupo.add(rodillos);
 
   // Banda emisiva en el piso a la entrada de cada estación
-  for (const x of Object.values(ESTACIONES)) {
+  for (const [id, x] of Object.entries(ESTACIONES)) {
+    if (id === 'playa-despacho') continue; // no es un recinto: se marcan los extremos de la playa, abajo
     bandas.push(caja(0.08, 0.01, 7.6, x - 3.4, 0.01, 0), caja(0.08, 0.01, 7.6, x + 3.4, 0.01, 0));
   }
+  const xPlayaIni = PLAYA.x0 - PLAYA.pasoX / 2, xPlayaFin = PLAYA.x0 + (PLAYA.columnas - 0.5) * PLAYA.pasoX;
+  bandas.push(caja(0.08, 0.01, 7.6, xPlayaIni, 0.01, 0), caja(0.08, 0.01, 7.6, xPlayaFin, 0.01, 0));
 
   // ----- 1. Carrocería: pórtico + robots articulados + chispas -----
   const xC = ESTACIONES.carroceria;
@@ -349,7 +368,7 @@ export function crearFabrica() {
     fragmentShader: /* glsl */ `
       uniform float uOpacidad; uniform vec3 uColor; uniform float uTiempo; varying vec2 vUv;
       void main(){
-        float lineas = 0.5 + 0.5 * sin(vUv.y * 160.0 + uTiempo * 6.0);
+        float lineas = 0.5 + 0.5 * sin(vUv.y * 160.0 + uTiempo * ${VELOCIDAD_RAYAS.toFixed(1)});
         float borde = smoothstep(0.0, 0.04, vUv.x) * smoothstep(1.0, 0.96, vUv.x) * smoothstep(0.0, 0.04, vUv.y) * smoothstep(1.0, 0.96, vUv.y);
         vec3 c = mix(uColor, vec3(1.0), 0.25) * (0.18 + lineas * 0.12) * borde;
         gl_FragColor = vec4(c * uOpacidad, 1.0);
@@ -453,7 +472,7 @@ export function crearFabrica() {
     const c = i % PLAYA.columnas;
     const f = Math.floor(i / PLAYA.columnas);
     const x = PLAYA.x0 + c * PLAYA.pasoX;
-    const z = (f - (PLAYA.filas - 1) / 2) * PLAYA.pasoZ;
+    const z = PLAYA.z0 - f * PLAYA.pasoZ;
     posiciones.push([x, z]);
     tmpM.makeRotationY(Math.PI / 2).setPosition(x, 0, z);
     const g = base.clone().applyMatrix4(tmpM);
@@ -475,22 +494,23 @@ export function crearFabrica() {
   // marcas de estacionamiento
   const marcas = [];
   for (let f = 0; f < PLAYA.filas; f++) {
-    const z = (f - (PLAYA.filas - 1) / 2) * PLAYA.pasoZ;
+    const z = PLAYA.z0 - f * PLAYA.pasoZ;
     for (let c = 0; c <= PLAYA.columnas; c++) {
       marcas.push(caja(0.05, 0.01, 5.8, PLAYA.x0 - PLAYA.pasoX / 2 + c * PLAYA.pasoX, 0.005, z));
     }
   }
   const marcasMat = playa.registrar(new THREE.MeshBasicMaterial({ color: PALETA.skyview.clone().multiplyScalar(0.5), transparent: true, opacity: 0.6, fog: true }));
   playa.grupo.add(new THREE.Mesh(mergeGeometries(marcas.map((g) => g.toNonIndexed())), marcasMat));
-  agregarAncla('playa-despacho', CENTRO_PLAYA.x, 3.2, CENTRO_PLAYA.z, playa.grupo);
+  agregarAncla('playa-despacho', ESTACIONES['playa-despacho'], 4.4, 0, playa.grupo);
   // Postes de iluminación alrededor de la playa (fusionados: un poste y una luminaria por draw call)
   const postes = [], cabezas = [];
   const xMin = PLAYA.x0 - PLAYA.pasoX, xMax = PLAYA.x0 + PLAYA.columnas * PLAYA.pasoX;
   const zBorde = ((PLAYA.filas - 1) / 2) * PLAYA.pasoZ + 4.2;
   for (let x = xMin; x <= xMax + 0.01; x += (xMax - xMin) / 3) {
-    for (const z of [-zBorde, zBorde]) {
-      postes.push(caja(0.16, 6.5, 0.16, x, 3.25, z), caja(0.08, 0.08, 1.2, x, 6.45, z - Math.sign(z) * 0.6));
-      cabezas.push(caja(0.6, 0.08, 0.3, x, 6.38, z - Math.sign(z) * 1.1));
+    for (const z of [CENTRO_PLAYA.z - zBorde, CENTRO_PLAYA.z + zBorde]) {
+      const hacia = z > CENTRO_PLAYA.z ? 1 : -1; // el brazo de la luminaria apunta al centro de la playa
+      postes.push(caja(0.16, 6.5, 0.16, x, 3.25, z), caja(0.08, 0.08, 1.2, x, 6.45, z - hacia * 0.6));
+      cabezas.push(caja(0.6, 0.08, 0.3, x, 6.38, z - hacia * 1.1));
     }
   }
   const posteMat = playa.registrar(crearMaterialRelleno({ color: new THREE.Color('#0a2a5a') }));
@@ -528,7 +548,7 @@ export function crearFabrica() {
     // Elevador
     elevador.position.y = 2.6 + (reducido ? 0 : Math.sin(t * 0.6) * 1.0);
     // Escaneo: barre el túnel
-    const fase = reducido ? 0.5 : (t * 0.22) % 1;
+    const fase = reducido ? 0.5 : (t * VELOCIDAD_ESCANEO) % 1;
     escaneo.position.x = xI - 3.4 + Math.abs(fase * 2 - 1) * 6.8;
     escaneoBorde.position.x = escaneo.position.x;
     // Gate Release: blanco → Skyview según el paso del vehículo

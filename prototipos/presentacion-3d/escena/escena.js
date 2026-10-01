@@ -690,7 +690,7 @@ export async function crearEscena({
     },
     'donde-mirar'(p) {
       const e = estadoBase();
-      e.modo = 0; e.vehRot = 0; e.halos = 1; e.bloom = 0.38;
+      e.modo = 0; e.vehRot = 0; e.halos = 0; e.bloom = 0.38; // sin halos: no hay zonas de componentes que resaltar
       e.cam.set(4.6, 3.1, -7.2).multiplyScalar(1.08 - p * 0.1); e.mira.set(0.1, 0.95, 0);
       return e;
     },

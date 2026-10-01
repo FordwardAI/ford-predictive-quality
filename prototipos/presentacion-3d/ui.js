@@ -395,6 +395,7 @@ export function renderizarCapitulos({ main, meta = {}, secciones = [], capitulos
     sec.className = 'capitulo';
     if (especial) sec.classList.add(`capitulo-${especial}`);
     if (ladoDe(cap, secciones) === 'derecha') sec.classList.add('lado-derecha');
+    if (cap.centrado) sec.classList.add('centrado');
     sec.id = cap.id;
     sec.tabIndex = -1;
     sec.dataset.indice = String(indice);
@@ -526,6 +527,13 @@ export function ajustarDisposicion(sec) {
   if (tarjetas) banda.append(tarjetas);
   sec.classList.toggle('con-banda', Boolean(tarjetas));
   sec.classList.remove('tarjetas-lado', 'callouts-lado');
+  if (sec.classList.contains('centrado') && tarjetas) {
+    // Pantalla `centrado`: las tarjetas van siempre en la columna del vehículo, centradas (ver styles.css).
+    lado.append(tarjetas);
+    sec.classList.remove('con-banda');
+    sec.classList.add('tarjetas-lado');
+    return;
+  }
   const entra = () => sec.scrollHeight <= Math.ceil(innerHeight) + 1;
   if (entra()) return;
   if (tarjetas) {
