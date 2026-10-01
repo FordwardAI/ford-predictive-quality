@@ -18,7 +18,10 @@
     #panel label { font-size: 13px; display: flex; gap: 8px; align-items: center; }
     body.caja canvas, body.caja #etiquetas { height: 56.25vw; }
     body.caja #panel { top: calc(56.25vw + 16px); bottom: auto; }
-    #estado { position: fixed; top: 16px; left: 16px; font-size: 13px; opacity: .8; }
+    #estado { position: fixed; top: 16px; left: 16px; font-size: 13px; opacity: .8; white-space: pre; }
+    /* ?captura=1: sólo el lienzo, para los renders headless */
+    body.captura #panel, body.captura #estado, body.captura #etiquetas { display: none; }
+    #salida { display: none; }
   </style>
 </head>
 <body>
@@ -26,7 +29,11 @@
   <div id="etiquetas"></div>
   <div id="estado"></div>
   <div id="panel"></div>
+  <pre id="salida"></pre>
   <script type="module">
+    // Parámetros: ?escena=<id>&p=<0..1> · ?env=room|estudio · ?calidad=alta|baja|auto
+    // ?captura=1 (sin UI; escribe el render en #salida para herramientas/renderizar.*)
+    // ?anclas=1 (marca y mueve las anclas de la Ranger) · ?modelo=procedural · ?orbita · ?reducido · ?caja · ?debug
     import { crearEscena, IDS_ESCENA } from './escena.js';
     const puntosPorEscena = {
       linea: ['carroceria', 'pintura', 'montaje', 'gate-release', 'inspeccion-adicional'],
@@ -35,26 +42,33 @@
       'donde-mirar': ['componente-1', 'componente-2', 'componente-3'],
     };
     const params = new URLSearchParams(location.search);
+    const captura = params.get('captura') === '1';
+    const modoAnclas = params.get('anclas') === '1';
     if (params.has('caja')) document.body.classList.add('caja');
+    if (captura) document.body.classList.add('captura');
     const escena = await crearEscena({
       canvas: document.getElementById('lienzo'),
       capaEtiquetas: document.getElementById('etiquetas'),
-      modeloUrl: '../assets/ranger.glb',
+      modeloUrl: params.get('modelo') === 'procedural' ? null : '../assets/ranger.glb',
       movimientoReducido: params.has('reducido'),
+      calidad: params.get('calidad') || 'auto',
+      entorno: params.get('env') || undefined,
+      captura,
     });
     window.demo = escena;
     const estado = document.getElementById('estado');
     const panel = document.getElementById('panel');
     let actual = params.get('escena') || 'portada';
     const slider = Object.assign(document.createElement('input'), { type: 'range', min: 0, max: 1, step: 0.01, value: params.get('p') || 0 });
+    const describir = () => 'modelo: ' + escena.modeloCargado + ' · escena: ' + actual + ' · calidad: ' + escena.calidad();
     const ir = (id, d) => {
       actual = id;
       escena.irA(id, d === undefined ? {} : { duracion: d });
       escena.progreso(id, Number(slider.value));
       escena.mostrarPuntos(puntosPorEscena[id] || []);
-      escena.orbita(params.has('orbita'));
-      panel.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
-      estado.textContent = `modelo: ${escena.modeloCargado} · escena: ${id}`;
+      escena.orbita(params.has('orbita') || modoAnclas);
+      panel.querySelectorAll('button[data-id]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+      estado.textContent = describir();
     };
     for (const id of IDS_ESCENA) {
       const b = document.createElement('button');
@@ -66,8 +80,104 @@
     lab.append('progreso', slider);
     panel.appendChild(lab);
     slider.addEventListener('input', () => escena.progreso(actual, Number(slider.value)));
-    escena.alTocarPunto((id) => { estado.textContent = `punto tocado: ${id}`; });
+    // Foco de puntos (pasos) y calidad
+    const botonFoco = Object.assign(document.createElement('button'), { textContent: 'foco →' });
+    let iFoco = -1;
+    botonFoco.addEventListener('click', () => {
+      const ids = puntosPorEscena[actual] || [];
+      iFoco = ids.length ? (iFoco + 1) % (ids.length + 1) : -1;
+      const id = iFoco >= 0 && iFoco < ids.length ? ids[iFoco] : null;
+      escena.enfocarPunto(id);
+      estado.textContent = describir() + '\nfoco: ' + (id ?? '—');
+    });
+    const botonCalidad = Object.assign(document.createElement('button'), { textContent: 'calidad' });
+    const ciclo = ['auto', 'alta', 'baja'];
+    let iCal = Math.max(0, ciclo.indexOf(params.get('calidad') || 'auto'));
+    botonCalidad.addEventListener('click', () => {
+      iCal = (iCal + 1) % ciclo.length;
+      escena.calidad(ciclo[iCal]);
+      estado.textContent = describir() + ' (pedida: ' + ciclo[iCal] + ')';
+    });
+    panel.append(botonFoco, botonCalidad);
+    escena.alTocarPunto((id) => { estado.textContent = 'punto tocado: ' + id; escena.enfocarPunto(id); });
     ir(actual, 0);
+
+    if (captura) {
+      // Espera a que asienten bloom, crecimiento de columnas y partículas (tiempo virtual).
+      await new Promise((r) => setTimeout(r, Number(params.get('espera') || 2500)));
+      const tipo = params.get('formato') === 'png' ? 'image/png' : 'image/webp';
+      const ancho = Number(params.get('ancho') || 1600), alto = Number(params.get('alto') || 900);
+      let q = Number(params.get('q') || 0.8);
+      let blob = await escena.capturar({ ancho, alto, tipo, calidad: q });
+      // objetivo ≤ 200 KB: baja la calidad WebP de a poco si hace falta
+      while (tipo === 'image/webp' && blob && blob.size > 200 * 1024 && q > 0.5) {
+        q -= 0.05;
+        blob = await escena.capturar({ ancho, alto, tipo, calidad: q });
+      }
+      const url = await new Promise((r) => { const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(blob); });
+      document.getElementById('salida').textContent = 'RENDER:' + url + ':FIN';
+      escena.pausar(true);
+    }
+
+    if (modoAnclas) iniciarAnclas();
+
+    // Ajuste de anclas: elegir un ancla, moverla con flechas (X/Z locales) y RePág/AvPág (Y);
+    // Mayús = paso ×5. Cada cambio imprime en consola el bloque ANCLAS_GLB para vehiculo.js.
+    async function iniciarAnclas() {
+      const THREE = await import('three');
+      const { vehiculo } = window.__escena;
+      const ids = Object.keys(vehiculo.anclas);
+      escena.mostrarPuntos(ids);
+      const marcas = {};
+      for (const id of ids) {
+        const m = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffcc33, depthTest: false }));
+        m.renderOrder = 20;
+        m.position.copy(vehiculo.anclas[id].position);
+        vehiculo.grupo.add(m);
+        marcas[id] = m;
+      }
+      let sel = ids[0];
+      const fila = document.createElement('div');
+      fila.style.cssText = 'display:flex;gap:6px;flex-basis:100%';
+      for (const id of ids) {
+        const b = Object.assign(document.createElement('button'), { textContent: id });
+        b.dataset.ancla = id;
+        b.addEventListener('click', () => { sel = id; marcar(); });
+        fila.appendChild(b);
+      }
+      panel.prepend(fila);
+      const marcar = () => {
+        fila.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ancla === sel)));
+        for (const [id, m] of Object.entries(marcas)) m.material.color.set(id === sel ? 0xff3355 : 0xffcc33);
+      };
+      const imprimir = () => {
+        const { min, max } = vehiculo.caja;
+        const t = max.clone().sub(min);
+        const r = (x) => Number(x.toFixed(3));
+        const salida = {};
+        for (const id of ids) {
+          const p = vehiculo.anclas[id].position;
+          const n = vehiculo.anclas[id].userData.normal;
+          salida[id] = [[r((p.x - min.x) / t.x), r((p.y - min.y) / t.y), r((p.z - min.z) / t.z)], [r(n.x), r(n.y), r(n.z)]];
+        }
+        console.log('ANCLAS_GLB =', JSON.stringify(salida, null, 2));
+        estado.textContent = describir() + '\nancla: ' + sel + ' → ' + JSON.stringify(salida[sel][0]);
+      };
+      window.addEventListener('keydown', (ev) => {
+        const paso = ev.shiftKey ? 0.1 : 0.02;
+        const d = { ArrowLeft: [-paso, 0, 0], ArrowRight: [paso, 0, 0], ArrowUp: [0, 0, -paso], ArrowDown: [0, 0, paso], PageUp: [0, paso, 0], PageDown: [0, -paso, 0] }[ev.key];
+        if (!d) return;
+        ev.preventDefault();
+        const a = vehiculo.anclas[sel];
+        a.position.add(new THREE.Vector3(...d));
+        marcas[sel].position.copy(a.position);
+        const halo = vehiculo.halos.find((h) => h.name === sel);
+        if (halo) halo.position.copy(a.position);
+        imprimir();
+      });
+      marcar();
+      imprimir();
+    }
   </script>
 </body>
 </html>
