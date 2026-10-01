@@ -70,7 +70,7 @@ Con **movimiento reducido** activado en el sistema operativo no hay pasos ni ani
 | `herramientas/capturar_plataforma.ps1` / `.sh` | Capturas locales de la plataforma y de la hoja (necesitan `prototipos/plataforma-web/data.js`, que se genera con el CSV crudo fuera del repo) |
 | `herramientas/figuras-demo.html` | Revisar las figuras de `figuras.js` y las ilustraciones en tema oscuro y claro (`?solo=<id>&tema=claro`) |
 | `herramientas/renderizar.*` | Renders de la escena 3D para `?estatico=1`, portada y documentación |
-| `escena/demo.html` | Probar la escena sola |
+| `escena/demo.html` | Probar la escena sola. Parámetros: `?escena=<id>&p=<0..1>`, `?env=estudio\|room` (entorno de luz), `?calidad=alta\|baja\|auto`, `?modelo=procedural` (sin el GLB), `?reducido` (sin transiciones), `?orbita`, `?anclas=1` (mover las anclas de los hotspots y copiar el JSON desde la consola) y `?captura=1` (un cuadro sin interfaz, lo usa `renderizar.*`) |
 | `verificar_cifras.py` | Comprobar que los respaldos de `cifras.js` coinciden con los JSON |
 
 ## El vehículo
