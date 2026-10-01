@@ -2,3 +2,11 @@
 *
 !.gitignore
 !ranger.glb
+# Renders propios de la escena (herramientas/renderizar.*) e ilustraciones SVG hechas a mano.
+!renders/
+!renders/*.webp
+!renders/*.png
+!ilustraciones/
+!ilustraciones/*.svg
+# Capturas locales de la plataforma (tasas por código): nunca se versionan.
+local/
