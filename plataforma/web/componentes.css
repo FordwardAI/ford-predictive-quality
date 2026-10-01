@@ -1,0 +1,177 @@
+/* Componentes de la plataforma según «ford-design-system.md».
+   Tamaños de letra: 40 (Heading-03), 24 (Heading-05), 20 (Label-01: solo el CTA de §5) y 16 (Body-02). Pesos 400 y 500.
+   Plano: sin sombras (§4). Espaciado en múltiplos de 8 (§3), salvo las medidas exactas de botones y navegación de §5. */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--color-bg); color: var(--color-text);
+  font-family: var(--font-family); font-weight: var(--fw-regular);
+  font-size: var(--fs-body-02); line-height: var(--lh-body); letter-spacing: var(--ls-body);
+  font-variant-numeric: tabular-nums;
+}
+h1, h2, h3, p, ol, ul, figure { margin: 0; }
+h1, h2, h3 { font-family: var(--font-family-medium); font-weight: var(--fw-medium); text-align: left; color: var(--color-text); }
+h1 { font-size: var(--fs-heading-03); line-height: var(--lh-heading); letter-spacing: var(--ls-heading); }
+h2 { font-size: var(--fs-heading-05); line-height: var(--lh-heading); letter-spacing: var(--ls-heading); }
+h3 { font-size: var(--fs-body-02); line-height: var(--lh-body); letter-spacing: var(--ls-heading); }
+h1 .acento { color: var(--color-accent); }
+b, strong { font-family: var(--font-family-medium); font-weight: var(--fw-medium); }
+:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+[hidden] { display: none !important; }
+
+/* --- Estructura: panel lateral flotante (§5) + contenido en grilla de 12 (§3) ------------------------------- */
+.app { display: grid; grid-template-columns: 228px minmax(0, 1fr); gap: var(--space-3); min-height: 100vh; padding: var(--space-3); }
+.nav {
+  position: sticky; top: var(--space-3); align-self: start; height: calc(100vh - 2 * var(--space-3));
+  display: flex; flex-direction: column; gap: var(--space-3);
+  background: var(--color-bg-inverse); color: var(--color-text-inverse);
+  border-radius: var(--radius-lg); padding: var(--space-3) 12px;
+}
+.marca { padding: 0 12px; color: var(--color-text-inverse); }
+.marca b { display: block; font-size: var(--fs-heading-05); line-height: var(--lh-heading); }
+.nav ol { list-style: none; padding: 0; display: flex; flex-direction: column; gap: var(--space-1); }
+.nav a {
+  display: flex; align-items: center; gap: 12px; padding: 4px 12px; min-height: 40px;
+  color: var(--color-text-inverse); text-decoration: none; border-radius: var(--radius-pill);
+  letter-spacing: -0.03em; transition: var(--transition-button-sm);
+}
+.nav a svg { flex: none; }
+.nav a:hover { background: var(--ford-twilight); }
+.nav a[aria-current="page"] { background: var(--ford-white); color: var(--ford-blue); font-family: var(--font-family-semibold); font-weight: var(--fw-medium); }
+.nav .rol { margin-top: auto; padding: 0 12px; }
+
+.contenido { min-width: 0; display: flex; flex-direction: column; }
+.vista { flex: 1; padding: var(--space-6) var(--space-8) var(--space-12); max-width: 1440px; }
+.cabeza { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-6); }
+.cabeza p { max-width: 64ch; margin-top: var(--space-2); }
+.ojo { display: block; margin-bottom: var(--space-1); color: var(--color-accent); font-family: var(--font-family-medium); font-weight: var(--fw-medium); }
+
+.pie { background: var(--color-bg-footer); color: var(--color-text-inverse); padding: var(--space-3) var(--space-8); border-radius: var(--radius-lg); margin: 0 0 0 0; }
+.pie p + p { margin-top: var(--space-1); }
+
+/* --- Secciones: espacio y fondo gris, no cajas sobre cajas (§3) ------------------------------------------------ */
+.seccion { margin-top: var(--space-8); }
+.seccion > h2 { margin-bottom: var(--space-3); }
+.banda { background: var(--color-bg-alt); border-radius: var(--radius-lg); padding: var(--space-4); }
+.columnas { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-3); }
+.c4 { grid-column: span 4; } .c6 { grid-column: span 6; } .c8 { grid-column: span 8; } .c12 { grid-column: span 12; }
+.texto { max-width: 72ch; }
+.lista { padding-left: var(--space-3); display: flex; flex-direction: column; gap: var(--space-1); }
+
+/* --- Cifras -------------------------------------------------------------------------------------------------- */
+.cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(176px, 1fr)); gap: var(--space-3); }
+.cifra { display: flex; flex-direction: column; gap: var(--space-1); }
+.cifra b { font-size: var(--fs-heading-03); line-height: var(--lh-heading); letter-spacing: var(--ls-heading); }
+.cifra .grande-acento { color: var(--color-accent); }
+
+/* --- Botones (§5) -------------------------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: flex-start; gap: var(--space-1);
+  font-family: var(--font-family-medium); font-weight: var(--fw-medium); cursor: pointer; text-decoration: none;
+  border: 0; background: transparent; color: var(--color-text);
+}
+.btn:disabled, .btn[aria-disabled="true"] { opacity: .4; cursor: not-allowed; }
+.cta {
+  min-height: 76px; padding: 24px; border-radius: var(--radius-lg);
+  background: var(--color-cta-bg); color: var(--color-cta-text);
+  font-size: var(--fs-label-01); line-height: 28px; letter-spacing: var(--ls-label);
+}
+.cta:hover:not(:disabled) { background: var(--ford-blue); }
+.outline {
+  min-height: 48px; padding: 12px 24px; border: var(--border-button-lg); border-radius: var(--radius-pill);
+  color: var(--ford-black); font-size: var(--fs-body-02); transition: var(--transition-button-lg);
+}
+.outline:hover:not(:disabled) { background: var(--ford-light-gray); }
+.compacto {
+  min-height: 32px; padding: 8px 16px; border: var(--border-button-sm); border-radius: var(--radius-pill);
+  color: var(--ford-blue); font-size: var(--fs-body-02); line-height: 1; font-family: var(--font-family); font-weight: var(--fw-regular);
+  transition: var(--transition-button-sm);
+}
+.compacto:hover:not(:disabled) { background: var(--ford-light-gray); }
+.compacto[aria-pressed="true"] { background: var(--ford-blue); border-color: var(--ford-blue); color: var(--ford-white); }
+.acciones { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+
+/* --- Formularios --------------------------------------------------------------------------------------------- */
+.campo { display: flex; flex-direction: column; gap: var(--space-1); }
+.campo > span { font-family: var(--font-family-medium); font-weight: var(--fw-medium); }
+.campo small, .nota { color: var(--ford-blue); }
+input[type="number"], input[type="text"], select {
+  font: inherit; color: var(--ford-blue); background: var(--ford-white);
+  min-height: 48px; padding: 8px 16px; border: 1px solid var(--ford-blue); border-radius: var(--radius-md);
+}
+input[type="file"] { font: inherit; color: var(--ford-blue); }
+.opciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(256px, 1fr)); gap: var(--space-2); }
+.opcion { position: relative; display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-3);
+  border: var(--border-button-sm); border-color: var(--ford-light-gray); border-radius: var(--radius-lg); cursor: pointer; background: var(--ford-white); }
+.opcion input { position: absolute; opacity: 0; pointer-events: none; }
+.opcion:has(input:checked) { border-color: var(--ford-skyview); border-width: 3px; padding: calc(var(--space-3) - 1px); }
+.opcion:has(input:focus-visible) { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+.opcion .marca-elegida { display: none; align-items: center; gap: var(--space-1); color: var(--ford-blue); }
+.opcion:has(input:checked) .marca-elegida { display: inline-flex; }
+.error { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-3); border: var(--border-button-lg); border-radius: var(--radius-lg); }
+
+/* --- Chips --------------------------------------------------------------------------------------------------- */
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: var(--radius-pill);
+  background: var(--ford-light-gray); color: var(--ford-blue); white-space: nowrap; }
+.chip.lleno { background: var(--ford-blue); color: var(--ford-white); }
+.chip.borde { background: var(--ford-white); border: var(--border-button-sm); padding: 2px 10px; }
+
+/* --- Tablas (§9.3) ------------------------------------------------------------------------------------------- */
+.tabla-marco { overflow-x: auto; border-radius: var(--radius-md); }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: var(--space-1) var(--space-2); text-align: left; border-bottom: var(--table-border); white-space: nowrap; }
+thead th { position: sticky; top: 0; background: var(--table-head-bg); color: var(--table-head-text);
+  font-family: var(--font-family-medium); font-weight: var(--fw-medium); vertical-align: bottom; }
+tbody tr:nth-child(even) td { background: var(--table-row-alt); }
+td.num, th.num { font-variant-numeric: tabular-nums; }
+tr.cupo td { border-bottom: 0; }
+tr.linea td { background: var(--ford-white) !important; border-top: 2px solid var(--ford-skyview); border-bottom: 2px solid var(--ford-skyview); padding: var(--space-1) var(--space-2); color: var(--ford-blue); white-space: normal; }
+tr.fuera td { color: var(--ford-blue); }
+td .rango { margin-left: var(--space-1); }
+
+/* --- ¿Lo audito? --------------------------------------------------------------------------------------------- */
+.audito { max-width: 720px; }
+.buscador input { width: 100%; min-height: 96px; font-size: var(--fs-heading-03); letter-spacing: 0.04em; padding: var(--space-2) var(--space-3); text-transform: uppercase; }
+.respuesta { margin-top: var(--space-3); padding: var(--space-4); border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: var(--space-2); min-height: 216px; }
+.respuesta .titular { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-heading-03); line-height: var(--lh-heading); font-family: var(--font-family-medium); font-weight: var(--fw-medium); letter-spacing: var(--ls-heading); }
+.respuesta.auditar { background: var(--ford-blue); color: var(--ford-white); }
+.respuesta.auditar .cta { background: var(--ford-white); color: var(--ford-blue); }
+.respuesta.no_auditar { background: var(--ford-light-gray); color: var(--ford-blue); }
+.respuesta.fuera_del_programa { background: var(--ford-white); color: var(--ford-blue); border: var(--border-button-lg); }
+.respuesta.vacia { background: var(--ford-light-gray); color: var(--ford-blue); }
+.contador { display: flex; align-items: baseline; gap: var(--space-1); }
+.contador b { font-size: var(--fs-heading-03); line-height: var(--lh-heading); }
+.barra { height: 8px; background: var(--ford-light-gray); border-radius: var(--radius-pill); overflow: hidden; }
+.barra > i { display: block; height: 100%; background: var(--ford-skyview); }
+
+/* --- Gráfico ------------------------------------------------------------------------------------------------- */
+.grafico svg { width: 100%; height: auto; display: block; }
+.grafico text { font-family: var(--font-family); font-size: 16px; fill: var(--ford-blue); letter-spacing: -0.03em; }
+
+/* --- Responsive (§3: sm/xs con padding 20 y gutter 16) ----------------------------------------------------- */
+@media (max-width: 1023px) {
+  .vista { padding: var(--space-4) 20px var(--space-8); }
+  .pie { padding: var(--space-3) 20px; }
+  .c4, .c6, .c8 { grid-column: span 12; }
+}
+@media (max-width: 767px) {
+  .app { grid-template-columns: minmax(0, 1fr); padding: var(--space-2); gap: var(--space-2); }
+  .nav { position: static; height: auto; flex-direction: row; align-items: center; overflow-x: auto; padding: var(--space-1) 12px; gap: var(--space-2); }
+  .nav ol { flex-direction: row; }
+  .nav a { white-space: nowrap; }
+  .marca, .nav .rol { display: none; }
+  .nav { scrollbar-width: none; }
+  .columnas { gap: var(--space-2); }
+  .vista { padding: var(--space-3) 4px var(--space-6); }
+  .cta { width: 100%; }
+}
+@media print {
+  .nav, .pie, .acciones { display: none; }
+  .app { display: block; padding: 0; }
+}
+
+/* Foco programático al cambiar de vista: no es un control, no lleva anillo. */
+.vista:focus { outline: none; }
+.opcion h3 { font-size: var(--fs-heading-05); line-height: var(--lh-heading); }
+table.envolver th, table.envolver td { white-space: normal; vertical-align: top; }
