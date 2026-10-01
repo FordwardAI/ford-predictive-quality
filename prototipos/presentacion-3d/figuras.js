@@ -4,6 +4,7 @@
 //   crear(id, { datos, opciones }) -> SVGElement | null
 //   cargarDatos(leerJson?) -> Promise<datos>
 //   disponible(id, datos) -> boolean
+//   ajustar(svg)  (ya en el documento: comprime textos que no entren)
 //
 // `id`: comparacion | veces_azar_prueba_final | donde_mirar | etiquetas_parciales
 //       | detector | particiones
@@ -88,13 +89,44 @@ export function disponible(id, datos) {
 export function crear(id, { datos, opciones = {} } = {}) {
   if (!disponible(id, datos)) return null;
   try {
-    return CONSTRUCTORES[id](datos, opciones);
+    const svg = CONSTRUCTORES[id](datos, opciones);
+    // Si la interfaz lo inserta en el mismo turno, se corrige cualquier texto que no entre.
+    if (svg && typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(() => { if (svg.isConnected) ajustar(svg); });
+    }
+    return svg;
   } catch (error) {
     // Un JSON con otra forma no rompe la pantalla: se usa el respaldo.
     if (typeof location !== 'undefined' && /[?&]debug\b/.test(location.search)) {
       console.warn(`[figuras] ${id}: uso el respaldo (${error.message})`);
     }
     return null;
+  }
+}
+
+/**
+ * Red de seguridad para tipografías más anchas que la estimada: comprime en
+ * horizontal (textLength) el texto que se saldría del viewBox. Requiere que el
+ * SVG ya esté en el documento; se puede llamar de nuevo tras cargar las fuentes
+ * (document.fonts.ready). No cambia ningún texto.
+ */
+export function ajustar(svg) {
+  const caja = svg?.viewBox?.baseVal;
+  if (!caja || !svg.isConnected) return;
+  const margen = 8;
+  for (const t of svg.querySelectorAll('text')) {
+    t.removeAttribute('textLength');
+    t.removeAttribute('lengthAdjust');
+    const ancla = t.getAttribute('text-anchor') || 'start';
+    if (ancla === 'middle') continue;
+    const x = Number(t.getAttribute('x'));
+    const disponible = ancla === 'end' ? x - margen : caja.width - margen - x;
+    let largo;
+    try { largo = t.getComputedTextLength(); } catch { continue; }
+    if (disponible > 0 && largo > disponible) {
+      t.setAttribute('textLength', disponible.toFixed(1));
+      t.setAttribute('lengthAdjust', 'spacingAndGlyphs');
+    }
   }
 }
 
@@ -164,7 +196,10 @@ function texto(padre, x, y, contenido, {
 }
 
 // Ancho aproximado de un texto (Roboto / Arial): sirve para decidir cortes de línea.
-const anchoTexto = (s, tam) => s.length * tam * 0.47;
+// Factores conservadores: valen para Roboto, Arial y FORD F-1 (más anchas que Roboto).
+const LETRA = 0.55;
+const LETRA_NEGRITA = 0.58;
+const anchoTexto = (s, tam) => s.length * tam * 0.52;
 
 /** Corta un texto en líneas de hasta `max` caracteres, por palabras. */
 function partir(s, max) {
@@ -203,7 +238,7 @@ function textoLineas(padre, x, y, lineas, opciones, interlinea) {
 }
 
 // Tamaños base (unidades del viewBox; a 900 px de ancho se ven al 75 %).
-const T = { titulo: 32, sub: 19, rotulo: 23, valor: 22, valorSub: 17, eje: 19, pie: 17, ref: 18 };
+const T = { titulo: 32, sub: 20, rotulo: 23, valor: 22, valorSub: 17, eje: 20, pie: 19, ref: 19 };
 
 function linea(padre, x1, y1, x2, y2, color, ancho = 1) {
   return el(padre, 'line', {
@@ -254,20 +289,20 @@ function lienzo(id, ancho, alto, { titulo, subtitulo = [], desc, pie, opciones, 
   let abajo = alto - 12;
   if (pie) {
     const tam = T.pie * k;
-    const lineas = partir(pie, Math.floor(util / (tam * 0.46)));
+    const lineas = partir(pie, Math.floor(util / (tam * LETRA)));
     lineas.forEach((l, i) => texto(svg, margen, alto - 20 - (lineas.length - 1 - i) * tam * 1.3, l, { tam, color: C.tenue, clase: 'pie' }));
     abajo = alto - 20 - lineas.length * tam * 1.3 - 8;
   }
   if (opciones.titulo === false) return { svg, arriba: 24, abajo };
   const tamT = T.titulo * k;
   const tamS = T.sub * k;
-  partir(titulo, Math.floor(util / (tamT * 0.46))).forEach((l, i) => {
+  partir(titulo, Math.floor(util / (tamT * LETRA_NEGRITA))).forEach((l, i) => {
     texto(svg, margen, 30 + tamT / 2 + i * tamT * 1.2, l, { tam: tamT, peso: 500, clase: 'titulo' });
   });
-  const lineasTitulo = partir(titulo, Math.floor(util / (tamT * 0.46))).length;
+  const lineasTitulo = partir(titulo, Math.floor(util / (tamT * LETRA_NEGRITA))).length;
   let y = 30 + tamT * 1.2 * lineasTitulo + 6;
   for (const s of subtitulo) {
-    for (const l of partir(s, Math.floor(util / (tamS * 0.46)))) {
+    for (const l of partir(s, Math.floor(util / (tamS * LETRA)))) {
       texto(svg, margen, y + tamS / 2, l, { tam: tamS, color: C.tenue, clase: 'subtitulo' });
       y += tamS * 1.35;
     }
@@ -445,7 +480,7 @@ function figuraComparacion(datos, opciones) {
   const xNota = 812;
   const tope = Math.max(0.3, ...todas.map((r) => r.precision_rango95[1] + 0.02));
   const esc = escala(0, tope, x0, x1);
-  const yBase = eje(svg, esc, ticks(tope), arriba, abajo, pctEje,
+  const yBase = eje(svg, esc, ticks(tope, 4), arriba, abajo, pctEje,
     'Precisión en el cupo: CALIBRADA entre los elegidos (rango del 95 %)', x0, x1, k);
   const yInicio = arriba + 28;
   const separacion = 6;
@@ -732,7 +767,7 @@ function figuraParticiones(datos, opciones) {
       const ancho = xb - xa - 20;
       const color = s.tipo === 'entrena' ? C.superficie : C.texto;
       // Primero adentro (dos tamaños); si no entra, a la derecha sobre la pista vacía.
-      const tam = [[21, 17], [18, 15]].find(([a, b]) => anchoTexto(s.t, a) <= ancho && anchoTexto(s.d, b) <= ancho);
+      const tam = [[21, 17], [18, 15], [16, 13]].find(([a, b]) => anchoTexto(s.t, a) <= ancho && anchoTexto(s.d, b) <= ancho);
       if (tam) {
         const centrado = ancho < 220;
         const x = centrado ? (xa + xb) / 2 : xa + 14;

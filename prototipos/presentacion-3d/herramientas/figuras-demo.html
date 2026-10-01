@@ -10,7 +10,9 @@
   /* Página de prueba de figuras.js y de assets/ilustraciones/.
      Abrir desde la raíz del repo: python -m http.server 8000 y
      http://localhost:8000/prototipos/presentacion-3d/herramientas/figuras-demo.html
-     Parámetros: ?solo=<id> muestra una sola figura; ?tema=claro|oscuro uno solo de los fondos. */
+     Parámetros: ?solo=<id> muestra una sola figura; ?tema=claro|oscuro uno solo de los fondos;
+     ?ancho=830 fija el ancho del panel (con ?solo); ?fuente=Arial (o Verdana, más ancha) prueba otra tipografía;
+     ?titulo=0 crea las figuras con { titulo: false }. */
   :root { color-scheme: dark; }
   body { margin: 0; background: #000A17; color: #FFFFFF; font-family: "Ford F-1", Roboto, Arial, sans-serif; }
   header { padding: 24px 32px 8px; }
@@ -44,7 +46,8 @@
   .panel img, .panel svg { display: block; width: 100%; height: auto; }
   .vacio { color: #FBAE40; font-size: 15px; }
   /* Con ?solo=…, cada panel mide lo que la columna derecha de la presentación a 1920 px. */
-  .solo-uno .par { grid-template-columns: repeat(auto-fill, 900px); }
+  .solo-uno .par { grid-template-columns: repeat(auto-fill, var(--ancho-panel, 900px)); }
+  .solo-uno .panel { padding: 0; }
 </style>
 </head>
 <body>
@@ -72,6 +75,9 @@
     ...ILUSTRACIONES.map((id) => ({ tipo: 'ilustracion', id })),
   ].filter((c) => !solo || c.id === solo);
   if (solo) document.body.classList.add('solo-uno');
+  if (parametros.get('ancho')) document.body.style.setProperty('--ancho-panel', `${Number(parametros.get('ancho'))}px`);
+  if (parametros.get('fuente')) document.body.style.fontFamily = `"${parametros.get('fuente')}", sans-serif`;
+  const sinTitulo = parametros.get('titulo') === '0';
 
   const datos = await cargarDatos();
   const faltan = Object.entries(datos).filter(([, v]) => !v).map(([k]) => k);
@@ -97,7 +103,7 @@
       try {
         let nodo;
         if (caso.tipo === 'figura') {
-          nodo = crear(caso.id, { datos, opciones: caso.opciones });
+          nodo = crear(caso.id, { datos, opciones: { ...caso.opciones, ...(sinTitulo ? { titulo: false } : {}) } });
         } else if (t === 'oscuro') {
           nodo = new Image();
           nodo.src = `../assets/ilustraciones/${caso.id}.svg`;
