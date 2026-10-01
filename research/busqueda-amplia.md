@@ -1,6 +1,30 @@
-# Búsqueda amplia de alternativas
+# Estudio comparativo de modelos, columnas y ensembles
 
 Ampliación pedida por Facundo el 30/09/2026, en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33), después de la comparación CatBoost + móvil. Incluye combinaciones de más de dos, otras columnas y datos sintéticos. **Todo es exploratorio; no se relee la prueba final ni se cambia la solución operativa.**
+
+## Conclusión para elegir candidatos
+
+**Recomendación provisional del análisis: Random Forest fijo con atributos del catálogo como candidato principal para una próxima evaluación; tasa fija como control; stacking + jerárquico como competidor; Rep.PosA como investigación condicionada a disponibilidad.** Esta recomendación combina rendimiento, estabilidad observada y complejidad. No es la regla preregistrada de adopción, ni una decisión del equipo de reemplazar la solución vigente.
+
+RF promedia **133,8/740 (18,08 %) en selección** y logra **46/225 (20,44 %) en cada una de las cinco semillas** posteriormente. La mezcla promedia **131,8/740 (17,81 %) y 45/225 (20,00 %)**. Su máximo con la semilla primaria, 147/740, no representa un rendimiento estable entre semillas. Tasa fija también logra 46/225 posteriormente: ese tramo por sí solo no acredita superioridad de RF sobre el control.
+
+El mayor máximo de selección, 154/740, exige historial A y cae a 43/225 posteriormente. Rep.PosA logra 136/740 y 48/225 con logística, pero no tiene comprobación de cinco semillas ni disponibilidad previa acreditada. Los sintéticos ayudan a un control específico; no lideran la selección. Las bandas por búsqueda incluyen cero: no se demuestra una ventaja general del ensemble sobre el mejor individual.
+
+Para leer el estudio: [comparación principal](#resultados), [semillas](#estabilidad-con-cinco-semillas-pesos-congelados), [columnas y sintéticos](#columnas-y-aumentación), [recomendación y decisiones](#recomendación-y-decisiones), [catálogo completo](anexo-busqueda.md).
+
+## Pregunta y recorrido del estudio
+
+La pregunta operativa es qué enfoque concentra más VIN CALIBRADA dentro del cupo diario simulado de aproximadamente 5 %, usando información disponible antes de decidir. La unidad es VIN: se construye una representación a partir de sus eventos QLS, conservando una etiqueta final por unidad. Una buena clasificación global o ROC-AUC no garantiza acertar en ese cupo.
+
+| Etapa | Pregunta | Evidencia conservada |
+| --- | --- | --- |
+| Exploraciones previas | ¿Qué señal ofrecen catálogo e historial? | [Experimentos anteriores](experimentos-modelado.md), [historial por VIN](historial-vin.md) |
+| Elección por precisión temporal | ¿Qué alternativas concentran más calibradas con atributos y origen móvil? | [Código](../solucion/precision.py), [agregados](../solucion/resultados/precision.json) |
+| Mezcla inicial | ¿CatBoost + tasa móvil mejora a sus componentes? | [Informe](ensemble-catalogo.md), [agregados](../solucion/resultados/ensemble.json) |
+| Búsqueda amplia | ¿Ayudan otros campos, objetivos, aumentación y más integrantes? | Este informe y [búsqueda](../solucion/resultados/busqueda.json) |
+| Robustez | ¿Qué queda con catálogo disponible y cinco semillas? | [Catálogo/adaptación](../solucion/resultados/robustez_busqueda.json), [semillas](../solucion/resultados/semillas_busqueda.json) |
+
+Las etapas anteriores explican la evolución del análisis, pero no se mezclan sus cifras como si pertenecieran a una corrida común. El contraste principal de este informe se recalculó en los mismos bloques. Ninguna etapa convierte períodos ya explorados en datos nuevos.
 
 ## Fuente, población y reproducción
 
@@ -13,12 +37,30 @@ Ampliación pedida por Facundo el 30/09/2026, en [#33](https://github.com/Fordwa
 .venv/bin/python -m solucion.run --csv '<CSV>' --catalogo '<catálogo>' --cache '<carpeta fuera del repo>' --salida '<carpeta fuera del repo>' --piezas busqueda
 .venv/bin/python -m solucion.robustez_busqueda --predicciones '<cache>/busqueda-<hash>.pickle' --salida solucion/resultados/robustez_busqueda.json
 .venv/bin/python -m solucion.run --csv '<CSV>' --catalogo '<catálogo>' --cache '<carpeta fuera del repo>' --salida '<carpeta fuera del repo>' --piezas semillas_busqueda
+MPLCONFIGDIR='<carpeta temporal>' .venv/bin/python research/documentar_busqueda.py
 .venv/bin/python -m solucion.pruebas
 python3 research/test_audit_dataset.py
 git diff --check
 ```
 
 La caché externa conserva predicciones y etiquetas anteriores a Día 195; no se publica. El archivo pickle debe ser exclusivamente la caché local propia, nunca un archivo recibido de terceros. La tabla de prueba sigue enmascarada. Se publica únicamente evidencia agregada. La corrida principal identifica el código `23da09a`; la revisión, `7e55ff5`; la comprobación de semillas añade el código publicado en esta PR. No se reentrena la búsqueda principal al agregar su informe.
+
+El generador documental lee solo los tres JSON publicados y regenera [el anexo](anexo-busqueda.md) y las dos figuras siguientes. El código de semillas está en el commit `12d02f6`; sus agregados registraron `7e55ff5+cambios` porque se calcularon antes de ese commit. Se conserva ese registro original. Fuente, filtro poblacional y temporalidad completos: [auditoría de preparación](../solucion/resultados/preparacion.json), [particiones](validation-partitions.json) y [datos locales](../docs/datos-locales.md).
+
+## Métricas e interpretación
+
+| Métrica | Cálculo | Qué permite interpretar |
+| --- | --- | --- |
+| Aciertos | VIN CALIBRADA dentro del cupo elegido | Comparación directa cuando los cupos coinciden |
+| Precisión en el cupo | Aciertos / inspecciones elegidas | Cuántos elegidos requieren calibración |
+| Recall o recupero | Aciertos / todos los CALIBRADA del tramo | Qué fracción de casos se recupera con capacidad limitada |
+| Azar esperado | Suma por día de cupo × proporción CALIBRADA del día, dividida por cupo total | Control con la misma disponibilidad y capacidad diaria |
+| Lift o veces el azar | Precisión / precisión esperada al azar | Concentración relativa de casos |
+| Diferencia pareada | Diferencia de precisión con remuestreo de los mismos días | Incertidumbre temporal descriptiva entre alternativas |
+
+ROC-AUC, PR-AUC y calibración probabilística son diagnósticos posibles, pero **esta búsqueda amplia no publica una comparación completa de esas métricas**. Sus máximos se eligen por aciertos/precisión en el cupo; no se afirma haber optimizado PR-AUC ni disponer de probabilidades calibradas. Los informes previos de historial sí conservan sus propios diagnósticos de AUC.
+
+En comprobación, 46 aciertos significan **46/225 = 20,44 % de precisión**, **46/408 = 11,27 % de recupero** y **2,33× el azar esperado**. No significa recuperar el 20,44 % de todos los casos, ni que el 5 % auditado sea la prevalencia CALIBRADA.
 
 ## Catálogo del experimento
 
@@ -29,6 +71,22 @@ La caché externa conserva predicciones y etiquetas anteriores a Día 195; no se
 5. Objetivo conjunto de OK o componente calibrado, mediante clasificación multiclase con logística, CatBoost y LightGBM. Para priorizar se usa `1 − P(OK)`. El componente es una etiqueta de entrenamiento, nunca un predictor. Esto evalúa una formulación conjunta concreta, no todas las redes multitarea posibles.
 6. Todas las parejas de individuales, con pesos 10/90 a 90/10. Un representante por familia, elegido en selección, forma el pool para **todos** sus subconjuntos de dos o más: promedio de probabilidades/puntuaciones, promedio de rangos y mediana. Pesos en pasos de 25 %, hasta cuatro integrantes; búsqueda continua mediante evolución diferencial con dos semillas y presupuestos prefijados.
 7. Meta-modelos temporales: stacking logístico con cuatro regularizaciones, RF y LightGBM; pesos convexos por log-loss y Brier. Sus doce entradas se fijan por nombre antes de elegir ganadores, evitando elegir features del meta con resultados futuros.
+
+| Configuraciones de la búsqueda principal | Cantidad |
+| --- | ---: |
+| Pipelines individuales | 238 |
+| Todas las parejas de individuales, nueve pesos | 253.827 |
+| Subconjuntos del pool por promedio | 65.519 |
+| Subconjuntos del pool por mediana | 65.519 |
+| Subconjuntos del pool por promedio de rangos | 65.519 |
+| Pesos en pasos de 25 %, tres/cuatro entradas | 3.500 |
+| Vectores visitados por búsqueda continua | 3.968 |
+| Meta-modelos temporales y pesos convexos | 8 |
+| **Total** | **458.098** |
+
+El pool tiene 16 representantes, identificados en [el anexo](anexo-busqueda.md#pool-de-representantes).
+Los ocho metas usan doce entradas prefijadas. El total no implica 458.098 entrenamientos diferentes: muchos
+pesos y reglas reutilizan las mismas predicciones individuales.
 
 ## Temporalidad y columnas
 
@@ -53,13 +111,27 @@ Selección: Día 100–174, 67 días con actividad, 15.279 VIN, 1.702 CALIBRADA 
 
 | Alternativa, semilla primaria 1 | Selección | Comprobación |
 | --- | ---: | ---: |
+| Azar esperado con el mismo cupo diario | ≈82,97/740 (11,21 %) | ≈19,77/225 (8,78 %) |
+| Tasa fija, control vigente | 94/740 (12,70 %) | 46/225 (20,44 %) |
 | 20 % logística de historial A + 80 % XGBoost con atributos reentrenado | 154/740 (20,81 %) | 43/225 (19,11 %) |
 | 40 % tasa jerárquica 60 días, peso 20 + 60 % stacking fijo | 147/740 (19,86 %) | 46/225 (20,44 %) |
 | CatBoost conjunto OK/componente, entradas de catálogo | 142/740 (19,19 %) | 39/225 (17,33 %) |
 | Random Forest con atributos, fijo | 139/740 (18,78 %) | 46/225 (20,44 %) |
 | Tasa jerárquica 60 días, peso 20 | 131/740 (17,70 %) | 41/225 (18,22 %) |
+| XGBoost con atributos reentrenado | 134/740 (18,11 %) | 44/225 (19,56 %) |
+| CatBoost con atributos reentrenado | 128/740 (17,30 %) | 39/225 (17,33 %) |
+| Catálogo + Rep.PosA, logística A | 136/740 (18,38 %) | 48/225 (21,33 %) |
 
-La primera fila es el máximo exploratorio y exige historial A, cuya disponibilidad al decidir no está acreditada. La segunda es el máximo de la búsqueda restringida a catálogo: su stacking ya reúne siete modelos, por lo que **se evaluaron combinaciones de muchos más de dos**. En la primera semilla encuentra 2,33 veces los casos esperados con azar en el mismo cupo posterior; recupera 46/408 = 11,27 % de los CALIBRADA de ese tramo. Eso no estima impacto en la población completa de planta.
+![Comparación de candidatos en selección y período posterior](figuras/busqueda-comparacion.png)
+
+Figura descriptiva de la semilla primaria: mismos tramos y cupos, sin intervalos dibujados. Los valores esperados del azar pueden ser fraccionarios; no representan un sorteo realizado. Las barras naranjas requieren campos de disponibilidad todavía sin acreditar.
+
+La tasa fija representa el mismo tipo de estimador que el control vigente, ajustado con el pasado permitido antes
+de cada bloque (`ml.fin_interno`). No se aplica retrospectivamente una tasa entrenada hasta Día 194 a días anteriores.
+
+La combinación de historial A + XGBoost es el máximo exploratorio y exige historial A, cuya disponibilidad al decidir no está acreditada. Stacking + jerárquico es el máximo de la búsqueda restringida a catálogo: su stacking ya reúne siete modelos, por lo que **se evaluaron combinaciones de muchos más de dos**. En la primera semilla encuentra 2,33 veces los casos esperados con azar en el mismo cupo posterior; recupera 46/408 = 11,27 % de los CALIBRADA de ese tramo. Eso no estima impacto en la población completa de planta.
+
+Con esa semilla, RF supera a CatBoost con atributos por **11 aciertos en selección y 7 posteriormente**, y a tasa fija por **45 en selección y 0 posteriormente**. Ensemble supera a RF por **8 en selección y 0 posteriormente**. CatBoost conjunto supera a RF por **3 en selección, pero obtiene 7 menos posteriormente**. Son diferencias observadas; no pruebas de superioridad estadística.
 
 El máximo seleccionado pierde su ventaja al considerar la búsqueda: la banda simultánea descriptiva para ganador general menos mejor individual es −5,29 a +8,53 puntos de precisión; para el máximo de catálogo, −5,49 a +6,84 puntos. Ambas incluyen cero. Son bandas condicionales al pool y al comparador elegidos; no constituyen inferencia selectiva completa ni validación independiente.
 
@@ -76,6 +148,10 @@ La pareja de catálogo se volvió a entrenar con semillas 1–5 sin elegir nuevo
 | RF con atributos fijo | 139, 135, 127, 133, 135 | 46, 46, 46, 46, 46 |
 
 La mezcla promedia 131,8 aciertos en selección y 45 posteriormente; RF 133,8 y 46; CatBoost conjunto 133,2 y 40. **No se confirma una ventaja estable de la mezcla sobre RF.** RF es una referencia fuerte para una siguiente evaluación, sin seleccionar retrospectivamente la semilla que más rinde. Las cinco semillas usan los mismos VIN: no son cinco muestras independientes. El jerárquico no tiene entrenamiento aleatorio, de ahí sus resultados idénticos.
+
+![Dispersión de resultados entre cinco semillas](figuras/busqueda-semillas.png)
+
+Cada punto representa una semilla y el rombo la media. La dispersión mide sensibilidad al entrenamiento aleatorio, no incertidumbre de muestreo. Que RF tenga 46 aciertos en todas las semillas no prueba que sus predicciones o los VIN seleccionados sean idénticos.
 
 ### Columnas y aumentación
 
@@ -105,7 +181,18 @@ Se añadió una regla que elige únicamente entre individuales, parejas prefijad
 
 La regla respeta el tiempo dentro de cada cálculo y sus pruebas lo comprueban. Sin embargo, **se añadió después de ver resultados sobre estos períodos**: es diagnóstico retrospectivo, no protocolo prospectivo ni confirmación independiente. El período anterior al primer bloque evaluado actúa como arranque, no se suma a los denominadores del diagnóstico.
 
-### Hipótesis y decisiones
+### Recomendación y decisiones
+
+| Opción | Lugar propuesto en la próxima evaluación | Motivo y condición |
+| --- | --- | --- |
+| RF fijo con atributos del catálogo | Candidato principal | Buen promedio de selección y 46/225 en cinco semillas; menos integrantes que el stacking + jerárquico. Confirmar con períodos nuevos. |
+| Tasa fija | Control imprescindible | Solución vigente, sencilla; también 46/225 posteriormente. No retirarla por una comparación retrospectiva. |
+| Stacking + jerárquico, pesos 60/40 | Competidor | Mejor máximo de catálogo en la semilla primaria; promedio menor que RF, ventaja no estable. |
+| Rep.PosA con logística | Investigación condicionada | 48/225 posteriormente; exige evidencia de disponibilidad, más semillas y control de multiplicidad. |
+| CatBoost OK/componente | Competidor secundario | Señal en selección; menor rendimiento posterior que RF en las cinco semillas. |
+| Sintéticos y modelos de historial | Menor prioridad con esta evidencia | Beneficios específicos sin liderazgo estable; falta validar disponibilidad o plausibilidad. No descartados universalmente. |
+
+Para una comparación prospectiva se deben congelar candidatos, pesos, representación de columnas y regla de elección antes de leer nuevos resultados. Si se desea un RF formado por varias semillas, ese promedio de predicciones sería **otro candidato**: aquí se promedian métricas para estudiar estabilidad, no se entrenó ni evaluó ese ensemble de semillas.
 
 - Hipótesis: combinar suavizado jerárquico con modelos de catálogo puede mejorar algunos períodos; la ventaja de la mezcla ganadora no es estable ante semillas.
 - Hipótesis: Rep.PosA contiene señal adicional que merece comprobar disponibilidad y reproducibilidad antes de incorporarse. El componente como objetivo conjunto es útil en selección, pero su ventaja no se mantiene posteriormente frente a RF.
@@ -119,6 +206,8 @@ La auditoría completa mantiene hashes y reconciliación de eventos/VIN; las pru
 La búsqueda amplia emitió siete avisos de falta de convergencia de logística (`lbfgs`, límite 2.000 iteraciones); terminó sin errores. No se atribuyen aquí a un candidato específico: la sensibilidad numérica de esos ajustes queda sin resolver. Además, el CatBoost básico local no reproduce exactamente una cifra histórica de otra corrida, como registra [el experimento previo](ensemble-catalogo.md). Las comparaciones publicadas usan controles calculados en la misma corrida; no se reemplaza esa discrepancia por una explicación inventada.
 
 Evidencia: [búsqueda principal](../solucion/resultados/busqueda.json), [catálogo y selección adaptativa](../solucion/resultados/robustez_busqueda.json), [cinco semillas](../solucion/resultados/semillas_busqueda.json).
+
+El [anexo](anexo-busqueda.md) permite revisar cada pipeline y los máximos por método/tamaño sin buscar dentro de un JSON. Conserva la lista completa de columnas y representantes; los ajustes por bloque, pesos y rangos quedan en los agregados enlazados. Solo se publican resultados agregados revisados, sin VIN, extractos individuales ni rutas personales.
 
 ## Límites de la cobertura
 

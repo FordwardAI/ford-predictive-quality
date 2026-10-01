@@ -50,6 +50,12 @@ ni releer la prueba final. Usar únicamente la caché local propia (pickle no es
 ```
 
 Cobertura, resultados y límites de estos experimentos en [búsqueda amplia](../research/busqueda-amplia.md).
+El [anexo completo](../research/anexo-busqueda.md) presenta todos los pipelines y columnas. Para regenerar
+el anexo y las figuras desde los agregados publicados, sin entrenar ni abrir el dataset:
+
+```sh
+MPLCONFIGDIR='<carpeta temporal>' .venv/bin/python research/documentar_busqueda.py
+```
 
 ## Segunda lectura de la prueba final (propuesta)
 

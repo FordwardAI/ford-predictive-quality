@@ -29,6 +29,15 @@ Reglas que siguen todos los archivos:
 
 Las figuras se referencian con los nombres que genera P9 en [`figuras/`](figuras/) (PNG y SVG): `comparacion_alternativas`, `veces_azar`, `veces_azar_prueba_final`, `etiquetas_parciales`, `donde_mirar`, `detector_potencia`, `diagrama_proceso` y `diagrama_solucion`. Esa carpeta la mantiene P9 y no forma parte de este commit.
 
+## Estudio exploratorio posterior
+
+El [estudio de modelos, columnas y ensembles](../../research/busqueda-amplia.md) y su
+[anexo completo](../../research/anexo-busqueda.md) documentan las comparaciones ampliadas del 30/09:
+238 pipelines, 458.098 configuraciones, cinco semillas para candidatos seleccionados y dos figuras.
+La recomendación provisional es evaluar RF con atributos, conservando tasa fija como control.
+Son períodos ya vistos, Día <195, de la base ficticia. Integrar esta evidencia al repo no cambia la solución
+acordada ni las cifras de prueba final de estos borradores. Puede usarse como anexo con ese calificador.
+
 ## Estado de las cifras pendientes
 
 Las cifras de validación de P3 a P6, la hoja de desarrollo de P8 y las de la prueba final (corrida única del 30/09, **mejora**) ya están en los borradores. No quedan marcas `[pendiente: …]` con cifras.
