@@ -446,6 +446,9 @@ def main(argv=None):
     s.add_argument("--csv", required=True, type=Path)
     s.add_argument("--catalogo", required=True, type=Path)
     s.add_argument("--salida", type=Path, default=None)
+    s.add_argument("--clave", default=None,
+                   help="Clave de una alternativa del ranking de precision.json (p. ej. 'ml_rf_atributos|reentrenado') "
+                        "en lugar de la ganadora por aciertos; con --clave la lectura se rotula como tercera")
     c = sub.add_parser("correr", help="Corrida única de la prueba final (sesión conjunta)")
     c.add_argument("--preregistro", type=Path, default=PREREGISTRO)
     c.add_argument("--hash-preregistro", required=True)
@@ -457,10 +460,12 @@ def main(argv=None):
         if opciones.accion == "generar-segunda":
             from . import precision
             tabla = datos.cargar(opciones.csv, opciones.catalogo, cache=None)  # Enmascarada: no lee la prueba final.
-            preregistro = precision.preregistro_segunda_lectura(tabla)
-            salida = opciones.salida or precision.PREREGISTRO_SEGUNDA
+            tercera = opciones.clave is not None
+            preregistro = precision.preregistro_segunda_lectura(tabla, clave=opciones.clave,
+                                                                lectura="tercera" if tercera else "segunda")
+            salida = opciones.salida or (precision.PREREGISTRO_TERCERA if tercera else precision.PREREGISTRO_SEGUNDA)
             sha = escribir(preregistro, salida)
-            print(f"Preregistro propuesto (segunda lectura): {salida} (sha256 {sha})")
+            print(f"Preregistro propuesto ({'tercera' if tercera else 'segunda'} lectura): {salida} (sha256 {sha})")
             print("Pendientes: " + (", ".join(pendientes(preregistro)) or "ninguno"))
         elif opciones.accion == "generar":
             preregistro = generar(opciones.resultados)

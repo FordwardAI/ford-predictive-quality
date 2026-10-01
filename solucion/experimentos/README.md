@@ -31,6 +31,16 @@ ni releer la prueba final. Usar únicamente la caché local propia (pickle no es
 
 Cobertura, resultados y límites de estos experimentos en [búsqueda amplia](../../research/busqueda-amplia.md).
 
+## Mundo simulado con verdad conocida
+
+`python -m solucion.experimentos.simulacion --csv '<CSV vigente>' --catalogo '<catálogo vigente>' --catboost` (o
+`--piezas simulacion` en `solucion.run`) arma un mundo donde la tasa verdadera de cada VIN se conoce, ajustado solo con
+Día <195 y con los días y códigos reales, y corre sobre él, 24 veces por escenario, las mismas alternativas y el mismo
+protocolo de bloques. Mide la precisión verdadera de cada opción (sin el ruido de las etiquetas), la fracción de la mejor
+selección posible que alcanza y cuánto de la diferencia entre opciones se vería en los datos. La amplitud de la señal se
+calibra con las estimaciones reales sin ML en la selección. **Es una simulación, no evidencia sobre la planta.** Escribe
+`solucion/experimentos/resultados/simulacion.json`; unos 85 minutos con CatBoost. Informe: [simulación](../../research/simulacion-evaluacion.md).
+
 ## Opción más precisa con el código
 
 `python -m solucion.experimentos.opcion_precisa --csv '<CSV vigente>' --catalogo '<catálogo vigente>'` mide el techo

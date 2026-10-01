@@ -33,8 +33,9 @@ PIEZAS = {  # Orden de dependencias del plan de acción.
     "ensemble": "solucion.experimentos.ensemble",  # Opcional: CatBoost + tasa móvil, solo Día <195.
     "busqueda": "solucion.experimentos.busqueda",  # Opcional: individuales, columnas, aumento y combinaciones amplias.
     "semillas_busqueda": "solucion.experimentos.semillas_busqueda",  # Estabilidad, sin elegir otra mezcla.
+    "simulacion": "solucion.experimentos.simulacion",  # Opcional: mundo con verdad conocida; ~80 min, solo Día <195.
 }
-OPCIONALES = ("precision", "historial_vin", "ensemble", "busqueda", "semillas_busqueda")
+OPCIONALES = ("precision", "historial_vin", "ensemble", "busqueda", "semillas_busqueda", "simulacion")
 CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 
 
