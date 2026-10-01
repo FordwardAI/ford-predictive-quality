@@ -32,16 +32,23 @@
 //   herramientas/figuras-demo.html).
 // - Cada fila (o segmento, o punto) es un <g class="fila" style="--i: n"> para
 //   que la interfaz pueda animarlas en cascada; el SVG no anima nada por sí mismo.
-// - Tamaños (1 unidad del viewBox ≈ 1 px en un panel de ~900 px de ancho):
-//   · Las figuras de la presentación (`particiones`, `veces_azar_prueba_final` y
-//     `comparacion` con `resumen`): 900 de ancho y alto según el contenido; letra
-//     de 22 px o más en rótulos y valores, y nunca menos de 18 px (ejes, notas).
-//     Sin pies largos dentro del SVG: la pantalla tiene su pie y el detalle va en
-//     <desc>. Ningún texto depende de textLength (se acorta o se parte la línea).
+// - Tamaños. En index.html a 1920×1080 el panel de figura (.figura-marco) mide
+//   746 px; la escala viewBox→px es ancho del panel / ancho del viewBox. Toda la
+//   página escala con el viewport (a 1366×768 el panel mide 531 px), así que la
+//   proporción con el resto de la pantalla se mantiene.
+//   · `particiones` y `comparacion` con `resumen`: 740 de ancho (escala ≈ 1,0 a
+//     1920 px) y alto según el contenido; letra de 22 px o más en rótulos y
+//     valores principales y nunca menos de 18 px (ejes, «margen»).
+//   · `veces_azar_prueba_final`: 900 de ancho con letra de 23 a 40 (≈ 19 a 33 px
+//     efectivos en el panel de 746 px).
+//   · Sin pies dentro de esas figuras: la pantalla tiene su pie y el detalle va
+//     en <desc>. Ningún texto depende de textLength (se acorta o se parte la línea).
 //   · `comparacion` completa: 830 de ancho, letra de 14–15 px (para el informe).
 //   · `donde_mirar`, `etiquetas_parciales` y `detector` (fuera de la presentación):
 //     viewBox 1200×675.
-//   Revisión: herramientas/figuras-demo.html?solo=<id>&ancho=900&medir=1.
+//   Revisión: herramientas/figuras-demo.html?solo=<id>&ancho=746&medir=1.
+// - Las clases de los textos llevan prefijo cuando chocan con la página
+//   (`figura-pie`, no `pie`: styles.css usa `.pie` para el pie fijo).
 
 import { formatear } from './cifras.js';
 
@@ -307,7 +314,7 @@ function lienzo(id, ancho, alto, { titulo, subtitulo = [], desc, pie, opciones, 
   if (pie) {
     const tam = T.pie * k;
     const lineas = partir(pie, Math.floor(util / (tam * LETRA)));
-    lineas.forEach((l, i) => texto(svg, margen, alto - 20 - (lineas.length - 1 - i) * tam * 1.3, l, { tam, color: C.tenue, clase: 'pie' }));
+    lineas.forEach((l, i) => texto(svg, margen, alto - 20 - (lineas.length - 1 - i) * tam * 1.3, l, { tam, color: C.tenue, clase: 'figura-pie' }));
     abajo = alto - 20 - lineas.length * tam * 1.3 - 8;
   }
   if (opciones.titulo === false) return { svg, arriba: 24, abajo };
@@ -488,7 +495,8 @@ function enjambre(xs, r, { separacion = 2, soloAbajo = false } = {}) {
  * Variante `resumen` (presentación proyectada): un punto por alternativa sobre un
  * solo eje de precisión en el cupo, en tres carriles (tasa por código, aprendizaje
  * automático y no elegibles). Sin rangos del 95 % (están en el informe y en la
- * variante completa). Ancho 900, letra de 18 a 30 px.
+ * variante completa). Ancho 740 (el panel de la pantalla mide ~746 px a 1920 px,
+ * así 1 unidad ≈ 1 px): letra de 18 a 28 px.
  */
 function figuraComparacionResumen(datos, opciones) {
   const { p3, p4, eleccion } = datos;
@@ -514,12 +522,12 @@ function figuraComparacionResumen(datos, opciones) {
     { clave: 'no-elegibles', lineas: ['No elegibles'], filas: todas.filter((r) => REFERENCIAS.includes(r.familia)) },
   ].filter((c) => c.filas.length);
 
-  const ANCHO = 900;
-  const TAM = { carril: 24, carrilSub: 20, destacado: 30, rotulo: 22, eje: 20, nota: 22, pie: 18 };
-  const R = 9;
-  const R_GANADORA = 14;
-  const x0 = 262;
-  const x1 = 872;
+  const ANCHO = 740;
+  const TAM = { carril: 24, carrilSub: 20, destacado: 28, rotulo: 22, eje: 20, nota: 22 };
+  const R = 8;
+  const R_GANADORA = 13;
+  const x0 = 232;
+  const x1 = 712;
   const tope = Math.max(0.3, ...todas.map((r) => r.precision_cupo + 0.02));
   const esc = escala(0, tope, x0, x1);
   const titulo = 'Comparación de alternativas en validación';
@@ -547,12 +555,15 @@ function figuraComparacionResumen(datos, opciones) {
     c.sobre = Math.max(R_GANADORA, ...dys.map((d) => -d + R + 1));
     c.bajo = Math.max(R_GANADORA, ...dys.map((d) => d + R + 1));
   }
-  // La mejor precisión se rotula a su derecha si nada de su carril queda más allá;
-  // si no, debajo del carril.
+  // La mejor precisión se rotula a su derecha (en dos o tres líneas) si nada de su
+  // carril queda más allá; si no, debajo del carril.
   const carrilMejor = carriles.find((c) => c.filas.includes(filaMejor));
   const xMejor = esc(filaMejor.precision_cupo);
-  const mejorAlLado = carrilMejor.filas.every((r) => esc(r.precision_cupo) <= xMejor + 2 * R)
-    && xMejor + R + 18 + anchoTexto('Mejor precisión', TAM.rotulo) * 1.15 <= ANCHO - 8;
+  const lineasMejor = carrilMejor.filas.every((r) => esc(r.precision_cupo) <= xMejor + 2 * R)
+    ? [['Mejor precisión', pct(filaMejor.precision_cupo)], ['Mejor', 'precisión', pct(filaMejor.precision_cupo)]]
+      .find((ls) => xMejor + R + 18 + Math.max(...ls.map((l) => anchoTexto(l, TAM.rotulo))) * 1.15 <= ANCHO - 8)
+    : undefined;
+  const mejorAlLado = Boolean(lineasMejor);
 
   // Disposición vertical: rótulo del azar, rótulo de la elegida, carriles.
   const yAzar = arriba + 14;
@@ -572,7 +583,7 @@ function figuraComparacionResumen(datos, opciones) {
     texto(g, esc(v), yBase + 24, pctEje(v), { tam: TAM.eje, color: C.tenue, ancla: 'middle' });
   }
   linea(g, x0, yBase, x1, yBase, C.rango, 1.5);
-  texto(g, (x0 + x1) / 2, yBase + 60, 'Precisión en el cupo (CALIBRADA entre los elegidos)', {
+  texto(g, (x0 + x1) / 2, yBase + 60, 'Precisión en el cupo (% CALIBRADA)', {
     tam: TAM.eje, color: C.tenue, ancla: 'middle',
   });
 
@@ -592,10 +603,10 @@ function figuraComparacionResumen(datos, opciones) {
   for (const c of carriles) {
     const gc = el(svg, 'g', { class: `carril carril-${c.clave}` });
     if (c.lineas.length > 1) {
-      texto(gc, 24, c.y - 13, c.lineas[0], { tam: TAM.carril, peso: 600 });
-      texto(gc, 24, c.y + 15, c.lineas[1], { tam: TAM.carrilSub, color: C.tenue });
+      texto(gc, 20, c.y - 13, c.lineas[0], { tam: TAM.carril, peso: 600 });
+      texto(gc, 20, c.y + 15, c.lineas[1], { tam: TAM.carrilSub, color: C.tenue });
     } else {
-      texto(gc, 24, c.y, c.lineas[0], { tam: TAM.carril, peso: 600 });
+      texto(gc, 20, c.y, c.lineas[0], { tam: TAM.carril, peso: 600 });
     }
     linea(gc, x0, c.y, x1, c.y, C.linea, 1);
     // Los destacados se dibujan al final para quedar encima.
@@ -631,15 +642,16 @@ function figuraComparacionResumen(datos, opciones) {
         // El rótulo se corre a la derecha si pisaría la línea del azar.
         const rotulo = `${FAMILIAS[r.familia] ?? capital(r.familia)} · ${pct(r.precision_cupo)}`;
         const mitad = (anchoTexto(rotulo, TAM.destacado) * 1.15) / 2;
-        const xr = xAzar === null ? x : Math.min(Math.max(x, xAzar + 16 + mitad), x + mitad - 12);
+        const xr = Math.min(xAzar === null ? x : Math.min(Math.max(x, xAzar + 16 + mitad), x + mitad - 12), ANCHO - 8 - mitad);
         texto(gp, xr, yElegida, rotulo, {
           tam: TAM.destacado, peso: 700, ancla: 'middle', halo: true,
         });
       } else if (esMejor) {
         el(gp, 'circle', { cx: x, cy: yc, r: R + 2, style: `fill:${C.texto};stroke:${C.superficie};stroke-width:2.5` });
         if (mejorAlLado) {
-          texto(gp, x + R + 14, yc - 14, 'Mejor precisión', { tam: TAM.rotulo, peso: 600, halo: true });
-          texto(gp, x + R + 14, yc + 16, pct(r.precision_cupo), { tam: TAM.rotulo, peso: 600, halo: true });
+          lineasMejor.forEach((l, k) => texto(gp, x + R + 14, yc + (k - (lineasMejor.length - 1) / 2) * 27 + 8, l, {
+            tam: TAM.rotulo, peso: 600, halo: true,
+          }));
         } else {
           const yr = c.y + c.bajo + 34;
           linea(gp, x, yc + R + 4, x, yr - 16, C.texto, 1.5);
@@ -651,18 +663,16 @@ function figuraComparacionResumen(datos, opciones) {
     }
   }
 
-  // Nota única y pie (debajo del eje); el alto final depende de lo que ocupen.
-  let yPie = yBase + 108;
+  // Nota única debajo del eje (sin pie: la pantalla tiene el suyo y los rangos del
+  // 95 % están en el informe); el alto final depende de si hay nota.
+  let yFin = yBase + 84;
   if (empatan) {
-    texto(svg, 24, yPie, `Otras ${empatan} alternativas empatan con la mejor: gana la más simple.`, {
+    texto(svg, 20, yBase + 108, `Otras ${empatan} empatan con la mejor: gana la más simple.`, {
       tam: TAM.nota, peso: 500, clase: 'nota',
     });
-    yPie += 40;
+    yFin = yBase + 132;
   }
-  texto(svg, 24, yPie, 'Cada punto, una alternativa; los rangos del 95 % están en el informe.', {
-    tam: TAM.pie, color: C.tenue, clase: 'pie',
-  });
-  const alto = Math.ceil(yPie + 24);
+  const alto = Math.ceil(yFin);
   svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
   svg.querySelector('rect')?.setAttribute('height', alto);
   return svg;
@@ -795,7 +805,7 @@ function figuraComparacion(datos, opciones) {
   const tamPie = T.pie * k;
   let yPie = yBase + 64 * k + 22;
   for (const l of partir(pie, Math.floor((ANCHO - 64) / (tamPie * LETRA)))) {
-    texto(svg, 32, yPie, l, { tam: tamPie, color: C.tenue, clase: 'pie' });
+    texto(svg, 32, yPie, l, { tam: tamPie, color: C.tenue, clase: 'figura-pie' });
     yPie += tamPie * 1.3;
   }
   const alto = Math.ceil(yPie + 4);
@@ -1032,10 +1042,10 @@ function figuraParticiones(datos, opciones) {
   const corte = tramo260.dias_del_vin[1];
   const DIA_INICIAL = 1; // base completa: Día 1–284 (cifras.js, tramo «base»)
 
-  // Pensada para ~900 px de ancho (1 unidad ≈ 1 px): el carril ocupa todo el ancho
-  // y su nombre va arriba; letra de 18 a 26 px.
-  const ANCHO = 900;
-  const TAM = { carril: 26, tramo: 24, detalle: 20, margen: 18, eje: 20, llave: 22 };
+  // Ancho 740 (el panel de la pantalla mide ~746 px a 1920 px, así 1 unidad ≈ 1 px):
+  // el carril ocupa todo el ancho y su nombre va arriba; letra de 18 a 26 px.
+  const ANCHO = 740;
+  const TAM = { carril: 26, tramo: 24, detalle: 22, margen: 18, eje: 20, llave: 22 };
   const { svg, arriba } = lienzo('particiones', ANCHO, 2000, {
     titulo: 'Cómo se separaron los días', opciones,
     subtitulo: [`Cada VIN cuenta en un solo tramo, según su Día del VIN. Entre entrenamiento y evaluación, `
@@ -1047,11 +1057,11 @@ function figuraParticiones(datos, opciones) {
       + `inspección ≤ DIA_${corte}; ${entero(cp.cohorte_posterior_260.vins)} VIN con primera inspección posterior van aparte. `
       + 'Base ficticia.',
   });
-  const x0 = 24;
-  const x1 = 876;
+  const x0 = 16;
+  const x1 = 724;
   const dia = escala(DIA_INICIAL - 1, pruFin, x0, x1); // el día d ocupa [dia(d - 1), dia(d)]
   const tramoX = (a, b) => [dia(a - 1), dia(b)];
-  const alto = 76;
+  const alto = 92;
   const yCarril1 = arriba + 34 + alto / 2;
   const yCarril2 = yCarril1 + alto + 84;
   const carriles = [
@@ -1073,6 +1083,9 @@ function figuraParticiones(datos, opciones) {
       ],
     },
   ];
+  // Líneas para rotular un tramo a su derecha ([nombre, detalle] o [nombre, días, VIN]), o null.
+  const alLado = (s, xb) => [[s.d], s.d.split(' · ')].map((partes) => [s.t, ...partes]).find((lineas) =>
+    Math.max(...lineas.map((l, k) => anchoTexto(l, k ? TAM.detalle : TAM.tramo))) * 1.12 <= x1 - xb - 14) ?? null;
   let i = 0;
   for (const c of carriles) {
     const arribaBarra = c.y - alto / 2;
@@ -1084,7 +1097,8 @@ function figuraParticiones(datos, opciones) {
       const g = fila(svg, i++, `segmento ${s.tipo}`);
       if (s.tipo === 'margen') {
         rect(g, xa, arribaBarra, xb - xa, alto, C.superficie);
-        texto(g, (xa + xb) / 2, yRotulo, `margen ${s.a}–${s.b}`, { tam: TAM.margen, color: C.tenue, ancla: 'middle' });
+        // Solo «margen»: los días de cada margen están en el pie de la pantalla y en <desc>.
+        texto(g, (xa + xb) / 2, yRotulo, 'margen', { tam: TAM.margen, color: C.tenue, ancla: 'middle' });
         linea(g, (xa + xb) / 2, yRotulo + 12, (xa + xb) / 2, arribaBarra, C.tenue, 1.5);
         continue;
       }
@@ -1099,10 +1113,13 @@ function figuraParticiones(datos, opciones) {
         const ancla = centrado ? 'middle' : 'start';
         texto(g, x, c.y - 14, s.t, { tam: TAM.tramo, peso: 700, color, ancla });
         texto(g, x, c.y + 18, s.d, { tam: TAM.detalle, color, peso: 500, ancla });
-      } else if (Math.max(anchoTexto(s.t, TAM.tramo), anchoTexto(s.d, TAM.detalle)) * 1.12 <= x1 - xb - 14) {
-        // A la derecha, sobre la pista vacía del carril.
-        texto(g, xb + 14, c.y - 14, s.t, { tam: TAM.tramo, peso: 700 });
-        texto(g, xb + 14, c.y + 18, s.d, { tam: TAM.detalle, color: C.tenue });
+      } else if (alLado(s, xb)) {
+        // A la derecha, sobre la pista vacía del carril: en dos líneas o, si no entra, en tres.
+        const lineas = alLado(s, xb);
+        lineas.forEach((l, k) => {
+          const yl = c.y + (k - (lineas.length - 1) / 2) * 28;
+          texto(g, xb + 14, yl, l, k ? { tam: TAM.detalle, color: C.tenue } : { tam: TAM.tramo, peso: 700 });
+        });
       } else {
         // Sin lugar al lado (el tramo final): arriba, con una línea guía.
         const xm = (xa + xb) / 2;
