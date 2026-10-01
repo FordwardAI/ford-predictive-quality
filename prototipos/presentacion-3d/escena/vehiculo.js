@@ -49,11 +49,11 @@ class Vehiculo {
     this.mallasXray = [];
     this.lineas = [];
     this.materialesPintado = new Set();
-    this.xrayCuerpo = crearMaterialXray({ intensidad: 0.95, base: 0.025 });
+    this.xrayCuerpo = crearMaterialXray({ intensidad: 0.6, base: 0.018 });
     this.xrayCuerpo.side = THREE.FrontSide;
-    this.xrayVidrio = crearMaterialXray({ color: PALETA.skyview.clone().lerp(PALETA.blanco, 0.3), intensidad: 0.45, base: 0.03 });
-    this.xrayInterior = crearMaterialXray({ intensidad: 0.4, base: 0.012, potencia: 1.8 });
-    this.materialBordes = crearMaterialBordes({ opacidad: 0.85 });
+    this.xrayVidrio = crearMaterialXray({ color: PALETA.skyview.clone().lerp(PALETA.blanco, 0.3), intensidad: 0.3, base: 0.02 });
+    this.xrayInterior = crearMaterialXray({ intensidad: 0.26, base: 0.008, potencia: 1.8 });
+    this.materialBordes = crearMaterialBordes({ opacidad: 0.75 });
     this.materialBordesInterior = crearMaterialBordes({ opacidad: 0.22 });
     this.anclas = {};
     this.halos = [];
@@ -107,12 +107,13 @@ class Vehiculo {
     this.xrayCuerpo.uniforms.uOpacidad.value = rx;
     this.xrayVidrio.uniforms.uOpacidad.value = rx;
     this.xrayInterior.uniforms.uOpacidad.value = rx;
-    this.materialBordes.uniforms.uOpacidad.value = 0.85 * bordes + 0.16 * pint;
+    this.materialBordes.uniforms.uOpacidad.value = 0.75 * bordes + 0.12 * pint;
     this.materialBordesInterior.uniforms.uOpacidad.value = 0.22 * bordes;
     for (const malla of this.mallasXray) malla.visible = rx > 0.003;
     for (const l of this.lineas) l.visible = bordes + pint > 0.003;
     for (const h of this.halos) {
-      const f = !this.focoHalo ? 1 : h.name === this.focoHalo ? 1.3 : 0.35;
+      // halos discretos: visibles en «dónde mirar» sin quemar la chapa
+      const f = !this.focoHalo ? 0.75 : h.name === this.focoHalo ? 1 : 0.25;
       h.material.opacity = Math.min(1, this.brilloHalos * v * f);
       h.visible = h.material.opacity > 0.003;
     }
@@ -128,8 +129,8 @@ class Vehiculo {
   fijarHalos(v, tiempo = 0) {
     this.brilloHalos = v;
     this.halos.forEach((h, i) => {
-      const s = 0.55 + 0.12 * Math.sin(tiempo * 2.4 + i * 1.7);
-      h.scale.setScalar(h.name === this.focoHalo ? s * 1.45 : s);
+      const s = 0.42 + 0.06 * Math.sin(tiempo * 2.4 + i * 1.7);
+      h.scale.setScalar(h.name === this.focoHalo ? s * 1.3 : s);
     });
     this.actualizar();
   }
@@ -216,7 +217,7 @@ export function crearPickupProcedural() {
   const negro = crearMaterialOscuro('#090b10', 0.6, 0.2);
   const goma = crearMaterialOscuro('#050506', 0.9, 0.0);
   const metal = crearMaterialMetal();
-  const faro = crearMaterialEmisivo(PALETA.blanco, 3.2);
+  const faro = crearMaterialEmisivo(PALETA.blanco, 1.8);
   const piloto = crearMaterialEmisivo(PALETA.gris, 0.5);
 
   // Carrocería delantera + cabina inferior (perfil lateral extruido con arco de rueda delantera)
@@ -498,7 +499,7 @@ function vehiculoDesdeGLB(raiz) {
       // era transparente (calcos, rejillas con alfa) lo sigue siendo, sin escribir profundidad.
       nuevo = mat.clone();
       // las ópticas emisivas del modelo florecen demasiado con el bloom de la escena
-      if (nuevo.emissiveMap || (nuevo.emissive && nuevo.emissive.getHex() !== 0)) nuevo.emissiveIntensity = (nuevo.emissiveIntensity ?? 1) * 0.45;
+      if (nuevo.emissiveMap || (nuevo.emissive && nuevo.emissive.getHex() !== 0)) nuevo.emissiveIntensity = (nuevo.emissiveIntensity ?? 1) * 0.3;
       const transparenteOriginal = mat.transparent && mat.opacity < 1;
       nuevo.userData.opacidadBase = transparenteOriginal ? mat.opacity : 1;
       nuevo.userData.siempreTransparente = !!mat.transparent;
