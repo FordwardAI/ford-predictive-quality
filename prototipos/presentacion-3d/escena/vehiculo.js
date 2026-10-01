@@ -11,11 +11,32 @@ import {
   crearMaterialOscuro,
   crearMaterialMetal,
   crearMaterialEmisivo,
+  fijarOpacidadMaterial,
 } from './materiales.js';
 
 const DRACO_URL = 'https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/libs/draco/gltf/';
 const LARGO_OBJETIVO = 5.4;
 const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
+
+// Anclas de hotspots como fracciones del bounding box local [fx (largo, +X = frente),
+// fy (alto), fz (ancho, 0 = lado -Z)] y normal hacia afuera (para ocultar el punto si queda detrás).
+// Las del GLB se ajustaron con demo.html?anclas=1 sobre la Ranger optimizada.
+export const ANCLAS_PROCEDURAL = {
+  'etiqueta-parabrisas': [[0.685, 0.67, 0.17], [0.7, 0.6, -0.5]],
+  'componente-1': [[0.86, 0.6, 0.5], [0.25, 1, 0]],
+  'componente-2': [[0.5, 0.52, 0.0], [0, 0.15, -1]],
+  'componente-3': [[0.18, 0.58, 0.5], [-0.2, 1, 0]],
+};
+export const ANCLAS_GLB = {
+  // esquina inferior del parabrisas del lado del conductor (−Z), apenas sobre el torpedo
+  'etiqueta-parabrisas': [[0.69, 0.78, 0.2], [0.7, 0.6, -0.5]],
+  // capot, sobre el eje delantero
+  'componente-1': [[0.86, 0.64, 0.5], [0.25, 1, 0]],
+  // puerta trasera, sobre la chapa (la caja incluye los espejos: 0 quedaría en el aire)
+  'componente-2': [[0.5, 0.52, 0.06], [0, 0.15, -1]],
+  // centro de la caja de carga, a la altura de las barandas
+  'componente-3': [[0.18, 0.55, 0.5], [-0.2, 1, 0]],
+};
 
 class Vehiculo {
   constructor(tipo) {
@@ -40,12 +61,14 @@ class Vehiculo {
     this.modo = 1;
     this.visibilidad = 1;
     this.brilloHalos = 0;
+    this.focoHalo = null; // id del componente enfocado (enfocarPunto) o null
   }
 
   // Agrega una pieza: malla pintada (opcional), gemela x-ray y bordes.
   agregarPieza(geometria, materialPintado, { xray = 'cuerpo', bordes = true, umbral = 22, padre = this.interior, soloXray = false } = {}) {
     if (materialPintado && !soloXray) {
       const malla = new THREE.Mesh(geometria, materialPintado);
+      if (materialPintado.userData.siempreTransparente) malla.renderOrder = 1;
       padre.add(malla);
       this.mallasPintado.push(malla);
       this.materialesPintado.add(materialPintado);
@@ -73,7 +96,11 @@ class Vehiculo {
     const m = THREE.MathUtils.clamp(this.modo, 0, 1);
     const v = this.visibilidad;
     const pint = m * v;
-    for (const mat of this.materialesPintado) mat.opacity = pint;
+    // Opacos salvo durante el fundido (0 < pint < 1); vidrios siempre transparentes.
+    for (const mat of this.materialesPintado) {
+      const base = mat.userData.opacidadBase ?? 1;
+      fijarOpacidadMaterial(mat, base * pint, { siempreTransparente: !!mat.userData.siempreTransparente });
+    }
     for (const malla of this.mallasPintado) malla.visible = pint > 0.003;
     const rx = (1 - m) * v;
     const bordes = THREE.MathUtils.clamp((1 - m) * 1.15, 0, 1) * v;
@@ -85,7 +112,8 @@ class Vehiculo {
     for (const malla of this.mallasXray) malla.visible = rx > 0.003;
     for (const l of this.lineas) l.visible = bordes + pint > 0.003;
     for (const h of this.halos) {
-      h.material.opacity = this.brilloHalos * v;
+      const f = !this.focoHalo ? 1 : h.name === this.focoHalo ? 1.3 : 0.35;
+      h.material.opacity = Math.min(1, this.brilloHalos * v * f);
       h.visible = h.material.opacity > 0.003;
     }
   }
@@ -101,25 +129,21 @@ class Vehiculo {
     this.brilloHalos = v;
     this.halos.forEach((h, i) => {
       const s = 0.55 + 0.12 * Math.sin(tiempo * 2.4 + i * 1.7);
-      h.scale.setScalar(s);
+      h.scale.setScalar(h.name === this.focoHalo ? s * 1.45 : s);
     });
     this.actualizar();
   }
 
-  // Anclas genéricas a partir del bounding box local (sirven para cualquier modelo orientado a +X).
-  calcularAnclas() {
+  // Anclas a partir del bounding box local (sirven para cualquier modelo orientado a +X).
+  calcularAnclas(tabla = ANCLAS_PROCEDURAL) {
     this.caja.setFromObject(this.interior, true);
     const { min, max } = this.caja;
     const L = max.x - min.x;
     const H = max.y - min.y;
     const W = max.z - min.z;
     const p = (fx, fy, fz) => new THREE.Vector3(min.x + L * fx, min.y + H * fy, min.z + W * fz);
-    const definiciones = {
-      'etiqueta-parabrisas': [p(0.685, 0.67, 0.17), v3(0.7, 0.6, -0.5)],
-      'componente-1': [p(0.86, 0.6, 0.5), v3(0.25, 1, 0)],
-      'componente-2': [p(0.5, 0.52, 0.0), v3(0, 0.15, -1)],
-      'componente-3': [p(0.18, 0.58, 0.5), v3(-0.2, 1, 0)],
-    };
+    this.fraccionAPos = p;
+    const definiciones = Object.fromEntries(Object.entries(tabla).map(([id, [f, n]]) => [id, [p(...f), v3(...n)]]));
     const centro = new THREE.Vector3((min.x + max.x) / 2, min.y + H * 0.45, (min.z + max.z) / 2);
     this.centroLocal = centro;
     for (const [id, [pos, normal]] of Object.entries(definiciones)) {
@@ -137,6 +161,7 @@ class Vehiculo {
         map: textura, color: PALETA.skyview.clone().lerp(PALETA.blanco, 0.3), transparent: true,
         opacity: 0, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
       }));
+      sprite.name = id;
       sprite.position.copy(this.anclas[id].position);
       sprite.renderOrder = 5;
       sprite.visible = false;
@@ -328,20 +353,53 @@ export function crearPickupProcedural() {
   return v;
 }
 
-// Geometría barata (boxes + cilindros fusionados) para repetir en la playa de despacho.
+// Silueta media de pickup doble cabina para repetir en la playa (fusionada) y en el convoy
+// (instanciada): perfil lateral extruido con arcos de rueda, cabina más angosta y ruedas.
+// Unos 1,5 k triángulos; sin índices para poder fusionar con atributos por vértice.
 export function crearGeometriaPickupSimple() {
-  const partes = [
-    caja(5.2, 0.62, 1.8, 0, 0.78, 0),
-    caja(2.2, 0.62, 1.66, 0.2, 1.4, 0),
-    caja(1.3, 0.12, 1.78, 1.9, 1.08, 0),
-  ];
-  for (const [x, z] of [[1.6, 0.8], [1.6, -0.8], [-1.6, 0.8], [-1.6, -0.8]]) {
-    const r = new THREE.CylinderGeometry(0.38, 0.38, 0.26, 12, 1);
+  const perfil = new THREE.Shape();
+  perfil.moveTo(-2.66, 0.46);
+  perfil.lineTo(-2.68, 1.2);
+  perfil.lineTo(-0.66, 1.2);
+  perfil.lineTo(-0.64, 1.24);
+  perfil.lineTo(0.98, 1.25);
+  perfil.lineTo(1.3, 1.2);
+  perfil.quadraticCurveTo(2.3, 1.15, 2.56, 1.07);
+  perfil.lineTo(2.66, 0.96);
+  perfil.lineTo(2.68, 0.62);
+  perfil.lineTo(2.6, 0.44);
+  perfil.lineTo(2.13, 0.44);
+  perfil.absarc(1.62, 0.44, 0.51, 0, Math.PI, false);
+  perfil.lineTo(-1.09, 0.46);
+  perfil.absarc(-1.6, 0.46, 0.51, 0, Math.PI, false);
+  perfil.lineTo(-2.66, 0.46);
+  const opciones = (prof, bisel) => ({ depth: prof, bevelEnabled: true, bevelThickness: bisel, bevelSize: bisel, bevelSegments: 1, curveSegments: 8 });
+  const cuerpo = new THREE.ExtrudeGeometry(perfil, opciones(1.74, 0.04));
+  cuerpo.translate(0, 0, -0.87);
+
+  const cabina = new THREE.Shape();
+  cabina.moveTo(-0.62, 1.2);
+  cabina.lineTo(-0.58, 1.8);
+  cabina.quadraticCurveTo(-0.2, 1.87, 0.22, 1.85);
+  cabina.lineTo(1.0, 1.24);
+  cabina.lineTo(-0.62, 1.2);
+  const techo = new THREE.ExtrudeGeometry(cabina, opciones(1.52, 0.04));
+  techo.translate(0, 0, -0.76);
+
+  const partes = [cuerpo, techo];
+  for (const [x, z] of [[1.62, 0.8], [1.62, -0.8], [-1.6, 0.8], [-1.6, -0.8]]) {
+    const r = new THREE.CylinderGeometry(0.39, 0.39, 0.27, 18, 1);
     r.rotateX(Math.PI / 2);
-    r.translate(x, 0.38, z);
+    r.translate(x, 0.39, z);
     partes.push(r);
   }
-  return mergeGeometries(partes.map((g) => g.toNonIndexed()));
+  const geo = mergeGeometries(partes.map((g) => {
+    const n = g.index ? g.toNonIndexed() : g;
+    n.deleteAttribute('uv');
+    return n;
+  }));
+  geo.computeBoundingSphere();
+  return geo;
 }
 
 // ---------- GLB ----------
@@ -424,14 +482,29 @@ function vehiculoDesdeGLB(raiz) {
     if (mayor) pinturas = [mayor];
   }
   const pinturaFord = crearMaterialPintura();
-  const vidrioFord = crearMaterialVidrio();
+  const vidrioFord = crearMaterialVidrio({ opacidad: 0.78 });
+  // Ópticas y lentes: vidrio casi invisible para que se vea el faro detrás (oscuro: uno claro
+  // toma la luz clave y florece con el bloom).
+  const vidrioClaro = crearMaterialVidrio({ opacidad: 0.25, color: '#0a0f18' });
+  const esOptica = (mat) => /clear|lens|lente|faro|light/i.test(mat.name || '');
   const reemplazos = new Map();
   const reemplazar = (mat) => {
     if (reemplazos.has(mat)) return reemplazos.get(mat);
     let nuevo;
     if (pinturas.includes(mat)) nuevo = pinturaFord;
-    else if (esVidrio(mat)) nuevo = vidrioFord;
-    else { nuevo = mat.clone(); nuevo.transparent = true; }
+    else if (esVidrio(mat)) nuevo = esOptica(mat) ? vidrioClaro : vidrioFord;
+    else {
+      // Clon opaco: `actualizar` lo vuelve transparente sólo mientras se funde. Si el original ya
+      // era transparente (calcos, rejillas con alfa) lo sigue siendo, sin escribir profundidad.
+      nuevo = mat.clone();
+      // las ópticas emisivas del modelo florecen demasiado con el bloom de la escena
+      if (nuevo.emissiveMap || (nuevo.emissive && nuevo.emissive.getHex() !== 0)) nuevo.emissiveIntensity = (nuevo.emissiveIntensity ?? 1) * 0.45;
+      const transparenteOriginal = mat.transparent && mat.opacity < 1;
+      nuevo.userData.opacidadBase = transparenteOriginal ? mat.opacity : 1;
+      nuevo.userData.siempreTransparente = !!mat.transparent;
+      nuevo.transparent = !!mat.transparent;
+      if (mat.transparent) nuevo.depthWrite = false;
+    }
     reemplazos.set(mat, nuevo);
     return nuevo;
   };
@@ -441,7 +514,9 @@ function vehiculoDesdeGLB(raiz) {
     const mats = Array.isArray(m.material) ? m.material : [m.material];
     mats.forEach((mat) => v.materialesPintado.add(mat));
     v.mallasPintado.push(m);
-    const vidrioMalla = mats.every((mat) => mat === vidrioFord);
+    const vidrioMalla = mats.every((mat) => mat === vidrioFord || mat === vidrioClaro);
+    // Orden: opaco (0) → transparentes del modelo (1) → gemela x-ray (2) → bordes (3).
+    if (mats.some((mat) => mat.userData.siempreTransparente)) m.renderOrder = 1;
     const gemela = new THREE.Mesh(m.geometry, vidrioMalla ? v.xrayVidrio : v.xrayCuerpo);
     gemela.renderOrder = 2;
     m.parent.add(gemela);
@@ -455,9 +530,42 @@ function vehiculoDesdeGLB(raiz) {
       v.lineas.push(lineas);
     }
   }
-  v.calcularAnclas();
+  v.calcularAnclas(ANCLAS_GLB);
+  taparEmblemas(v, pinturaFord);
   v.actualizar();
   return v;
+}
+
+// El modelo trae el óvalo de Ford en la parrilla y en el portón, el nombre del modelo estampado
+// en el portón y la insignia «Sport»; la presentación no usa logos de Ford. Se tapan con placas
+// del color de la pieza: oscura en la parrilla (se lee como la barra central) y pintura en el
+// portón. Posiciones medidas por raycast sobre la Ranger optimizada, en metros desde el frente
+// (max.x) o la cola (min.x) de la caja y desde el piso; z desde el centro.
+const EMBLEMAS_GLB = [
+  // [extremo, dx hacia adentro, y, z, profundidad, alto, ancho, material]
+  ['frente', 0.006, 0.98, 0, 0.03, 0.118, 0.34, 'parrilla'],
+  ['cola', 0.052, 1.055, 0, 0.02, 0.125, 0.27, 'pintura'],
+  ['cola', 0.085, 0.84, 0, 0.02, 0.135, 1.46, 'pintura'],
+  ['cola', 0.09, 1.128, 0.53, 0.02, 0.075, 0.3, 'pintura'],
+];
+function taparEmblemas(v, pintura) {
+  const { min, max } = v.caja;
+  const zc = (min.z + max.z) / 2;
+  const materiales = { parrilla: crearMaterialOscuro('#0b0e14', 0.4, 0.5), pintura };
+  const geos = { parrilla: [], pintura: [] };
+  for (const [extremo, dx, y, z, prof, alto, ancho, mat] of EMBLEMAS_GLB) {
+    const g = new THREE.BoxGeometry(prof, alto, ancho);
+    g.translate(extremo === 'frente' ? max.x - dx : min.x + dx, min.y + y, zc + z);
+    geos[mat].push(g);
+  }
+  for (const [clave, lista] of Object.entries(geos)) {
+    if (!lista.length) continue;
+    const malla = new THREE.Mesh(mergeGeometries(lista), materiales[clave]);
+    malla.name = `tapa-emblemas-${clave}`;
+    v.interior.add(malla);
+    v.mallasPintado.push(malla);
+    v.materialesPintado.add(materiales[clave]);
+  }
 }
 
 // Nunca rechaza: si el GLB no existe o falla, devuelve la pickup procedural.
