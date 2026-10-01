@@ -6,9 +6,19 @@
 // es el valor publicado en docs/entrega/ y se marca `respaldo: true`.
 //
 // Fuentes:
-//   - solucion/resultados/prueba-final.json  corrida única de la prueba final
-//     (corridas[0]: tasa fija, preregistro.json). Las corridas[1] y [2] son la
-//     segunda lectura (CatBoost, preregistro-precision.json) y no se muestran.
+//   - solucion/resultados/prueba-final.json  lecturas de la prueba final. Se
+//     usa la primera corrida de cada preregistro:
+//       corridas[0]  lectura 1, tasa fija (preregistro.json): la cifra oficial.
+//       corridas[1]  lectura 2, CatBoost (preregistro-precision.json).
+//       corridas[2]  repetición exacta de corridas[1] (mismos tramos y piezas;
+//                    la anterior falló al imprimir en la consola de Windows). Se
+//                    conserva en el JSON y no se lee aquí.
+//       corridas[3]  lectura 3, Random Forest (preregistro-efectividad.json,
+//                    pedida el 01/10; no consta acuerdo del resto del equipo).
+//     Las tres lecturas se informan juntas; la 2 y la 3 no reemplazan a la 1.
+//   - solucion/resultados/precision.json  elección por precisión en bloques de
+//     tiempo (propuesta del 30/09): selección 100–174 y confirmación 175–194,
+//     todo con Día < 195 (prueba final no releída).
 //   - solucion/resultados/eleccion.json, p3.json, p5.json, p6.json, p8.json,
 //     preparacion.json  validación 155–194 y preparación de los datos.
 //   - research/audit-csv.json  auditoría del CSV vigente (SHA-256 a24860d8…c5a82b).
@@ -24,7 +34,9 @@
 // campo en el JSON y falla si difieren. Mantener el formato de DEFINICIONES:
 // un objeto por definición, con los campos clave, archivo, ruta, formato y
 // respaldo en ese orden, `ruta` con puntos e índices ([0]) y, para cifras
-// derivadas, `a/b` (cociente), `a-b` (diferencia), `a#largo` o `a#cuenta:campo`.
+// derivadas, `a/b` (cociente), `a-b` (diferencia), `a#largo`, `a#cuenta:campo`
+// o `a#n` (el entero que sigue a «n = » en un texto de calificador; precision.json
+// no trae el n de selección y confirmación como número aparte).
 
 const RAIZ = '../../'; // relativo a prototipos/presentacion-3d/
 
@@ -39,6 +51,8 @@ const TRAMOS = {
   dondeMirar: { texto: 'validación 155–194', n: 'dondeMirar.n', unidad: 'VIN CALIBRADA elegidos por la tasa fija' },
   dondeMirarPrueba: { texto: 'prueba final Día 200–284', n: 'dondeMirar.prueba.n', unidad: 'VIN CALIBRADA elegidos por la tasa fija' },
   hoja190: { texto: 'hoja de desarrollo del Día 190 (validación)', n: 'validacion.n', unidad: 'VIN en validación; unidades con identificadores ficticios' },
+  seleccion: { texto: 'selección 100–174 (prueba final no releída)', n: 'seleccion.n', unidad: 'VIN' },
+  confirmacion: { texto: 'confirmación 175–194 (prueba final no releída)', n: 'confirmacion.n', unidad: 'VIN' },
 };
 
 export const DEFINICIONES = [
@@ -98,7 +112,7 @@ export const DEFINICIONES = [
   { clave: 'prueba.calibradasElegidas', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.calibrada_elegidas', formato: 'entero', respaldo: 71,
     tramo: 'prueba', etiqueta: 'CALIBRADA entre los elegidos' },
   { clave: 'prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.10889570552147239,
-    tramo: 'prueba', etiqueta: 'de cada 100 elegidos se calibran' },
+    tramo: 'prueba', etiqueta: 'de cada 100 elegidos se calibran · lectura 1, tasa fija (oficial)' },
   { clave: 'prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.08274629051053826, 0.13609099666968646],
     tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo' },
   { clave: 'prueba.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08228066604795758,
@@ -117,6 +131,45 @@ export const DEFINICIONES = [
     tramo: 'prueba260', etiqueta: 'de cada 100 elegidos se calibran (prueba ≤260)' },
   { clave: 'prueba.hasta260.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[1].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08324409192158382,
     tramo: 'prueba260', etiqueta: 'al azar con el mismo cupo (prueba ≤260)' },
+
+  // --- La solución elegida: CatBoost con atributos del código -----------------
+  // Elección por precisión (propuesta aprobada el 30/09): precision.json.
+  { clave: 'seleccion.n', archivo: 'solucion/resultados/precision.json', ruta: 'calificador_seleccion#n', formato: 'entero', respaldo: 15279,
+    tramo: 'seleccion', etiqueta: 'VIN en selección (cuatro bloques)' },
+  { clave: 'confirmacion.n', archivo: 'solucion/resultados/precision.json', ruta: 'calificador_confirmacion#n', formato: 'entero', respaldo: 4626,
+    tramo: 'confirmacion', etiqueta: 'VIN en confirmación' },
+  { clave: 'catboost.seleccion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.precision_seleccion', formato: 'pct1', respaldo: 0.1837837837837838,
+    tramo: 'seleccion', etiqueta: 'de cada 100 elegidos por CatBoost se calibran' },
+  { clave: 'catboost.tasaFijaSeleccion', archivo: 'solucion/resultados/precision.json', ruta: 'tasa_fija.precision_seleccion', formato: 'pct1', respaldo: 0.12702702702702703,
+    tramo: 'seleccion', etiqueta: 'con la tasa fija reajustada en cada bloque' },
+  { clave: 'catboost.azarSeleccion', archivo: 'solucion/resultados/precision.json', ruta: 'azar.precision_seleccion', formato: 'pct1', respaldo: 0.11216216216216217,
+    tramo: 'seleccion', etiqueta: 'al azar con el mismo cupo' },
+  { clave: 'catboost.confirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.17333333333333334,
+    tramo: 'confirmacion', etiqueta: 'CatBoost en el último bloque: no se confirmó' },
+  { clave: 'catboost.tasaFijaConfirmacion', archivo: 'solucion/resultados/precision.json', ruta: 'tasa_fija.confirmacion.precision_cupo', formato: 'pct1', respaldo: 0.20444444444444446,
+    tramo: 'confirmacion', etiqueta: 'tasa fija en el último bloque (dentro del ruido)' },
+
+  // Prueba final, lectura 2 (corridas[1], CatBoost; corridas[2] la repite igual).
+  { clave: 'catboost.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.1196319018404908,
+    tramo: 'prueba', etiqueta: 'de cada 100 elegidos se calibran · lectura 2, CatBoost (más débil)' },
+  { clave: 'catboost.prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.09162573707704177, 0.1475946322603848],
+    tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo · lectura 2' },
+  { clave: 'catboost.prueba.azar', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.azar_mismo_cupo', formato: 'pct1', respaldo: 0.08228066604795758,
+    tramo: 'prueba', etiqueta: 'al azar con el mismo cupo · lectura 2' },
+  { clave: 'catboost.prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.4539491181411064,
+    tramo: 'prueba', etiqueta: 'veces el azar · lectura 2, CatBoost' },
+  { clave: 'catboost.prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.143937851209665, 1.7606161509632392],
+    tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar · lectura 2' },
+
+  // Prueba final, lectura 3 (corridas[3], Random Forest; sin acuerdo del resto del equipo).
+  { clave: 'rf.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.11809815950920245,
+    tramo: 'prueba', etiqueta: 'de cada 100 elegidos se calibran · lectura 3, Random Forest' },
+  { clave: 'rf.prueba.precisionRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_rango95', formato: 'rangoPct1', respaldo: [0.09223003256939673, 0.14618075150777565],
+    tramo: 'prueba', etiqueta: 'rango del 95 % de la precisión en el cupo · lectura 3' },
+  { clave: 'rf.prueba.veces', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.veces_azar', formato: 'veces', respaldo: 1.4353087448316049,
+    tramo: 'prueba', etiqueta: 'veces el azar · lectura 3, Random Forest' },
+  { clave: 'rf.prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.1318838968651415, 1.7603055447500682],
+    tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar · lectura 3' },
 
   // --- Valor diferencial ---------------------------------------------------
   { clave: 'dondeMirar.n', archivo: 'solucion/resultados/p6.json', ruta: 'componente.calibrada_elegidas_por_la_ganadora.calibrada_evaluadas', formato: 'entero', respaldo: 59,
@@ -195,7 +248,7 @@ export function formatear(formato, valor) {
   return f(valor);
 }
 
-// --- Lectura de rutas del tipo 'a.b[0].c', 'x/y', 'x-y', 'x#largo', 'x#cuenta:campo'.
+// --- Lectura de rutas del tipo 'a.b[0].c', 'x/y', 'x-y', 'x#largo', 'x#cuenta:campo', 'x#n'.
 function leerRuta(objeto, ruta) {
   let valor = objeto;
   for (const parte of ruta.split('.')) {
@@ -211,6 +264,11 @@ function leerRuta(objeto, ruta) {
 export function resolver(objeto, ruta) {
   const [base, op] = ruta.split('#');
   if (op === 'largo') return leerRuta(objeto, base).length;
+  if (op === 'n') {
+    const m = String(leerRuta(objeto, base)).match(/\bn = (\d+)\b/);
+    if (!m) throw new Error(`Sin «n = » en: ${base}`);
+    return Number(m[1]);
+  }
   if (op?.startsWith('cuenta:')) {
     const campo = op.slice('cuenta:'.length);
     return leerRuta(objeto, base).filter((x) => x[campo] === true).length;
