@@ -4,12 +4,21 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 V="${1:-v1}"
-CHROME="${CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
+# Chrome: la variable CHROME manda; si no está, se busca la ruta habitual de macOS, Windows o Linux.
+if [ -z "${CHROME:-}" ]; then
+  for c in "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"            "/c/Program Files/Google/Chrome/Application/chrome.exe"            "/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"            "$(command -v google-chrome || true)"; do
+    [ -n "$c" ] && [ -x "$c" ] && { CHROME="$c"; break; }
+  done
+fi
+[ -n "${CHROME:-}" ] || { echo "No encuentro Chrome: definir CHROME=/ruta/al/ejecutable" >&2; exit 1; }
 W=1840
 OUT="shots/$V"
 mkdir -p "$OUT"
 [ -f data.js ] || { echo "Falta data.js: correr exportar_datos.py primero" >&2; exit 1; }
-BASE="file://$PWD/index.html"
+# En Windows (Git Bash) Chrome necesita file:///C:/…; cygpath -m da esa forma.
+DIR="$PWD"
+command -v cygpath >/dev/null 2>&1 && DIR="/$(cygpath -m "$PWD")"
+BASE="file://$DIR/index.html"
 FLAGS=(--headless=new --hide-scrollbars --allow-file-access-from-files --virtual-time-budget=15000)
 
 # Chrome sin interfaz a veces se cuelga: se corta a los 60 s y se reintenta una vez.
@@ -50,6 +59,6 @@ for p in d-inicio.html d-hoja.html "d-hoja.html?estado=sin-programa" "d-hoja.htm
          "d-evaluacion.html?vista=ml" d-exploracion.html d-datos.html d-control.html d-config.html \
          "d-config.html?estado=error-archivo"; do
   n=$(echo "$p" | sed 's/\.html//; s/[?=&]/-/g')
-  chrome --window-size=1440,994 --screenshot="$OUT/pantallas/$n.png" "file://$PWD/$p" >/dev/null
+  chrome --window-size=1440,994 --screenshot="$OUT/pantallas/$n.png" "file://$DIR/$p" >/dev/null
 done
 echo "$OUT/pantallas/ ($(ls "$OUT/pantallas" | wc -l | tr -d ' ') capturas)"
