@@ -194,8 +194,11 @@ def _resumen(x):
             "p2_5": float(np.percentile(x, 2.5)), "p97_5": float(np.percentile(x, 97.5))}
 
 
-def resumir(replicas, claves):
-    """Agrega las réplicas de un escenario: precisión, diferencia con la tasa fija y qué tan seguido se ve."""
+def resumir(replicas, claves, pares=()):
+    """Agrega las réplicas de un escenario: precisión, diferencia con la tasa fija y qué tan seguido se ve.
+
+    `pares`: [(a, b)] de claves; agrega la diferencia directa a − b, pareada réplica por réplica (positiva si a es mejor).
+    """
     salida = {}
     for tramo in ("seleccion", "confirmacion", "todo"):
         realizada = {c: np.array([_agregar(r[c], tramo)[0] for r in replicas]) for c in ("azar", *claves)}
@@ -216,7 +219,13 @@ def resumir(replicas, claves):
                     "es_mejor_que_la_tasa_fija": None if c == "tasa_fija" else float(np.mean(dv > 0)),
                     "se_ve_mejor_en_los_datos": None if c == "tasa_fija" else float(np.mean(dr > 0))})
             filas.append(fila)
-        salida[tramo] = {"elegidos_por_replica": elegidos, "filas": filas}
+        directas = []
+        for a, b in pares:
+            dv, dr = verdadera[a] - verdadera[b], realizada[a] - realizada[b]
+            directas.append({"a": a, "b": b, "nombre": f"{NOMBRES[a]} menos {NOMBRES[b]}",
+                             "diferencia_verdadera": _resumen(dv), "diferencia_realizada": _resumen(dr),
+                             "a_es_mejor": float(np.mean(dv > 0)), "a_se_ve_mejor_en_los_datos": float(np.mean(dr > 0))})
+        salida[tramo] = {"elegidos_por_replica": elegidos, "filas": filas, "comparaciones_directas": directas}
     return salida
 
 
@@ -277,7 +286,8 @@ def fidelidad(replicas, real, claves):
     return filas
 
 
-def correr(tabla, opciones=None, replicas=None, escenarios=None, claves=CANDIDATAS, al_terminar=None, amplitud=None):
+def correr(tabla, opciones=None, replicas=None, escenarios=None, claves=CANDIDATAS, al_terminar=None, amplitud=None,
+           pares=()):
     assert not tabla.desbloqueada, "La simulación no relee la prueba final"
     assert all(b <= DIA_MAX for _, b in BLOQUES), "Solo Día < 195"
     replicas = replicas or getattr(opciones, "replicas", None) or REPLICAS
@@ -291,11 +301,12 @@ def correr(tabla, opciones=None, replicas=None, escenarios=None, claves=CANDIDAT
         al_terminar(f"calibración (amplitud {amplitud})", 0.0)
     nombres = list(escenarios or ESCENARIOS)
     resultados, corridas_base = {}, None
-    for i, nombre in enumerate(nombres):
+    for nombre in nombres:
+        i = list(ESCENARIOS).index(nombre)  # La semilla depende del escenario, no de cuáles se piden.
         inicio = time.time()
         corridas = [evaluar_replica(tabla, mundo, ESCENARIOS[nombre], np.random.default_rng([SEMILLA, i, r]), claves,
                                     atributos, mercados, amplitud) for r in range(replicas)]
-        resultados[nombre] = {"escenario": ESCENARIOS[nombre], "replicas": replicas, **resumir(corridas, claves)}
+        resultados[nombre] = {"escenario": ESCENARIOS[nombre], "replicas": replicas, **resumir(corridas, claves, pares)}
         if nombre == "base":
             corridas_base = corridas
         if al_terminar:
@@ -303,7 +314,7 @@ def correr(tabla, opciones=None, replicas=None, escenarios=None, claves=CANDIDAT
     return {"pieza": "Simulación de un mundo con verdad conocida (#33)",
             "rotulo": "simulación, no evidencia sobre la planta; Día < 195; prueba final no releída; no elegible",
             "protocolo": {"bloques_seleccion": [list(b) for b in BLOQUES_SELECCION], "confirmacion": list(CONFIRMACION),
-                          "margen_dias": MARGEN, "replicas": replicas, "semilla": SEMILLA, "candidatas": list(claves),
+                          "margen_dias": MARGEN, "replicas": replicas, "semilla": SEMILLA, "candidatas": list(claves), "pares": [list(p) for p in pares],
                           "configuracion_fija": "la de los preregistros: RF min_samples_leaf 5, vida 15, semilla 4; "
                                                 "CatBoost l2 10, vida 15, semilla 1; logística C 1, vida 60; sin ajuste por "
                                                 "bloque"},
@@ -325,10 +336,17 @@ def main(argv=None):
     parser.add_argument("--replicas", type=int, default=REPLICAS)
     parser.add_argument("--escenarios", default=",".join(ESCENARIOS))
     parser.add_argument("--catboost", action="store_true", help="Suma CatBoost con atributos (más lento)")
+    parser.add_argument("--pares", default="", help="Comparaciones directas a:b separadas por coma (a − b, positiva si a es mejor)")
+    parser.add_argument("--solo", default="", help="Solo estas opciones (más la tasa fija), separadas por coma")
+    parser.add_argument("--amplitud", type=float, default=None, help="Fija la amplitud y se salta la calibración")
     opciones = parser.parse_args(argv)
     tabla = cargar(opciones.csv, opciones.catalogo, cache=opciones.cache)
+    pares = [tuple(p.split(":")) for p in opciones.pares.split(",") if p]
+    claves = tuple(c for c in (CON_CATBOOST if opciones.catboost else CANDIDATAS) if not opciones.solo
+                   or c in opciones.solo.split(",") or c == "tasa_fija")
+    assert all(a in claves and b in claves for a, b in pares), "Los pares deben estar entre las opciones corridas"
     resultado = correr(tabla, replicas=opciones.replicas, escenarios=opciones.escenarios.split(","),
-                       claves=CON_CATBOOST if opciones.catboost else CANDIDATAS,
+                       claves=claves, pares=pares, amplitud=opciones.amplitud,
                        al_terminar=lambda n, s: print(f"simulacion: {n} listo ({s:.0f} s)", flush=True))
     opciones.salida.parent.mkdir(parents=True, exist_ok=True)
     opciones.salida.write_text(json.dumps(resultado, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
