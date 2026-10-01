@@ -24,8 +24,8 @@
 //   herramientas/figuras-demo.html).
 // - Cada fila (o segmento) es un <g class="fila" style="--i: n"> para que la
 //   interfaz pueda animarlas en cascada; el SVG no anima nada por sí mismo.
-// - viewBox 1200×675 (16:9), salvo `comparacion`: 1000×1100, porque 31
-//   alternativas y 2 referencias no entran legibles en 16:9.
+// - viewBox 1200×675 (16:9), salvo `comparacion`: 830 de ancho y alto según
+//   el contenido (~860 sin título), para letra de 14–15 px a ~830 px de ancho.
 
 import { formatear } from './cifras.js';
 
@@ -457,54 +457,76 @@ function figuraComparacion(datos, opciones) {
   const todas = grupos.flatMap((g) => g.filas);
   const calificador = todas.find((r) => r.elegible)?.calificador ?? '';
 
-  const ANCHO = 1000;
-  const ALTO = 1100;
+  // Notas de figuras.py; «empata con la mejor» no se repite en cada fila: va una vez en la leyenda.
+  const notaDe = (r, grupo) => {
+    const nota = [];
+    if (r.alternativa === ganadora) nota.push(`${pct(r.precision_cupo)} · ganadora`);
+    if (r.alternativa === mejor) nota.push(`${pct(r.precision_cupo)} · mejor precisión`);
+    if (grupo.tipo === 'referencia') nota.push(pct(r.precision_cupo));
+    else if (comparacion.has(r.alternativa) && !nota.length) {
+      return comparacion.get(r.alternativa).empata ? { empata: true, texto: '' } : { empata: false, texto: 'por debajo de la mejor' };
+    }
+    return { empata: false, texto: nota.join(' / ') };
+  };
+  const empatanSinNota = grupos.flatMap((g) => g.filas.map((r) => notaDe(r, g))).filter((n) => n.empata).length;
+
+  // Pensada para ~830 px de ancho: 1 unidad del viewBox ≈ 1 px; 31 alternativas + 2
+  // referencias en ~870 px de alto, con letra de 14–15 px.
+  const ANCHO = 830;
+  const k = 0.75; // título, subtítulo, eje y pie en escala con el resto
+  const TAM = { rotulo: 15, grupo: 14, nota: 14 };
+  const PASO = 18.5;
+  const SEPARACION = 3;
   const titulo = 'Comparación de alternativas en validación';
   const desc = `Precisión en el cupo por alternativa, con rango del 95 % (bootstrap por días), ${calificador}. `
     + `La ganadora (${nombre(ganadora)}) es la más simple entre las que empatan con la mejor (${nombre(mejor)}). `
     + 'El oráculo (techo) y la versión con fuga (didáctica) no son elegibles. La línea vertical es el azar al mismo cupo.';
-  const k = 0.82; // textos de soporte algo más chicos: la figura tiene 33 filas
-  const { svg, arriba, abajo } = lienzo('comparacion', ANCHO, ALTO, {
+  const { svg, arriba } = lienzo('comparacion', ANCHO, 2000, {
     titulo, desc, opciones, escala: k,
     subtitulo: [`Precisión en el cupo diario del 5 %, ${calificador}.`,
       'Rango del 95 % por bootstrap de días. Los rombos huecos son referencias que no pueden elegirse.'],
-    pie: 'Regla de elección (#10): mayor precisión en el cupo; si el rango pareado de la diferencia con la mejor '
-      + 'incluye 0, empatan y gana la más simple.',
   });
   if (resaltarFuga) svg.classList.add('resaltar-fuga');
 
-  const xGrupo = 20;
-  const xEtiqueta = 500;
-  const x0 = 514;
-  const x1 = 800;
-  const xNota = 812;
+  const xGrupo = 34;      // nombres de familia (a la derecha de la llave de aprendizaje automático)
+  const xEtiqueta = 450;  // borde derecho de los rótulos de fila
+  const x0 = 462;
+  const x1 = 712;         // las notas van a la derecha de cada intervalo
+  const yInicio = arriba + 28; // rótulo del azar
+  const alternativas = grupos.filter((g) => g.tipo !== 'referencia');
+  const alturaFilas = todas.length * PASO + SEPARACION * (grupos.length - 1)
+    + (grupos.some((g) => g.tipo === 'referencia') ? PASO : 0); // encabezado de las referencias
+  const yBase = yInicio + alturaFilas + 6;
   const tope = Math.max(0.3, ...todas.map((r) => r.precision_rango95[1] + 0.02));
   const esc = escala(0, tope, x0, x1);
-  const yBase = eje(svg, esc, ticks(tope, 4), arriba, abajo, pctEje,
+  eje(svg, esc, ticks(tope, 4), arriba, yBase + 64 * k, pctEje,
     'Precisión en el cupo: CALIBRADA entre los elegidos (rango del 95 %)', x0, x1, k);
-  const yInicio = arriba + 28;
-  const separacion = 6;
-  const paso = (yBase - 8 - yInicio - separacion * (grupos.length - 1)) / todas.length;
   if (azar) referencia(svg, esc(azar.azar_mismo_cupo), arriba, yBase, `azar al mismo cupo: ${pct(azar.azar_mismo_cupo)}`, k);
 
   let y = yInicio;
   let i = 0;
+  let mlDesde = null;
+  let mlHasta = null;
   grupos.forEach((grupo, gi) => {
     if (gi) {
-      linea(svg, xGrupo, y + separacion / 2, xEtiqueta, y + separacion / 2, C.linea, 1);
-      y += separacion;
+      linea(svg, xGrupo, y + SEPARACION / 2, xEtiqueta, y + SEPARACION / 2, C.linea, 1);
+      y += SEPARACION;
     }
-    // Rótulos de familia largos en dos líneas si el grupo tiene filas para eso.
-    const lineas = grupo.lineas.length === 1 && grupo.tipo !== 'referencia' && grupo.filas.length > 1
-      ? partir(grupo.lineas[0], 16) : grupo.lineas;
-    lineas.forEach((l, li) => {
-      const ultima = grupo.lineas.length === 1 || li === lineas.length - 1;
-      texto(svg, xGrupo, y + paso * (li + 0.5), l, {
-        tam: 13, peso: ultima ? 600 : 400, color: ultima ? C.texto : C.tenue, clase: 'grupo',
-      });
-    });
+    const nom = grupo.lineas[grupo.lineas.length - 1];
+    if (grupo.tipo === 'referencia') {
+      // Encabezado propio: el rótulo de la versión con fuga es largo y ocupa la columna.
+      texto(svg, xGrupo, y + PASO / 2, nom, { tam: TAM.grupo, peso: 600, clase: 'grupo' });
+      y += PASO;
+    } else {
+      if (grupo.lineas.length > 1) { // aprendizaje automático: la llave común lleva ese rótulo
+        mlDesde ??= y;
+        mlHasta = y + grupo.filas.length * PASO;
+      }
+      const lineas = grupo.filas.length > 1 ? partir(nom, 15).slice(0, grupo.filas.length) : [nom];
+      lineas.forEach((l, li) => texto(svg, xGrupo, y + PASO * (li + 0.5), l, { tam: TAM.grupo, peso: 600, clase: 'grupo' }));
+    }
     for (const r of grupo.filas) {
-      const yc = y + paso / 2;
+      const yc = y + PASO / 2;
       const esGanadora = r.alternativa === ganadora;
       const esMejor = r.alternativa === mejor;
       const esFuga = resaltarFuga && r.familia === 'fuga';
@@ -512,27 +534,50 @@ function figuraComparacion(datos, opciones) {
       const clases = [esGanadora && 'ganadora', esMejor && 'mejor', grupo.tipo === 'referencia' && 'referencia',
         r.familia === 'fuga' && 'fuga'].filter(Boolean).join(' ');
       const g = fila(svg, i, clases);
-      if (esFuga) rect(g, xGrupo - 8, yc - paso / 2, ANCHO - 2 * xGrupo + 16, paso, C.alertaSuave, { radio: 4 });
+      if (esFuga) rect(g, 6, yc - PASO / 2, ANCHO - 12, PASO, C.alertaSuave, { radio: 4 });
       texto(g, xEtiqueta, yc, etiquetaComparacion(r), {
-        tam: 15, ancla: 'end', peso: esGanadora || esFuga ? 600 : 400,
-        color: esFuga ? C.alerta : C.texto,
+        tam: TAM.rotulo, ancla: 'end', peso: esGanadora || esFuga ? 600 : 400, color: esFuga ? C.alerta : C.texto,
       });
-      puntoIntervalo(g, esc, yc, r.precision_cupo, r.precision_rango95, tipo, 6.5);
-      const nota = [];
-      if (esGanadora) nota.push(`${pct(r.precision_cupo)} · ganadora`);
-      if (esMejor) nota.push(`${pct(r.precision_cupo)} · mejor precisión`);
-      if (grupo.tipo === 'referencia') nota.push(pct(r.precision_cupo));
-      else if (comparacion.has(r.alternativa) && !nota.length) {
-        nota.push(comparacion.get(r.alternativa).empata ? 'empata con la mejor' : 'por debajo de la mejor');
+      puntoIntervalo(g, esc, yc, r.precision_cupo, r.precision_rango95, tipo, 6);
+      const nota = notaDe(r, grupo).texto;
+      if (nota) {
+        const fuerte = esGanadora || esMejor || esFuga;
+        texto(g, esc(r.precision_rango95[1]) + 10, yc, nota, {
+          tam: TAM.nota, color: esFuga ? C.alerta : fuerte ? C.texto : C.tenue, peso: fuerte ? 600 : 400, halo: true,
+        });
       }
-      const fuerte = esGanadora || esMejor || esFuga;
-      texto(g, xNota, yc, nota.join(' / '), {
-        tam: 14, color: esFuga ? C.alerta : fuerte ? C.texto : C.tenue, peso: fuerte ? 600 : 400,
-      });
-      y += paso;
+      y += PASO;
       i += 1;
     }
   });
+  if (mlDesde !== null && alternativas.length) {
+    const xLlave = 20;
+    el(svg, 'path', {
+      d: `M${xLlave + 6} ${mlDesde + 3}H${xLlave}V${mlHasta - 3}H${xLlave + 6}`,
+      style: `fill:none;stroke:${C.tenue};stroke-width:1.5`,
+    });
+    const yc = (mlDesde + mlHasta) / 2;
+    texto(svg, xLlave - 8, yc, 'Aprendizaje automático', {
+      tam: TAM.grupo, color: C.tenue, ancla: 'middle', clase: 'grupo',
+    }).setAttribute('transform', `rotate(-90 ${xLlave - 8} ${yc})`);
+  }
+
+  // Leyenda y pie, debajo del eje; el alto final del viewBox depende de cuántas líneas ocupen.
+  const pie = [
+    empatanSinNota ? `Sin nota: empata con la mejor (${empatanSinNota} alternativas).` : '',
+    opciones.titulo === false ? 'Los rombos huecos son referencias que no pueden elegirse.' : '',
+    'Regla de elección (#10): mayor precisión en el cupo; si el rango pareado de la diferencia con la mejor '
+      + 'incluye 0, empatan y gana la más simple.',
+  ].filter(Boolean).join(' ');
+  const tamPie = T.pie * k;
+  let yPie = yBase + 64 * k + 22;
+  for (const l of partir(pie, Math.floor((ANCHO - 64) / (tamPie * LETRA)))) {
+    texto(svg, 32, yPie, l, { tam: tamPie, color: C.tenue, clase: 'pie' });
+    yPie += tamPie * 1.3;
+  }
+  const alto = Math.ceil(yPie + 4);
+  svg.setAttribute('viewBox', `0 0 ${ANCHO} ${alto}`);
+  svg.querySelector('rect')?.setAttribute('height', alto);
   return svg;
 }
 
