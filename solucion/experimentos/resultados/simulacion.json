@@ -1,0 +1,4622 @@
+{
+  "pieza": "Simulación de un mundo con verdad conocida (#33)",
+  "rotulo": "simulación, no evidencia sobre la planta; Día < 195; prueba final no releída; no elegible",
+  "protocolo": {
+    "bloques_seleccion": [
+      [
+        100,
+        118
+      ],
+      [
+        119,
+        137
+      ],
+      [
+        138,
+        156
+      ],
+      [
+        157,
+        174
+      ]
+    ],
+    "confirmacion": [
+      175,
+      194
+    ],
+    "margen_dias": 5,
+    "replicas": 24,
+    "semilla": 20261005,
+    "candidatas": [
+      "tasa_fija",
+      "jerarquico_60",
+      "movil_120_mercado",
+      "riesgo_estandarizado",
+      "logistica_atributos",
+      "rf_atributos",
+      "catboost_atributos"
+    ],
+    "configuracion_fija": "la de los preregistros: RF min_samples_leaf 5, vida 15, semilla 4; CatBoost l2 10, vida 15, semilla 1; logística C 1, vida 60; sin ajuste por bloque"
+  },
+  "mundo": {
+    "desvio_entre_codigos_log": 0.2150347031413495,
+    "nivel_general": {
+      "min": 0.0861397479954181,
+      "max": 0.14820936639118457
+    },
+    "riesgo_relativo_por_mercado": {
+      "LOCATION_1": 1.026772268019088,
+      "LOCATION_2": 0.9643645073811272,
+      "LOCATION_3": 0.852622151597571,
+      "LOCATION_4": 1.8870577045496155,
+      "LOCATION_5": 0.8712793007087621,
+      "LOCATION_6": 0.9288133147937411,
+      "LOCATION_7": 0.7845812319232167,
+      "LOCATION_8": 0.5096395708077329,
+      "LOCATION_9": 0.8427524465272607
+    },
+    "codigos": 98,
+    "ajustado_con": "Día <= 194",
+    "amplitud": 1.0,
+    "calibracion": [
+      {
+        "amplitud": 1.0,
+        "error_cuadratico_medio_puntos": 0.5742415149627327,
+        "simulada": {
+          "jerarquico_60": 16.875,
+          "movil_120_mercado": 16.6722972972973,
+          "riesgo_estandarizado": 16.739864864864867
+        }
+      },
+      {
+        "amplitud": 1.2,
+        "error_cuadratico_medio_puntos": 1.8840833870608265,
+        "simulada": {
+          "jerarquico_60": 19.121621621621625,
+          "movil_120_mercado": 19.138513513513516,
+          "riesgo_estandarizado": 19.206081081081084
+        }
+      },
+      {
+        "amplitud": 1.4,
+        "error_cuadratico_medio_puntos": 5.407041559809819,
+        "simulada": {
+          "jerarquico_60": 22.58445945945946,
+          "movil_120_mercado": 22.787162162162165,
+          "riesgo_estandarizado": 22.702702702702705
+        }
+      },
+      {
+        "amplitud": 1.6,
+        "error_cuadratico_medio_puntos": 4.263543852778218,
+        "simulada": {
+          "jerarquico_60": 21.62162162162162,
+          "movil_120_mercado": 21.418918918918916,
+          "riesgo_estandarizado": 21.62162162162162
+        }
+      },
+      {
+        "amplitud": 1.8,
+        "error_cuadratico_medio_puntos": 9.097471784952846,
+        "simulada": {
+          "jerarquico_60": 26.199324324324323,
+          "movil_120_mercado": 26.43581081081081,
+          "riesgo_estandarizado": 26.52027027027027
+        }
+      }
+    ]
+  },
+  "fidelidad_escenario_base": [
+    {
+      "clave": "azar",
+      "nombre": "azar",
+      "seleccion": {
+        "real": 11.216216216216218,
+        "simulada": 11.08108108108108,
+        "simulada_p2_5": 9.25,
+        "simulada_p97_5": 12.908783783783784
+      },
+      "confirmacion": {
+        "real": 9.333333333333334,
+        "simulada": 10.148148148148147,
+        "simulada_p2_5": 6.355555555555556,
+        "simulada_p97_5": 13.388888888888891
+      },
+      "todo": {
+        "real": 10.777202072538861,
+        "simulada": 10.86355785837651,
+        "simulada_p2_5": 8.914507772020725,
+        "simulada_p97_5": 12.966321243523316
+      }
+    },
+    {
+      "clave": "tasa_fija",
+      "nombre": "tasa fija, reajustada por bloque",
+      "seleccion": {
+        "real": 12.702702702702704,
+        "simulada": 13.772522522522522,
+        "simulada_p2_5": 11.391891891891893,
+        "simulada_p97_5": 17.175675675675677
+      },
+      "confirmacion": {
+        "real": 20.444444444444446,
+        "simulada": 14.981481481481481,
+        "simulada_p2_5": 8.511111111111111,
+        "simulada_p97_5": 19.933333333333337
+      },
+      "todo": {
+        "real": 14.507772020725387,
+        "simulada": 14.05440414507772,
+        "simulada_p2_5": 11.207253886010362,
+        "simulada_p97_5": 17.282383419689122
+      }
+    },
+    {
+      "clave": "jerarquico_60",
+      "nombre": "jerárquico 60 días, peso 20",
+      "seleccion": {
+        "real": 17.7027027027027,
+        "simulada": 16.841216216216214,
+        "simulada_p2_5": 14.131756756756758,
+        "simulada_p97_5": 21.077702702702705
+      },
+      "confirmacion": {
+        "real": 18.22222222222222,
+        "simulada": 15.370370370370372,
+        "simulada_p2_5": 8.066666666666666,
+        "simulada_p97_5": 20.633333333333336
+      },
+      "todo": {
+        "real": 17.82383419689119,
+        "simulada": 16.49827288428325,
+        "simulada_p2_5": 13.637305699481866,
+        "simulada_p97_5": 20.32383419689119
+      }
+    },
+    {
+      "clave": "movil_120_mercado",
+      "nombre": "móvil 120 días hacia el mercado",
+      "seleccion": {
+        "real": 17.027027027027028,
+        "simulada": 17.14527027027027,
+        "simulada_p2_5": 14.655405405405405,
+        "simulada_p97_5": 20.905405405405407
+      },
+      "confirmacion": {
+        "real": 20.444444444444446,
+        "simulada": 15.092592592592593,
+        "simulada_p2_5": 7.755555555555556,
+        "simulada_p97_5": 19.933333333333337
+      },
+      "todo": {
+        "real": 17.82383419689119,
+        "simulada": 16.666666666666668,
+        "simulada_p2_5": 13.696891191709843,
+        "simulada_p97_5": 20.145077720207254
+      }
+    },
+    {
+      "clave": "riesgo_estandarizado",
+      "nombre": "riesgo estandarizado, 60 días",
+      "seleccion": {
+        "real": 17.16216216216216,
+        "simulada": 17.31418918918919,
+        "simulada_p2_5": 15.003378378378379,
+        "simulada_p97_5": 20.996621621621625
+      },
+      "confirmacion": {
+        "real": 19.555555555555557,
+        "simulada": 15.481481481481481,
+        "simulada_p2_5": 10.166666666666666,
+        "simulada_p97_5": 21.011111111111113
+      },
+      "todo": {
+        "real": 17.72020725388601,
+        "simulada": 16.886873920552677,
+        "simulada_p2_5": 14.020725388601036,
+        "simulada_p97_5": 20.339378238341972
+      }
+    },
+    {
+      "clave": "logistica_atributos",
+      "nombre": "logística con atributos, reentrenada cada 5 días",
+      "seleccion": {
+        "real": 15.81081081081081,
+        "simulada": 16.43581081081081,
+        "simulada_p2_5": 13.844594594594595,
+        "simulada_p97_5": 20.26689189189189
+      },
+      "confirmacion": {
+        "real": 20.444444444444446,
+        "simulada": 15.222222222222223,
+        "simulada_p2_5": 7.5,
+        "simulada_p97_5": 20.633333333333336
+      },
+      "todo": {
+        "real": 16.89119170984456,
+        "simulada": 16.15284974093264,
+        "simulada_p2_5": 13.080310880829014,
+        "simulada_p97_5": 19.702072538860104
+      }
+    },
+    {
+      "clave": "rf_atributos",
+      "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+      "seleccion": {
+        "real": 16.08108108108108,
+        "simulada": 15.979729729729732,
+        "simulada_p2_5": 13.070945945945946,
+        "simulada_p97_5": 19.97972972972973
+      },
+      "confirmacion": {
+        "real": 19.555555555555557,
+        "simulada": 14.388888888888891,
+        "simulada_p2_5": 6.8,
+        "simulada_p97_5": 19.866666666666667
+      },
+      "todo": {
+        "real": 16.89119170984456,
+        "simulada": 15.608808290155443,
+        "simulada_p2_5": 12.145077720207254,
+        "simulada_p97_5": 19.020725388601036
+      }
+    },
+    {
+      "clave": "catboost_atributos",
+      "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+      "seleccion": {
+        "real": 17.43243243243243,
+        "simulada": 16.70045045045045,
+        "simulada_p2_5": 14.094594594594595,
+        "simulada_p97_5": 19.976351351351354
+      },
+      "confirmacion": {
+        "real": 17.333333333333336,
+        "simulada": 14.666666666666666,
+        "simulada_p2_5": 7.311111111111112,
+        "simulada_p97_5": 20.18888888888889
+      },
+      "todo": {
+        "real": 17.409326424870468,
+        "simulada": 16.226252158894646,
+        "simulada_p2_5": 13.562176165803109,
+        "simulada_p97_5": 19.569948186528496
+      }
+    }
+  ],
+  "escenarios": {
+    "base": {
+      "escenario": {
+        "mezcla": "real",
+        "heterogeneidad": 1.0,
+        "deriva": 0.0
+      },
+      "replicas": 24,
+      "seleccion": {
+        "elegidos_por_replica": 740,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.281340256057513,
+              "desvio": 0.7165403620647736,
+              "p2_5": 10.222930756173207,
+              "p97_5": 12.586319204008838
+            },
+            "precision_realizada": {
+              "media": 11.08108108108108,
+              "desvio": 1.0096872545587041,
+              "p2_5": 9.25,
+              "p97_5": 12.908783783783784
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 13.727480550114242,
+              "desvio": 1.628438635213776,
+              "p2_5": 11.708859294295868,
+              "p97_5": 16.99578127419427
+            },
+            "precision_realizada": {
+              "media": 13.772522522522522,
+              "desvio": 1.7424239809029884,
+              "p2_5": 11.391891891891893,
+              "p97_5": 17.175675675675677
+            },
+            "fraccion_del_techo": 0.7565290191496897,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 16.5256375059091,
+              "desvio": 1.8343400413736322,
+              "p2_5": 13.64625913107734,
+              "p97_5": 19.268195384563548
+            },
+            "precision_realizada": {
+              "media": 16.841216216216214,
+              "desvio": 1.9476476516180008,
+              "p2_5": 14.131756756756758,
+              "p97_5": 21.077702702702705
+            },
+            "fraccion_del_techo": 0.9105496021575569,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.7981569557948602,
+              "desvio": 0.8008499364844778,
+              "p2_5": 1.6268636153709028,
+              "p97_5": 4.228986382581745
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.0686936936936937,
+              "desvio": 1.5796965658949282,
+              "p2_5": 0.48310810810810756,
+              "p97_5": 6.385135135135137
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 1.0
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 16.834426179039614,
+              "desvio": 1.771673351096026,
+              "p2_5": 13.757198067285875,
+              "p97_5": 19.602558195146667
+            },
+            "precision_realizada": {
+              "media": 17.14527027027027,
+              "desvio": 1.8396827074774527,
+              "p2_5": 14.655405405405405,
+              "p97_5": 20.905405405405407
+            },
+            "fraccion_del_techo": 0.9277808928646003,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.106945628925374,
+              "desvio": 0.722911452501978,
+              "p2_5": 1.7378025515794386,
+              "p97_5": 4.234458063595987
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.372747747747747,
+              "desvio": 1.6051252424546918,
+              "p2_5": 0.4459459459459474,
+              "p97_5": 6.425675675675675
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 1.0
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 17.08155637442039,
+              "desvio": 1.61400278008157,
+              "p2_5": 14.228518192874136,
+              "p97_5": 19.51945702704369
+            },
+            "precision_realizada": {
+              "media": 17.31418918918919,
+              "desvio": 1.8210300151297423,
+              "p2_5": 15.003378378378379,
+              "p97_5": 20.996621621621625
+            },
+            "fraccion_del_techo": 0.9420395048720489,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.3540758243061517,
+              "desvio": 0.7461667543362325,
+              "p2_5": 2.0910635801470128,
+              "p97_5": 4.617388213735241
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.5416666666666665,
+              "desvio": 1.677919712806226,
+              "p2_5": 1.6993243243243252,
+              "p97_5": 7.21283783783784
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 1.0
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 16.039619722172976,
+              "desvio": 1.8276539836380326,
+              "p2_5": 13.158299064221103,
+              "p97_5": 18.84638656904068
+            },
+            "precision_realizada": {
+              "media": 16.43581081081081,
+              "desvio": 1.8972613496381951,
+              "p2_5": 13.844594594594595,
+              "p97_5": 20.26689189189189
+            },
+            "fraccion_del_techo": 0.8834407655708553,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.312139172058737,
+              "desvio": 0.7577443048700068,
+              "p2_5": 1.1275036729918906,
+              "p97_5": 3.7366903351965624
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.6632882882882885,
+              "desvio": 1.5675874054959869,
+              "p2_5": 0.3479729729729722,
+              "p97_5": 5.4594594594594605
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 1.0
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.878905713494348,
+              "desvio": 1.853535072388396,
+              "p2_5": 12.822248961269752,
+              "p97_5": 18.817039691713163
+            },
+            "precision_realizada": {
+              "media": 15.979729729729732,
+              "desvio": 1.9417020245117127,
+              "p2_5": 13.070945945945946,
+              "p97_5": 19.97972972972973
+            },
+            "fraccion_del_techo": 0.8744306488743758,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.1514251633801087,
+              "desvio": 0.7129086183988594,
+              "p2_5": 0.9454389851976029,
+              "p97_5": 3.35451805884332
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.207207207207207,
+              "desvio": 1.6848553884831725,
+              "p2_5": -0.4020270270270264,
+              "p97_5": 5.300675675675677
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 16.25156215047507,
+              "desvio": 1.857921095886251,
+              "p2_5": 13.100565192520799,
+              "p97_5": 19.067064891487195
+            },
+            "precision_realizada": {
+              "media": 16.70045045045045,
+              "desvio": 1.7250214392032108,
+              "p2_5": 14.094594594594595,
+              "p97_5": 19.976351351351354
+            },
+            "fraccion_del_techo": 0.8948316603086953,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.5240816003608333,
+              "desvio": 0.9627644322835394,
+              "p2_5": 0.910321551162831,
+              "p97_5": 4.302842271488797
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.9279279279279273,
+              "desvio": 1.6457597672391102,
+              "p2_5": 0.40540540540540565,
+              "p97_5": 5.385135135135134
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 1.0
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 18.13539008108472,
+              "desvio": 1.7068292145073973,
+              "p2_5": 15.120962060927532,
+              "p97_5": 20.87946018422549
+            }
+          }
+        ]
+      },
+      "confirmacion": {
+        "elegidos_por_replica": 225,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 9.553039528521998,
+              "desvio": 0.5685483616977577,
+              "p2_5": 8.617673870767586,
+              "p97_5": 10.46510508554675
+            },
+            "precision_realizada": {
+              "media": 10.148148148148147,
+              "desvio": 2.1119161106107627,
+              "p2_5": 6.355555555555556,
+              "p97_5": 13.388888888888891
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 15.311107771496628,
+              "desvio": 2.2640467748682904,
+              "p2_5": 11.041473720362658,
+              "p97_5": 18.347942357732304
+            },
+            "precision_realizada": {
+              "media": 14.981481481481481,
+              "desvio": 3.1494645348574615,
+              "p2_5": 8.511111111111111,
+              "p97_5": 19.933333333333337
+            },
+            "fraccion_del_techo": 0.9434073677651318,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 15.488274936785082,
+              "desvio": 2.2109608788111257,
+              "p2_5": 10.818028186494706,
+              "p97_5": 18.7968964680718
+            },
+            "precision_realizada": {
+              "media": 15.370370370370372,
+              "desvio": 3.771046385175914,
+              "p2_5": 8.066666666666666,
+              "p97_5": 20.633333333333336
+            },
+            "fraccion_del_techo": 0.9545069194965382,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.17716716528845464,
+              "desvio": 0.6065501732284001,
+              "p2_5": -0.5958807374287616,
+              "p97_5": 1.6848300328642596
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.38888888888888906,
+              "desvio": 1.9231058257871814,
+              "p2_5": -3.1111111111111103,
+              "p97_5": 4.000000000000001
+            },
+            "es_mejor_que_la_tasa_fija": 0.6666666666666666,
+            "se_ve_mejor_en_los_datos": 0.4583333333333333
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 15.673962767056707,
+              "desvio": 2.1077203466861985,
+              "p2_5": 11.387403434046774,
+              "p97_5": 18.67165378477047
+            },
+            "precision_realizada": {
+              "media": 15.092592592592593,
+              "desvio": 3.48598400047983,
+              "p2_5": 7.755555555555556,
+              "p97_5": 19.933333333333337
+            },
+            "fraccion_del_techo": 0.9668949253226976,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.3628549955600793,
+              "desvio": 0.42605050989445886,
+              "p2_5": -0.06119794456696734,
+              "p97_5": 1.4298354555103323
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.11111111111111106,
+              "desvio": 1.5521010641596569,
+              "p2_5": -2.4111111111111114,
+              "p97_5": 3.355555555555558
+            },
+            "es_mejor_que_la_tasa_fija": 0.875,
+            "se_ve_mejor_en_los_datos": 0.4583333333333333
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 15.902134942807955,
+              "desvio": 2.0651560044781276,
+              "p2_5": 11.787876945248383,
+              "p97_5": 19.02821254012441
+            },
+            "precision_realizada": {
+              "media": 15.481481481481481,
+              "desvio": 3.2307344946379364,
+              "p2_5": 10.166666666666666,
+              "p97_5": 21.011111111111113
+            },
+            "fraccion_del_techo": 0.9815186279515107,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.5910271713113294,
+              "desvio": 0.57382918727578,
+              "p2_5": -0.04761650878242755,
+              "p97_5": 2.0336899048701125
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.49999999999999994,
+              "desvio": 2.0982317530561323,
+              "p2_5": -1.966666666666667,
+              "p97_5": 6.155555555555555
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 15.515088018636845,
+              "desvio": 2.229608298819115,
+              "p2_5": 11.162004034465756,
+              "p97_5": 18.673618029460258
+            },
+            "precision_realizada": {
+              "media": 15.222222222222223,
+              "desvio": 3.5802284042685155,
+              "p2_5": 7.5,
+              "p97_5": 20.633333333333336
+            },
+            "fraccion_del_techo": 0.9560759030778394,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.20398024714021612,
+              "desvio": 0.4691508150418197,
+              "p2_5": -0.4960058247727765,
+              "p97_5": 1.3483628862670123
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.2407407407407407,
+              "desvio": 1.6731489613212693,
+              "p2_5": -2.4111111111111114,
+              "p97_5": 3.6111111111111125
+            },
+            "es_mejor_que_la_tasa_fija": 0.7916666666666666,
+            "se_ve_mejor_en_los_datos": 0.5
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.00095473837038,
+              "desvio": 2.193887503395659,
+              "p2_5": 11.096736022087134,
+              "p97_5": 18.48334757343336
+            },
+            "precision_realizada": {
+              "media": 14.388888888888891,
+              "desvio": 3.581577482406303,
+              "p2_5": 6.8,
+              "p97_5": 19.866666666666667
+            },
+            "fraccion_del_techo": 0.9247026150813085,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.3101530331262467,
+              "desvio": 0.8024592973397019,
+              "p2_5": -1.95550202637286,
+              "p97_5": 1.0133267937972326
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.5925925925925927,
+              "desvio": 1.7370536893749082,
+              "p2_5": -3.866666666666667,
+              "p97_5": 2.411111111111112
+            },
+            "es_mejor_que_la_tasa_fija": 0.3333333333333333,
+            "se_ve_mejor_en_los_datos": 0.2916666666666667
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.2199126551403,
+              "desvio": 2.2496507034390985,
+              "p2_5": 11.062940699035053,
+              "p97_5": 18.709716810774726
+            },
+            "precision_realizada": {
+              "media": 14.666666666666666,
+              "desvio": 3.6106837353937604,
+              "p2_5": 7.311111111111112,
+              "p97_5": 20.18888888888889
+            },
+            "fraccion_del_techo": 0.9378656317310511,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.09119511635632686,
+              "desvio": 0.7975378879129278,
+              "p2_5": -1.7711185807805616,
+              "p97_5": 1.4545327187122843
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.3148148148148148,
+              "desvio": 2.4535768508515345,
+              "p2_5": -4.311111111111112,
+              "p97_5": 4.755555555555557
+            },
+            "es_mejor_que_la_tasa_fija": 0.375,
+            "se_ve_mejor_en_los_datos": 0.3333333333333333
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 16.18876480603542,
+              "desvio": 2.002317740738767,
+              "p2_5": 12.27728113986268,
+              "p97_5": 19.27903208690906
+            }
+          }
+        ]
+      },
+      "todo": {
+        "elegidos_por_replica": 965,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 10.878368583834208,
+              "desvio": 0.6716334930816698,
+              "p2_5": 9.863930308907202,
+              "p97_5": 12.099621081653863
+            },
+            "precision_realizada": {
+              "media": 10.86355785837651,
+              "desvio": 0.9805553041476132,
+              "p2_5": 8.914507772020725,
+              "p97_5": 12.966321243523316
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 14.096720057690442,
+              "desvio": 1.6516885539417012,
+              "p2_5": 11.729406380187696,
+              "p97_5": 16.932186702424467
+            },
+            "precision_realizada": {
+              "media": 14.05440414507772,
+              "desvio": 1.8306239964036575,
+              "p2_5": 11.207253886010362,
+              "p97_5": 17.282383419689122
+            },
+            "fraccion_del_techo": 0.7966703720695193,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 16.28376540429987,
+              "desvio": 1.867513045155469,
+              "p2_5": 12.979610442341603,
+              "p97_5": 18.858567177102977
+            },
+            "precision_realizada": {
+              "media": 16.49827288428325,
+              "desvio": 2.068023729372971,
+              "p2_5": 13.637305699481866,
+              "p97_5": 20.32383419689119
+            },
+            "fraccion_del_techo": 0.9198123655664864,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.1870453466094286,
+              "desvio": 0.6331635083641323,
+              "p2_5": 1.1954100222770525,
+              "p97_5": 3.37156016002477
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.4438687392055267,
+              "desvio": 1.204197834825025,
+              "p2_5": 0.5233160621761657,
+              "p97_5": 4.836787564766841
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 16.56385180837002,
+              "desvio": 1.7964980371261883,
+              "p2_5": 13.201849374700572,
+              "p97_5": 19.109018440034628
+            },
+            "precision_realizada": {
+              "media": 16.666666666666668,
+              "desvio": 1.9313635875784425,
+              "p2_5": 13.696891191709843,
+              "p97_5": 20.145077720207254
+            },
+            "fraccion_del_techo": 0.9360753594183254,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.4671317506795805,
+              "desvio": 0.5697039980876345,
+              "p2_5": 1.417648954636024,
+              "p97_5": 3.295980863645278
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.612262521588946,
+              "desvio": 1.2100237942602963,
+              "p2_5": 0.3575129533678763,
+              "p97_5": 4.7642487046632125
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 16.806561740106613,
+              "desvio": 1.6683061596576148,
+              "p2_5": 13.655355182655953,
+              "p97_5": 19.123657313830947
+            },
+            "precision_realizada": {
+              "media": 16.886873920552677,
+              "desvio": 1.8475488197156418,
+              "p2_5": 14.020725388601036,
+              "p97_5": 20.339378238341972
+            },
+            "fraccion_del_techo": 0.9504173914310233,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.7098416824161675,
+              "desvio": 0.6236246327299456,
+              "p2_5": 1.709448829829217,
+              "p97_5": 3.7533646164561763
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.8324697754749573,
+              "desvio": 1.204100900590743,
+              "p2_5": 1.5544041450777202,
+              "p97_5": 5.487046632124354
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 1.0
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 15.917319584042792,
+              "desvio": 1.870913058649498,
+              "p2_5": 12.659925329391282,
+              "p97_5": 18.494903919609516
+            },
+            "precision_realizada": {
+              "media": 16.15284974093264,
+              "desvio": 2.0064508148479314,
+              "p2_5": 13.080310880829014,
+              "p97_5": 19.702072538860104
+            },
+            "fraccion_del_techo": 0.8988579004417355,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.8205995263523462,
+              "desvio": 0.595576920168808,
+              "p2_5": 0.8757249093267334,
+              "p97_5": 2.9874863976550032
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.0984455958549226,
+              "desvio": 1.1677163844933611,
+              "p2_5": 0.26943005181347085,
+              "p97_5": 4.0829015544041445
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.674202118258188,
+              "desvio": 1.8633578589941289,
+              "p2_5": 12.489925484788031,
+              "p97_5": 18.348978689049968
+            },
+            "precision_realizada": {
+              "media": 15.608808290155443,
+              "desvio": 2.0177050110481254,
+              "p2_5": 12.145077720207254,
+              "p97_5": 19.020725388601036
+            },
+            "fraccion_del_techo": 0.8850454080252849,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.577482060567746,
+              "desvio": 0.5917060378460034,
+              "p2_5": 0.7057250647234816,
+              "p97_5": 2.6646290428045374
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 1.5544041450777204,
+              "desvio": 1.3438537308574032,
+              "p2_5": -0.4119170984455952,
+              "p97_5": 4.0362694300518145
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.8333333333333334
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 16.01102211270272,
+              "desvio": 1.903800143505297,
+              "p2_5": 12.607228083716839,
+              "p97_5": 18.787373647932945
+            },
+            "precision_realizada": {
+              "media": 16.226252158894646,
+              "desvio": 1.8067759553178824,
+              "p2_5": 13.562176165803109,
+              "p97_5": 19.569948186528496
+            },
+            "fraccion_del_techo": 0.9038693069457278,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.9143020550122734,
+              "desvio": 0.7852904627878861,
+              "p2_5": 0.6062520585836436,
+              "p97_5": 3.30146854618186
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.171848013816926,
+              "desvio": 1.3571566495831515,
+              "p2_5": -0.21761658031088005,
+              "p97_5": 4.189119170984457
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 17.681513721617268,
+              "desvio": 1.7159625094410778,
+              "p2_5": 14.454188666745182,
+              "p97_5": 20.372764725802043
+            }
+          }
+        ]
+      }
+    },
+    "mezcla_estable": {
+      "escenario": {
+        "mezcla": "estable",
+        "heterogeneidad": 1.0,
+        "deriva": 0.0
+      },
+      "replicas": 24,
+      "seleccion": {
+        "elegidos_por_replica": 740,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.331780343681103,
+              "desvio": 0.4677882849928351,
+              "p2_5": 10.776243390962616,
+              "p97_5": 12.33059644956222
+            },
+            "precision_realizada": {
+              "media": 11.458333333333334,
+              "desvio": 1.091299509080716,
+              "p2_5": 9.807432432432433,
+              "p97_5": 13.68581081081081
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 19.06190360737428,
+              "desvio": 1.5422418603613282,
+              "p2_5": 15.98408501806825,
+              "p97_5": 21.86112649020438
+            },
+            "precision_realizada": {
+              "media": 19.3018018018018,
+              "desvio": 2.2342800369311684,
+              "p2_5": 15.138513513513514,
+              "p97_5": 23.570945945945947
+            },
+            "fraccion_del_techo": 0.9533661468747449,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 18.80386763856136,
+              "desvio": 1.5621931480858517,
+              "p2_5": 15.491110784488368,
+              "p97_5": 21.712585234019343
+            },
+            "precision_realizada": {
+              "media": 18.688063063063066,
+              "desvio": 2.041849125027849,
+              "p2_5": 15.162162162162161,
+              "p97_5": 22.810810810810814
+            },
+            "fraccion_del_techo": 0.9404904196203757,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.25803596881291957,
+              "desvio": 0.5240386911884116,
+              "p2_5": -1.3649846384507804,
+              "p97_5": 0.5924118761773702
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.6137387387387386,
+              "desvio": 1.0999955007794842,
+              "p2_5": -2.489864864864866,
+              "p97_5": 1.4864864864864864
+            },
+            "es_mejor_que_la_tasa_fija": 0.20833333333333334,
+            "se_ve_mejor_en_los_datos": 0.25
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 19.361281155233396,
+              "desvio": 1.4716583828418066,
+              "p2_5": 16.322963391404375,
+              "p97_5": 22.027958049505617
+            },
+            "precision_realizada": {
+              "media": 19.588963963963966,
+              "desvio": 2.19730516252051,
+              "p2_5": 15.58108108108108,
+              "p97_5": 24.165540540540544
+            },
+            "fraccion_del_techo": 0.9686293550788223,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.2993775478591166,
+              "desvio": 0.24713232348919134,
+              "p2_5": -0.1488341004941374,
+              "p97_5": 0.7340111008301273
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.287162162162162,
+              "desvio": 0.906349806495465,
+              "p2_5": -1.0608108108108123,
+              "p97_5": 2.256756756756757
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.5416666666666666
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 19.530682889544966,
+              "desvio": 1.3881879016497063,
+              "p2_5": 16.889692493672957,
+              "p97_5": 22.115036017108448
+            },
+            "precision_realizada": {
+              "media": 19.791666666666668,
+              "desvio": 2.0536748856336864,
+              "p2_5": 15.891891891891891,
+              "p97_5": 23.858108108108112
+            },
+            "fraccion_del_techo": 0.9774596311581836,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.46877928217068865,
+              "desvio": 0.41643330696117287,
+              "p2_5": -0.3815431879610631,
+              "p97_5": 1.0178493457312658
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.48986486486486475,
+              "desvio": 0.8600524342166924,
+              "p2_5": -1.118243243243244,
+              "p97_5": 1.891891891891892
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.6666666666666666
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 19.167183585051635,
+              "desvio": 1.4858033797510337,
+              "p2_5": 16.076479540922204,
+              "p97_5": 21.931239998497787
+            },
+            "precision_realizada": {
+              "media": 19.375,
+              "desvio": 2.171985798939517,
+              "p2_5": 15.719594594594595,
+              "p97_5": 23.972972972972975
+            },
+            "fraccion_del_techo": 0.9588937466044634,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.10527997767735586,
+              "desvio": 0.35936847324059285,
+              "p2_5": -0.6215654231140713,
+              "p97_5": 0.5680138389539672
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.07319819819819824,
+              "desvio": 1.0573025108869492,
+              "p2_5": -1.5033783783783776,
+              "p97_5": 1.9290540540540537
+            },
+            "es_mejor_que_la_tasa_fija": 0.875,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 18.012391347742355,
+              "desvio": 1.5446062379148486,
+              "p2_5": 14.89002346237034,
+              "p97_5": 20.85201975061925
+            },
+            "precision_realizada": {
+              "media": 18.164414414414413,
+              "desvio": 2.1610296191717,
+              "p2_5": 14.79391891891892,
+              "p97_5": 22.658783783783786
+            },
+            "fraccion_del_techo": 0.9007905889670808,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -1.0495122596319257,
+              "desvio": 0.5097461760354626,
+              "p2_5": -2.1108935379176654,
+              "p97_5": -0.3301225495848984
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -1.1373873873873874,
+              "desvio": 1.383241040620907,
+              "p2_5": -3.125000000000001,
+              "p97_5": 1.5439189189189182
+            },
+            "es_mejor_que_la_tasa_fija": 0.0,
+            "se_ve_mejor_en_los_datos": 0.16666666666666666
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 18.655882590587527,
+              "desvio": 1.5131614145390453,
+              "p2_5": 15.80523003170534,
+              "p97_5": 21.38992290598194
+            },
+            "precision_realizada": {
+              "media": 18.620495495495494,
+              "desvio": 2.2326136556283456,
+              "p2_5": 15.27364864864865,
+              "p97_5": 22.902027027027028
+            },
+            "fraccion_del_techo": 0.9333375805350269,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.40602101678675334,
+              "desvio": 0.5775450705979958,
+              "p2_5": -1.6369388893989631,
+              "p97_5": 0.12320712935955401
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.6813063063063063,
+              "desvio": 1.342201199476652,
+              "p2_5": -2.625000000000001,
+              "p97_5": 1.253378378378378
+            },
+            "es_mejor_que_la_tasa_fija": 0.16666666666666666,
+            "se_ve_mejor_en_los_datos": 0.3333333333333333
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 19.978501890353495,
+              "desvio": 1.326350043484695,
+              "p2_5": 17.23316158357262,
+              "p97_5": 22.394551266232778
+            }
+          }
+        ]
+      },
+      "confirmacion": {
+        "elegidos_por_replica": 225,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 9.382647855598664,
+              "desvio": 0.47767028704080766,
+              "p2_5": 8.752140513732776,
+              "p97_5": 10.327406422311519
+            },
+            "precision_realizada": {
+              "media": 9.722222222222223,
+              "desvio": 2.018965365895343,
+              "p2_5": 6.9222222222222225,
+              "p97_5": 14.022222222222224
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 15.82900096918793,
+              "desvio": 1.2396884337634693,
+              "p2_5": 13.550472710265222,
+              "p97_5": 18.27907991197527
+            },
+            "precision_realizada": {
+              "media": 14.796296296296296,
+              "desvio": 2.8936539420805247,
+              "p2_5": 10.222222222222223,
+              "p97_5": 20.0
+            },
+            "fraccion_del_techo": 0.9647886237768613,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 15.250752883310296,
+              "desvio": 1.4680897798127641,
+              "p2_5": 12.515391238879879,
+              "p97_5": 18.212469528601307
+            },
+            "precision_realizada": {
+              "media": 14.388888888888888,
+              "desvio": 3.1229931827900437,
+              "p2_5": 9.144444444444446,
+              "p97_5": 19.48888888888889
+            },
+            "fraccion_del_techo": 0.9285901381025751,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.578248085877635,
+              "desvio": 0.4620380359273148,
+              "p2_5": -1.2662083628780618,
+              "p97_5": 0.22147651607915653
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.40740740740740744,
+              "desvio": 1.6469580823540446,
+              "p2_5": -2.855555555555556,
+              "p97_5": 2.4111111111111114
+            },
+            "es_mejor_que_la_tasa_fija": 0.125,
+            "se_ve_mejor_en_los_datos": 0.3333333333333333
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 15.792446465411212,
+              "desvio": 1.3065783786532748,
+              "p2_5": 13.309680548912834,
+              "p97_5": 18.296101540529584
+            },
+            "precision_realizada": {
+              "media": 14.888888888888891,
+              "desvio": 2.755368545937164,
+              "p2_5": 10.28888888888889,
+              "p97_5": 19.233333333333334
+            },
+            "fraccion_del_techo": 0.9622956540735719,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.03655450377672009,
+              "desvio": 0.26905886409762136,
+              "p2_5": -0.5261909215108458,
+              "p97_5": 0.46822096406935904
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.0925925925925926,
+              "desvio": 1.2772700804731938,
+              "p2_5": -1.966666666666667,
+              "p97_5": 2.5333333333333345
+            },
+            "es_mejor_que_la_tasa_fija": 0.4583333333333333,
+            "se_ve_mejor_en_los_datos": 0.4583333333333333
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 16.036551090949132,
+              "desvio": 1.1777527022573255,
+              "p2_5": 13.847250392151542,
+              "p97_5": 18.350629011683022
+            },
+            "precision_realizada": {
+              "media": 15.018518518518519,
+              "desvio": 2.7365376658929725,
+              "p2_5": 10.988888888888889,
+              "p97_5": 19.044444444444448
+            },
+            "fraccion_del_techo": 0.977649051395924,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.20755012176120044,
+              "desvio": 0.2153877602046234,
+              "p2_5": -0.1817333503491278,
+              "p97_5": 0.5672889015711957
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.22222222222222218,
+              "desvio": 1.3993327142208059,
+              "p2_5": -2.6000000000000005,
+              "p97_5": 2.4111111111111114
+            },
+            "es_mejor_que_la_tasa_fija": 0.7916666666666666,
+            "se_ve_mejor_en_los_datos": 0.4583333333333333
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 15.743927650289235,
+              "desvio": 1.312686874772618,
+              "p2_5": 13.170266296051576,
+              "p97_5": 18.224414881458216
+            },
+            "precision_realizada": {
+              "media": 14.777777777777779,
+              "desvio": 2.631817374853095,
+              "p2_5": 9.58888888888889,
+              "p97_5": 18.666666666666668
+            },
+            "fraccion_del_techo": 0.9592673765888703,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.0850733188986963,
+              "desvio": 0.24161577788714458,
+              "p2_5": -0.5156465163298503,
+              "p97_5": 0.3515822088048636
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.018518518518518507,
+              "desvio": 1.2671440183112122,
+              "p2_5": -2.155555555555556,
+              "p97_5": 2.344444444444445
+            },
+            "es_mejor_que_la_tasa_fija": 0.375,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 14.506455505942833,
+              "desvio": 1.3999727578932533,
+              "p2_5": 12.090780559565406,
+              "p97_5": 17.270508032704573
+            },
+            "precision_realizada": {
+              "media": 13.481481481481481,
+              "desvio": 2.806836731753187,
+              "p2_5": 8.444444444444445,
+              "p97_5": 17.711111111111112
+            },
+            "fraccion_del_techo": 0.8832768120538245,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -1.3225454632450984,
+              "desvio": 0.563312532576995,
+              "p2_5": -2.338604753776421,
+              "p97_5": -0.410986966097025
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -1.3148148148148149,
+              "desvio": 2.214398465813304,
+              "p2_5": -4.944444444444445,
+              "p97_5": 2.911111111111113
+            },
+            "es_mejor_que_la_tasa_fija": 0.0,
+            "se_ve_mejor_en_los_datos": 0.20833333333333334
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 15.29424490442643,
+              "desvio": 1.3366130938361693,
+              "p2_5": 13.10368874457914,
+              "p97_5": 17.92639881458772
+            },
+            "precision_realizada": {
+              "media": 14.833333333333334,
+              "desvio": 2.5237465865385436,
+              "p2_5": 10.47777777777778,
+              "p97_5": 18.41111111111111
+            },
+            "fraccion_del_techo": 0.9317302571686001,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.5347560647615004,
+              "desvio": 0.4772608004133395,
+              "p2_5": -1.4240556107085742,
+              "p97_5": 0.2593479302010706
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.037037037037037035,
+              "desvio": 1.767684714623373,
+              "p2_5": -2.666666666666667,
+              "p97_5": 3.2333333333333343
+            },
+            "es_mejor_que_la_tasa_fija": 0.125,
+            "se_ve_mejor_en_los_datos": 0.4583333333333333
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 16.396825767591157,
+              "desvio": 1.071454774477383,
+              "p2_5": 14.531061858867009,
+              "p97_5": 18.59476623596331
+            }
+          }
+        ]
+      },
+      "todo": {
+        "elegidos_por_replica": 965,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 10.877319400863954,
+              "desvio": 0.4552733876612894,
+              "p2_5": 10.340176030058544,
+              "p97_5": 11.833945807381815
+            },
+            "precision_realizada": {
+              "media": 11.053540587219345,
+              "desvio": 0.8801882920266149,
+              "p2_5": 9.696891191709843,
+              "p97_5": 12.538860103626941
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 18.308118018159846,
+              "desvio": 1.456717169608192,
+              "p2_5": 15.448241757674948,
+              "p97_5": 21.025934282845263
+            },
+            "precision_realizada": {
+              "media": 18.251295336787564,
+              "desvio": 2.154996856816709,
+              "p2_5": 14.212435233160623,
+              "p97_5": 22.038860103626945
+            },
+            "fraccion_del_techo": 0.9556549008434082,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 17.9754211930365,
+              "desvio": 1.5232887615299038,
+              "p2_5": 14.797290165045974,
+              "p97_5": 20.89649607990633
+            },
+            "precision_realizada": {
+              "media": 17.68566493955095,
+              "desvio": 2.1221075435092844,
+              "p2_5": 13.937823834196891,
+              "p97_5": 21.440414507772022
+            },
+            "fraccion_del_techo": 0.9380975648709969,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.33269682512334503,
+              "desvio": 0.4388188403614961,
+              "p2_5": -1.2081700263025617,
+              "p97_5": 0.41966659326794886
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.5656303972366148,
+              "desvio": 0.929372338367078,
+              "p2_5": -1.9533678756476682,
+              "p97_5": 0.9015544041450783
+            },
+            "es_mejor_que_la_tasa_fija": 0.20833333333333334,
+            "se_ve_mejor_en_los_datos": 0.2916666666666667
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 18.529169439989882,
+              "desvio": 1.4224202892592042,
+              "p2_5": 15.62038449030531,
+              "p97_5": 21.163403628964378
+            },
+            "precision_realizada": {
+              "media": 18.493091537132987,
+              "desvio": 2.0938260621206535,
+              "p2_5": 14.704663212435232,
+              "p97_5": 22.598445595854923
+            },
+            "fraccion_del_techo": 0.9673620433564437,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.2210514218300356,
+              "desvio": 0.22369194364095488,
+              "p2_5": -0.16799935782546532,
+              "p97_5": 0.6083932895961208
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.24179620034542282,
+              "desvio": 0.7293469488714229,
+              "p2_5": -0.9896373056994814,
+              "p97_5": 1.3911917098445592
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.5833333333333334
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 18.71598894686718,
+              "desvio": 1.3303127631181888,
+              "p2_5": 16.22608270687676,
+              "p97_5": 21.237324539159513
+            },
+            "precision_realizada": {
+              "media": 18.678756476683937,
+              "desvio": 1.9413900323048037,
+              "p2_5": 15.046632124352332,
+              "p97_5": 21.96113989637306
+            },
+            "fraccion_del_techo": 0.9774960530483364,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.4078709287073366,
+              "desvio": 0.3368794681270006,
+              "p2_5": -0.25217999738335717,
+              "p97_5": 0.8946993156355205
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.4274611398963731,
+              "desvio": 0.8263713745210802,
+              "p2_5": -0.8290155440414504,
+              "p97_5": 2.0129533678756486
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.6666666666666666
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 18.36901510285315,
+              "desvio": 1.4359088419089148,
+              "p2_5": 15.398865053776202,
+              "p97_5": 21.071638573338788
+            },
+            "precision_realizada": {
+              "media": 18.30310880829015,
+              "desvio": 2.0550768089762035,
+              "p2_5": 14.707253886010363,
+              "p97_5": 22.199481865284973
+            },
+            "fraccion_del_techo": 0.9589676281341918,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.060897084693302184,
+              "desvio": 0.29999199061021525,
+              "p2_5": -0.5360516855886546,
+              "p97_5": 0.4781029842446275
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.051813471502590545,
+              "desvio": 0.8664665289476455,
+              "p2_5": -1.168393782383421,
+              "p97_5": 1.8471502590673583
+            },
+            "es_mejor_que_la_tasa_fija": 0.5833333333333334,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 17.194945167011895,
+              "desvio": 1.480417626618668,
+              "p2_5": 14.237350246690433,
+              "p97_5": 20.016952251623596
+            },
+            "precision_realizada": {
+              "media": 17.072538860103627,
+              "desvio": 1.8790635252211545,
+              "p2_5": 13.772020725388602,
+              "p97_5": 20.582901554404145
+            },
+            "fraccion_del_techo": 0.897304558222979,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -1.1131728511479506,
+              "desvio": 0.39404547886649427,
+              "p2_5": -1.8754530376987169,
+              "p97_5": -0.44312165180442
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -1.1787564766839382,
+              "desvio": 1.1080406123641608,
+              "p2_5": -2.6347150259067362,
+              "p97_5": 0.7694300518134716
+            },
+            "es_mejor_que_la_tasa_fija": 0.0,
+            "se_ve_mejor_en_los_datos": 0.125
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 17.872081057544786,
+              "desvio": 1.43933046291672,
+              "p2_5": 15.175336985484206,
+              "p97_5": 20.582365475345984
+            },
+            "precision_realizada": {
+              "media": 17.73747841105354,
+              "desvio": 2.068630391378185,
+              "p2_5": 14.507772020725387,
+              "p97_5": 21.27461139896373
+            },
+            "fraccion_del_techo": 0.9330276375950232,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.43603696061506164,
+              "desvio": 0.420007027012723,
+              "p2_5": -1.367632245905968,
+              "p97_5": 0.015441411808771649
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.5138169257340243,
+              "desvio": 1.206352606873379,
+              "p2_5": -2.4559585492227964,
+              "p97_5": 1.2720207253886016
+            },
+            "es_mejor_que_la_tasa_fija": 0.041666666666666664,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 19.143396058621345,
+              "desvio": 1.2594195712221443,
+              "p2_5": 16.603138331698254,
+              "p97_5": 21.508591026014507
+            }
+          }
+        ]
+      }
+    },
+    "heterogeneidad_alta": {
+      "escenario": {
+        "mezcla": "real",
+        "heterogeneidad": 2.0,
+        "deriva": 0.0
+      },
+      "replicas": 24,
+      "seleccion": {
+        "elegidos_por_replica": 740,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.755775629347289,
+              "desvio": 1.737502886106734,
+              "p2_5": 10.009312214055075,
+              "p97_5": 15.843064288098454
+            },
+            "precision_realizada": {
+              "media": 11.86373873873874,
+              "desvio": 2.379959937333055,
+              "p2_5": 8.185810810810812,
+              "p97_5": 16.908783783783786
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 19.513215016362775,
+              "desvio": 4.54480818032284,
+              "p2_5": 14.014722666814178,
+              "p97_5": 28.28590560126343
+            },
+            "precision_realizada": {
+              "media": 19.386261261261264,
+              "desvio": 4.577624561565763,
+              "p2_5": 13.442567567567568,
+              "p97_5": 28.18918918918919
+            },
+            "fraccion_del_techo": 0.7825431027196292,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 22.31079747746219,
+              "desvio": 3.792957549516704,
+              "p2_5": 16.455451367331165,
+              "p97_5": 28.9040949170861
+            },
+            "precision_realizada": {
+              "media": 22.376126126126124,
+              "desvio": 4.027511360291301,
+              "p2_5": 16.14864864864865,
+              "p97_5": 30.68918918918919
+            },
+            "fraccion_del_techo": 0.8996750392630523,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.7975824610994167,
+              "desvio": 1.9770875711833829,
+              "p2_5": -0.3695848087262732,
+              "p97_5": 6.304185491446049
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.9898648648648654,
+              "desvio": 2.3579511158216238,
+              "p2_5": -1.3648648648648645,
+              "p97_5": 6.655405405405406
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 22.653667412140255,
+              "desvio": 3.6724890693597514,
+              "p2_5": 17.25106915205779,
+              "p97_5": 28.966895790739922
+            },
+            "precision_realizada": {
+              "media": 22.545045045045043,
+              "desvio": 4.0076994740849825,
+              "p2_5": 16.820945945945947,
+              "p97_5": 31.695945945945947
+            },
+            "fraccion_del_techo": 0.9142557604479901,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.1404523957774853,
+              "desvio": 2.0521032653832725,
+              "p2_5": -0.189782173870813,
+              "p97_5": 6.657946739114792
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.158783783783784,
+              "desvio": 2.336131469400262,
+              "p2_5": -1.114864864864865,
+              "p97_5": 7.023648648648649
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 22.416268813477714,
+              "desvio": 3.34917434034714,
+              "p2_5": 17.44629345881382,
+              "p97_5": 28.10088857148044
+            },
+            "precision_realizada": {
+              "media": 22.443693693693692,
+              "desvio": 4.047373396126294,
+              "p2_5": 16.381756756756758,
+              "p97_5": 30.567567567567572
+            },
+            "fraccion_del_techo": 0.9062885453130853,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.9030537971149397,
+              "desvio": 2.280577236624346,
+              "p2_5": -1.186507982973192,
+              "p97_5": 6.352674971273531
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.057432432432433,
+              "desvio": 2.867427987844619,
+              "p2_5": -2.277027027027027,
+              "p97_5": 7.293918918918921
+            },
+            "es_mejor_que_la_tasa_fija": 0.8333333333333334,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 21.993112477749833,
+              "desvio": 3.92554979259,
+              "p2_5": 16.659730932641956,
+              "p97_5": 29.05466253385552
+            },
+            "precision_realizada": {
+              "media": 22.111486486486488,
+              "desvio": 4.186594188869651,
+              "p2_5": 16.2027027027027,
+              "p97_5": 30.841216216216218
+            },
+            "fraccion_del_techo": 0.8861081148801669,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.4798974613870572,
+              "desvio": 1.8528449689640356,
+              "p2_5": -0.8101117530507818,
+              "p97_5": 6.090491547174925
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.725225225225225,
+              "desvio": 2.206387690894264,
+              "p2_5": -1.2905405405405408,
+              "p97_5": 6.6790540540540535
+            },
+            "es_mejor_que_la_tasa_fija": 0.875,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.60745496252311,
+              "desvio": 3.8470335566854628,
+              "p2_5": 16.500835507446084,
+              "p97_5": 28.31341812974001
+            },
+            "precision_realizada": {
+              "media": 21.458333333333332,
+              "desvio": 4.149288614037721,
+              "p2_5": 15.18581081081081,
+              "p97_5": 29.10810810810811
+            },
+            "fraccion_del_techo": 0.8705906255310499,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.0942399461603336,
+              "desvio": 1.7074386745934769,
+              "p2_5": -0.5784388993100099,
+              "p97_5": 5.224387887520125
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.0720720720720727,
+              "desvio": 2.06011639652443,
+              "p2_5": -1.5608108108108096,
+              "p97_5": 5.148648648648652
+            },
+            "es_mejor_que_la_tasa_fija": 0.875,
+            "se_ve_mejor_en_los_datos": 0.8333333333333334
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.602609570462352,
+              "desvio": 3.846323762546721,
+              "p2_5": 16.351160257316078,
+              "p97_5": 28.230903181539762
+            },
+            "precision_realizada": {
+              "media": 21.768018018018015,
+              "desvio": 4.036372854349911,
+              "p2_5": 16.300675675675677,
+              "p97_5": 29.5472972972973
+            },
+            "fraccion_del_techo": 0.870996213023146,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.089394554099578,
+              "desvio": 1.90391678918379,
+              "p2_5": -1.2277913799456295,
+              "p97_5": 5.250617038584042
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.3817567567567575,
+              "desvio": 2.337490549726493,
+              "p2_5": -2.3547297297297294,
+              "p97_5": 6.192567567567569
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 24.762545684832546,
+              "desvio": 3.840040524780779,
+              "p2_5": 19.704875406449652,
+              "p97_5": 31.629788087762407
+            }
+          }
+        ]
+      },
+      "confirmacion": {
+        "elegidos_por_replica": 225,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 9.925310081953576,
+              "desvio": 1.3152943839361295,
+              "p2_5": 8.351142923767993,
+              "p97_5": 13.104427525492538
+            },
+            "precision_realizada": {
+              "media": 10.055555555555555,
+              "desvio": 2.5203412935906533,
+              "p2_5": 6.733333333333333,
+              "p97_5": 14.466666666666669
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 20.05457333732009,
+              "desvio": 3.574063633675074,
+              "p2_5": 14.550986774262316,
+              "p97_5": 26.746282114662964
+            },
+            "precision_realizada": {
+              "media": 20.740740740740744,
+              "desvio": 4.958947590922765,
+              "p2_5": 12.066666666666666,
+              "p97_5": 29.06666666666667
+            },
+            "fraccion_del_techo": 0.949460330250858,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 20.34405365987196,
+              "desvio": 3.5650429815662963,
+              "p2_5": 15.03245044869046,
+              "p97_5": 26.54279268598253
+            },
+            "precision_realizada": {
+              "media": 20.72222222222222,
+              "desvio": 5.016023706798094,
+              "p2_5": 11.433333333333334,
+              "p97_5": 29.000000000000004
+            },
+            "fraccion_del_techo": 0.9629306141082701,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.28948032255187556,
+              "desvio": 1.1983963249732104,
+              "p2_5": -1.433609176221426,
+              "p97_5": 2.909231554837228
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.018518518518518712,
+              "desvio": 1.5533686030104863,
+              "p2_5": -3.044444444444442,
+              "p97_5": 3.1111111111111116
+            },
+            "es_mejor_que_la_tasa_fija": 0.5416666666666666,
+            "se_ve_mejor_en_los_datos": 0.4583333333333333
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 20.50975438235957,
+              "desvio": 3.5273214614594783,
+              "p2_5": 15.106950903026208,
+              "p97_5": 27.05697683305518
+            },
+            "precision_realizada": {
+              "media": 21.0,
+              "desvio": 5.0321563926689645,
+              "p2_5": 11.622222222222222,
+              "p97_5": 28.933333333333337
+            },
+            "fraccion_del_techo": 0.9710786810220972,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.4551810450394836,
+              "desvio": 0.8373928750683773,
+              "p2_5": -0.38963715593329673,
+              "p97_5": 2.508380780686328
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.259259259259259,
+              "desvio": 1.0477933086623434,
+              "p2_5": -1.077777777777778,
+              "p97_5": 2.600000000000001
+            },
+            "es_mejor_que_la_tasa_fija": 0.75,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 20.250436897415472,
+              "desvio": 3.272338044283564,
+              "p2_5": 15.188780280462856,
+              "p97_5": 25.402166240793704
+            },
+            "precision_realizada": {
+              "media": 20.444444444444443,
+              "desvio": 4.6889278108144845,
+              "p2_5": 12.38888888888889,
+              "p97_5": 28.17777777777778
+            },
+            "fraccion_del_techo": 0.9603229832007408,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.19586356009538938,
+              "desvio": 1.2708779267871604,
+              "p2_5": -2.252856388055254,
+              "p97_5": 2.6279696131469343
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.2962962962962966,
+              "desvio": 2.1119161106107622,
+              "p2_5": -4.499999999999998,
+              "p97_5": 3.3000000000000007
+            },
+            "es_mejor_que_la_tasa_fija": 0.625,
+            "se_ve_mejor_en_los_datos": 0.3333333333333333
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 20.398595502547625,
+              "desvio": 3.6518009090533017,
+              "p2_5": 14.751768577977575,
+              "p97_5": 27.183675953045924
+            },
+            "precision_realizada": {
+              "media": 21.055555555555557,
+              "desvio": 5.100914003538738,
+              "p2_5": 11.622222222222222,
+              "p97_5": 29.766666666666666
+            },
+            "fraccion_del_techo": 0.9647290158415845,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.3440221652275403,
+              "desvio": 0.8098875370574319,
+              "p2_5": -0.553235750622716,
+              "p97_5": 2.3373673183961623
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.3148148148148148,
+              "desvio": 1.0276199992050312,
+              "p2_5": -1.5222222222222224,
+              "p97_5": 2.1555555555555577
+            },
+            "es_mejor_que_la_tasa_fija": 0.7083333333333334,
+            "se_ve_mejor_en_los_datos": 0.5833333333333334
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 20.19695076074507,
+              "desvio": 3.667588447667623,
+              "p2_5": 14.636549418958094,
+              "p97_5": 26.985168393312875
+            },
+            "precision_realizada": {
+              "media": 20.62962962962963,
+              "desvio": 4.781277974891175,
+              "p2_5": 12.511111111111111,
+              "p97_5": 29.133333333333336
+            },
+            "fraccion_del_techo": 0.9546750771256757,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.14237742342498586,
+              "desvio": 1.1458981804810113,
+              "p2_5": -1.5450441769775838,
+              "p97_5": 2.523424880045928
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.11111111111111095,
+              "desvio": 1.3635859389821392,
+              "p2_5": -3.300000000000001,
+              "p97_5": 1.9000000000000026
+            },
+            "es_mejor_que_la_tasa_fija": 0.5,
+            "se_ve_mejor_en_los_datos": 0.4583333333333333
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 20.28432715766465,
+              "desvio": 3.6262963928781753,
+              "p2_5": 14.675239808310844,
+              "p97_5": 26.461553922135074
+            },
+            "precision_realizada": {
+              "media": 20.481481481481485,
+              "desvio": 5.009348926602728,
+              "p2_5": 12.711111111111112,
+              "p97_5": 29.322222222222226
+            },
+            "fraccion_del_techo": 0.9591940416269967,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.2297538203445606,
+              "desvio": 1.1580872466732828,
+              "p2_5": -1.044116057178344,
+              "p97_5": 2.758393159707507
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": -0.25925925925925886,
+              "desvio": 2.0426653324527653,
+              "p2_5": -4.3,
+              "p97_5": 3.3000000000000007
+            },
+            "es_mejor_que_la_tasa_fija": 0.4583333333333333,
+            "se_ve_mejor_en_los_datos": 0.25
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 21.092244779355457,
+              "desvio": 3.365474722840207,
+              "p2_5": 15.942023872416152,
+              "p97_5": 27.200368084793027
+            }
+          }
+        ]
+      },
+      "todo": {
+        "elegidos_por_replica": 965,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.328983144203677,
+              "desvio": 1.631280153571745,
+              "p2_5": 9.676115172706025,
+              "p97_5": 15.204522037749925
+            },
+            "precision_realizada": {
+              "media": 11.442141623488773,
+              "desvio": 2.252580153547402,
+              "p2_5": 8.512953367875646,
+              "p97_5": 16.22020725388601
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 19.63943845907303,
+              "desvio": 4.155832104251678,
+              "p2_5": 14.119133653471733,
+              "p97_5": 27.252636113504742
+            },
+            "precision_realizada": {
+              "media": 19.702072538860104,
+              "desvio": 4.318225554291383,
+              "p2_5": 13.658031088082902,
+              "p97_5": 28.11658031088083
+            },
+            "fraccion_del_techo": 0.8169695120953581,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 21.852230266106957,
+              "desvio": 3.6635908767394163,
+              "p2_5": 16.123663588373486,
+              "p97_5": 28.23963982839758
+            },
+            "precision_realizada": {
+              "media": 21.990500863557855,
+              "desvio": 4.027271545312441,
+              "p2_5": 15.310880829015545,
+              "p97_5": 30.23575129533679
+            },
+            "fraccion_del_techo": 0.9125815800837641,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.2127918070339283,
+              "desvio": 1.6415035492395564,
+              "p2_5": -0.4594109091490914,
+              "p97_5": 5.2741478861331474
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.288428324697755,
+              "desvio": 1.8953095711426562,
+              "p2_5": -1.238341968911914,
+              "p97_5": 5.207253886010364
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.8333333333333334
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 22.153791317113672,
+              "desvio": 3.587733084809366,
+              "p2_5": 16.751145207983072,
+              "p97_5": 28.511407123864497
+            },
+            "precision_realizada": {
+              "media": 22.18480138169257,
+              "desvio": 4.008905023909705,
+              "p2_5": 16.049222797927463,
+              "p97_5": 31.051813471502594
+            },
+            "fraccion_del_techo": 0.9256790933915832,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.5143528580406467,
+              "desvio": 1.649297556741426,
+              "p2_5": -0.20082209452084454,
+              "p97_5": 5.419290011774194
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.48272884283247,
+              "desvio": 1.8566240736200448,
+              "p2_5": -0.914507772020724,
+              "p97_5": 5.637305699481862
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 21.911282097297402,
+              "desvio": 3.2605061726937827,
+              "p2_5": 16.919930282514372,
+              "p97_5": 27.403097579313144
+            },
+            "precision_realizada": {
+              "media": 21.977547495682206,
+              "desvio": 3.9457499186829756,
+              "p2_5": 16.204663212435236,
+              "p97_5": 30.01036269430052
+            },
+            "fraccion_del_techo": 0.9172633726527746,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.271843638224371,
+              "desvio": 1.9003594561182395,
+              "p2_5": -1.230613813667261,
+              "p97_5": 5.203102900925852
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.2754749568221073,
+              "desvio": 2.3122228348972977,
+              "p2_5": -1.9663212435233155,
+              "p97_5": 5.518134715025907
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.7916666666666666
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 21.621333908402168,
+              "desvio": 3.7768768010130818,
+              "p2_5": 16.266428715708056,
+              "p97_5": 28.242010738937772
+            },
+            "precision_realizada": {
+              "media": 21.86528497409326,
+              "desvio": 4.1386523752500946,
+              "p2_5": 15.487046632124352,
+              "p97_5": 30.17357512953368
+            },
+            "fraccion_del_techo": 0.9021709725574318,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.9818954493291383,
+              "desvio": 1.5099944221478039,
+              "p2_5": -0.619527601505216,
+              "p97_5": 4.96170380354211
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.1632124352331608,
+              "desvio": 1.7805888218725352,
+              "p2_5": -0.9300518134714999,
+              "p97_5": 5.269430051813469
+            },
+            "es_mejor_que_la_tasa_fija": 0.875,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.27858092583911,
+              "desvio": 3.694104949013841,
+              "p2_5": 16.066157403912616,
+              "p97_5": 27.60168720580368
+            },
+            "precision_realizada": {
+              "media": 21.265112262521587,
+              "desvio": 3.975464117436478,
+              "p2_5": 15.00259067357513,
+              "p97_5": 28.756476683937827
+            },
+            "fraccion_del_techo": 0.8879882475500075,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.639142466766082,
+              "desvio": 1.421871099774769,
+              "p2_5": -0.601241454001728,
+              "p97_5": 4.409722249766308
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 1.5630397236614855,
+              "desvio": 1.713129522894875,
+              "p2_5": -1.4455958549222774,
+              "p97_5": 4.111398963730571
+            },
+            "es_mejor_que_la_tasa_fija": 0.875,
+            "se_ve_mejor_en_los_datos": 0.7916666666666666
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.29523802343698,
+              "desvio": 3.701944771672546,
+              "p2_5": 16.147424043191485,
+              "p97_5": 27.73954477056387
+            },
+            "precision_realizada": {
+              "media": 21.468048359240072,
+              "desvio": 3.994174377870817,
+              "p2_5": 16.1139896373057,
+              "p97_5": 29.256476683937827
+            },
+            "fraccion_del_techo": 0.889077740743626,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.6557995643639523,
+              "desvio": 1.5950434354551823,
+              "p2_5": -1.0952364183024248,
+              "p97_5": 4.465674227880209
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 1.7659758203799656,
+              "desvio": 1.8892800125754747,
+              "p2_5": -1.9093264248704649,
+              "p97_5": 4.987046632124352
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 23.906776043659132,
+              "desvio": 3.6543483286404714,
+              "p2_5": 18.940802644446556,
+              "p97_5": 30.415712815640095
+            }
+          }
+        ]
+      }
+    },
+    "heterogeneidad_baja": {
+      "escenario": {
+        "mezcla": "real",
+        "heterogeneidad": 0.5,
+        "deriva": 0.0
+      },
+      "replicas": 24,
+      "seleccion": {
+        "elegidos_por_replica": 740,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.18580910115125,
+              "desvio": 0.34129049870670664,
+              "p2_5": 10.57664930000234,
+              "p97_5": 11.737649765394279
+            },
+            "precision_realizada": {
+              "media": 11.43018018018018,
+              "desvio": 1.0905262098073534,
+              "p2_5": 9.52027027027027,
+              "p97_5": 13.358108108108109
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 12.262340500136995,
+              "desvio": 0.36247877945610085,
+              "p2_5": 11.679565656610299,
+              "p97_5": 13.01812152272223
+            },
+            "precision_realizada": {
+              "media": 11.95945945945946,
+              "desvio": 1.2683061045180835,
+              "p2_5": 9.864864864864865,
+              "p97_5": 13.570945945945946
+            },
+            "fraccion_del_techo": 0.7419990046653097,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 14.867131821720337,
+              "desvio": 0.45224360059629654,
+              "p2_5": 14.093730486173566,
+              "p97_5": 15.471628447955043
+            },
+            "precision_realizada": {
+              "media": 14.80292792792793,
+              "desvio": 1.4867424022130082,
+              "p2_5": 12.317567567567568,
+              "p97_5": 17.56418918918919
+            },
+            "fraccion_del_techo": 0.8995403956518718,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.6047913215833414,
+              "desvio": 0.45468135771078544,
+              "p2_5": 1.7946790288223018,
+              "p97_5": 3.2295445830484133
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.843468468468469,
+              "desvio": 1.5655601062019966,
+              "p2_5": 0.006756756756756799,
+              "p97_5": 5.385135135135135
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 15.20035357278129,
+              "desvio": 0.3928201875190439,
+              "p2_5": 14.634666355919991,
+              "p97_5": 15.788353810690209
+            },
+            "precision_realizada": {
+              "media": 15.152027027027026,
+              "desvio": 1.2088906552626522,
+              "p2_5": 13.243243243243244,
+              "p97_5": 17.08445945945946
+            },
+            "fraccion_del_techo": 0.9196559177937863,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.938013072644292,
+              "desvio": 0.43406891019520377,
+              "p2_5": 2.182449471024168,
+              "p97_5": 3.581899191000253
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.192567567567567,
+              "desvio": 1.5677562287702262,
+              "p2_5": 0.4290540540540534,
+              "p97_5": 5.52027027027027
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 15.575335094172578,
+              "desvio": 0.4868887117708982,
+              "p2_5": 14.619116323467194,
+              "p97_5": 16.416741063798586
+            },
+            "precision_realizada": {
+              "media": 15.568693693693694,
+              "desvio": 1.231448655086536,
+              "p2_5": 13.554054054054054,
+              "p97_5": 17.625
+            },
+            "fraccion_del_techo": 0.9421021040783341,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.312994594035579,
+              "desvio": 0.5359302332274738,
+              "p2_5": 2.176873252629327,
+              "p97_5": 4.204481323530012
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.609234234234234,
+              "desvio": 1.6894731449542555,
+              "p2_5": 0.42905405405405506,
+              "p97_5": 6.1959459459459465
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 14.657944506356747,
+              "desvio": 0.38712253691742793,
+              "p2_5": 14.067985396268178,
+              "p97_5": 15.346623315628195
+            },
+            "precision_realizada": {
+              "media": 14.588963963963963,
+              "desvio": 1.2356324332864488,
+              "p2_5": 12.64527027027027,
+              "p97_5": 17.08108108108108
+            },
+            "fraccion_del_techo": 0.8868568185933915,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.3956040062197492,
+              "desvio": 0.42928201586021564,
+              "p2_5": 1.7072936513145218,
+              "p97_5": 3.1084681784514916
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.6295045045045042,
+              "desvio": 1.542312032503976,
+              "p2_5": -0.11486486486486486,
+              "p97_5": 5.4425675675675675
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 14.471738931191146,
+              "desvio": 0.46109003463499637,
+              "p2_5": 13.749311218586492,
+              "p97_5": 15.288031307224168
+            },
+            "precision_realizada": {
+              "media": 14.476351351351353,
+              "desvio": 1.3212346149250649,
+              "p2_5": 12.297297297297298,
+              "p97_5": 16.790540540540544
+            },
+            "fraccion_del_techo": 0.8756605018654326,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.209398431054148,
+              "desvio": 0.49609995050355504,
+              "p2_5": 1.5810766946370391,
+              "p97_5": 3.1819852026001865
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.5168918918918917,
+              "desvio": 1.6043006105696713,
+              "p2_5": -0.1283783783783775,
+              "p97_5": 5.577702702702703
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 14.739647470704229,
+              "desvio": 0.48109887206652724,
+              "p2_5": 13.633304855204244,
+              "p97_5": 15.414448998202094
+            },
+            "precision_realizada": {
+              "media": 14.645270270270272,
+              "desvio": 1.6195700398707884,
+              "p2_5": 11.777027027027028,
+              "p97_5": 17.219594594594593
+            },
+            "fraccion_del_techo": 0.8917420880771433,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.4773069705672315,
+              "desvio": 0.5880920069462046,
+              "p2_5": 1.2642643308446468,
+              "p97_5": 3.220437657900538
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.6858108108108105,
+              "desvio": 2.049934214923654,
+              "p2_5": -1.0371621621621614,
+              "p97_5": 6.270270270270271
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 16.538244382438275,
+              "desvio": 0.4809825876408857,
+              "p2_5": 15.74503129693539,
+              "p97_5": 17.334780018121567
+            }
+          }
+        ]
+      },
+      "confirmacion": {
+        "elegidos_por_replica": 225,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 9.361106535368,
+              "desvio": 0.26152850671894246,
+              "p2_5": 8.955782959798109,
+              "p97_5": 9.860502961512257
+            },
+            "precision_realizada": {
+              "media": 9.166666666666668,
+              "desvio": 1.96507345603177,
+              "p2_5": 5.5888888888888895,
+              "p97_5": 12.122222222222224
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 13.864465592125669,
+              "desvio": 1.121380988709915,
+              "p2_5": 11.669523714273803,
+              "p97_5": 15.624217596976461
+            },
+            "precision_realizada": {
+              "media": 13.166666666666666,
+              "desvio": 2.2079250222592277,
+              "p2_5": 9.58888888888889,
+              "p97_5": 16.633333333333336
+            },
+            "fraccion_del_techo": 0.9142431143548541,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 14.320619562095084,
+              "desvio": 0.8835354492027724,
+              "p2_5": 12.726392692427227,
+              "p97_5": 15.799321846749395
+            },
+            "precision_realizada": {
+              "media": 13.481481481481481,
+              "desvio": 2.6200979413756933,
+              "p2_5": 9.333333333333334,
+              "p97_5": 18.46666666666667
+            },
+            "fraccion_del_techo": 0.944243591919942,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.456153969969417,
+              "desvio": 0.7977000753759365,
+              "p2_5": -0.7212741711663825,
+              "p97_5": 2.0950798517527436
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.31481481481481477,
+              "desvio": 1.432566048109885,
+              "p2_5": -2.155555555555556,
+              "p97_5": 2.9111111111111136
+            },
+            "es_mejor_que_la_tasa_fija": 0.75,
+            "se_ve_mejor_en_los_datos": 0.5416666666666666
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 14.46133998002738,
+              "desvio": 0.764782672722039,
+              "p2_5": 13.046993026981077,
+              "p97_5": 15.714707110627819
+            },
+            "precision_realizada": {
+              "media": 13.759259259259258,
+              "desvio": 2.1910045604872357,
+              "p2_5": 9.844444444444445,
+              "p97_5": 17.522222222222226
+            },
+            "fraccion_del_techo": 0.9537604171210998,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.5968743879017128,
+              "desvio": 0.676143958873121,
+              "p2_5": -7.11863028522025e-05,
+              "p97_5": 2.1480164470756353
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.5925925925925926,
+              "desvio": 0.9601097330974608,
+              "p2_5": -0.6333333333333334,
+              "p97_5": 2.4111111111111114
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.5416666666666666
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 14.723824127205338,
+              "desvio": 0.6898767567685282,
+              "p2_5": 13.406671785240059,
+              "p97_5": 15.794262533233786
+            },
+            "precision_realizada": {
+              "media": 14.055555555555557,
+              "desvio": 2.5642573965391717,
+              "p2_5": 10.033333333333335,
+              "p97_5": 17.711111111111112
+            },
+            "fraccion_del_techo": 0.9710709120131132,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.8593585350796674,
+              "desvio": 0.9497431491369237,
+              "p2_5": -0.19012965079108382,
+              "p97_5": 3.054408291974272
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.888888888888889,
+              "desvio": 1.7922119344041652,
+              "p2_5": -1.966666666666667,
+              "p97_5": 4.500000000000003
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.7083333333333334
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 14.301132544329766,
+              "desvio": 0.8480476530959672,
+              "p2_5": 12.812681662944541,
+              "p97_5": 15.774804756993106
+            },
+            "precision_realizada": {
+              "media": 13.388888888888891,
+              "desvio": 2.2020826525333463,
+              "p2_5": 10.033333333333335,
+              "p97_5": 16.88888888888889
+            },
+            "fraccion_del_techo": 0.9431832487074249,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.43666695220409624,
+              "desvio": 0.6126327790613394,
+              "p2_5": -0.36757996209654287,
+              "p97_5": 1.6039318382488874
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.22222222222222224,
+              "desvio": 1.064732546006254,
+              "p2_5": -1.8999999999999995,
+              "p97_5": 1.9666666666666675
+            },
+            "es_mejor_que_la_tasa_fija": 0.875,
+            "se_ve_mejor_en_los_datos": 0.5416666666666666
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 13.764528515472099,
+              "desvio": 1.0043373479422533,
+              "p2_5": 11.770962356692705,
+              "p97_5": 15.298557585583126
+            },
+            "precision_realizada": {
+              "media": 13.24074074074074,
+              "desvio": 2.5344998303162236,
+              "p2_5": 8.511111111111111,
+              "p97_5": 17.26666666666667
+            },
+            "fraccion_del_techo": 0.907456552989542,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": -0.09993707665356816,
+              "desvio": 0.919386998681552,
+              "p2_5": -1.512826989991631,
+              "p97_5": 1.7498041136028428
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.07407407407407396,
+              "desvio": 2.1482036752221534,
+              "p2_5": -3.8,
+              "p97_5": 3.9888888888888907
+            },
+            "es_mejor_que_la_tasa_fija": 0.375,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 14.188255876289796,
+              "desvio": 0.9408416530077189,
+              "p2_5": 12.258092556087968,
+              "p97_5": 15.811186332482666
+            },
+            "precision_realizada": {
+              "media": 13.388888888888891,
+              "desvio": 2.4494897427831783,
+              "p2_5": 9.655555555555557,
+              "p97_5": 17.522222222222226
+            },
+            "fraccion_del_techo": 0.9354000724963182,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.3237902841641281,
+              "desvio": 1.0383903873086562,
+              "p2_5": -1.3195514807528625,
+              "p97_5": 2.4213372283224106
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.2222222222222221,
+              "desvio": 2.1773242158072694,
+              "p2_5": -3.422222222222221,
+              "p97_5": 4.366666666666671
+            },
+            "es_mejor_que_la_tasa_fija": 0.6666666666666666,
+            "se_ve_mejor_en_los_datos": 0.5
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 15.159675800017729,
+              "desvio": 0.5548456143515339,
+              "p2_5": 13.964392300867894,
+              "p97_5": 16.28142217482922
+            }
+          }
+        ]
+      },
+      "todo": {
+        "elegidos_por_replica": 965,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 10.760360316383133,
+              "desvio": 0.3205530148880407,
+              "p2_5": 10.202018121463805,
+              "p97_5": 11.296070867504705
+            },
+            "precision_realizada": {
+              "media": 10.902417962003454,
+              "desvio": 0.91008189799509,
+              "p2_5": 9.124352331606218,
+              "p97_5": 12.360103626943005
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 12.63589298272503,
+              "desvio": 0.4549760681139843,
+              "p2_5": 11.776441567463678,
+              "p97_5": 13.39102938399915
+            },
+            "precision_realizada": {
+              "media": 12.240932642487047,
+              "desvio": 1.0916974045939292,
+              "p2_5": 9.904145077720207,
+              "p97_5": 13.735751295336787
+            },
+            "fraccion_del_techo": 0.7795304734584138,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 14.739706683465746,
+              "desvio": 0.464582837944839,
+              "p2_5": 14.005061383226748,
+              "p97_5": 15.444940378054724
+            },
+            "precision_realizada": {
+              "media": 14.49481865284974,
+              "desvio": 1.2936912277978263,
+              "p2_5": 12.777202072538858,
+              "p97_5": 16.919689119170986
+            },
+            "fraccion_del_techo": 0.9093174212298747,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.1038137007407163,
+              "desvio": 0.4076659301846903,
+              "p2_5": 1.363998739726358,
+              "p97_5": 2.8222487229580513
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.253886010362694,
+              "desvio": 1.3062393174185434,
+              "p2_5": -0.21761658031088116,
+              "p97_5": 4.365284974093265
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 15.028044704004472,
+              "desvio": 0.42743656473499825,
+              "p2_5": 14.340903508177087,
+              "p97_5": 15.647037568618252
+            },
+            "precision_realizada": {
+              "media": 14.827288428324698,
+              "desvio": 0.9353502115131573,
+              "p2_5": 13.32383419689119,
+              "p97_5": 16.417098445595855
+            },
+            "fraccion_del_techo": 0.9270598255490783,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.392151721279443,
+              "desvio": 0.4160666820607483,
+              "p2_5": 1.7382594798940292,
+              "p97_5": 3.080943449573844
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.586355785837651,
+              "desvio": 1.1911628534634955,
+              "p2_5": 0.3290155440414505,
+              "p97_5": 4.189119170984456
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 15.376796267677626,
+              "desvio": 0.48683748998807475,
+              "p2_5": 14.468948868974016,
+              "p97_5": 16.23687142102196
+            },
+            "precision_realizada": {
+              "media": 15.215889464594127,
+              "desvio": 1.035217608420606,
+              "p2_5": 13.590673575129532,
+              "p97_5": 17.111398963730572
+            },
+            "fraccion_del_techo": 0.9483791032364536,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.7409032849525947,
+              "desvio": 0.5269745380852325,
+              "p2_5": 1.6593194867347292,
+              "p97_5": 3.6702016771437416
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.9749568221070812,
+              "desvio": 1.3810283189647912,
+              "p2_5": 0.4170984455958552,
+              "p97_5": 5.165803108808291
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 14.574750007438539,
+              "desvio": 0.4222553224286975,
+              "p2_5": 13.813881975888247,
+              "p97_5": 15.17217299927219
+            },
+            "precision_realizada": {
+              "media": 14.309153713298791,
+              "desvio": 0.9863709178550101,
+              "p2_5": 13.044041450777202,
+              "p97_5": 16.417098445595855
+            },
+            "fraccion_del_techo": 0.8991125764034523,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.9388570247135093,
+              "desvio": 0.3759471516752766,
+              "p2_5": 1.3616778789416863,
+              "p97_5": 2.685801610233798
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.0682210708117443,
+              "desvio": 1.2020877513647987,
+              "p2_5": -0.10362694300518178,
+              "p97_5": 4.1891191709844575
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 14.306845310945773,
+              "desvio": 0.4749294670290548,
+              "p2_5": 13.402599207440685,
+              "p97_5": 15.00347587485354
+            },
+            "precision_realizada": {
+              "media": 14.18825561312608,
+              "desvio": 1.1583493453427294,
+              "p2_5": 11.533678756476682,
+              "p97_5": 15.955958549222796
+            },
+            "fraccion_del_techo": 0.882534992669472,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.6709523282207435,
+              "desvio": 0.43272592317909053,
+              "p2_5": 0.9250301352883665,
+              "p97_5": 2.439122577518717
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 1.9473229706390323,
+              "desvio": 1.3956571660371047,
+              "p2_5": -0.7461139896373058,
+              "p97_5": 4.233160621761658
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 14.611084663716406,
+              "desvio": 0.5067719988102893,
+              "p2_5": 13.549629667602902,
+              "p97_5": 15.388713150427249
+            },
+            "precision_realizada": {
+              "media": 14.352331606217616,
+              "desvio": 1.3764637865190006,
+              "p2_5": 11.520725388601036,
+              "p97_5": 16.313471502590673
+            },
+            "fraccion_del_techo": 0.9012673749669147,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.9751916809913779,
+              "desvio": 0.5773142001671664,
+              "p2_5": 0.7637143331413134,
+              "p97_5": 2.906142477830429
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.11139896373057,
+              "desvio": 1.7622708076485158,
+              "p2_5": -1.2357512953367862,
+              "p97_5": 4.83937823834197
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 16.216816474620014,
+              "desvio": 0.44334054760307157,
+              "p2_5": 15.467860142690045,
+              "p97_5": 17.072044948307873
+            }
+          }
+        ]
+      }
+    },
+    "riesgo_con_deriva": {
+      "escenario": {
+        "mezcla": "real",
+        "heterogeneidad": 1.0,
+        "deriva": 0.03
+      },
+      "replicas": 24,
+      "seleccion": {
+        "elegidos_por_replica": 740,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.603198500037932,
+              "desvio": 1.5829679444882456,
+              "p2_5": 8.848924314875037,
+              "p97_5": 14.748299365727037
+            },
+            "precision_realizada": {
+              "media": 12.021396396396398,
+              "desvio": 2.214581655776202,
+              "p2_5": 8.97972972972973,
+              "p97_5": 16.04054054054054
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 18.09318675607143,
+              "desvio": 3.214094856332438,
+              "p2_5": 12.28971491048909,
+              "p97_5": 24.46086466327478
+            },
+            "precision_realizada": {
+              "media": 17.9222972972973,
+              "desvio": 3.4265224109242047,
+              "p2_5": 12.878378378378377,
+              "p97_5": 25.168918918918923
+            },
+            "fraccion_del_techo": 0.7410914819565084,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 21.748882987238137,
+              "desvio": 3.1978944289855638,
+              "p2_5": 16.917897740153062,
+              "p97_5": 27.8809932274105
+            },
+            "precision_realizada": {
+              "media": 21.61599099099099,
+              "desvio": 3.387995516434063,
+              "p2_5": 16.091216216216218,
+              "p97_5": 28.09121621621622
+            },
+            "fraccion_del_techo": 0.890299144088453,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.655696231166709,
+              "desvio": 1.9423930858419818,
+              "p2_5": 1.4331719778356633,
+              "p97_5": 7.642603652117546
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.6936936936936937,
+              "desvio": 2.4547438253021236,
+              "p2_5": 0.020270270270271673,
+              "p97_5": 8.777027027027026
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 21.968871182783165,
+              "desvio": 3.1635692192251277,
+              "p2_5": 17.257022272840526,
+              "p97_5": 28.122837519949822
+            },
+            "precision_realizada": {
+              "media": 21.61599099099099,
+              "desvio": 3.4421661181792143,
+              "p2_5": 15.95608108108108,
+              "p97_5": 29.118243243243246
+            },
+            "fraccion_del_techo": 0.8997206778577721,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.875684426711738,
+              "desvio": 2.0449998515124452,
+              "p2_5": 0.8461379093123083,
+              "p97_5": 7.696020192662542
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.6936936936936937,
+              "desvio": 2.4932553178549237,
+              "p2_5": -0.5405405405405406,
+              "p97_5": 8.094594594594597
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 21.837669748766782,
+              "desvio": 3.148057822143258,
+              "p2_5": 17.11573449618632,
+              "p97_5": 28.02575575852012
+            },
+            "precision_realizada": {
+              "media": 21.666666666666668,
+              "desvio": 3.2129081395066335,
+              "p2_5": 17.22972972972973,
+              "p97_5": 29.003378378378383
+            },
+            "fraccion_del_techo": 0.8943371907410061,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.744482992695353,
+              "desvio": 2.2172541299294957,
+              "p2_5": 0.3682270847720859,
+              "p97_5": 7.683182233977929
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.7443693693693696,
+              "desvio": 2.488414150431455,
+              "p2_5": -0.6925675675675684,
+              "p97_5": 7.810810810810811
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 21.23474373762826,
+              "desvio": 3.1536413126162506,
+              "p2_5": 16.248143458780895,
+              "p97_5": 27.459277671107053
+            },
+            "precision_realizada": {
+              "media": 20.6981981981982,
+              "desvio": 3.4438236054723323,
+              "p2_5": 15.182432432432433,
+              "p97_5": 28.172297297297302
+            },
+            "fraccion_del_techo": 0.8692144954487581,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.1415569815568314,
+              "desvio": 1.9336762207591602,
+              "p2_5": 0.4528081031462287,
+              "p97_5": 7.234556558550956
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.7759009009009006,
+              "desvio": 2.233680282874429,
+              "p2_5": -0.5574324324324318,
+              "p97_5": 7.0743243243243255
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 20.99820214149212,
+              "desvio": 3.1705720841581506,
+              "p2_5": 15.998870877670596,
+              "p97_5": 27.45667621094715
+            },
+            "precision_realizada": {
+              "media": 20.518018018018015,
+              "desvio": 3.5794825305305253,
+              "p2_5": 15.182432432432433,
+              "p97_5": 28.39189189189189
+            },
+            "fraccion_del_techo": 0.8593008323652866,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.905015385420691,
+              "desvio": 1.8153285270209858,
+              "p2_5": 0.008522656606764295,
+              "p97_5": 6.520504790560502
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.595720720720721,
+              "desvio": 2.1329471477783017,
+              "p2_5": -0.5574324324324318,
+              "p97_5": 6.783783783783786
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.310878308441648,
+              "desvio": 3.5013090221529617,
+              "p2_5": 15.562071562534143,
+              "p97_5": 28.3291422972112
+            },
+            "precision_realizada": {
+              "media": 21.114864864864867,
+              "desvio": 3.753075405478289,
+              "p2_5": 14.912162162162163,
+              "p97_5": 29.290540540540544
+            },
+            "fraccion_del_techo": 0.8708984268773042,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.2176915523702228,
+              "desvio": 2.0923534415508476,
+              "p2_5": 0.3421484700906272,
+              "p97_5": 7.47177518783397
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 3.192567567567567,
+              "desvio": 2.653133119387666,
+              "p2_5": -0.5574324324324318,
+              "p97_5": 8.547297297297296
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 24.375074840358906,
+              "desvio": 2.98394753317213,
+              "p2_5": 19.937283719111424,
+              "p97_5": 30.067235059364126
+            }
+          }
+        ]
+      },
+      "confirmacion": {
+        "elegidos_por_replica": 225,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 10.14478777204617,
+              "desvio": 1.3897763657362423,
+              "p2_5": 7.943388799043743,
+              "p97_5": 13.052446143363895
+            },
+            "precision_realizada": {
+              "media": 10.222222222222221,
+              "desvio": 1.8947054518655504,
+              "p2_5": 7.811111111111111,
+              "p97_5": 13.644444444444446
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 21.6183821249391,
+              "desvio": 3.9412506547790462,
+              "p2_5": 14.630084336555326,
+              "p97_5": 27.01956155256277
+            },
+            "precision_realizada": {
+              "media": 21.722222222222218,
+              "desvio": 4.311663892046984,
+              "p2_5": 14.477777777777778,
+              "p97_5": 29.077777777777776
+            },
+            "fraccion_del_techo": 0.9417403141695689,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 22.05802203067974,
+              "desvio": 4.0628319865908145,
+              "p2_5": 15.358036316099865,
+              "p97_5": 28.0905128089274
+            },
+            "precision_realizada": {
+              "media": 21.87037037037037,
+              "desvio": 4.378210168531815,
+              "p2_5": 14.8,
+              "p97_5": 29.266666666666666
+            },
+            "fraccion_del_techo": 0.9599559944466366,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.43963990574064393,
+              "desvio": 1.1887593999011685,
+              "p2_5": -1.182541165920896,
+              "p97_5": 3.519058465841173
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.1481481481481476,
+              "desvio": 1.8703743562719597,
+              "p2_5": -2.5333333333333323,
+              "p97_5": 4.188888888888887
+            },
+            "es_mejor_que_la_tasa_fija": 0.7083333333333334,
+            "se_ve_mejor_en_los_datos": 0.3333333333333333
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 22.02234168875732,
+              "desvio": 3.8784516871301107,
+              "p2_5": 15.606121169595209,
+              "p97_5": 27.557645791574213
+            },
+            "precision_realizada": {
+              "media": 21.90740740740741,
+              "desvio": 4.243737031200251,
+              "p2_5": 14.355555555555556,
+              "p97_5": 28.18888888888889
+            },
+            "fraccion_del_techo": 0.9597124665770611,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.4039595638182194,
+              "desvio": 0.9116786296772754,
+              "p2_5": -0.3181086213264414,
+              "p97_5": 3.193200768644695
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.18518518518518534,
+              "desvio": 1.2902319616797837,
+              "p2_5": -1.077777777777778,
+              "p97_5": 3.0333333333333377
+            },
+            "es_mejor_que_la_tasa_fija": 0.75,
+            "se_ve_mejor_en_los_datos": 0.4166666666666667
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 22.00044866988043,
+              "desvio": 4.092428775453658,
+              "p2_5": 15.195825388401964,
+              "p97_5": 27.732298656971725
+            },
+            "precision_realizada": {
+              "media": 22.18518518518518,
+              "desvio": 3.892085182910619,
+              "p2_5": 14.61111111111111,
+              "p97_5": 27.933333333333334
+            },
+            "fraccion_del_techo": 0.9572985596786676,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.38206654494133413,
+              "desvio": 1.1287883384563147,
+              "p2_5": -1.0595695361848803,
+              "p97_5": 3.4012436561552395
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.4629629629629628,
+              "desvio": 2.0068767087622703,
+              "p2_5": -2.1555555555555546,
+              "p97_5": 4.311111111111114
+            },
+            "es_mejor_que_la_tasa_fija": 0.7083333333333334,
+            "se_ve_mejor_en_los_datos": 0.375
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 22.054482733550767,
+              "desvio": 3.9749112573367125,
+              "p2_5": 15.44492683934653,
+              "p97_5": 27.669489947761722
+            },
+            "precision_realizada": {
+              "media": 21.833333333333332,
+              "desvio": 4.084586057797462,
+              "p2_5": 14.355555555555556,
+              "p97_5": 27.300000000000004
+            },
+            "fraccion_del_techo": 0.9605147308608997,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.43610060861166966,
+              "desvio": 0.9290649433930294,
+              "p2_5": -0.5445966534764228,
+              "p97_5": 3.198867585369087
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.11111111111111101,
+              "desvio": 1.5185381562690772,
+              "p2_5": -1.966666666666667,
+              "p97_5": 3.6111111111111134
+            },
+            "es_mejor_que_la_tasa_fija": 0.7916666666666666,
+            "se_ve_mejor_en_los_datos": 0.2916666666666667
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.99973731688333,
+              "desvio": 4.221715044035647,
+              "p2_5": 15.242502131849584,
+              "p97_5": 28.469288841557773
+            },
+            "precision_realizada": {
+              "media": 22.055555555555557,
+              "desvio": 4.6775809797151355,
+              "p2_5": 13.655555555555555,
+              "p97_5": 29.833333333333332
+            },
+            "fraccion_del_techo": 0.9563571913043779,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.38135519194423256,
+              "desvio": 1.0294824005958179,
+              "p2_5": -0.5879803264104885,
+              "p97_5": 2.890315507984309
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.3333333333333332,
+              "desvio": 1.8730509641002875,
+              "p2_5": -1.7777777777777781,
+              "p97_5": 5.011111111111114
+            },
+            "es_mejor_que_la_tasa_fija": 0.5416666666666666,
+            "se_ve_mejor_en_los_datos": 0.375
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.85927352170614,
+              "desvio": 4.449256113724164,
+              "p2_5": 14.336222326180545,
+              "p97_5": 28.376736453438372
+            },
+            "precision_realizada": {
+              "media": 21.814814814814813,
+              "desvio": 4.915896707272422,
+              "p2_5": 13.722222222222221,
+              "p97_5": 30.211111111111112
+            },
+            "fraccion_del_techo": 0.9484266511648266,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.24089139676703797,
+              "desvio": 1.3211265959877303,
+              "p2_5": -2.2075044694336587,
+              "p97_5": 2.936960000656165
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.09259259259259234,
+              "desvio": 2.3407213762219046,
+              "p2_5": -3.2999999999999994,
+              "p97_5": 5.900000000000003
+            },
+            "es_mejor_que_la_tasa_fija": 0.5,
+            "se_ve_mejor_en_los_datos": 0.3333333333333333
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 22.915069366630068,
+              "desvio": 3.816602356925847,
+              "p2_5": 16.593709630908123,
+              "p97_5": 28.74197937619031
+            }
+          }
+        ]
+      },
+      "todo": {
+        "elegidos_por_replica": 965,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.2631545479155,
+              "desvio": 1.4915276713635117,
+              "p2_5": 8.72916641568548,
+              "p97_5": 14.19687253172513
+            },
+            "precision_realizada": {
+              "media": 11.60189982728843,
+              "desvio": 1.9045402913011016,
+              "p2_5": 8.870466321243523,
+              "p97_5": 15.023316062176166
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 18.91512350010793,
+              "desvio": 2.849337777271865,
+              "p2_5": 14.135395743757897,
+              "p97_5": 24.63642821920652
+            },
+            "precision_realizada": {
+              "media": 18.808290155440414,
+              "desvio": 2.7355737994260987,
+              "p2_5": 14.634715025906734,
+              "p97_5": 24.90673575129534
+            },
+            "fraccion_del_techo": 0.7864414413783161,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 21.820962038817786,
+              "desvio": 3.0894006943771135,
+              "p2_5": 16.615571801333225,
+              "p97_5": 27.715487776407794
+            },
+            "precision_realizada": {
+              "media": 21.675302245250432,
+              "desvio": 3.1825256560421042,
+              "p2_5": 16.264248704663213,
+              "p97_5": 27.639896373057
+            },
+            "fraccion_del_techo": 0.9060138714585801,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.905838538709855,
+              "desvio": 1.5260513290802593,
+              "p2_5": 1.0137314711332541,
+              "p97_5": 5.858512762303279
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.8670120898100167,
+              "desvio": 1.964203156714627,
+              "p2_5": 0.1191709844559593,
+              "p97_5": 6.790155440414509
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9583333333333334
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 21.981338399202013,
+              "desvio": 3.0290723197889777,
+              "p2_5": 16.876332462209255,
+              "p97_5": 27.875279593420046
+            },
+            "precision_realizada": {
+              "media": 21.683937823834196,
+              "desvio": 3.21719157512335,
+              "p2_5": 16.16062176165803,
+              "p97_5": 28.606217616580313
+            },
+            "fraccion_del_techo": 0.9131556846608069,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 3.0662148990940783,
+              "desvio": 1.551144354503647,
+              "p2_5": 0.651166074681025,
+              "p97_5": 5.980995855140812
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.8756476683937824,
+              "desvio": 1.905464477228503,
+              "p2_5": -0.665803108808291,
+              "p97_5": 6.059585492227981
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 21.87562338322333,
+              "desvio": 3.102373859412904,
+              "p2_5": 16.965451943871976,
+              "p97_5": 27.826893773444457
+            },
+            "precision_realizada": {
+              "media": 21.787564766839377,
+              "desvio": 2.9897218317940086,
+              "p2_5": 16.958549222797927,
+              "p97_5": 28.279792746113994
+            },
+            "fraccion_del_techo": 0.9083223035866353,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.960499883115402,
+              "desvio": 1.7353333222483778,
+              "p2_5": 0.10976897035442698,
+              "p97_5": 6.037029184686418
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.9792746113989637,
+              "desvio": 1.7645048092969944,
+              "p2_5": -0.5595854922279804,
+              "p97_5": 5.826424870466322
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 21.425874591599833,
+              "desvio": 3.0025516964681302,
+              "p2_5": 16.514836261342126,
+              "p97_5": 27.361114324811258
+            },
+            "precision_realizada": {
+              "media": 20.962867012089813,
+              "desvio": 3.134157992456553,
+              "p2_5": 15.821243523316062,
+              "p97_5": 27.821243523316063
+            },
+            "fraccion_del_techo": 0.8898373023149336,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.510751091491898,
+              "desvio": 1.4628172253397818,
+              "p2_5": 0.3943410198767507,
+              "p97_5": 5.582412177951334
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.1545768566493955,
+              "desvio": 1.696165194959024,
+              "p2_5": -0.5025906735751299,
+              "p97_5": 5.248704663212436
+            },
+            "es_mejor_que_la_tasa_fija": 1.0,
+            "se_ve_mejor_en_los_datos": 0.875
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.231720705702504,
+              "desvio": 3.086232970405138,
+              "p2_5": 15.871664564320803,
+              "p97_5": 27.363858961928006
+            },
+            "precision_realizada": {
+              "media": 20.87651122625216,
+              "desvio": 3.2850798599290703,
+              "p2_5": 15.67357512953368,
+              "p97_5": 27.9300518134715
+            },
+            "fraccion_del_techo": 0.8812485037099095,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.316597205594574,
+              "desvio": 1.4244940113244566,
+              "p2_5": -0.030003623225130213,
+              "p97_5": 4.997766893241493
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.0682210708117443,
+              "desvio": 1.7421977956630812,
+              "p2_5": -0.44041450777202107,
+              "p97_5": 5.66580310880829
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.9166666666666666
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 21.438742477337517,
+              "desvio": 3.4002829436359674,
+              "p2_5": 15.34384791138408,
+              "p97_5": 28.01752157549088
+            },
+            "precision_realizada": {
+              "media": 21.278065630397236,
+              "desvio": 3.6272219075550334,
+              "p2_5": 14.873056994818652,
+              "p97_5": 28.694300518134714
+            },
+            "fraccion_del_techo": 0.8884834788434072,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 2.5236189772295843,
+              "desvio": 1.6659914116024115,
+              "p2_5": -0.06766388464239657,
+              "p97_5": 5.596508722012069
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 2.469775474956822,
+              "desvio": 2.1836977256067835,
+              "p2_5": -0.3834196891191722,
+              "p97_5": 6.494818652849744
+            },
+            "es_mejor_que_la_tasa_fija": 0.9583333333333334,
+            "se_ve_mejor_en_los_datos": 0.7916666666666666
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 24.034659056328863,
+              "desvio": 2.8911823357332267,
+              "p2_5": 19.402819244029303,
+              "p97_5": 29.423378338688558
+            }
+          }
+        ]
+      }
+    },
+    "estable_con_deriva": {
+      "escenario": {
+        "mezcla": "estable",
+        "heterogeneidad": 1.0,
+        "deriva": 0.03
+      },
+      "replicas": 24,
+      "seleccion": {
+        "elegidos_por_replica": 740,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 12.253402743182454,
+              "desvio": 1.03502431169778,
+              "p2_5": 10.499425348730943,
+              "p97_5": 14.71476884900948
+            },
+            "precision_realizada": {
+              "media": 12.443693693693694,
+              "desvio": 1.4899098848042254,
+              "p2_5": 10.54054054054054,
+              "p97_5": 14.864864864864865
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 24.74641473020502,
+              "desvio": 4.37687332739009,
+              "p2_5": 19.399293226218436,
+              "p97_5": 32.19372563985103
+            },
+            "precision_realizada": {
+              "media": 24.735360360360364,
+              "desvio": 5.313179022257429,
+              "p2_5": 17.050675675675677,
+              "p97_5": 33.4695945945946
+            },
+            "fraccion_del_techo": 0.8986487976207885,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 25.775429723095073,
+              "desvio": 4.370408924228902,
+              "p2_5": 20.94428570193398,
+              "p97_5": 34.14924815718463
+            },
+            "precision_realizada": {
+              "media": 26.01914414414414,
+              "desvio": 4.999123238571292,
+              "p2_5": 19.54391891891892,
+              "p97_5": 35.070945945945944
+            },
+            "fraccion_del_techo": 0.9359429706476788,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.0290149928900496,
+              "desvio": 1.1837074856595307,
+              "p2_5": -0.6054756704600457,
+              "p97_5": 3.3402225706135105
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 1.283783783783784,
+              "desvio": 1.577443665089385,
+              "p2_5": -0.46283783783783866,
+              "p97_5": 4.85810810810811
+            },
+            "es_mejor_que_la_tasa_fija": 0.8333333333333334,
+            "se_ve_mejor_en_los_datos": 0.8333333333333334
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 25.385615730708803,
+              "desvio": 4.3392430930670525,
+              "p2_5": 19.980598275777666,
+              "p97_5": 32.67805371939019
+            },
+            "precision_realizada": {
+              "media": 25.54617117117117,
+              "desvio": 4.853341746371323,
+              "p2_5": 19.152027027027028,
+              "p97_5": 34.513513513513516
+            },
+            "fraccion_del_techo": 0.9221035227469079,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.6392010005037763,
+              "desvio": 0.5480028129861315,
+              "p2_5": -0.1382869679650623,
+              "p97_5": 1.547091158279461
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.8108108108108117,
+              "desvio": 1.0183004852689508,
+              "p2_5": -0.5979729729729708,
+              "p97_5": 2.817567567567568
+            },
+            "es_mejor_que_la_tasa_fija": 0.8333333333333334,
+            "se_ve_mejor_en_los_datos": 0.75
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 25.557733369214116,
+              "desvio": 4.353921655631919,
+              "p2_5": 20.27060847212271,
+              "p97_5": 33.31633160465421
+            },
+            "precision_realizada": {
+              "media": 25.70382882882883,
+              "desvio": 4.731152911056384,
+              "p2_5": 19.402027027027028,
+              "p97_5": 34.304054054054056
+            },
+            "fraccion_del_techo": 0.9282081045089391,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.8113186390090924,
+              "desvio": 1.0733523170998962,
+              "p2_5": -0.6235211585683903,
+              "p97_5": 3.1511163437294893
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.9684684684684689,
+              "desvio": 1.2805585478500354,
+              "p2_5": -1.0810810810810796,
+              "p97_5": 3.8006756756756754
+            },
+            "es_mejor_que_la_tasa_fija": 0.75,
+            "se_ve_mejor_en_los_datos": 0.7083333333333334
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 25.63947658990162,
+              "desvio": 4.341686617803825,
+              "p2_5": 20.651568394500497,
+              "p97_5": 33.43881988354298
+            },
+            "precision_realizada": {
+              "media": 25.54617117117117,
+              "desvio": 4.991096205166338,
+              "p2_5": 19.131756756756758,
+              "p97_5": 34.53378378378379
+            },
+            "fraccion_del_techo": 0.9312663724644371,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.893061859696591,
+              "desvio": 0.7607412565419599,
+              "p2_5": -0.2720483129260845,
+              "p97_5": 2.470049615639637
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.8108108108108113,
+              "desvio": 0.9906348396799414,
+              "p2_5": -0.27027027027026984,
+              "p97_5": 3.1250000000000013
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.6666666666666666
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 25.299359922100034,
+              "desvio": 4.432760857203681,
+              "p2_5": 20.37561188269102,
+              "p97_5": 33.743086063460325
+            },
+            "precision_realizada": {
+              "media": 25.146396396396398,
+              "desvio": 4.987824071151461,
+              "p2_5": 18.47635135135135,
+              "p97_5": 34.82094594594595
+            },
+            "fraccion_del_techo": 0.9178271398968132,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.5529451918950107,
+              "desvio": 1.2772120704066015,
+              "p2_5": -1.6723560814864658,
+              "p97_5": 2.962054686647216
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.4110360360360367,
+              "desvio": 1.6619921796790635,
+              "p2_5": -1.756756756756758,
+              "p97_5": 3.510135135135137
+            },
+            "es_mejor_que_la_tasa_fija": 0.7083333333333334,
+            "se_ve_mejor_en_los_datos": 0.5416666666666666
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 25.59713378491499,
+              "desvio": 4.592042042438027,
+              "p2_5": 20.370369270179417,
+              "p97_5": 34.55933457910884
+            },
+            "precision_realizada": {
+              "media": 25.675675675675677,
+              "desvio": 5.1621221720970265,
+              "p2_5": 18.320945945945947,
+              "p97_5": 36.08108108108108
+            },
+            "fraccion_del_techo": 0.9280051768111018,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.8507190547099653,
+              "desvio": 1.6691151287411843,
+              "p2_5": -1.5325367798726077,
+              "p97_5": 4.120782119540458
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.9403153153153153,
+              "desvio": 1.8912535294793855,
+              "p2_5": -1.408783783783786,
+              "p97_5": 4.439189189189189
+            },
+            "es_mejor_que_la_tasa_fija": 0.6666666666666666,
+            "se_ve_mejor_en_los_datos": 0.625
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 27.495999861254347,
+              "desvio": 4.250477168139444,
+              "p2_5": 22.308245964570347,
+              "p97_5": 35.808194897367784
+            }
+          }
+        ]
+      },
+      "confirmacion": {
+        "elegidos_por_replica": 225,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 10.3144303268574,
+              "desvio": 1.1884296496788618,
+              "p2_5": 8.600702739996722,
+              "p97_5": 13.011195842229943
+            },
+            "precision_realizada": {
+              "media": 10.277777777777779,
+              "desvio": 2.3674750836291687,
+              "p2_5": 7.433333333333334,
+              "p97_5": 15.477777777777781
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 21.87043941097701,
+              "desvio": 4.365036812655074,
+              "p2_5": 16.845892230882477,
+              "p97_5": 30.860856679522048
+            },
+            "precision_realizada": {
+              "media": 21.703703703703706,
+              "desvio": 5.4992964627538266,
+              "p2_5": 15.11111111111111,
+              "p97_5": 32.82222222222222
+            },
+            "fraccion_del_techo": 0.8836044030842034,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 23.01305836674,
+              "desvio": 4.7703284420935335,
+              "p2_5": 17.022699732551153,
+              "p97_5": 32.810781797369835
+            },
+            "precision_realizada": {
+              "media": 22.85185185185185,
+              "desvio": 5.967047340447525,
+              "p2_5": 15.811111111111112,
+              "p97_5": 33.455555555555556
+            },
+            "fraccion_del_techo": 0.927893469189633,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.142618955762994,
+              "desvio": 2.4595481317630985,
+              "p2_5": -2.7403377613656117,
+              "p97_5": 5.613270514908542
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 1.1481481481481486,
+              "desvio": 2.517286806888288,
+              "p2_5": -3.744444444444444,
+              "p97_5": 5.333333333333332
+            },
+            "es_mejor_que_la_tasa_fija": 0.6666666666666666,
+            "se_ve_mejor_en_los_datos": 0.6666666666666666
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 22.81736536570681,
+              "desvio": 4.218070702435409,
+              "p2_5": 18.096827391650663,
+              "p97_5": 31.983972333061857
+            },
+            "precision_realizada": {
+              "media": 22.2962962962963,
+              "desvio": 5.806197908819385,
+              "p2_5": 15.177777777777777,
+              "p97_5": 34.15555555555556
+            },
+            "fraccion_del_techo": 0.9229470083878396,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.946925954729798,
+              "desvio": 1.448070657982351,
+              "p2_5": -0.5966376580805551,
+              "p97_5": 4.574505119594103
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.5925925925925927,
+              "desvio": 1.4396675626686106,
+              "p2_5": -1.5222222222222224,
+              "p97_5": 3.299999999999998
+            },
+            "es_mejor_que_la_tasa_fija": 0.75,
+            "se_ve_mejor_en_los_datos": 0.5416666666666666
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 22.643498986800466,
+              "desvio": 4.752288927933052,
+              "p2_5": 16.51027069234361,
+              "p97_5": 33.00896423119858
+            },
+            "precision_realizada": {
+              "media": 22.203703703703706,
+              "desvio": 6.090361494291655,
+              "p2_5": 14.922222222222222,
+              "p97_5": 34.211111111111116
+            },
+            "fraccion_del_techo": 0.9134107131749792,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.7730595758234561,
+              "desvio": 2.2535849136112915,
+              "p2_5": -3.1564876824994297,
+              "p97_5": 4.603704047286866
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.5000000000000004,
+              "desvio": 2.122648362506956,
+              "p2_5": -3.299999999999999,
+              "p97_5": 4.311111111111113
+            },
+            "es_mejor_que_la_tasa_fija": 0.6666666666666666,
+            "se_ve_mejor_en_los_datos": 0.5
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 22.87158310848571,
+              "desvio": 4.146246438967229,
+              "p2_5": 18.224745075661822,
+              "p97_5": 32.009212591755855
+            },
+            "precision_realizada": {
+              "media": 22.407407407407405,
+              "desvio": 5.790275100532454,
+              "p2_5": 15.366666666666667,
+              "p97_5": 34.41111111111111
+            },
+            "fraccion_del_techo": 0.9253326771881593,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.0011436975086963,
+              "desvio": 1.3861491665411305,
+              "p2_5": -0.21503926459849398,
+              "p97_5": 4.250225985526285
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.7037037037037038,
+              "desvio": 1.5335456923123396,
+              "p2_5": -2.155555555555556,
+              "p97_5": 2.855555555555555
+            },
+            "es_mejor_que_la_tasa_fija": 0.8333333333333334,
+            "se_ve_mejor_en_los_datos": 0.7083333333333334
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 22.225043158702515,
+              "desvio": 4.886473033930273,
+              "p2_5": 16.22649980099603,
+              "p97_5": 32.98090955002922
+            },
+            "precision_realizada": {
+              "media": 21.888888888888886,
+              "desvio": 6.6146115849498734,
+              "p2_5": 13.466666666666667,
+              "p97_5": 34.08888888888889
+            },
+            "fraccion_del_techo": 0.8941246857675358,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.3546037477255071,
+              "desvio": 2.108157733190513,
+              "p2_5": -3.6585741085207943,
+              "p97_5": 3.980157954040541
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.18518518518518567,
+              "desvio": 2.6696172618793046,
+              "p2_5": -5.333333333333332,
+              "p97_5": 5.011111111111112
+            },
+            "es_mejor_que_la_tasa_fija": 0.5416666666666666,
+            "se_ve_mejor_en_los_datos": 0.5416666666666666
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 22.48718200112371,
+              "desvio": 5.184533806708051,
+              "p2_5": 15.133278843918013,
+              "p97_5": 32.656935098253044
+            },
+            "precision_realizada": {
+              "media": 22.037037037037038,
+              "desvio": 6.374825240816977,
+              "p2_5": 14.61111111111111,
+              "p97_5": 34.22222222222222
+            },
+            "fraccion_del_techo": 0.9039180660481984,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.6167425901467002,
+              "desvio": 2.8928888776732897,
+              "p2_5": -4.487514250692754,
+              "p97_5": 5.588331507235953
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.33333333333333387,
+              "desvio": 2.487542769169756,
+              "p2_5": -3.744444444444444,
+              "p97_5": 4.877777777777778
+            },
+            "es_mejor_que_la_tasa_fija": 0.5833333333333334,
+            "se_ve_mejor_en_los_datos": 0.5416666666666666
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 24.719304355867177,
+              "desvio": 4.329821157476116,
+              "p2_5": 19.682770945175715,
+              "p97_5": 34.584498078119644
+            }
+          }
+        ]
+      },
+      "todo": {
+        "elegidos_por_replica": 965,
+        "filas": [
+          {
+            "clave": "azar",
+            "nombre": "azar",
+            "precision_verdadera": {
+              "media": 11.8013107290134,
+              "desvio": 1.0559564404215511,
+              "p2_5": 10.01752942195962,
+              "p97_5": 14.319705757795646
+            },
+            "precision_realizada": {
+              "media": 11.938687392055266,
+              "desvio": 1.393313468133868,
+              "p2_5": 10.111398963730569,
+              "p97_5": 14.769430051813472
+            }
+          },
+          {
+            "clave": "tasa_fija",
+            "nombre": "tasa fija, reajustada por bloque",
+            "precision_verdadera": {
+              "media": 24.075850536602633,
+              "desvio": 4.308085415411209,
+              "p2_5": 18.878890108253284,
+              "p97_5": 31.589216830202574
+            },
+            "precision_realizada": {
+              "media": 24.028497409326423,
+              "desvio": 5.1532749331861005,
+              "p2_5": 17.054404145077722,
+              "p97_5": 32.4300518134715
+            },
+            "fraccion_del_techo": 0.895425687784317,
+            "diferencia_verdadera_con_tasa_fija": null,
+            "diferencia_realizada_con_tasa_fija": null,
+            "es_mejor_que_la_tasa_fija": null,
+            "se_ve_mejor_en_los_datos": null
+          },
+          {
+            "clave": "jerarquico_60",
+            "nombre": "jerárquico 60 días, peso 20",
+            "precision_verdadera": {
+              "media": 25.131353500110734,
+              "desvio": 4.330105861191653,
+              "p2_5": 20.433715181115918,
+              "p97_5": 33.91545794092025
+            },
+            "precision_realizada": {
+              "media": 25.280656303972364,
+              "desvio": 4.974513683391636,
+              "p2_5": 18.909326424870464,
+              "p97_5": 34.652849740932645
+            },
+            "fraccion_del_techo": 0.9344160704660993,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 1.0555029635080941,
+              "desvio": 1.3443087922574999,
+              "p2_5": -1.059659341483645,
+              "p97_5": 3.525508055600168
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 1.2521588946459408,
+              "desvio": 1.5174450191350297,
+              "p2_5": -0.19170984455958848,
+              "p97_5": 4.748704663212436
+            },
+            "es_mejor_que_la_tasa_fija": 0.8333333333333334,
+            "se_ve_mejor_en_los_datos": 0.7916666666666666
+          },
+          {
+            "clave": "movil_120_mercado",
+            "nombre": "móvil 120 días hacia el mercado",
+            "precision_verdadera": {
+              "media": 24.78680087876533,
+              "desvio": 4.219386913256598,
+              "p2_5": 19.883140857227456,
+              "p97_5": 32.46004481132178
+            },
+            "precision_realizada": {
+              "media": 24.788428324697758,
+              "desvio": 4.781116084644141,
+              "p2_5": 18.761658031088082,
+              "p97_5": 33.64766839378238
+            },
+            "fraccion_del_techo": 0.9223005191490338,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.7109503421626937,
+              "desvio": 0.6597511291698108,
+              "p2_5": -0.0929709389708934,
+              "p97_5": 1.9998534148863982
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.7599309153713302,
+              "desvio": 0.9819827206311161,
+              "p2_5": -0.5181347150259086,
+              "p97_5": 2.7072538860103643
+            },
+            "es_mejor_que_la_tasa_fija": 0.8333333333333334,
+            "se_ve_mejor_en_los_datos": 0.7083333333333334
+          },
+          {
+            "clave": "riesgo_estandarizado",
+            "nombre": "riesgo estandarizado, 60 días",
+            "precision_verdadera": {
+              "media": 24.87824866865135,
+              "desvio": 4.31515565003923,
+              "p2_5": 20.138391839653956,
+              "p97_5": 33.327000057596464
+            },
+            "precision_realizada": {
+              "media": 24.887737478411054,
+              "desvio": 4.779620530018076,
+              "p2_5": 18.505181347150263,
+              "p97_5": 33.795336787564764
+            },
+            "fraccion_del_techo": 0.9251840248084733,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.8023981320487114,
+              "desvio": 1.2210475394690505,
+              "p2_5": -0.9928585138806576,
+              "p97_5": 3.4446073316354315
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.8592400690846288,
+              "desvio": 1.3106031373323344,
+              "p2_5": -1.196891191709844,
+              "p97_5": 3.4922279792746114
+            },
+            "es_mejor_que_la_tasa_fija": 0.75,
+            "se_ve_mejor_en_los_datos": 0.6666666666666666
+          },
+          {
+            "clave": "logistica_atributos",
+            "nombre": "logística con atributos, reentrenada cada 5 días",
+            "precision_verdadera": {
+              "media": 24.994112824804642,
+              "desvio": 4.220930166381893,
+              "p2_5": 20.368668435327642,
+              "p97_5": 33.1370950603884
+            },
+            "precision_realizada": {
+              "media": 24.81433506044905,
+              "desvio": 4.931292460719572,
+              "p2_5": 18.803108808290155,
+              "p97_5": 33.72279792746114
+            },
+            "fraccion_del_techo": 0.929954779833078,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.9182622882020047,
+              "desvio": 0.8057507669988488,
+              "p2_5": -0.09252461975006744,
+              "p97_5": 2.5847721252104296
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.785837651122625,
+              "desvio": 0.9887348074518855,
+              "p2_5": -0.4145077720207236,
+              "p97_5": 3.0777202072538863
+            },
+            "es_mejor_que_la_tasa_fija": 0.9166666666666666,
+            "se_ve_mejor_en_los_datos": 0.7916666666666666
+          },
+          {
+            "clave": "rf_atributos",
+            "nombre": "Random Forest con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 24.582550314053986,
+              "desvio": 4.462458564345718,
+              "p2_5": 19.58069715473961,
+              "p97_5": 33.60758860963035
+            },
+            "precision_realizada": {
+              "media": 24.386873920552677,
+              "desvio": 5.110547295211601,
+              "p2_5": 17.66580310880829,
+              "p97_5": 34.16321243523316
+            },
+            "fraccion_del_techo": 0.9127483711774064,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.5066997774513445,
+              "desvio": 1.363182143725654,
+              "p2_5": -1.631752927058085,
+              "p97_5": 3.1671813597282257
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.3583765112262515,
+              "desvio": 1.6181216093411053,
+              "p2_5": -1.5388601036269443,
+              "p97_5": 3.2124352331606207
+            },
+            "es_mejor_que_la_tasa_fija": 0.625,
+            "se_ve_mejor_en_los_datos": 0.5
+          },
+          {
+            "clave": "catboost_atributos",
+            "nombre": "CatBoost con atributos, reentrenado cada 5 días",
+            "precision_verdadera": {
+              "media": 24.872015493357438,
+              "desvio": 4.6048333462651385,
+              "p2_5": 19.737407976011482,
+              "p97_5": 34.15992282228892
+            },
+            "precision_realizada": {
+              "media": 24.827288428324696,
+              "desvio": 5.196725694718976,
+              "p2_5": 17.72020725388601,
+              "p97_5": 35.64766839378238
+            },
+            "fraccion_del_techo": 0.9230223040647297,
+            "diferencia_verdadera_con_tasa_fija": {
+              "media": 0.7961649567548011,
+              "desvio": 1.8075297143493654,
+              "p2_5": -1.7445330662137508,
+              "p97_5": 4.060799753668486
+            },
+            "diferencia_realizada_con_tasa_fija": {
+              "media": 0.7987910189982728,
+              "desvio": 1.7968157776778582,
+              "p2_5": -1.6424870466321237,
+              "p97_5": 4.041450777202073
+            },
+            "es_mejor_que_la_tasa_fija": 0.7083333333333334,
+            "se_ve_mejor_en_los_datos": 0.5833333333333334
+          },
+          {
+            "clave": "oraculo",
+            "nombre": "mejor selección posible (conoce la tasa verdadera)",
+            "precision_verdadera": {
+              "media": 26.848583810775466,
+              "desvio": 4.214501378860432,
+              "p2_5": 21.777859147757017,
+              "p97_5": 35.52287698614412
+            }
+          }
+        ]
+      }
+    }
+  },
+  "version_codigo": "16350a9421233bb7d2aba09d600c4c6f3f332bcf"
+}
