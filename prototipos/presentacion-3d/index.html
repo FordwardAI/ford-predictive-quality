@@ -43,12 +43,11 @@
     <p class="cargando">Cargando presentación…</p>
   </main>
 
-  <div class="indicador" aria-hidden="false">
-    <p class="indicador-seccion" id="indicador-seccion" aria-live="polite" aria-atomic="true">
-      <span class="indicador-numero" id="indicador-numero"></span>
-      <span class="indicador-titulo" id="indicador-titulo"></span>
-    </p>
-  </div>
+  <footer class="pie">
+    <span class="pie-numero" id="pie-numero" aria-hidden="true"></span>
+    <span class="pie-seccion" id="pie-seccion" aria-live="polite" aria-atomic="true"></span>
+    <ol class="pie-pasos" id="pie-pasos" aria-hidden="true" hidden></ol>
+  </footer>
   <div class="progreso" aria-hidden="true">
     <div class="progreso-pista"><div class="progreso-relleno" id="progreso-relleno"></div></div>
     <ol class="progreso-marcas" id="progreso-marcas"></ol>
@@ -68,18 +67,11 @@
       <ol class="indice-lista" id="indice-lista"></ol>
     </nav>
     <p class="indice-atajos">
-      <kbd>→</kbd> siguiente · <kbd>←</kbd> anterior · <kbd>0</kbd>–<kbd>6</kbd> sección · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa · <kbd>O</kbd> órbita
+      <kbd>→</kbd> paso siguiente · <kbd>←</kbd> paso anterior · <kbd>Shift</kbd>+<kbd>→</kbd> saltar pantalla · <kbd>0</kbd>–<kbd>6</kbd> sección · <kbd>N</kbd> notas · <kbd>F</kbd> pantalla completa · <kbd>O</kbd> órbita · <kbd>L</kbd> calidad
     </p>
   </dialog>
 
-  <aside class="detalle-panel" id="detalle-panel" role="dialog" aria-modal="false" aria-labelledby="detalle-titulo" hidden>
-    <button type="button" class="boton boton-icono detalle-cerrar" id="detalle-cerrar" aria-label="Cerrar detalle">
-      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-    </button>
-    <p class="antetitulo" id="detalle-antetitulo"></p>
-    <h2 class="detalle-titulo" id="detalle-titulo" tabindex="-1"></h2>
-    <p class="detalle-texto" id="detalle-texto"></p>
-  </aside>
+  <p class="aviso" id="aviso" role="status" hidden></p>
 
   <noscript>
     <div class="sin-js">
