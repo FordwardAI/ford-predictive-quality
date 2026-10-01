@@ -67,6 +67,21 @@ No forma parte del comando por defecto ni modifica el preregistro.
 ```
 
 Informe y límites: [sensibilidad a datos de proceso](../research/sensibilidad-proceso.md).
+
+La ampliación con los **candidatos priorizados** reproduce los controles de #48 y conserva
+sus configuraciones: RF con atributos, CatBoost conjunto, stacking y mezcla 60/40 con tasa
+jerárquica. El stacking recibe proxies mediante una corrección de logits aprendida en su
+tramo interno; las siete bases y los pesos originales quedan congelados. Tasa fija y
+jerárquico permanecen como controles por código, sin consumir proxies.
+
+```sh
+.venv/bin/python -m solucion.sensibilidad_candidatos \
+  --csv '<CSV vigente>' --catalogo '<catálogo vigente>' \
+  --historico solucion/resultados/semillas_busqueda.json \
+  --salida solucion/resultados/sensibilidad_candidatos.json
+```
+
+Supuestos y comparación completa: [sensibilidad de candidatos](../research/sensibilidad-candidatos.md).
 El [anexo completo](../research/anexo-busqueda.md) presenta todos los pipelines y columnas. Para regenerar
 el anexo y las figuras desde los agregados publicados, sin entrenar ni abrir el dataset:
 

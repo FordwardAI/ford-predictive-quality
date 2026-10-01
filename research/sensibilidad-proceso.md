@@ -4,6 +4,11 @@ Ampliación explícitamente autorizada por Facundo tras la [evaluación document
 
 ## Qué pregunta responde
 
+Esta primera corrida usa tres estimadores genéricos. La [ampliación con los candidatos
+priorizados](sensibilidad-candidatos.md) reproduce los controles originales de #48 y evalúa
+sus extensiones concretas con los mismos escenarios. No mezclar las dos configuraciones
+de RF como si fueran un único control.
+
 **Cuánto cambia la precisión en el cupo bajo niveles impuestos de señal, ruido y cobertura.** No estima la señal que tendrán datos reales de Ford, no descubre causas de calibración ni demuestra beneficio de comprar sensores. Las etiquetas de la base ficticia se usan deliberadamente para generar las columnas de cada escenario, también las del período de evaluación. Es un análisis de sensibilidad condicionado a supuestos, no validación de variables observadas.
 
 Esta autorización amplía el alcance anterior, que era solo documental. Se conservan el predictor operativo, el preregistro y la prueba final; no se adopta un modelo nuevo.
