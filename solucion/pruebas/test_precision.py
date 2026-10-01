@@ -133,3 +133,56 @@ def test_segunda_lectura_congela_sin_la_prueba_arma_el_preregistro_y_corre_de_pu
         g = corrida["tramos"][0]["ganadora"]
         assert g["calibrada_tramo"] > 0 and g["lectura"] in ("mejora", "inconcluso", "peor")  # Leyó la prueba.
         assert "SYN" not in salida.read_text(encoding="utf-8")  # Sin identificadores.
+
+
+def test_tercera_lectura_congela_la_alternativa_pedida_y_declara_que_es_la_tercera():
+    """Con `clave` se preregistra otra alternativa del ranking (no la ganadora por aciertos) y se rotula como tercera."""
+    import json
+    import tempfile
+    from pathlib import Path
+
+    from solucion import preregistro as pr
+    from solucion.pruebas import test_preregistro as tp
+
+    def entrada(nombre, clave, aciertos):
+        return {"alternativa": nombre, "clave": clave, "semilla_mediana": None, "precision_seleccion": aciertos / 740,
+                "precision_seleccion_rango95": [0.15, 0.21], "calibrada_elegidas_seleccion": aciertos,
+                "elegidos_seleccion": 740, "confirmacion": {"precision_cupo": 0.17, "calibrada_elegidas": 39,
+                                                           "elegidos": 225}}
+
+    por_aciertos = entrada("XGBoost con atributos del código, reentrenado cada 5 d", "ml_xgboost_atributos|reentrenado", 140)
+    pedida = entrada("Regresión logística con atributos del código, reentrenado cada 5 d",
+                     "ml_logistica_atributos|reentrenado", 130)
+    with tempfile.TemporaryDirectory() as d:
+        tp._resultados(d)
+        Path(d, "preregistro.json").write_text("{}", encoding="utf-8", newline="\n")
+        Path(d, "preregistro-precision.json").write_text("{}", encoding="utf-8", newline="\n")
+        Path(d, "precision.json").write_text(json.dumps({"ganadora": por_aciertos, "ranking": [por_aciertos, pedida]}),
+                                             encoding="utf-8", newline="\n")
+        masked = tabla(dias=range(1, 271), por_dia=40)
+        assert not masked.desbloqueada
+        p = precision.preregistro_segunda_lectura(masked, d, fecha="2026-10-01", clave=pedida["clave"],
+                                                  lectura="tercera")
+        assert p["estado"] == "propuesto" and not pr.pendientes(p), pr.pendientes(p)
+        assert p["ganadora_en_prueba"]["familia"] == "ml_logistica_atributos"  # La pedida, no la de más aciertos.
+        assert "segunda_lectura" not in p and "dos veces" in p["tercera_lectura"]["advertencia"]
+        assert any("tercera lectura" in x for x in p["ya_visto"])
+        assert "explícito" in p["como_acordar"] and len(p["tercera_lectura"]["preregistros_anteriores"]) == 2
+        assert p["piezas"] == {"p5": pr.FUERA, "p6": pr.FUERA, "e3": pr.FUERA}
+        # La corrida única sigue negándose mientras no esté acordado.
+        archivo = Path(d) / "preregistro-efectividad.json"
+        archivo.write_text(json.dumps(p, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+        try:
+            pr.correr(archivo, pr.sha256(archivo), salida=Path(d) / "prueba-final.json", git=tp._git_ok,
+                      cargar=tp._tabla, ahora=tp.AHORA)
+        except pr.Rechazo as error:
+            assert "propuesto" in str(error)
+        else:
+            raise AssertionError("Un preregistro propuesto no puede leer la prueba final")
+        # Una clave que no está en el ranking no se congela en silencio.
+        try:
+            precision.preregistro_segunda_lectura(masked, d, clave="ml_inexistente|fijo", lectura="tercera")
+        except AssertionError as error:
+            assert "no está en el ranking" in str(error)
+        else:
+            raise AssertionError("Una clave inexistente debería rechazarse")
