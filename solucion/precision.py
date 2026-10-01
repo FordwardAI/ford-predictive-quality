@@ -30,6 +30,7 @@ JERARQUICO_VENTANAS, JERARQUICO_PESOS = (60, 120, None), (10, 20, 40)
 ANCLA_PRUEBA = PRUEBA_DESDE  # El modelo reentrenado empieza a reentrenar en el primer día de la prueba final.
 RESULTADOS = RAIZ / "solucion" / "resultados"
 PREREGISTRO_SEGUNDA = RAIZ / "solucion" / "preregistro-precision.json"
+PREREGISTRO_TERCERA = RAIZ / "solucion" / "preregistro-efectividad.json"
 
 
 def grupos_del_bloque(tabla, fuente, a, b, con_ml=True):
@@ -231,18 +232,23 @@ def congelar(tabla, ganadora):
     return familia, parametros, {"log_loss_interna": ajuste["log_loss_interna"], "grilla": ajuste["grilla"]}
 
 
-def preregistro_segunda_lectura(tabla, resultados=RESULTADOS, fecha=None):
+def preregistro_segunda_lectura(tabla, resultados=RESULTADOS, fecha=None, clave=None, lectura="segunda"):
     """Preregistro propuesto para leer, una vez, la prueba final con la ganadora por precisión.
 
     Es una SEGUNDA lectura: la prueba ya se leyó el 30/09 con la tasa fija preregistrada y el equipo vio ese resultado.
     Se lee solo el predictor (los cuatro tramos contra el azar); las demás piezas ya se leyeron y quedan fuera.
+
+    `clave` elige otra alternativa del ranking de `precision.json` en lugar de la ganadora por aciertos (por ejemplo,
+    la de mejor peor lectura). Con `lectura="tercera"` los textos declaran que la prueba ya se leyó dos veces.
     """
+    assert lectura in ("segunda", "tercera"), lectura
     from . import preregistro as pr
     anterior = Path(resultados) / "eleccion.json"
     assert anterior.exists(), "Faltan los resultados de la validación"
     d, fuente_precision = pr._leer(Path(resultados) / "precision.json")
     assert d is not None, "Falta precision.json: correr la pieza `precision`"
-    g = d["ganadora"]
+    g = d["ganadora"] if clave is None else next((r for r in d["ranking"] if r["clave"] == clave), None)
+    assert g is not None, f"La alternativa {clave!r} no está en el ranking de precision.json"
     familia, parametros, ajuste = congelar(tabla, g)
     p = pr.generar(resultados, fecha)
     primero = pr.PREREGISTRO if Path(resultados) == pr.RESULTADOS else Path(resultados) / "preregistro.json"
@@ -275,4 +281,37 @@ def preregistro_segunda_lectura(tabla, resultados=RESULTADOS, fecha=None):
                      "primeros modelos quedaron a pocos aciertos de diferencia."]
     p["no_se_lee_en_prueba"] = [*pr.NO_SE_LEE, "P5, P6 y la E3: ya se leyeron en la primera lectura.",
                                 "Los demás modelos con atributos y el suavizado jerárquico: solo validación."]
+    if lectura == "tercera":
+        _como_tercera(p, pr, resultados, fuente_primero)
     return p
+
+
+def _como_tercera(p, pr, resultados, fuente_primero):
+    """Reescribe los textos de la propuesta: es una TERCERA lectura, la más débil, y se declara."""
+    segunda = PREREGISTRO_SEGUNDA if Path(resultados) == RESULTADOS else Path(resultados) / "preregistro-precision.json"
+    _, fuente_segunda = pr._leer(segunda)
+    p["como_acordar"] = ("Tercera lectura de la prueba final. Los documentos registran que el equipo acordó no hacerla: "
+                         "hace falta un acuerdo explícito. Revisar en equipo, cambiar estado a \"acordado\", commitear, "
+                         f"enlazar en #33 y correr una vez con --preregistro solucion/{PREREGISTRO_TERCERA.name} "
+                         "--hash-preregistro <sha256 del archivo commiteado>. Se informan las tres lecturas.")
+    del p["segunda_lectura"]
+    p["tercera_lectura"] = {
+        "motivo": "Elección por efectividad pedida el 01/10: la alternativa de mejor peor lectura entre validación "
+                  "155–194, selección 100–174 y confirmación 175–194.",
+        "advertencia": "La prueba final ya se leyó dos veces el 30/09 (tasa fija y CatBoost con atributos) y el equipo "
+                       "conoce ambos resultados. Esta lectura es más débil que las dos anteriores y se informa siempre "
+                       "junto a ellas.",
+        "preregistros_anteriores": [fuente_primero, fuente_segunda],
+    }
+    p["ganadora"]["criterio"] = "mejor peor lectura entre validación, selección y confirmación (fijado tras verlas)"
+    p["reglas_de_lectura"] = {"predictor": pr.REGLAS["predictor"],
+                              "tercera_lectura": "Se informa junto a la primera (tasa fija) y a la segunda (CatBoost, "
+                              "30/09). No reemplaza la cifra oficial de la prueba final."}
+    p["ya_visto"] = [*pr.YA_VISTO,
+                     "La prueba final ya se leyó dos veces el 30/09 (tasa fija y CatBoost con atributos): esta es la "
+                     "tercera lectura y el equipo conocía ambos resultados.",
+                     "La alternativa se eligió por mejor peor lectura entre tramos de Día < 195 ya vistos, un criterio "
+                     "fijado después de verlos; su ventaja sobre las parecidas está dentro del ruido."]
+    p["no_se_lee_en_prueba"] = [*pr.NO_SE_LEE, "P5, P6 y la E3: ya se leyeron en la primera lectura.",
+                                "La tasa fija y CatBoost: ya se leyeron.",
+                                "Los demás modelos con atributos y el suavizado jerárquico: solo validación."]

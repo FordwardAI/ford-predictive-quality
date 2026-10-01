@@ -1,0 +1,220 @@
+{
+  "estado": "acordado",
+  "acuerdo": "Tercera lectura pedida explícitamente por Mateo Serebrinsky el 01/10/2026 en la sesión de trabajo con Claude. No consta en el repositorio un acuerdo del resto del equipo; los documentos registran que se había acordado no hacer una tercera lectura. Se corre y se registra con ese calificador.",
+  "fecha": "2026-10-01",
+  "como_acordar": "Tercera lectura de la prueba final. Los documentos registran que el equipo acordó no hacerla: hace falta un acuerdo explícito. Revisar en equipo, cambiar estado a \"acordado\", commitear, enlazar en #33 y correr una vez con --preregistro solucion/preregistro-efectividad.json --hash-preregistro <sha256 del archivo commiteado>. Se informan las tres lecturas.",
+  "fuente": {
+    "csv_sha256": "a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b",
+    "catalogo_sha256": "89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047"
+  },
+  "version_codigo": "a98666e301ccd302b915d263fe04f57425b3d5b9",
+  "entradas": {
+    "precision": {
+      "archivo": "solucion/resultados/precision.json",
+      "sha256": "760f3b70af2e5b401d8af958473eb4492aa7296f1c09648a37c21b7223df40e8"
+    }
+  },
+  "ganadora": {
+    "alternativa": "Random Forest con atributos del código, reentrenado cada 5 d",
+    "familia": "ml_rf_atributos",
+    "parametros": {
+      "modo": "reentrenado",
+      "semilla": 4,
+      "ancla": 200,
+      "vida": 15,
+      "hiperparametros": {
+        "min_samples_leaf": 5
+      }
+    },
+    "en_seleccion": {
+      "precision_seleccion": 0.17702702702702702,
+      "precision_seleccion_rango95": [
+        0.14747037132369398,
+        0.2081821146164506
+      ],
+      "calibrada_elegidas_seleccion": 131,
+      "elegidos_seleccion": 740
+    },
+    "en_confirmacion": {
+      "precision_cupo": 0.2,
+      "precision_rango95": [
+        0.15246181511916415,
+        0.2463072035410866
+      ],
+      "calibrada_elegidas": 45,
+      "elegidos": 225,
+      "azar_mismo_cupo": 0.08784774865474905,
+      "veces_azar": 2.2766661987664722,
+      "veces_azar_rango95": [
+        1.786636616259729,
+        2.784574074329514
+      ],
+      "lectura": "mejora",
+      "calificador": "entre auditados con actividad QLS, confirmación 175–194, base ficticia, n = 4626 VIN"
+    },
+    "ajuste_interno": {
+      "log_loss_interna": 0.3033009943265146,
+      "grilla": [
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 5
+          },
+          "vida": 15,
+          "log_loss": 0.3033009943265146
+        },
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 5
+          },
+          "vida": 30,
+          "log_loss": 0.3040741120437374
+        },
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 5
+          },
+          "vida": 60,
+          "log_loss": 0.3046900657770645
+        },
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 50
+          },
+          "vida": 15,
+          "log_loss": 0.3035551356396992
+        },
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 50
+          },
+          "vida": 30,
+          "log_loss": 0.30416126940633537
+        },
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 50
+          },
+          "vida": 60,
+          "log_loss": 0.30487423235411854
+        },
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 200
+          },
+          "vida": 15,
+          "log_loss": 0.3041808098550805
+        },
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 200
+          },
+          "vida": 30,
+          "log_loss": 0.30410248041597776
+        },
+        {
+          "hiperparametros": {
+            "min_samples_leaf": 200
+          },
+          "vida": 60,
+          "log_loss": 0.30506213166165635
+        }
+      ]
+    },
+    "criterio": "mejor peor lectura entre validación, selección y confirmación (fijado tras verlas)"
+  },
+  "ganadora_en_prueba": {
+    "familia": "ml_rf_atributos",
+    "parametros": {
+      "modo": "reentrenado",
+      "semilla": 4,
+      "ancla": 200,
+      "vida": 15,
+      "hiperparametros": {
+        "min_samples_leaf": 5
+      }
+    },
+    "modo": "reentrenada: ancla 200, resultados de Día <= t−5, también dentro de la prueba"
+  },
+  "semillas": {
+    "desempate": 20261002,
+    "bootstrap": 20261003,
+    "remuestreos": 2000,
+    "modelo": "semilla 4: la mediana de las semillas 1 a 5 en la selección; las otras cuatro no se leen"
+  },
+  "piezas": {
+    "p5": "fuera del preregistro",
+    "p6": "fuera del preregistro",
+    "e3": "fuera del preregistro"
+  },
+  "tramos": [
+    {
+      "nombre": "prueba completa",
+      "desde": 200,
+      "hasta": null,
+      "cohorte": false,
+      "lectura": "principal",
+      "vin_esperados": 13312
+    },
+    {
+      "nombre": "prueba ≤260",
+      "desde": 200,
+      "hasta": 260,
+      "cohorte": false,
+      "lectura": "principal",
+      "vin_esperados": 13135
+    },
+    {
+      "nombre": "prueba >260",
+      "desde": 261,
+      "hasta": null,
+      "cohorte": false,
+      "lectura": "descriptiva: cupo ~8, demasiado chico para leerlo",
+      "vin_esperados": 177
+    },
+    {
+      "nombre": "sensibilidad con la cohorte posterior a 260",
+      "desde": 200,
+      "hasta": null,
+      "cohorte": true,
+      "lectura": "sensibilidad: suma la cohorte de primer evento posterior a DIA_260 (toda OK)",
+      "vin_esperados": 18222
+    }
+  ],
+  "reglas_de_lectura": {
+    "predictor": "En cada tramo, la ganadora congelada contra el azar al mismo cupo diario: precisión en el cupo, veces el azar y recupero con rango del 95 % (bootstrap por días). Lectura sin umbral: mejora si el rango de la diferencia con el azar queda entero sobre 0, peor si queda entero debajo, inconcluso si incluye 0. Donde no hay CALIBRADA no se calcula veces el azar: solo cuántas se encontraron.",
+    "tercera_lectura": "Se informa junto a la primera (tasa fija) y a la segunda (CatBoost, 30/09). No reemplaza la cifra oficial de la prueba final."
+  },
+  "ya_visto": [
+    "El tramo de prueba (Día 200–260) ya lo exploraron los experimentos de modelado (research/experimentos-modelado.md), que eligieron ahí la ventana de 60 días: la cifra puede ser optimista.",
+    "Las tasas por mercado dentro de la prueba ya están publicadas en research/catalog-groups.json.",
+    "Los totales CALIBRADA de la prueba por tramo ya están publicados en research/validation-partitions.json.",
+    "Que los auditados sean una selección al azar es un supuesto de Ford.",
+    "En planta solo se conocería el resultado de lo que se elige auditar.",
+    "El Día del VIN es aproximado: max(Fecha Inspección, Fecha Reparación).",
+    "La prueba final ya se leyó dos veces el 30/09 (tasa fija y CatBoost con atributos): esta es la tercera lectura y el equipo conocía ambos resultados.",
+    "La alternativa se eligió por mejor peor lectura entre tramos de Día < 195 ya vistos, un criterio fijado después de verlos; su ventaja sobre las parecidas está dentro del ruido."
+  ],
+  "no_se_lee_en_prueba": [
+    "Las demás alternativas de P3 y P4: solo con cifras de validación.",
+    "Oráculo y versión con fuga: no elegibles.",
+    "Anexo de historial: disponibilidad no probada; solo validación.",
+    "Todo lo que no figura en este preregistro.",
+    "P5, P6 y la E3: ya se leyeron en la primera lectura.",
+    "La tasa fija y CatBoost: ya se leyeron.",
+    "Los demás modelos con atributos y el suavizado jerárquico: solo validación."
+  ],
+  "tercera_lectura": {
+    "motivo": "Elección por efectividad pedida el 01/10: la alternativa de mejor peor lectura entre validación 155–194, selección 100–174 y confirmación 175–194.",
+    "advertencia": "La prueba final ya se leyó dos veces el 30/09 (tasa fija y CatBoost con atributos) y el equipo conoce ambos resultados. Esta lectura es más débil que las dos anteriores y se informa siempre junto a ellas.",
+    "preregistros_anteriores": [
+      {
+        "archivo": "solucion/preregistro.json",
+        "sha256": "485af08db180cfd4d2391ad1d2d5b6f3d285f5a548894413e1c0ab25e2eb2b93"
+      },
+      {
+        "archivo": "solucion/preregistro-precision.json",
+        "sha256": "a11941dd45fa05260d91b7a9085bd70a8ff2ce27fb24a1dbc9d40ed4455a9941"
+      }
+    ]
+  }
+}
