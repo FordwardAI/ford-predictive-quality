@@ -54,7 +54,7 @@ Abrir <http://127.0.0.1:8765>. Arranca en el Día 155 con una fuente simulada so
 python3 -m http.server 8000
 ```
 
-Abrir <http://localhost:8000/prototipos/presentacion-3d/>. Se recorre con las flechas o con scroll; `N` muestra las notas del orador y `?estatico=1` evita el 3D en equipos lentos. Las capturas de la plataforma no se versionan porque muestran tasas por código. Sin ellas, esas pantallas muestran un esquema sin números. Para generarlas hacen falta los dos CSV y Chrome (bash, en macOS o Linux):
+Abrir <http://localhost:8000/prototipos/presentacion-3d/>. Se recorre con las flechas o con scroll; `N` muestra las notas del orador y `?estatico=1` evita el 3D en equipos lentos. Las capturas de la plataforma no se versionan porque muestran tasas por código. Sin ellas, esas pantallas muestran un esquema sin números, con un aviso que se oculta con `?limpio=1`. Para generarlas hacen falta los dos CSV y Chrome (bash, en macOS o Linux):
 
 ```sh
 FORD_CSV="<Dataset QLS Inspección Adicional.csv>" FORD_CATALOGO="<Códigos de catálogo.csv>" prototipos/presentacion-3d/herramientas/capturar_flujo.sh
