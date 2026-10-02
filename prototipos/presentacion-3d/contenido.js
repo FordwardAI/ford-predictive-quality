@@ -307,7 +307,7 @@ export const capitulos = [
     cifras: ['catboost.prueba.precision', 'catboost.prueba.azar', 'catboost.prueba.veces'],
     puntos: [],
     // La figura usa la primera corrida del preregistro de CatBoost (corridas[1]),
-    // una fila por tramo. Sin respaldo: el SVG del informe muestra otra lectura.
+    // una fila por tramo. Sin respaldo: si no se puede dibujar, la pantalla queda sin figura.
     figura: { tipo: 'js', id: 'veces_azar_prueba_final', opciones: {}, alt: 'Veces el azar de CatBoost en la prueba final, por tramo, con su rango del 95 %', pie: 'Prueba final · CatBoost con atributos del código.' },
     // Dos tarjetas: en la columna de texto no entran en 1920×1080; van en la banda al pie.
     disposicion: 'tarjetas-escena',

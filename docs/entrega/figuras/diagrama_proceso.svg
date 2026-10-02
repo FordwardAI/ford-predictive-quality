@@ -3325,8 +3325,8 @@ z
      <use xlink:href="#HelveticaNeue-3a" transform="translate(692.796875 0)"/>
      <use xlink:href="#HelveticaNeue-21" transform="translate(757.59375 0)"/>
     </g>
-    <!-- entra al recálculo -->
-    <g style="fill: #00142e" transform="translate(745.2 374.107422) scale(0.095 -0.095)">
+    <!-- entra al reentrenamiento -->
+    <g style="fill: #00142e" transform="translate(745.2 373.841719) scale(0.095 -0.095)">
      <use xlink:href="#HelveticaNeue-4c"/>
      <use xlink:href="#HelveticaNeue-55" transform="translate(53.703125 0)"/>
      <use xlink:href="#HelveticaNeue-5b" transform="translate(109.296875 0)"/>
@@ -3338,13 +3338,19 @@ z
      <use xlink:href="#HelveticaNeue-3" transform="translate(331.5 0)"/>
      <use xlink:href="#HelveticaNeue-59" transform="translate(359.296875 0)"/>
      <use xlink:href="#HelveticaNeue-4c" transform="translate(390.796875 0)"/>
-     <use xlink:href="#HelveticaNeue-4a" transform="translate(444.5 0)"/>
-     <use xlink:href="#HelveticaNeue-6d" transform="translate(498.203125 0)"/>
-     <use xlink:href="#HelveticaNeue-53" transform="translate(551.90625 0)"/>
-     <use xlink:href="#HelveticaNeue-4a" transform="translate(574.109375 0)"/>
-     <use xlink:href="#HelveticaNeue-5c" transform="translate(627.8125 0)"/>
-     <use xlink:href="#HelveticaNeue-53" transform="translate(683.40625 0)"/>
-     <use xlink:href="#HelveticaNeue-56" transform="translate(705.609375 0)"/>
+     <use xlink:href="#HelveticaNeue-4c" transform="translate(444.5 0)"/>
+     <use xlink:href="#HelveticaNeue-55" transform="translate(498.203125 0)"/>
+     <use xlink:href="#HelveticaNeue-5b" transform="translate(553.796875 0)"/>
+     <use xlink:href="#HelveticaNeue-59" transform="translate(585.296875 0)"/>
+     <use xlink:href="#HelveticaNeue-4c" transform="translate(616.796875 0)"/>
+     <use xlink:href="#HelveticaNeue-55" transform="translate(670.5 0)"/>
+     <use xlink:href="#HelveticaNeue-48" transform="translate(726.09375 0)"/>
+     <use xlink:href="#HelveticaNeue-54" transform="translate(779.796875 0)"/>
+     <use xlink:href="#HelveticaNeue-50" transform="translate(865.09375 0)"/>
+     <use xlink:href="#HelveticaNeue-4c" transform="translate(887.296875 0)"/>
+     <use xlink:href="#HelveticaNeue-55" transform="translate(941 0)"/>
+     <use xlink:href="#HelveticaNeue-5b" transform="translate(996.59375 0)"/>
+     <use xlink:href="#HelveticaNeue-56" transform="translate(1028.09375 0)"/>
     </g>
     <!-- con Día ≤ t−5 -->
     <g style="fill: #00142e" transform="translate(745.2 390.651523) scale(0.095 -0.095)">

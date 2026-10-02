@@ -23,7 +23,7 @@ Según la decisión de [base QLS][qls], punto 7:
 
 ## 2. Escalado
 
-- **Revisión periódica de la tasa** de cada código con los resultados que se van conociendo, con 5 días de margen; la periodicidad se fija con Ford. El detector de cambios avisa entre revisiones.
+- **Reentrenamiento automático cada 5 días** del modelo con los resultados que se van conociendo, con 5 días de margen y calendario fijo. El detector de cambios avisa entre reentrenamientos.
 - **Detector de cambios** activo por código, con alertas a quien designe Ford (sección 4).
 - **Revisión periódica** de la opción elegida con el mismo protocolo sin fuga: partición temporal, cupo diario y bootstrap por días ([`solucion/README.md`][sol]).
 - **Hoja para todas las unidades** de la playa, porque el código se lee en el parabrisas. La variante restringida a unidades con actividad QLS queda como opción si Ford confirma que QLS se puede consultar desde la playa ([base QLS][qls], punto 4).
@@ -35,7 +35,7 @@ Lo que se necesita para replicar:
 | Requisito | Por qué |
 | --- | --- |
 | Un código de catálogo (o equivalente) visible en la unidad | Es el único predictor y lo que el analista lee |
-| Resultados de las auditorías con la fecha y el código | Alimentan la revisión de la tasa |
+| Resultados de las auditorías con la fecha y el código | Alimentan el reentrenamiento del modelo |
 | Un cupo diario definido | La hoja llena ese cupo |
 | Un histórico de auditorías elegidas al azar para arrancar | Da tasas iniciales que no dependen de lo que la hoja elija |
 
@@ -47,7 +47,7 @@ Cuando Ford publique la subcategorización, se trata como una fuente nueva: se v
 
 ## 5. Historial de QLS
 
-El historial (incidencias, reparaciones, tiempos) queda fuera del predictor porque no está probado que exista al momento de elegir. Si Ford prueba esa disponibilidad (por ejemplo, con una marca de Gate Release en la exportación), se reabre, empezando por las **secuencias** de eventos ([representación][rep], punto 3; [alternativas][alt], punto 15). El anexo de historial deja preparada esa evaluación. Ford indicó (02/10) que la información puede obtenerse en tiempo real; con eventos que llevan su hora, el historial entra como variable candidata en sombra del [puntaje de fin de línea](05-1-scoring-fin-de-linea.md). En validación, el historial solo no se distinguió del azar (8,7 % y 9,0 % en el cupo, contra 9,9 % esperado) y sumado al código empató con la tasa fija, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN ([`p6.json`][p6]).
+El historial (incidencias, reparaciones, tiempos) queda fuera del predictor porque no está probado que exista al momento de elegir. Si Ford prueba esa disponibilidad (por ejemplo, con una marca de Gate Release en la exportación), se reabre, empezando por las **secuencias** de eventos ([representación][rep], punto 3; [alternativas][alt], punto 15). El anexo de historial deja preparada esa evaluación. Ford indicó (02/10) que la información puede obtenerse en tiempo real; con eventos que llevan su hora, el historial entra como variable candidata en sombra del [puntaje de fin de línea](05-1-scoring-fin-de-linea.md). En validación, el historial solo no se distinguió del azar (8,7 % y 9,0 % en el cupo, contra 9,9 % esperado) y sumado al código no mejoró al código solo, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN ([`p6.json`][p6]).
 
 ## 6. Consulta operativa pendiente
 
@@ -56,22 +56,21 @@ Qué fracción de las unidades producidas tiene actividad QLS y si los analistas
 
 ## 7. Plataforma web
 
-Propuesta de implementación, no un entregable del 2/10 ([#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33), decisión del 30/09). La hoja sigue siendo la salida operativa y el piso si la plataforma no está disponible. La plataforma reúne en un solo lugar lo que hoy son archivos sueltos:
+La plataforma ya existe como **MVP** en [`plataforma/`][plat] y muestra cómo se usaría la solución en planta ([#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33), PR #59). La hoja sigue siendo la salida operativa y el piso si la plataforma no está disponible: se descarga igual en CSV, Excel e imprimible. El ciclo en planta:
 
-- **Operación diaria:** la hoja del día con la cantidad sugerida y las unidades, y el registro de cada ronda en la playa de despacho (qué códigos llegaron y cómo baja lo pendiente por el ranking).
-- **Códigos y mercado:** la tasa de cada código en el tiempo, con su rango y su n; la señal por mercado de destino; «dónde mirar», si se sostiene en la prueba final; y las alertas del detector de cambios.
-- **Evidencia del modelo:** la comparación de alternativas, las etiquetas parciales, la preparación de datos y el estado de la prueba final.
-- **Implementación:** el seguimiento de los días de control y la configuración del cupo diario, el mínimo por código y la carga del programa del día.
+- **Entrada:** llegan las unidades de Gate Release y la hoja se arma con la playa de los últimos 5 días, el cupo y la versión vigente del modelo.
+- **En la playa:** el analista escribe el código de la etiqueta y la app responde «enviar» o «no enviar», con el motivo. Al terminar la ronda, lo que faltó baja al siguiente del ranking.
+- **Retorno:** vuelve el resultado de la auditoría con el acierto por unidad. CatBoost se reentrena solo cada 5 días, con calendario fijo, y la pantalla Modelo muestra qué cambió.
+- **Reporte para la línea:** tasa de calibración por código, versión, motor, mercado y componente, con su tendencia, solo con agregados.
 
-**Prototipo:** galería de pantallas en [`prototipos/plataforma-web/`](https://github.com/FordwardAI/ford-predictive-quality/tree/main/prototipos/plataforma-web), con los tokens de la guía de marca de Ford y sin logo. Los datos (`data.js`) y las capturas se regeneran localmente y no se versionan.
-
-**Límites:** el prototipo usa la base ficticia y cifras de validación. No hay integración con QLS ni con el programa de producción; esa integración es el trabajo principal para llevarla a planta. Cómo se llevaría al GCP de Ford (Cloud Run con IAP, Cloud SQL en lugar de SQLite y los `/api/*` como topics de Pub/Sub) está en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#componentes). Los riesgos de acceso y de datos se analizan en [seguridad y privacidad](02-3-seguridad-privacidad.md).
+**Límites:** usa una fuente simulada sobre la base ficticia (Días 155–194), con el mismo contrato de entradas que tendría la conexión con Ford (JSON o CSV). No hay integración con QLS ni con el programa de producción; esa integración es el trabajo principal para llevarla a planta, y los supuestos de la simulación se validan con Ford ([README de la plataforma][plat]). Cómo se llevaría al GCP de Ford (Cloud Run con IAP, Cloud SQL en lugar de SQLite y los `/api/*` como topics de Pub/Sub) está en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#componentes). Los riesgos de acceso y de datos se analizan en [seguridad y privacidad](02-3-seguridad-privacidad.md).
 
 ## 8. Puntaje de fin de línea (feedback del jurado, 02/10)
 
-La hoja evoluciona hacia un puntaje por VIN que se calcula al terminar la línea, antes de Gate Release, con el código de catálogo y los parámetros de la línea publicados hasta ese momento. Con solo el catálogo coincide con la hoja actual. Los eventos viajan en tiempo real al BigQuery de Ford, por Pub/Sub y MQTT donde corresponda. Las mediciones de la verificación de calidad entran como variables, y las de Auditoría Adicional solo como etiqueta. Todo arranca en sombra. Arquitectura, contrato de eventos, costos y texto para el Informe: [05-1-scoring-fin-de-linea.md](05-1-scoring-fin-de-linea.md).
+La hoja evoluciona hacia un puntaje por VIN que se calcula al terminar la línea, antes de Gate Release, con el código de catálogo y los parámetros de la línea publicados hasta ese momento. Con solo el catálogo coincide con la hoja actual. Los eventos viajan en tiempo real al BigQuery de Ford, por Pub/Sub y MQTT donde corresponda. Las mediciones de la verificación de calidad entran como variables, y las de Auditoría Adicional solo como etiqueta. Todo arranca en sombra. Arquitectura, contrato de eventos y costos: [05-1-scoring-fin-de-linea.md](05-1-scoring-fin-de-linea.md).
 
 [ctx]: ../../CONTEXT.md
+[plat]: ../../plataforma/README.md
 [sol]: ../../solucion/README.md
 [p6]: ../../solucion/resultados/p6.json
 [alc-sec]: ../alcance-entrega.md#contenido-por-sección-del-informe

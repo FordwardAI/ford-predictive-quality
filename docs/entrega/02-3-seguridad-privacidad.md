@@ -22,10 +22,10 @@ Fuentes oficiales consultadas el 29/09/2026.
 
 | Dato | Para qué | ¿Refiere a personas? |
 | --- | --- | --- |
-| Código de catálogo | Único predictor ([admisibilidad][adm], punto 3) | No: describe versión y mercado del vehículo |
+| Código de catálogo | Predictor ([admisibilidad][adm], punto 3) | No: describe versión y mercado del vehículo |
 | Resultado de la Auditoría Adicional (OK / CALIBRADA) y Día del VIN | Calcular la tasa del código con 5 días de margen | No |
 | Componente de la Auditoría Adicional | Solo para «dónde mirar», como lo que se predice | No |
-| Agrupación del catálogo (mercado, versión, motor, tracción) | Columnas legibles y suavizado hacia el mercado | No |
+| Agrupación del catálogo (mercado, versión, motor, tracción) | Atributos del código para CatBoost y columnas legibles | No |
 | Programa de producción del día y cupo diario | Entradas de la hoja | No |
 | VIN | Solo interno, para agrupar eventos en una fila por vehículo. **Nunca aparece en las salidas** ([plan][plan-contrato], «Tabla por VIN») | Identifica un vehículo. Ver hipótesis |
 
@@ -42,7 +42,7 @@ La base de Ford trae además identificadores anonimizados de inspectores y repar
 
 ## Dónde corre y quién accede
 
-- **Dónde corre:** un script de Python que se ejecuta en una notebook o en un servidor de la planta. **No requiere nube, no llama a servicios externos y no usa modelos de lenguaje (LLM)** ([plan][plan-fact], «Factibilidad económica y escalado»). Las dependencias son paquetes de código abierto con versiones fijadas en `requirements.txt`; una vez instaladas, funciona sin conexión. La evolución con puntaje de fin de línea sí correría en el proyecto de GCP de Ford, con conexión solo saliente desde planta y sin escribir en QLS, el MES ni los controladores; sus controles están en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#seguridad-y-privacidad).
+- **Dónde corre:** una aplicación de Python ([plataforma][plat]) que se ejecuta en una notebook o en un servidor de la planta. El servidor escucha solo en la máquina local (`127.0.0.1`) y guarda su estado fuera del repositorio. Cada respuesta y cada descarga pasa por un control que la frena si contiene un VIN de la tabla. **No requiere nube, no llama a servicios externos y no usa modelos de lenguaje (LLM)** ([plan][plan-fact], «Factibilidad económica y escalado»). Las dependencias son paquetes de código abierto con versiones fijadas en `requirements.txt`; una vez instaladas, funciona sin conexión. La evolución con puntaje de fin de línea sí correría en el proyecto de GCP de Ford, con conexión solo saliente desde planta y sin escribir en QLS, el MES ni los controladores; sus controles están en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#seguridad-y-privacidad).
 - **Qué no toca:** no se conecta a controladores, robots ni a la red de automatización de la línea. No escribe en QLS: lee una exportación. En los términos de IEC 62443, no forma parte de ninguna zona de control; si Ford la instala en un servidor de planta, ese servidor queda dentro de la zona de TI que Ford ya tenga definida.
 - **Quién accede:**
 
@@ -50,7 +50,7 @@ La base de Ford trae además identificadores anonimizados de inspectores y repar
 | --- | --- | --- |
 | Calidad de Planta | Carga el programa del día y el cupo | Entradas y hoja |
 | Equipo de analistas | Usa la hoja en sus rondas | La hoja (impresa o planilla) |
-| Responsable técnico que designe Ford | Corre y mantiene el script, recibe las alertas del detector de cambios | Código, entradas y salidas |
+| Responsable técnico que designe Ford | Corre y mantiene la plataforma, recibe las alertas del detector de cambios | Código, entradas y salidas |
 
 ## Análisis de riesgos
 
@@ -62,28 +62,35 @@ Valoración cualitativa del equipo, no medida.
 | **Integridad de las entradas** | Una exportación equivocada o alterada produce una hoja equivocada | El código verifica el SHA-256 del CSV y del catálogo antes de correr ([`solucion/README.md`][sol]). En planta, cada exportación nueva tendría su propio control (trabajo futuro) | Bajo |
 | **Integridad de la hoja** | Alguien edita la planilla a mano | La hoja se regenera en segundos desde las entradas; se puede comparar con la original | Bajo |
 | **Fuga de información futura en el cálculo** | Usar resultados que todavía no se conocen | Margen de 5 días y control técnico: las etiquetas enmascaradas solo se leen con flag y hash ([plan][plan-reg]) | Bajo |
-| **Disponibilidad** | El script falla o no hay hoja ese día | **La hoja es una recomendación, no un bloqueo.** Si no está, los analistas eligen al azar como hoy: la producción y la auditoría no se detienen | Bajo |
-| **Caché local** | El script guarda la tabla por VIN ya preparada en una caché fuera del repo, en formato `pickle`, que ejecuta código al cargarse si alguien la reemplaza | La caché vive en la carpeta del usuario que corre el script ([`solucion/README.md`][sol]). En planta, esa carpeta queda sin acceso de terceros, o se desactiva la caché | Bajo |
+| **Disponibilidad** | La plataforma falla o no hay hoja ese día | **La hoja es una recomendación, no un bloqueo.** Si no está, los analistas eligen al azar como hoy: la producción y la auditoría no se detienen | Bajo |
+| **Caché local** | El código guarda la tabla por VIN ya preparada en una caché fuera del repo, en formato `pickle`, que ejecuta código al cargarse si alguien la reemplaza | La caché vive en la carpeta del usuario que corre el código ([`solucion/README.md`][sol]). En planta, esa carpeta queda sin acceso de terceros, o se desactiva la caché | Bajo |
 | **Cadena de suministro de software** | Un paquete de terceros comprometido | Versiones exactas fijadas; se instala una vez y corre sin red. Como mejora, instalar con hashes verificados | Bajo a medio, igual que cualquier software de código abierto |
 | **Datos personales** | Tratar datos de personas sin necesidad | No se usan identificadores de inspectores ni reparadores, ni el VIN en salidas (art. 4, inc. 1, Ley 25.326) | Bajo |
 | **Decisión automática sin control humano** | Que la hoja decida sola | Calidad de Planta fija cuántos y los analistas deciden cuáles ([CONTEXT.md][ctx], «Recomendación de auditoría») | Bajo |
+| **Modelo que se degrada** | Un reentrenamiento aprende de lo que el propio modelo eligió y se sesga | Calendario fijo de reentrenamiento (nadie elige el momento), mínimo por código y días de control al azar; si hay dudas, se vuelve a la versión anterior o al azar | Bajo |
+| **Retención sugerida sin fundamento** (evolución en tiempo real) | Se retiene un vehículo sin evidencia | Modo sombra, motivos visibles y decisión de Calidad. Antes de activar la retención hace falta evidencia en un período nuevo ([puntaje de fin de línea][fin]) | Bajo en sombra |
+| **Telemetría incompleta o tardía** (evolución en tiempo real) | El puntaje usa datos faltantes o atrasados | Hora de evento y de publicación en cada mensaje; los VIN sin datos se mantienen en el denominador. Antes de intervenir se mide la cobertura y la latencia por fuente | Bajo en sombra |
 
 ## Las seis funciones del NIST CSF 2.0, aplicadas
 
 | Función | En esta solución |
 | --- | --- |
-| Gobernar | Ford designa quién mantiene el script y quién recibe las alertas |
+| Gobernar | Ford designa quién mantiene la plataforma y quién recibe las alertas |
 | Identificar | Inventario corto: CSV de QLS, catálogo, programa del día, cupo, hoja |
 | Proteger | Acceso limitado a Calidad y analistas; sin datos personales; dependencias fijadas |
-| Detectar | Verificación de hash de las entradas: si no coincide, el script se detiene y no genera la hoja |
+| Detectar | Verificación de hash de las entradas: si no coincide, el proceso se detiene y no genera la hoja. Control de VIN en cada salida |
 | Responder | Si hay una duda sobre la hoja, se vuelve a elegir al azar ese día |
 | Recuperar | Todo se regenera con un comando desde el código versionado y las entradas del día |
 
 ## Conclusión para el informe
 
-La solución no introduce un riesgo de ciberseguridad nuevo relevante: lee una exportación, corre fuera de la red de automatización, no usa nube ni LLM, no trata datos personales y, si falla, la planta vuelve al método actual sin interrumpir nada. Los controles que quedan del lado de Ford (acceso a la hoja, lugar donde corre y mantenimiento) son los de cualquier planilla interna de Calidad. La evolución en tiempo real agrega dos riesgos, retención sugerida sin fundamento y telemetría incompleta, que se controlan arrancando en sombra ([puntaje de fin de línea](05-1-scoring-fin-de-linea.md#texto-para-el-informe)).
+La solución no introduce un riesgo de ciberseguridad nuevo relevante: lee una exportación, corre fuera de la red de automatización, no usa nube ni LLM, no trata datos personales y, si falla, la planta vuelve al método actual sin interrumpir nada. Los controles que quedan del lado de Ford (acceso a la hoja, lugar donde corre y mantenimiento) son los de cualquier planilla interna de Calidad. La evolución en tiempo real agrega dos riesgos, retención sugerida sin fundamento y telemetría incompleta, que se controlan arrancando en sombra.
+
+**Si Ford adopta la evolución con puntaje de fin de línea** (sección 5), el servicio correría en el proyecto de GCP de Ford. Los eventos saldrían de planta solo hacia afuera: desde la DMZ industrial en el caso de equipos de planta, o publicados directamente por las aplicaciones de TI. Ningún componente escribiría en QLS, el MES ni los controladores. El VIN se seudonimizaría al ingresar, con VPC Service Controls, claves administradas por Ford, permisos mínimos y acceso corporativo. La región y la transferencia internacional (Ley 25.326) las define IT, porque GCP no tiene región en Argentina ([puntaje de fin de línea][fin]).
 
 [alc]: ../alcance-entrega.md#qué-exigen-los-templates
+[plat]: ../../plataforma/README.md
+[fin]: 05-1-scoring-fin-de-linea.md#seguridad-y-privacidad
 [agents]: ../../AGENTS.md
 [ctx]: ../../CONTEXT.md
 [sol]: ../../solucion/README.md

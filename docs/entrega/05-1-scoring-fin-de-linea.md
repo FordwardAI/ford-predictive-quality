@@ -181,37 +181,6 @@ Son preguntas sobre la operación, no sobre la solución:
 4. ¿En qué punto antes de Gate Release se puede retener físicamente un vehículo, y quién lo decide?
 5. ¿Qué proyecto, región y política de retención tienen en BigQuery para estos datos?
 
-## Texto para el Informe
-
-Texto para incorporar al documento final. Los encabezados indican la sección del Informe.
-
-**§2.3 Seguridad y privacidad, al final:**
-
-> Si Ford adopta la evolución con puntaje de fin de línea (sección 5), el servicio correría en el proyecto de GCP de Ford. Los eventos saldrían de planta solo hacia afuera: desde la DMZ industrial en el caso de equipos de planta, o publicados directamente por las aplicaciones de TI. Ningún componente escribiría en QLS, el MES ni los controladores. El VIN se seudonimizaría al ingresar, con VPC Service Controls, claves administradas por Ford, permisos mínimos y acceso corporativo. La región y la transferencia internacional (Ley 25.326) las define IT, porque GCP no tiene región en Argentina.
-
-Filas nuevas para la tabla de riesgos:
-
-| Riesgo | Control disponible | Requisito para planta |
-| --- | --- | --- |
-| Retención sugerida sin fundamento | Modo sombra; motivos visibles; decide Calidad | Evidencia en período nuevo antes de activar la retención |
-| Telemetría incompleta o tardía | Hora de evento y de publicación por mensaje; VIN sin datos se mantienen en el denominador | Medir cobertura y latencia por fuente antes de intervenir |
-
-**§3 Factibilidad económica, fila nueva y párrafo:**
-
-| Componente | Costo a presupuestar | Mantenimiento |
-| --- | --- | --- |
-| Nube (opcional, GCP de Ford) | Pub/Sub, BigQuery, Dataflow, Cloud Run y Cloud SQL al volumen de planta | Monitoreo, versiones y costo mensual del servicio |
-
-> Con precios de lista de GCP consultados el 02/10/2026 y el volumen de la base (unos 210 vehículos por día), la infraestructura de la evolución en tiempo real quedaría en el orden de USD 100 a 200 por mes. El mayor costo sería Dataflow para unir parámetros por VIN y la base de la plataforma. El costo principal sigue siendo integrar y validar las fuentes.
-
-**§5 Trabajo futuro, fila nueva al final de la tabla de etapas:**
-
-| Etapa | Trabajo | Condición para avanzar |
-| --- | --- | --- |
-| Puntaje de fin de línea | Eventos en tiempo real hacia el BigQuery de Ford; puntaje por VIN con catálogo, parámetros de línea y mediciones de la verificación de calidad, primero en sombra; tendencias por código y parámetro | Cobertura y latencia medidas; aporte incremental frente al catálogo solo en período nuevo; aprobación de Ford para retener |
-
-> Siguiendo la sugerencia del jurado, la hoja evoluciona hacia un puntaje de fin de línea. Se calcula al terminar la línea, antes de Gate Release, con el código de catálogo y los parámetros de la línea publicados hasta ese momento. Con solo el catálogo coincide con la hoja actual, que queda como control y vuelta atrás. Los eventos viajarían en tiempo real hacia el BigQuery que Ford ya usa: por Pub/Sub desde las aplicaciones, y por MQTT donde la fuente sea un equipo de planta. Las mediciones de la verificación de calidad podrían sumarse como variables. Las de Auditoría Adicional servirían solo para definir mejor qué ajuste representa CALIBRADA. El puntaje y las sugerencias de retención antes de Gate Release arrancan en sombra, y se comparan contra el resultado de lo auditado antes de intervenir. Detalle de arquitectura y costos: docs/entrega/05-1-scoring-fin-de-linea.md.
-
 [i33]: https://github.com/FordwardAI/ford-predictive-quality/issues/33
 [ctx]: ../../CONTEXT.md
 [dp]: ../../research/datos-proceso.md

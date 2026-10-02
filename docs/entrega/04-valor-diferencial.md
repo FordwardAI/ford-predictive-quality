@@ -2,9 +2,9 @@
 
 Borrador para la sección 4 del Informe (E2) y el separador 04 de la presentación. La ficha evalúa la innovación como «creatividad en el análisis de variables y en el enfoque de la solución» ([ficha técnica][ficha], «Criterios de Evaluación»).
 
-**Idea central.** Con el código de catálogo como único predictor admisible, todo modelo estima la misma tabla de tasas por código. La innovación no está en el algoritmo, sino en **cómo se usa esa tasa**: dónde mirar dentro de la unidad elegida, cómo seguir aprendiendo solo con lo que se audita, cómo avisar cuando un código cambia y cómo explicar la prioridad ([alternativas][alt], idea que ordena el ticket).
+**Idea central.** Con el código de catálogo (y lo que se lee de él) como predictor admisible, todo modelo estima la misma tabla de tasas por código. La innovación no está en el algoritmo, sino en **cómo se usa esa tasa**: dónde mirar dentro de la unidad elegida, cómo seguir aprendiendo solo con lo que se audita, cómo avisar cuando un código cambia y cómo explicar la prioridad ([alternativas][alt], idea que ordena el ticket).
 
-Cada pieza se configura y se evalúa en validación. Llega a la prueba final solo lo que figura en el preregistro; lo demás se muestra con cifras de validación, rotulado así ([plan][plan-inc], incompatibilidad 3).
+Cada pieza se configura y se evalúa en validación. Llega a la prueba final solo lo que figura en el preregistro; lo demás se muestra con cifras de validación, rotulado así ([plan][plan-inc], incompatibilidad 3). Las piezas se midieron con el **predictor de la primera etapa** (la tasa fija), y sus cifras de prueba final son de esa lectura. La solución que se presenta es CatBoost ([cómo se iteró](02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)). Las piezas usan la tasa del código, sea cual sea el modelo que la estime, pero con CatBoost no se volvieron a medir.
 
 | Pieza | Qué aporta | Estado |
 | --- | --- | --- |
@@ -33,7 +33,7 @@ Cada pieza se configura y se evalúa en validación. Llega a la prueba final sol
 | Todas las de validación (n = 780) | 312 de 780: 40,0 % (36,4–43,5) | 261 de 780: 33,5 % (30,1–37,0) | mejora |
 | Las que eligió la tasa fija (n = 59) | 36 de 59: 61,0 % (49,2–73,1) | 18 de 59: 30,5 % (20,9–42,9) | mejora |
 
-Entre auditados con actividad QLS, validación 155–194, base ficticia. En las unidades que la hoja elige, mirar primero los 3 componentes de su código acierta en unas 6 de cada 10 CALIBRADA, contra 3 de cada 10 con la lista general. En la prueba final (corrida única, entre auditados con actividad QLS, prueba final 200–284, base ficticia): sobre todas las CALIBRADA (n = 1.098 VIN), los 3 primeros del código aciertan 515 (46,9 %; 43,9–50,1) contra 437 (39,8 %; 36,8–42,7) de la lista general, y sobre las 71 que eligió la tasa fija, 45 (63,4 %; 53,2–73,1) contra 25 (35,2 %; 25,8–45,6): mejora en ambas ([`prueba-final.json`](../../solucion/resultados/prueba-final.json)).
+Entre auditados con actividad QLS, validación 155–194, base ficticia. En las unidades que la hoja elige, mirar primero los 3 componentes de su código acierta en unas 6 de cada 10 CALIBRADA, contra 3 de cada 10 con la lista general. En la prueba final (lectura 1, con la tasa fija, entre auditados con actividad QLS, prueba final 200–284, base ficticia): sobre todas las CALIBRADA (n = 1.098 VIN), los 3 primeros del código aciertan 515 (46,9 %; 43,9–50,1) contra 437 (39,8 %; 36,8–42,7) de la lista general, y sobre las 71 que eligió la tasa fija, 45 (63,4 %; 53,2–73,1) contra 25 (35,2 %; 25,8–45,6): mejora en ambas ([`prueba-final.json`](../../solucion/resultados/prueba-final.json)).
 
 ![Dónde mirar](figuras/donde_mirar.png)
 
@@ -53,7 +53,7 @@ Entre auditados con actividad QLS, validación 155–194, base ficticia. En las 
 - **Asignación por incertidumbre (muestreo de Thompson):** compite con la rotación; dirige la exploración a los códigos con el rango más ancho sin cambiar el formato de la hoja ([base QLS][qls], punto 6).
 - **Días de control:** solo durante la implementación inicial, se alternan días con hoja y días al azar para medir la hoja frente al método actual en las mismas condiciones ([base QLS][qls], punto 5).
 
-**Cómo se evalúa sobre la base.** Simulación con etiquetas parciales: completas hasta el Día 149 y, desde el 155, solo las de lo elegido. Se comparan ε = 0, ε = 0 con mínimo por código, Thompson, ε = 20 % como referencia de lo que costaría, y azar ([plan][plan-par]). La simulación usa la opción elegida, la tasa fija (≤149).
+**Cómo se evalúa sobre la base.** Simulación con etiquetas parciales: completas hasta el Día 149 y, desde el 155, solo las de lo elegido. Se comparan ε = 0, ε = 0 con mínimo por código, Thompson, ε = 20 % como referencia de lo que costaría, y azar ([plan][plan-par]). La simulación usa el predictor de la primera etapa, la tasa fija (≤149); con CatBoost no se repitió.
 
 Entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN, 391 elegidos en 35 días ([`p5.json`][p5]):
 
@@ -116,7 +116,7 @@ Entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.0
 
 **Observaciones.** La agrupación del catálogo que llegó el 29/09 muestra que la posición 3 del código fija el mercado de destino ([agrupación del catálogo][cat], observación 3). Entre auditados con actividad QLS, población principal, base ficticia, n = 54.771 VIN, el χ² contra CALIBRADA es 674,2 para el código completo (98 grupos) y 187,8 para el mercado (9 grupos); motor, versión, familia y tracción quedan entre 21,1 y 28,5 ([agrupación del catálogo][cat], observación 4). En validación, motor, familia y tracción dejan de discriminar (χ² entre 0,0 y 2,6) y el mercado se sostiene (χ² 56,1, n = 8.038 VIN) ([agrupación del catálogo][cat], observación 5).
 
-**Uso.** La variante que suaviza los códigos chicos hacia la tasa de su mercado compitió en validación y tuvo la mayor precisión en el cupo: 17,6 % (13,1–21,9), 1,79 veces el azar, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN; empata con otras 28 alternativas y por eso la regla elige la tasa fija, más simple ([`p3.json`][p3]; [`eleccion.json`][elec]). La hoja explica cada prioridad por el mercado de destino, en el bloque «por qué este código» ([uso de la agrupación][agr], puntos 1 a 3).
+**Uso.** La variante que suaviza los códigos chicos hacia la tasa de su mercado compitió en validación y tuvo la mayor precisión en el cupo: 17,6 % (13,1–21,9), 1,79 veces el azar, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN; empata con otras 28 alternativas y por eso la regla de la primera etapa eligió la tasa fija, más simple ([`p3.json`][p3]; [`eleccion.json`][elec]). En la segunda etapa, los modelos que usan el mercado como atributo quedaron arriba, con CatBoost primero ([`precision.json`](../../solucion/resultados/precision.json)). La hoja explica cada prioridad por el mercado de destino, en el bloque «por qué este código» ([uso de la agrupación][agr], puntos 1 a 3).
 
 **Hipótesis y límites.** Esto es sobre la base ficticia: no prueba que el mercado cause calibraciones ([agrupación del catálogo][cat], hipótesis). La posición 4 del código sigue sin explicar.
 
