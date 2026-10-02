@@ -7,8 +7,8 @@ Estas instrucciones se aplican al equipo, Codex y Claude Code. Mantener el flujo
 - El proyecto se inició con **wayfinder** y continúa sobre ese mapa. El issue tracker compartido es **GitHub Project FordwardAI-v1**, apoyado en los issues, sub-issues y dependencias nativas del repositorio. Retomar ese flujo; no reiniciar la planificación ni crear un tracker paralelo.
 - Al iniciar, leer `README.md`, `CONTEXT.md` y el ticket pertinente; revisar `git status --short --branch` antes de editar. No deshacer cambios ajenos.
 - La guía del equipo y el documento del tracker para las skills están en [docs/trabajo-equipo.md](docs/trabajo-equipo.md), sección **Wayfinding operations**.
-- El [mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) y sus dependencias viven en GitHub. El README es una instantánea; `.scratch/` no es otro tracker.
-- El mapa actual busca una especificación. No interpretar research terminado como autorización para entrenar, desplegar o cerrar decisiones que requieren acuerdo del equipo. Consultar sus Notes actuales antes de continuar.
+- El [mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) y sus dependencias viven en GitHub. El README es una instantánea, no otro tracker.
+- El mapa llegó a su especificación el 29/09 y la construcción se siguió en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33). No interpretar research terminado como autorización para entrenar, desplegar o cerrar decisiones que requieren acuerdo del equipo. Consultar sus Notes actuales antes de continuar.
 - La consigna en `docs/fuentes/` es fuente primaria; el documento de ideas contiene propuestas. No modificar originales para hacerlos coincidir con nuestras conclusiones. `CONTEXT.md` es vocabulario, no un registro de implementación.
 
 ## Coordinación y Git
@@ -38,7 +38,7 @@ Estas instrucciones se aplican al equipo, Codex y Claude Code. Mantener el flujo
 - Scripts reproducibles desde la raíz, sin rutas personales ni datos incrustados. Si se usa muestreo/aleatoriedad, registrar semilla, tamaño y método. Un notebook exploratorio no debe ser la única forma de reproducir un resultado publicado; limpiar salidas con datos individuales antes de compartirlo.
 - Para cambios en lógica, dejar una prueba pequeña con datos sintéticos que falle si se rompe el comportamiento. No añadir frameworks ni pruebas que solo repliquen el código.
 - Ejecutar `python3 research/test_audit_dataset.py` si se toca la auditoría y `git diff --check` antes de publicar. Si cambia lectura, conteo o interpretación, repetir la auditoría completa con la fuente identificada y revisar informes afectados. Documentación sola no exige volver a procesar el dataset.
-- Al llegar a modelado, usar el protocolo acordado en GitHub: separación por VIN, disponibilidad temporal y transformaciones aprendidas solo en entrenamiento; no fijar aquí splits, métricas o umbrales todavía pendientes.
+- En modelado, usar el protocolo acordado en GitHub y resumido en `docs/entrega/02-2-especificaciones-tecnicas.md` (apartado D): separación por VIN, disponibilidad temporal y transformaciones aprendidas solo en entrenamiento. La prueba final solo se lee con un preregistro acordado.
 
 ## Skills
 

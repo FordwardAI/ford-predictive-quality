@@ -1,10 +1,12 @@
 # Estudio comparativo de modelos, columnas y ensembles
 
+> **Nota del 02/10/2026.** La solución presentada es **CatBoost con atributos del código, reentrenado cada 5 días**, y la prueba final se leyó tres veces: tasa fija, CatBoost y Random Forest ([cómo se iteró la solución](../docs/entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)). Este informe conserva su análisis original; donde dice «solución vigente» o «tasa fija acordada», se refiere a la primera etapa.
+
 Ampliación pedida por Facundo el 30/09/2026, en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33), después de la comparación CatBoost + móvil. Incluye combinaciones de más de dos, otras columnas y datos sintéticos. **Todo es exploratorio; no se relee la prueba final ni se cambia la solución operativa.**
 
 ## Conclusión para elegir candidatos
 
-**Recomendación provisional del análisis: Random Forest fijo con atributos del catálogo como candidato principal para una próxima evaluación; tasa fija como control; stacking + jerárquico como competidor; Rep.PosA como investigación condicionada a disponibilidad.** Esta recomendación combina rendimiento, estabilidad observada y complejidad. No es la regla preregistrada de adopción, ni una decisión del equipo de reemplazar la solución vigente.
+**Recomendación provisional del análisis: Random Forest fijo con atributos del catálogo como candidato principal para una próxima evaluación; tasa fija como control; stacking + jerárquico como competidor; Rep.PosA como investigación condicionada a disponibilidad.** Esta recomendación combina rendimiento, estabilidad observada y complejidad. No es la regla preregistrada de adopción ni una decisión del equipo. El equipo eligió después CatBoost con atributos por precisión (ver la nota del inicio).
 
 RF promedia **133,8/740 (18,08 %) en selección** y logra **46/225 (20,44 %) en cada una de las cinco semillas** posteriormente. La mezcla promedia **131,8/740 (17,81 %) y 45/225 (20,00 %)**. Su máximo con la semilla primaria, 147/740, no representa un rendimiento estable entre semillas. Tasa fija también logra 46/225 posteriormente: ese tramo por sí solo no acredita superioridad de RF sobre el control.
 
@@ -186,7 +188,7 @@ La regla respeta el tiempo dentro de cada cálculo y sus pruebas lo comprueban. 
 | Opción | Lugar propuesto en la próxima evaluación | Motivo y condición |
 | --- | --- | --- |
 | RF fijo con atributos del catálogo | Candidato principal | Buen promedio de selección y 46/225 en cinco semillas; menos integrantes que el stacking + jerárquico. Confirmar con períodos nuevos. |
-| Tasa fija | Control imprescindible | Solución vigente, sencilla; también 46/225 posteriormente. No retirarla por una comparación retrospectiva. |
+| Tasa fija | Control imprescindible | Solución de la primera etapa, sencilla; también 46/225 posteriormente. No retirarla por una comparación retrospectiva. |
 | Stacking + jerárquico, pesos 60/40 | Competidor | Mejor máximo de catálogo en la semilla primaria; promedio menor que RF, ventaja no estable. |
 | Rep.PosA con logística | Investigación condicionada | 48/225 posteriormente; exige evidencia de disponibilidad, más semillas y control de multiplicidad. |
 | CatBoost OK/componente | Competidor secundario | Señal en selección; menor rendimiento posterior que RF en las cinco semillas. |

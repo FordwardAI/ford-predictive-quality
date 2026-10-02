@@ -1,6 +1,8 @@
 # ¿Cuál es la opción más precisa? Evaluación de las vías posibles
 
-Pedido de Facundo Lanusse el 01/10/2026, en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33): evaluar con criterio propio, sin limitarse a la solución planteada, qué opción da la mayor **precisión en el cupo**. **Exploratorio: solo Día < 195, períodos ya explorados; la prueba final no se releyó y los preregistros no cambian.** Código: [`opcion_precisa.py`](../solucion/experimentos/opcion_precisa.py). Agregados: [`opcion_precisa.json`](../solucion/experimentos/resultados/opcion_precisa.json). Unidad de análisis: VIN. Todas las cifras son **entre auditados con actividad QLS, base ficticia**.
+> **Nota del 02/10/2026.** La solución presentada es **CatBoost con atributos del código, reentrenado cada 5 días**, y la prueba final se leyó tres veces: tasa fija, CatBoost y Random Forest ([cómo se iteró la solución](../docs/entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)). Este informe conserva su análisis original; donde dice «solución vigente» o «tasa fija acordada», se refiere a la primera etapa.
+
+Pedido de Facundo Lanusse el 01/10/2026, en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33): evaluar con criterio propio, sin limitarse a la solución planteada, qué opción da la mayor **precisión en el cupo**. **Exploratorio: solo Día < 195, períodos ya explorados; este análisis no usó la prueba final ni cambió los preregistros.** Código: [`opcion_precisa.py`](../solucion/experimentos/opcion_precisa.py). Agregados: [`opcion_precisa.json`](../solucion/experimentos/resultados/opcion_precisa.json). Unidad de análisis: VIN. Todas las cifras son **entre auditados con actividad QLS, base ficticia**.
 
 ## Conclusión
 
@@ -150,7 +152,7 @@ Agregar el historial cambia el AUC entre −0,046 y +0,001, y la precisión entr
   - **Salida:** una probabilidad por código, que entra en la hoja sin cambiarle el formato.
 - **Por qué esta.** No cae en ninguna lectura. En la rotación de la mezcla supera a la tasa fija por +1,1 a +9,0 puntos en selección (rango del 95 %, pareado por días); en confirmación la diferencia va de −2,5 a +1,4. CatBoost, en cambio, gana en selección y es de las más débiles en validación y confirmación.
 - **Lo que no prueba.** Su ventaja sobre XGBoost reentrenado, el riesgo estandarizado o la móvil hacia el mercado es de 5 a 10 aciertos sobre unos 1.000 elegidos, dentro del ruido. Su efectividad esperada es similar, alrededor de 18 % en validación.
-- **Cifras sin prueba final.** RF reentrenado nunca se leyó en la prueba final: allí solo están la tasa fija (10,9 % contra 8,2 % al azar) y CatBoost (12,0 %, segunda lectura). El equipo acordó no hacer una tercera lectura. Sus cifras se rotulan «evaluado en validación; prueba final no releída».
+- **Prueba final.** Cuando se escribió este informe, RF reentrenado no se había leído en la prueba final. Se leyó después, el 01/10 ([`preregistro-efectividad.json`](../solucion/preregistro-efectividad.json)): 11,8 % contra 8,2 % al azar, 1,44 veces. Es la tercera lectura, después de la tasa fija (10,9 %) y de CatBoost (12,0 %, la solución presentada).
 - **Origen de las cifras.**
   - Modelos de ML: [`precision.json`](../solucion/resultados/precision.json). En los bloques se informa la corrida mediana de 5 semillas por precisión de selección (RF: semilla 4); validación 155–194 usa una corrida.
   - Riesgo estandarizado: [`opcion_precisa.json`](../solucion/experimentos/resultados/opcion_precisa.json).
@@ -159,7 +161,7 @@ Agregar el historial cambia el AUC entre −0,046 y +0,001, y la precisión entr
 
 Es una propuesta de este análisis; no es una decisión del equipo.
 
-1. **Trials Day.** Presentar RF con atributos reentrenado como la opción elegida por efectividad, con sus cifras de validación rotuladas. Las únicas cifras de prueba final son la tasa fija preregistrada (10,9 % contra 8,2 % al azar, ×1,32) y CatBoost (12,0 %, segunda lectura). No afirmar que RF le gana a las opciones parecidas. La inversión del orden entre bloques explica por qué se eligió por consistencia y no por el máximo de un tramo.
+1. **Trials Day.** Presentar RF con atributos reentrenado como la opción elegida por efectividad, con sus cifras de validación rotuladas. *(El equipo presentó finalmente CatBoost; ver la nota del inicio.)* No afirmar que RF le gana a las opciones parecidas. La inversión del orden entre bloques explica por qué se eligió por consistencia y no por el máximo de un tramo.
 2. **Implementación.** Calcular la columna de tasa de la hoja con RF con atributos reentrenado cada 5 días, en lugar de la tasa fija: la tasa fija revisada cada tanto no basta en una rotación de mezcla. Si el equipo no quiere operar un modelo de ML, la móvil de 120 días hacia el mercado tiene una efectividad esperada similar. El detector de cambios sigue siendo útil para avisar entre reentrenamientos.
 3. **Más precisión.** Pedir a Ford el piloto de [datos de proceso](datos-proceso.md): es la única vía que puede superar el techo del código. Mientras tanto, el techo esperable con la base actual es de unos 18–20 % en validación.
 
@@ -196,7 +198,7 @@ Es una propuesta de este análisis; no es una decisión del equipo.
 
 ## Decisiones acordadas
 
-Ninguna. El informe no cambia la solución operativa, la hoja ni los preregistros, y no relee la prueba final. La elección de RF con atributos reentrenado es de este análisis, con el criterio de efectividad que pidió Facundo. Contradice la opción de tasa fija acordada el 30/09 en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33) y requiere acuerdo del equipo.
+Ninguna. El informe no cambia la solución operativa, la hoja ni los preregistros, y no relee la prueba final. La elección de RF con atributos reentrenado es de este análisis, con el criterio de efectividad que pidió Facundo. El equipo no la adoptó: la solución presentada es CatBoost ([#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)). Coincide con este análisis en lo principal: una tasa que se actualiza y se apoya en el mercado.
 
 ## Fuentes
 

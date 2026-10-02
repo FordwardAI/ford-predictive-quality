@@ -39,10 +39,12 @@ reconstruye el predictor del segundo preregistro y sus pruebas.
 
 ## Registro de la prueba final
 
-La prueba final ya tuvo **dos lecturas el 30/09**: tasa fija (`preregistro.json`) y CatBoost con atributos,
-reentrenado cada 5 días (`preregistro-precision.json`). Las dos están en
-[`resultados/prueba-final.json`](resultados/prueba-final.json); la segunda tiene evidencia más débil
-porque ocurre después de conocer la primera. Esta limpieza no adopta otro modelo ni vuelve a correrlas.
+La prueba final tuvo **tres lecturas**, cada una con su preregistro:
+- tasa fija, el 30/09 (`preregistro.json`);
+- **CatBoost con atributos, reentrenado cada 5 días**, el 30/09 (`preregistro-precision.json`): es la solución;
+- Random Forest con atributos, el 01/10 (`preregistro-efectividad.json`).
+
+Las tres están en [`resultados/prueba-final.json`](resultados/prueba-final.json). La lectura de CatBoost tiene evidencia más débil porque se acordó conociendo la primera ([cómo se iteró la solución](../docs/entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)). No se vuelven a correr.
 
 La reproducción recalcula validación y genera la hoja de desarrollo del Día 190. La hoja de prueba final
 se produjo en la sesión registrada; no se regenera leyendo de nuevo sus etiquetas. Para el alcance y las
@@ -65,6 +67,12 @@ python3 research/test_audit_dataset.py
 | `preparacion.py` | P1 | Evidencia de preparación y control contra `research/validation-partitions.json` |
 | `referencias.py` | P3 | Azar, tasa fija, móviles, mercado, decaimiento, oráculo y fuga |
 | `eleccion.py` | P3/P4 | Ganadora en validación |
+| `ml.py` | P4 | ML sobre el código: siete familias, promedio y stacking, en modo fijo y reentrenado |
+| `exploracion.py` | P5 | Etiquetas parciales, mínimo por código, Thompson y días de control |
+| `diferencial.py` | P6 | «Dónde mirar», detector de cambios, subcategorización y anexo de historial |
+| `preregistro.py` | P7 | Preregistro y lectura de la prueba final |
+| `hoja.py` | P8 | Hoja de códigos prioritarios: planilla CSV/XLSX e imprimible |
+| `figuras.py` | P9 | Figuras y diagramas de `docs/entrega/figuras/` |
 | `run.py` | P2 | Comando único |
-| `precision.py` | segunda lectura 30/09 | Elección por mayor precisión en bloques de tiempo (selección 100–174, confirmación 175–194), con suavizado jerárquico y ML con atributos del código; sin desempate por simplicidad |
+| `precision.py` | solución (30/09) | Elección por mayor precisión en bloques de tiempo (selección 100–174, confirmación 175–194), con suavizado jerárquico y ML con atributos del código; sin desempate por simplicidad |
 | `empaquetar.py` | P13 | .zip de reproducción (código, entorno, resultados, hoja); falla si entra un CSV o un VIN |

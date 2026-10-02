@@ -73,4 +73,4 @@ Las 391.616 celdas de horas difieren y son compatibles con el redondeo del Markd
 
 El CSV conserva espacios finales en algunos campos; también hay diferencias entre espacios comunes y no separables del Markdown. La comparación identifica esas diferencias, pero no limpia ni sobrescribe el CSV. Las descripciones finales continúan desalineadas: posición 38 describe el resultado y nombra Desensamblar; 39 tiene descripción vacía y nombra Código de Catálogo; 40 describe catálogo y nombra Auditoría Adicional.
 
-No se verificó equivalencia con `table.xlsx`. Las dudas sobre población, disponibilidad temporal y DIA_260 siguen abiertas. Cualquier nueva entrega debe auditarse y compararse antes de trasladar estos resultados.
+No se verificó equivalencia con `table.xlsx`. Ford respondió sobre la población el 29/09: la base reúne solo auditados con actividad QLS ([#29](https://github.com/FordwardAI/ford-predictive-quality/issues/29)). La disponibilidad temporal del historial y la causa del patrón posterior a DIA_260 siguen abiertas. Cualquier nueva entrega debe auditarse y compararse antes de trasladar estos resultados.

@@ -49,8 +49,9 @@ catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: hay que ten
    `p8` y `p9` salvo nombres de archivo y `version_codigo`; en `p4` y `eleccion` (modelos de ML) y en `p6` puede variar
    la 3.ª cifra decimal o la semilla mediana según la plataforma, sin cambiar la alternativa ganadora.
 
-5. **La prueba final no se vuelve a correr.** Las dos lecturas del 30/09 (tasa fija y CatBoost con atributos)
-   tienen sus preregistros en `solucion/preregistro.json` y `solucion/preregistro-precision.json`.
+5. **La prueba final no se vuelve a correr.** Sus tres lecturas (tasa fija y CatBoost con atributos el 30/09,
+   Random Forest con atributos el 01/10) tienen sus preregistros en `solucion/preregistro.json`,
+   `solucion/preregistro-precision.json` y `solucion/preregistro-efectividad.json`. La solución es CatBoost.
    Su registro agregado está en `solucion/resultados/prueba-final.json`. El comando regenera validación y
    la hoja de desarrollo del Día 190; las cifras finales se leen del registro y la hoja final incluida se conserva.
 

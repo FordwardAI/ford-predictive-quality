@@ -27,7 +27,7 @@ Entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15.2
 
 ## Decisiones acordadas
 
-- El historial se reabrió como experimento (Mateo Serebrinsky, 30/09) y se midió solo en validación, sin tercera lectura de la prueba final.
+- El historial se reabrió como experimento (Mateo Serebrinsky, 30/09) y se midió solo en validación, sin usar la prueba final.
 - Con este resultado **el historial no entra en la solución**; sigue vigente la regla de `AGENTS.md`. No se incorporaron el objetivo auxiliar ni el ensamble de la propuesta porque ningún modelo mostró señal (condición fijada en el plan).
 
 ## Límites

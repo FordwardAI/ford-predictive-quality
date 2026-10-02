@@ -41,6 +41,15 @@ selección posible que alcanza y cuánto de la diferencia entre opciones se ver�
 calibra con las estimaciones reales sin ML en la selección. **Es una simulación, no evidencia sobre la planta.** Escribe
 `solucion/experimentos/resultados/simulacion.json`; unos 85 minutos con CatBoost. Informe: [simulación](../../research/simulacion-evaluacion.md).
 
+La comparación directa entre CatBoost y Random Forest (`simulacion_pares.json`) sale de la misma herramienta, con los
+parámetros que registra su `protocolo` (dos escenarios, 24 réplicas, misma semilla):
+
+```sh
+.venv/bin/python -m solucion.experimentos.simulacion --csv '<CSV vigente>' --catalogo '<catálogo vigente>' --catboost \
+  --solo rf_atributos,catboost_atributos --escenarios base,mezcla_estable \
+  --pares catboost_atributos:rf_atributos --salida solucion/experimentos/resultados/simulacion_pares.json
+```
+
 ## Opción más precisa con el código
 
 `python -m solucion.experimentos.opcion_precisa --csv '<CSV vigente>' --catalogo '<catálogo vigente>'` mide el techo
@@ -90,12 +99,12 @@ MPLCONFIGDIR='<carpeta temporal>' .venv/bin/python research/documentar_busqueda.
 
 ## Organización
 
-Los ocho módulos (`historial_vin`, `columnas`, `ensemble`, `busqueda`, `robustez_busqueda`,
-`semillas_busqueda`, `sensibilidad_proceso`, `sensibilidad_candidatos`) conservan sus pruebas
-sintéticas en `solucion/pruebas/`. Los siete JSON en `resultados/` son los agregados originales,
+Los diez módulos (`historial_vin`, `columnas`, `ensemble`, `busqueda`, `robustez_busqueda`,
+`semillas_busqueda`, `sensibilidad_proceso`, `sensibilidad_candidatos`, `opcion_precisa`, `simulacion`)
+conservan sus pruebas sintéticas en `solucion/pruebas/`. Los diez JSON en `resultados/` son los agregados originales,
 sin alterar su contenido: sus rutas y versiones históricas describen la corrida que los produjo.
 Las cachés anteriores permanecen fuera del repo. El cambio de código genera una nueva huella
 para futuras corridas de búsqueda; la revisión de robustez permite usar la caché anterior por ruta.
 
 No se eliminan informes, figuras ni resultados de alternativas descartadas: justifican la comparación.
-El prototipo de plataforma continúa en `prototipos/`, fuera del ZIP y del recorrido principal.
+La plataforma está en [`plataforma/`](../../plataforma/README.md) y la presentación, en [`prototipos/presentacion-3d/`](../../prototipos/presentacion-3d/README.md).

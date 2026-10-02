@@ -4,7 +4,7 @@ El flujo compartido está en [AGENTS.md](../AGENTS.md) y las convenciones de ram
 
 ## Incorporación
 
-1. Clonar el repo y leer README, AGENTS y CONTEXT. Se necesitan Git y Python 3 para la auditoría actual; `gh` autenticado y acceso al repo/Project para sincronizar GitHub.
+1. Clonar el repo y leer README, AGENTS y CONTEXT. Se necesitan Git, Python 3.13 con el entorno `.venv` de [`requirements.txt`](../requirements.txt) (ver [reproducción](../solucion/README.md)); `gh` autenticado y acceso al repo/Project para sincronizar GitHub.
 2. Obtener el CSV por el canal del equipo, guardarlo fuera del repo y verificar el hash según [datos locales](datos-locales.md). No copiarlo como fixture ni adjuntarlo a tickets.
 3. Ejecutar `python3 research/test_audit_dataset.py`. No requiere el CSV ni paquetes externos.
 4. Abrir el agente desde el repo. Pedirle que indique qué convenciones cargó y el ticket que va a trabajar. En Claude se puede revisar `/context` para comprobar la carga de `CLAUDE.md`.
@@ -38,7 +38,7 @@ El proyecto ya se inició con **wayfinder**. Si se ejecuta `setup-matt-pocock-sk
 
 `ford-data-analysis` complementa las skills generales con las particularidades QLS: cabecera doble del CSV, precisión y faltantes, conteos por evento/VIN, temporalidad, fuga y evidencia reproducible. Reutiliza el script actual y no requiere una librería nueva. Es una skill del equipo, no de Matt Pocock.
 
-Para gráficos o tablas futuras, usar las herramientas disponibles para la necesidad concreta. No hace falta incorporar ahora un framework de ML, un profiler automático ni infraestructura de experimentos para seguir caracterizando la base.
+Para gráficos o tablas futuras, usar las herramientas disponibles para la necesidad concreta. Los frameworks de ML que usa la solución (scikit-learn, CatBoost, XGBoost, LightGBM) ya están fijados en `requirements.txt`; no hace falta sumar un profiler automático ni infraestructura de experimentos para seguir caracterizando la base.
 
 ## Wayfinding operations
 
