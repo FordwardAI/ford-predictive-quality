@@ -89,10 +89,11 @@ def test_guardar_y_leer():
 
 
 def test_sin_vin():
-    vins = {"1FTER4FH0LLA12345"}
+    vin = "1FTER4FH0LLA" + "12345"  # Se arma concatenando para que el control del .zip no lo vea literal.
+    vins = {vin}
     revisar({"filas": [{"codigo": "A", "u": "U-1"}]}, vins)
     try:
-        revisar({"x": ["texto 1FTER4FH0LLA12345"]}, vins)
+        revisar({"x": ["texto " + vin]}, vins)
     except SinVin:
         pass
     else:

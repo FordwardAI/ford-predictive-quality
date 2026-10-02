@@ -23,6 +23,8 @@ RAIZ_INCLUIDA = {"requirements.txt", ".python-version", "README.md", "AGENTS.md"
 EXCLUIDOS = ("/__pycache__/", "/.venv/", "/node_modules/", "/assets/local/", "/assets/fuente/")
 PRESENTACION = "prototipos/presentacion-3d/"
 DATOS_CRUDOS = {".csv", ".xlsx", ".xls", ".pickle", ".pkl", ".parquet"}
+# Binarios de la presentación (modelo 3D y renders): no tienen texto que revisar y dan falsos positivos de forma de VIN.
+BINARIOS = {".glb", ".webp"}
 CARPETA_HOJA, CARPETA_ANEXOS = "hoja/", "anexos/"
 FORMA_VIN = re.compile(r"\b(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-HJ-NPR-Z0-9]{17}\b")
 
@@ -111,6 +113,8 @@ def version_codigo():
 def _textos(zf):
     """(nombre, texto) de cada miembro; abre los .xlsx anidados, que guardan el texto en XML."""
     for nombre in zf.namelist():
+        if Path(nombre).suffix in BINARIOS:
+            continue
         datos = zf.read(nombre)
         if nombre.endswith(".xlsx"):
             with zipfile.ZipFile(io.BytesIO(datos)) as interno:
