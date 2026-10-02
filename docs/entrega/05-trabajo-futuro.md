@@ -6,11 +6,12 @@ Borrador para la sección 5 del Informe (E2) y el separador 05 de la presentaci�
 
 ## 1. Implementación inicial con días de control
 
-1. **Conectar las entradas.** Exportación diaria de QLS con los resultados de Auditoría Adicional, programa de producción del día y cupo diario de Calidad de Planta ([plan][plan-fact]).
+1. **Conectar y asegurar.** Exportación diaria de QLS con los resultados de Auditoría Adicional, ingreso de Gate Release, playa y despacho, catálogo y cupo diario de Calidad de Planta, con identidad, permisos y copias aprobados por IT ([plan][plan-fact]).
 2. **Arrancar con el histórico que ya existe.** Las auditorías que Ford ya tiene, elegidas al azar según Ford, son etiquetas completas para arrancar la tasa de cada código. Es lo que simula la lectura con etiquetas parciales: etiquetas completas hasta el Día 149 y solo lo elegido desde el 155 ([plan][plan-par]).
-3. **Hoja al inicio del día**, con la cantidad sugerida por código y las filas del **mínimo por código** ([operación][ope], decisiones 1 y 2; [base QLS][qls], punto 5).
-4. **Días de control.** Durante la etapa inicial, se alternan días con hoja y días al azar. Los días al azar dan la referencia sin sesgo en las mismas condiciones de producción. Terminada la etapa, la hoja orienta todo el cupo ([CONTEXT.md][ctx], «Días de control»).
-5. **Resultados separados** para unidades con y sin actividad QLS. El cruce se hace después, con QLS, sin necesidad de consultarlo desde la playa ([base QLS][qls], punto 7).
+3. **Prueba sin intervenir.** La hoja se genera y sus sugerencias se registran, pero la selección sigue al azar como hoy. Sirve para comprobar datos completos, trazabilidad y tiempos antes de cambiar nada.
+4. **Hoja al inicio del día**, con la cantidad sugerida por código y las filas del **mínimo por código** ([operación][ope], decisiones 1 y 2; [base QLS][qls], punto 5).
+5. **Días de control.** Durante la etapa inicial, se alternan días con hoja y días al azar. Los días al azar dan la referencia sin sesgo en las mismas condiciones de producción. Terminada la etapa, la hoja orienta todo el cupo ([CONTEXT.md][ctx], «Días de control»).
+6. **Resultados separados** para unidades con y sin actividad QLS. El cruce se hace después, con QLS, sin necesidad de consultarlo desde la playa ([base QLS][qls], punto 7).
 
 ### Límites de una prueba en planta
 

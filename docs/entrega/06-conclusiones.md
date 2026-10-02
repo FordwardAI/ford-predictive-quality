@@ -55,12 +55,13 @@ Ordenados por dependencias; las fechas las define Ford.
 
 1. **Conectar las entradas:** exportación diaria de QLS con resultados de Auditoría Adicional y programa del día.
 2. **Cargar el histórico** de auditorías al azar para entrenar el primer modelo.
-3. **Instalar la plataforma** ([`plataforma/`](../../plataforma/README.md)) en un servidor de planta y generar la primera hoja.
+3. **Instalar y asegurar la plataforma** ([`plataforma/`](../../plataforma/README.md)) en un servidor de planta, con usuarios, permisos y comunicación cifrada aprobados por IT, y generar la primera hoja.
 4. **Capacitar al equipo de analistas** con la hoja impresa.
-5. **Arrancar la etapa con días de control**, alternando días con hoja y días al azar, con el mínimo por código activo.
-6. **Medir por separado** unidades con y sin actividad QLS, y calcular con esos datos la duración y el tamaño que necesita la etapa.
-7. **Decidir con los datos de planta** si la hoja orienta todo el cupo.
-8. **Sumar la subcategorización** del catálogo cuando Ford la publique, compitiendo en validación con la misma regla.
+5. **Prueba sin intervenir:** generar la hoja y registrar sus sugerencias mientras sigue la selección actual.
+6. **Arrancar la etapa con días de control**, alternando días con hoja y días al azar, con el mínimo por código activo.
+7. **Medir por separado** unidades con y sin actividad QLS, y calcular con esos datos la duración y el tamaño que necesita la etapa.
+8. **Decidir con los datos de planta** si la hoja orienta todo el cupo.
+9. **Sumar la subcategorización** del catálogo cuando Ford la publique, compitiendo en validación con la misma regla.
 
 [iter]: 02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución
 [i33]: https://github.com/FordwardAI/ford-predictive-quality/issues/33

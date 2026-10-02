@@ -101,7 +101,7 @@ Porque, si la hoja rinde más que el azar, ese 20 % cuesta calibraciones todos l
 No lo podemos calcular sin datos reales de planta: depende de la tasa y del cupo reales. Queda para calcularlo con los primeros datos ([base QLS][qls], punto 7).
 
 **28. ¿Introduce un riesgo de ciberseguridad?**
-No uno nuevo relevante: lee una exportación, no se conecta a la red de automatización, no usa nube ni LLM y no usa datos personales. Si falla, se elige al azar como hoy ([seguridad y privacidad](02-3-seguridad-privacidad.md)). La evolución en tiempo real correría en el GCP de Ford, con conexión solo saliente desde planta (pregunta 32).
+Limita su exposición: lee una exportación, no se conecta a la red de automatización, no usa nube ni LLM y no usa datos personales. Para operar en la red de planta hacen falta usuarios, permisos, comunicación cifrada y recuperación aprobados por IT. Si falla, se elige al azar como hoy ([seguridad y privacidad](02-3-seguridad-privacidad.md)). La evolución en tiempo real correría en el GCP de Ford, con conexión solo saliente desde planta (pregunta 32).
 
 **29. ¿Qué aporta más allá de la selección?**
 «Dónde mirar» (qué componente revisar primero), el detector de cambios por código y un insumo para la subcategorización del catálogo ([valor diferencial](04-valor-diferencial.md)).
