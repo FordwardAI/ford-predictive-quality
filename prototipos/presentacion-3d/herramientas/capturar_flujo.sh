@@ -110,9 +110,13 @@ while True:
 
 envios = api("envios")["cifras"]
 modelo = api("modelo")
+# Códigos a auditar como los cuenta la pantalla Hoja: con algo pendiente o ya enviado hoy.
+a_auditar = ({p["codigo"] for p in estado["pendientes"] if p["pendiente"] > 0}
+             | {c for c, ids in estado["tomadas_por_codigo"].items() if ids})
 resumen = (f"Último día: {t} · modelo {hoja['modelo']} v{hoja['version']['numero']} "
            f"(resultados hasta el Día {hoja['version']['entrenado_hasta']})\n"
            f"Cupo del día: {hoja['cupo']} · enviadas hoy: {estado['tomadas']}\n"
+           f"En la playa: {hoja['programadas']} · códigos a auditar: {len(a_auditar)} de {len(hoja['filas'])} programados\n"
            f"Enviadas en total: {envios['enviadas']} · con resultado: {envios['con_resultado']}\n"
            f"Versiones del modelo: {len(modelo['versiones'])}\n")
 open(salida, "w", encoding="utf-8").write(resumen)
