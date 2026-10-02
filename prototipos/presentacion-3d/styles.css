@@ -443,6 +443,19 @@ kbd {
 }
 .figura-chip { position: absolute; top: var(--s-2); right: var(--s-2); }
 
+/* Captura ampliada (figura.ampliar): la figura la mueve ui.ampliarFigura; acá se
+   atenúa el resto y un velo separa la captura de la escena 3D. */
+.velo-figura {
+  position: fixed; inset: 0; z-index: 1;
+  background: rgba(0, 20, 46, .9);
+  opacity: 0; pointer-events: none;
+  transition: opacity .6s ease;
+}
+.figura-ampliada .velo-figura { opacity: 1; }
+.capitulo .capitulo-texto, .cabecera, .pie, .progreso { transition: opacity .6s ease; }
+.capitulo.figura-ampliada .capitulo-texto { opacity: .06; }
+.figura-ampliada .cabecera, .figura-ampliada .pie, .figura-ampliada .progreso { opacity: 0; }
+
 /* ---------- Portada y cierre ---------- */
 .capitulo-portada, .capitulo-cierre { --t-display: calc(120 * var(--u)); grid-template-columns: minmax(0, calc(1040 * var(--u))) minmax(0, 1fr); padding-bottom: calc(var(--pie-h) + var(--s-3)); }
 .capitulo-portada .capitulo-texto, .capitulo-cierre .capitulo-texto { align-self: end; }

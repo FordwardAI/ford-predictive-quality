@@ -626,6 +626,35 @@ export function animarSalida(sec, { movimientoReducido } = {}) {
     .add(() => prepararEntrada(sec));
 }
 
+// Captura ampliada (pantallas con `figura.ampliar`): la figura se escala y se
+// centra hasta 94 vw × 86 vh, con su proporción; el resto lo atenúa styles.css.
+export function ampliarFigura(sec, valor, { movimientoReducido, instantaneo = false } = {}) {
+  const fig = sec?.querySelector(':scope .capitulo-figura');
+  const gsap = window.gsap;
+  if (!fig) return false;
+  sec.classList.toggle('figura-ampliada', valor);
+  if (!gsap) return valor;
+  gsap.killTweensOf(fig);
+  const duracion = movimientoReducido || instantaneo ? 0 : 0.6;
+  if (!valor) {
+    gsap.to(fig, { x: 0, y: 0, scale: 1, duration: duracion, ease: 'power2.inOut', clearProps: 'transform,zIndex' });
+    return false;
+  }
+  mostrarTodo(sec); // si la entrada sigue en curso, se completa antes de medir
+  gsap.set(fig, { clearProps: 'transform' });
+  const r = fig.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const escala = Math.min((0.94 * vw) / r.width, (0.86 * vh) / r.height);
+  gsap.to(fig, {
+    x: vw / 2 - (r.left + r.width / 2),
+    y: vh / 2 - (r.top + r.height / 2),
+    scale: escala, transformOrigin: '50% 50%', zIndex: 5,
+    duration: duracion, ease: 'power2.inOut',
+  });
+  return true;
+}
+
 // ---------- Índice (diálogo) ----------
 export function construirIndice({ lista, secciones, capitulos, alElegir }) {
   lista.textContent = '';

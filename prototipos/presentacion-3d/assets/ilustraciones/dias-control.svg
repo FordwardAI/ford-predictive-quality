@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="il-control-titulo il-control-desc">
+  <title id="il-control-titulo">Días de control en la etapa inicial (esquema)</title>
+  <desc id="il-control-desc">Esquema ilustrativo, sin datos: en la etapa inicial se alternan días con hoja y días al azar; la precisión de cada grupo se mide por separado, con y sin actividad QLS, en las mismas condiciones de producción. Terminada la etapa, la hoja orienta todo el cupo. La duración de la etapa se decide con datos de planta.</desc>
+  <!-- Ilustración a mano: SIN números ni tasas. La alternancia día por día es un ejemplo, no un esquema acordado.
+       Colores por variables CSS «figura-…»; los valores de respaldo son el tema oscuro Twilight. -->
+  <style>
+    .il-fondo { fill: var(--figura-fondo, #00142E); }
+    .il-t { fill: var(--figura-texto, #FFFFFF); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); font-size: 34px; }
+    .il-tenue { fill: var(--figura-tenue, rgba(255, 255, 255, .72)); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); font-size: 34px; }
+    .il-chico { font-size: 28px; }
+    .il-negrita { font-weight: 600; }
+    .il-rotulo { font-size: 30px; letter-spacing: .04em; }
+    .il-dia-hoja { fill: var(--figura-acento, #066FEF); }
+    .il-dia-azar { fill: none; stroke: var(--figura-rango, rgba(255, 255, 255, .40)); stroke-width: 2; stroke-dasharray: 7 6; }
+    .il-caja { fill: var(--figura-acento-suave, rgba(6, 111, 239, .28)); stroke: var(--figura-acento, #066FEF); stroke-width: 2; }
+    .il-caja-azar { fill: none; stroke: var(--figura-rango, rgba(255, 255, 255, .40)); stroke-width: 2; stroke-dasharray: 7 6; }
+    .il-chip { fill: none; stroke: var(--figura-linea, rgba(255, 255, 255, .16)); stroke-width: 2; }
+    .il-trazo { fill: none; stroke: var(--figura-tenue, rgba(255, 255, 255, .72)); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .il-chip-t { font-size: 25px; }
+  </style>
+
+    <rect class="il-fondo" width="1200" height="675"/>
+
+  <!-- 1 · Etapa inicial: días alternados -->
+  <text class="il-tenue il-rotulo" x="40" y="48">1 · ETAPA INICIAL: DÍAS ALTERNADOS</text>
+  <rect class="il-dia-hoja" x="40" y="76" width="130" height="104" rx="14"/>
+  <text class="il-t il-chico" x="105.0" y="112" text-anchor="middle">Día 1</text>
+  <text class="il-t il-negrita" x="105.0" y="156" text-anchor="middle">Hoja</text>
+  <rect class="il-dia-azar" x="180" y="76" width="130" height="104" rx="14"/>
+  <text class="il-t il-chico" x="245.0" y="112" text-anchor="middle">Día 2</text>
+  <text class="il-tenue il-negrita" x="245.0" y="156" text-anchor="middle">Azar</text>
+  <rect class="il-dia-hoja" x="320" y="76" width="130" height="104" rx="14"/>
+  <text class="il-t il-chico" x="385.0" y="112" text-anchor="middle">Día 3</text>
+  <text class="il-t il-negrita" x="385.0" y="156" text-anchor="middle">Hoja</text>
+  <rect class="il-dia-azar" x="460" y="76" width="130" height="104" rx="14"/>
+  <text class="il-t il-chico" x="525.0" y="112" text-anchor="middle">Día 4</text>
+  <text class="il-tenue il-negrita" x="525.0" y="156" text-anchor="middle">Azar</text>
+  <rect class="il-dia-hoja" x="600" y="76" width="130" height="104" rx="14"/>
+  <text class="il-t il-chico" x="665.0" y="112" text-anchor="middle">Día 5</text>
+  <text class="il-t il-negrita" x="665.0" y="156" text-anchor="middle">Hoja</text>
+  <rect class="il-dia-azar" x="740" y="76" width="130" height="104" rx="14"/>
+  <text class="il-t il-chico" x="805.0" y="112" text-anchor="middle">Día 6</text>
+  <text class="il-tenue il-negrita" x="805.0" y="156" text-anchor="middle">Azar</text>
+  <rect class="il-dia-hoja" x="880" y="76" width="130" height="104" rx="14"/>
+  <text class="il-t il-chico" x="945.0" y="112" text-anchor="middle">Día 7</text>
+  <text class="il-t il-negrita" x="945.0" y="156" text-anchor="middle">Hoja</text>
+  <rect class="il-dia-azar" x="1020" y="76" width="130" height="104" rx="14"/>
+  <text class="il-t il-chico" x="1085.0" y="112" text-anchor="middle">Día 8</text>
+  <text class="il-tenue il-negrita" x="1085.0" y="156" text-anchor="middle">Azar</text>
+
+  <!-- Cada grupo se mide por separado -->
+  <path class="il-trazo" d="M310 194v30M890 194v30"/>
+  <path class="il-trazo" d="M300 214l10 12 10-12M880 214l10 12 10-12"/>
+
+  <rect class="il-caja" x="40" y="238" width="530" height="200" rx="18"/>
+  <text class="il-t il-negrita" x="68" y="286">Días con hoja</text>
+  <text class="il-tenue il-chico" x="68" y="328">Precisión en el cupo</text>
+  <rect class="il-chip" x="62" y="358" width="240" height="56" rx="28"/>
+  <text class="il-t il-chip-t" x="182" y="395" text-anchor="middle">Con actividad QLS</text>
+  <rect class="il-chip" x="310" y="358" width="240" height="56" rx="28"/>
+  <text class="il-t il-chip-t" x="430" y="395" text-anchor="middle">Sin actividad QLS</text>
+
+  <rect class="il-caja-azar" x="630" y="238" width="530" height="200" rx="18"/>
+  <text class="il-t il-negrita" x="658" y="286">Días al azar</text>
+  <text class="il-tenue il-chico" x="658" y="328">Referencia sin sesgo</text>
+  <rect class="il-chip" x="652" y="358" width="240" height="56" rx="28"/>
+  <text class="il-t il-chip-t" x="772" y="395" text-anchor="middle">Con actividad QLS</text>
+  <rect class="il-chip" x="900" y="358" width="240" height="56" rx="28"/>
+  <text class="il-t il-chip-t" x="1020" y="395" text-anchor="middle">Sin actividad QLS</text>
+
+  <text class="il-t il-negrita" x="600" y="350" text-anchor="middle">vs.</text>
+
+  <text class="il-tenue il-chico" x="600" y="484" text-anchor="middle">Misma producción, mismas condiciones: la diferencia es la hoja.</text>
+
+  <!-- 2 · Terminada la etapa -->
+  <text class="il-tenue il-rotulo" x="40" y="548">2 · DESPUÉS: LA HOJA ORIENTA TODO EL CUPO</text>
+  <rect class="il-dia-hoja" x="40" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="152" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="264" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="376" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="488" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="600" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="712" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="824" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="936" y="572" width="102" height="40" rx="10"/>
+  <rect class="il-dia-hoja" x="1048" y="572" width="102" height="40" rx="10"/>
+  <text class="il-tenue il-chico" x="40" y="652">La duración de la etapa se decide con datos de planta.</text>
+</svg>

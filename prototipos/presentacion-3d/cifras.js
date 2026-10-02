@@ -57,6 +57,8 @@ const TRAMOS = {
   confirmacion: { texto: 'validación, último bloque (días 175–194; prueba final no releída)', n: 'confirmacion.n', unidad: 'VIN' },
 };
 
+const DEMO_HOJA = 'demo de la plataforma: fuente simulada sobre la base ficticia, Día 166 (herramientas/capturar_flujo.sh)';
+
 export const DEFINICIONES = [
   // --- La base -------------------------------------------------------------
   { clave: 'base.eventos', archivo: 'research/audit-csv.json', ruta: 'rows', formato: 'entero', respaldo: 195808,
@@ -166,6 +168,8 @@ export const DEFINICIONES = [
     tramo: 'prueba', etiqueta: 'veces el azar' },
   { clave: 'catboost.prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.143937851209665, 1.7606161509632392],
     tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar' },
+  { clave: 'catboost.prueba.diferencia', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[1].tramos[0].ganadora.precision_cupo-corridas[1].tramos[0].ganadora.azar_mismo_cupo', formato: 'puntos1', respaldo: 0.037351235792533216,
+    tramo: 'prueba', etiqueta: 'más que el azar: unas 4 calibraciones más cada 100 inspecciones' },
 
   // Prueba final, tercera lectura, corridas[3] (sin acuerdo del resto del equipo; no se proyecta).
   { clave: 'rf.prueba.precision', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[3].tramos[0].ganadora.precision_cupo', formato: 'pct1', respaldo: 0.11809815950920245,
@@ -218,6 +222,16 @@ export const DEFINICIONES = [
     tramo: 'hoja190', etiqueta: 'unidades sugeridas para llenar el cupo del día' },
   { clave: 'hoja.vinEnSalidas', archivo: 'solucion/resultados/p8.json', ruta: 'vin_en_salidas', formato: 'entero', respaldo: 0,
     tramo: 'hoja190', etiqueta: 'VIN en las salidas' },
+
+  // --- Demo de la plataforma (sin JSON): las de la captura flujo-2-hoja.png ----
+  // Si se regeneran las capturas (herramientas/capturar_flujo.sh), comparar con
+  // assets/local/flujo/escenario.txt y actualizar estos respaldos.
+  { clave: 'demo.cupo', archivo: null, ruta: null, formato: 'entero', respaldo: 13,
+    leyenda: DEMO_HOJA, fuente: 'herramientas/capturar_flujo.sh', etiqueta: 'cupo del día (Día 166)' },
+  { clave: 'demo.playa', archivo: null, ruta: null, formato: 'entero', respaldo: 482,
+    leyenda: DEMO_HOJA, fuente: 'herramientas/capturar_flujo.sh', etiqueta: 'unidades en la playa' },
+  { clave: 'demo.codigos', archivo: null, ruta: null, formato: 'entero', respaldo: 3,
+    leyenda: DEMO_HOJA, fuente: 'herramientas/capturar_flujo.sh', etiqueta: 'códigos a auditar, de 29 programados' },
 
   // --- Factibilidad (sin JSON: docs/entrega/03) ------------------------------
   { clave: 'factibilidad.corrida', archivo: null, ruta: null, formato: 'segundos1', respaldo: 2.4,

@@ -4,7 +4,9 @@
 // Un toque = una pantalla completa:
 //   - →/Espacio/PgDn/↓ van a la pantalla siguiente y ←/PgUp/↑ a la anterior; al
 //     llegar (por teclado, scroll, índice o enlace) todo su contenido entra en
-//     una cascada corta. No hay pasos.
+//     una cascada corta. Único paso: en las pantallas con `figura.ampliar`
+//     (capturas de la plataforma) el primer «siguiente» amplía la captura y el
+//     segundo pasa de pantalla; «anterior» con la captura ampliada la reduce.
 //   - En la escena `linea` el vehículo recorre la línea solo al llegar y la
 //     escena enfoca cada estación con callout al pasar por ella.
 //   - Movimiento reducido e impresión: todo visible, sin animar.
@@ -67,6 +69,7 @@ const estado = {
   tweenAuto: null,
   rotacion: 0,
   foco: null, // punto enfocado en la pantalla actual
+  ampliada: false, // captura de la pantalla actual ampliada (figura.ampliar)
 };
 
 if (limpio) raiz.classList.add('limpio');
@@ -265,6 +268,7 @@ function activar(i) {
   const anterior = estado.capitulos[estado.actual];
   const secAnterior = estado.elementos[estado.actual];
   if (secAnterior) ui.marcarCallout(secAnterior, null);
+  if (estado.ampliada) ampliar(false, { instantaneo: true });
   estado.actual = i;
   const cap = estado.capitulos[i];
   const sec = estado.elementos[i];
@@ -338,8 +342,20 @@ function irAId(id) {
   return i >= 0;
 }
 
-const siguiente = () => irA(estado.actual + 1);
-const anterior = () => irA(estado.actual - 1);
+// Paso de la captura ampliada: `true` si «siguiente» (+1) o «anterior» (−1) lo consumió.
+function ampliar(valor, { instantaneo = false } = {}) {
+  estado.ampliada = ui.ampliarFigura(estado.elementos[estado.actual], valor, { movimientoReducido, instantaneo });
+  raiz.classList.toggle('figura-ampliada', estado.ampliada);
+}
+function pasoFigura(direccion) {
+  if (!estado.capitulos[estado.actual]?.figura?.ampliar) return false;
+  if (direccion > 0 && !estado.ampliada) { ampliar(true); return true; }
+  if (direccion < 0 && estado.ampliada) { ampliar(false); return true; }
+  return false;
+}
+
+const siguiente = () => { if (!pasoFigura(1)) irA(estado.actual + 1); };
+const anterior = () => { if (!pasoFigura(-1)) irA(estado.actual - 1); };
 
 // ↓/↑: si la pantalla es más alta que la ventana, primero recorrerla.
 function desplazarDentro(direccion) {
@@ -526,11 +542,11 @@ document.addEventListener('keydown', (e) => {
       break;
     case 'ArrowDown':
       e.preventDefault();
-      if (!desplazarDentro(1)) siguiente();
+      if (!pasoFigura(1) && !desplazarDentro(1)) siguiente();
       break;
     case 'ArrowUp':
       e.preventDefault();
-      if (!desplazarDentro(-1)) anterior();
+      if (!pasoFigura(-1) && !desplazarDentro(-1)) anterior();
       break;
     case 'Home': e.preventDefault(); irA(0); break;
     case 'End': e.preventDefault(); irA(estado.elementos.length - 1); break;
@@ -545,7 +561,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ---------- Scroll ----------
-function alScrollearAMano() { estado.navegando = null; }
+function alScrollearAMano() {
+  estado.navegando = null;
+  if (estado.ampliada) ampliar(false); // la captura fija no acompaña el scroll
+}
 window.addEventListener('wheel', alScrollearAMano, { passive: true });
 window.addEventListener('touchstart', alScrollearAMano, { passive: true });
 window.addEventListener('scrollend', () => {
@@ -639,6 +658,7 @@ function alRedimensionar() {
     window.ScrollTrigger?.refresh();
     const el = estado.elementos[estado.actual];
     if (el && !navegandoActivo()) window.scrollTo({ top: el.offsetTop, behavior: 'auto' });
+    if (estado.ampliada) ampliar(true, { instantaneo: true });
   }, 200);
 }
 
@@ -702,6 +722,7 @@ async function iniciar() {
 }
 
 // ---------- Eventos globales ----------
+document.body.append(Object.assign(document.createElement('div'), { className: 'velo-figura', ariaHidden: 'true' }));
 $('boton-indice').addEventListener('click', abrirIndice);
 $('cerrar-indice').addEventListener('click', cerrarIndice);
 $('boton-notas').addEventListener('click', abrirNotas);
