@@ -966,7 +966,7 @@ function figuraEtiquetasParciales(datos, opciones) {
     titulo: 'Políticas con etiquetas parciales en validación',
     subtitulo: [`${capital(calificador)}.`],
     desc: 'Precisión en el cupo de cada política de exploración con etiquetas parciales '
-      + `(solo se conoce lo auditado desde el Día 155), ${calificador}.`,
+      + `(solo se conoce lo inspeccionado desde el Día 155), ${calificador}.`,
     filas,
     dominio: [0, tope * 1.15],
     formatoEje: pctEje,
@@ -1071,18 +1071,18 @@ function figuraParticiones(datos, opciones) {
     {
       etiqueta: 'Elección (validación)', y: yCarril1,
       segmentos: [
-        { a: DIA_INICIAL, b: hastaComparacion, t: 'Entrenamiento', d: `Día ${DIA_INICIAL}–${hastaComparacion} · ${entero(cp.entrenamiento_comparacion.vins)} VIN`, tipo: 'entrena' },
+        { a: DIA_INICIAL, b: hastaComparacion, t: 'Entrenamiento', d: `Día ${DIA_INICIAL}–${hastaComparacion}`, tipo: 'entrena' },
         { a: hastaComparacion + 1, b: valIni - 1, tipo: 'margen' },
-        { a: valIni, b: valFin, t: 'Validación', d: `${valIni}–${valFin} · ${entero(cp.validacion.vins)} VIN`, tipo: 'evalua' },
+        { a: valIni, b: valFin, t: 'Validación', d: `Día ${valIni}–${valFin}`, tipo: 'evalua' },
       ],
     },
     {
       etiqueta: 'Prueba final (corrida única)', y: yCarril2,
       segmentos: [
-        { a: DIA_INICIAL, b: hastaFinal, t: 'Entrenamiento final', d: `Día ${DIA_INICIAL}–${hastaFinal} · ${entero(cp.entrenamiento_final.vins)} VIN`, tipo: 'entrena' },
+        { a: DIA_INICIAL, b: hastaFinal, t: 'Entrenamiento final', d: `Día ${DIA_INICIAL}–${hastaFinal}`, tipo: 'entrena' },
         { a: hastaFinal + 1, b: pruIni - 1, tipo: 'margen' },
-        { a: pruIni, b: corte, t: `≤${corte}`, d: `${entero(cp.prueba_final_hasta_260.vins)} VIN`, tipo: 'prueba' },
-        { a: corte + 1, b: pruFin, t: `>${corte}`, d: `${entero(cp.prueba_final_despues_260.vins)} VIN`, tipo: 'descriptiva' },
+        { a: pruIni, b: corte, t: `≤${corte}`, d: `${pruIni}–${corte}`, tipo: 'prueba' },
+        { a: corte + 1, b: pruFin, t: `>${corte}`, d: `${corte + 1}–${pruFin}`, tipo: 'descriptiva' },
       ],
     },
   ];
@@ -1139,7 +1139,7 @@ function figuraParticiones(datos, opciones) {
     d: `M${pa + 1} ${yLlave - 6}V${yLlave}H${pb - 1}V${yLlave - 6}`,
     style: `fill:none;stroke:${C.tenue};stroke-width:1.5`,
   });
-  texto(gl, pb, yLlave + 26, `Prueba final ${pruIni}–${pruFin} · ${entero(cp.prueba_final.vins)} VIN`, {
+  texto(gl, pb, yLlave + 26, `Prueba final · Día ${pruIni}–${pruFin}`, {
     tam: TAM.llave, ancla: 'end', peso: 600,
   });
   // Eje de días.
