@@ -7,7 +7,7 @@ Código del [plan de acción](../docs/plan-de-accion.md), seguido en [#33](https
 Python 3.13 (ver `.python-version`). Desde la raíz del repo:
 
 ```sh
-brew install libomp              # solo macOS: lo necesitan xgboost y lightgbm
+brew install libomp              # macOS: OpenMP para xgboost y lightgbm (Linux: apt-get install libgomp1)
 python3.13 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```

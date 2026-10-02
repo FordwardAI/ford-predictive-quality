@@ -38,7 +38,8 @@ catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: hay que ten
    python3.13 -m venv .venv
    .venv/bin/pip install -r requirements.txt          # Windows: .venv\\Scripts\\pip
    ```
-   En macOS, xgboost y lightgbm necesitan `brew install libomp`. En Windows hace falta `set PYTHONUTF8=1`.
+   xgboost y lightgbm necesitan OpenMP del sistema: en macOS, `brew install libomp`; en Linux (Debian/Ubuntu),
+   `apt-get install libgomp1`. En Windows hace falta `set PYTHONUTF8=1`.
 2. Pruebas sintéticas (no necesitan los datos):
    ```sh
    .venv/bin/python -m solucion.pruebas

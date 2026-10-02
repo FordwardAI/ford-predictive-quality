@@ -38,7 +38,7 @@ python3.13 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
 
-En macOS, xgboost y lightgbm necesitan `brew install libomp`. En Windows, el intérprete es `.venv\Scripts\python` y conviene `set PYTHONUTF8=1`.
+xgboost y lightgbm necesitan OpenMP del sistema: en macOS, `brew install libomp`; en Linux (Debian/Ubuntu), `apt-get install libgomp1`. En Windows, el intérprete es `.venv\Scripts\python` y conviene `set PYTHONUTF8=1`.
 
 **2. Plataforma.** El build de la interfaz está versionado, así que alcanza con Python (Node solo hace falta para cambiar la interfaz):
 
