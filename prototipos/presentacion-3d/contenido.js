@@ -63,7 +63,8 @@ export const secciones = [
 // Campos extra (opcionales para ui.js): `subseccion` (2.1…2.3), `minutos` (duración orientativa),
 // `lado` ('derecha' | 'izquierda': de qué lado va el texto; si no, lo decide la sección), `centrado`
 // (true: las tarjetas o la figura van al centro de su columna, un poco por encima del medio, aunque
-// tapen parte del vehículo; ver styles.css) y, en las
+// tapen parte del vehículo; ver styles.css), `continua` (true, solo en la escena `linea`: la pantalla
+// arranca quieta donde terminó la pantalla anterior de la línea, sin recorrerla) y, en las
 // pantallas de la escena `linea`, `recorrido` (segundos que tarda el vehículo en recorrerla; por
 // defecto 6, ver main.js). La línea mide ≈ 162 unidades, así que 11 s ≈ 14 u/s.
 //
@@ -140,7 +141,7 @@ export const capitulos = [
     id: 'pregunta',
     seccion: '01',
     escena: 'linea',
-    recorrido: 18, // ≈ 9 u/s: más lento que antes (≈ 14); el vehículo vuelve a pasar por la línea
+    continua: true, // arranca quieto donde terminó la pantalla anterior de la línea (`proceso`), sin recorrerla de nuevo
     nucleo: true,
     minutos: 1.0,
     antetitulo: 'Descripción del desafío',
@@ -265,6 +266,7 @@ export const capitulos = [
     seccion: '02',
     subseccion: '2.2',
     escena: 'predictor',
+    centrado: true, // las tarjetas van al centro de su columna, un poco por encima del medio (pueden tapar el vehículo)
     nucleo: true,
     minutos: 2.5,
     antetitulo: 'Especificaciones técnicas · La solución elegida',
@@ -288,7 +290,7 @@ export const capitulos = [
       { titulo: 'Simulación con verdad conocida', texto: 'CatBoost contra Random Forest, pareado réplica por réplica en 24 réplicas: con la mezcla de códigos que rota, la diferencia no se distingue de cero; con la mezcla estable, CatBoost queda unos 0,7 puntos arriba en las 24. Es un mundo simulado, no evidencia de planta (research/simulacion-evaluacion.md).' },
       { titulo: 'Otro criterio', texto: 'Con el criterio de mejor peor lectura, el análisis exploratorio del 1/10 señala a Random Forest con atributos, sin acuerdo registrado del resto del equipo; su ventaja sobre las parecidas está dentro del ruido. La solución elegida es CatBoost, la de mayor precisión en selección.' },
     ],
-    notas: 'Presentamos la solución elegida: CatBoost con los atributos del código, reentrenado cada 5 días, vida media de 15 días, semilla 1. Decimos qué es en una frase: aprende la tasa de cada código con lo que ya se auditó y, para un código con pocos resultados, se apoya en los que comparten mercado y versión. Entrega una tasa por código; la hoja no cambia. Cifras con calificador: entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15.279 VIN, de cada 100 elegidos se calibran 18,4 con CatBoost. En el último bloque (confirmación 175–194, n = 4.626 VIN) baja a 17,3, contra 9,3 al azar: con 225 elegidos queda dentro del ruido. Y el límite, sin esconderlo: es la más precisa de una familia que empata.',
+    notas: 'Presentamos la solución elegida: CatBoost con los atributos del código, reentrenado cada 5 días, vida media de 15 días, semilla 1. Decimos qué es en una frase: aprende la tasa de cada código con lo que ya se auditó y, para un código con pocos resultados, se apoya en los que comparten mercado y versión. Entrega una tasa por código; la hoja no cambia. Cifras con calificador: entre auditados con actividad QLS, selección 100–174, base ficticia, n = 15.279 VIN, de cada 100 elegidos se calibran 18,4 con CatBoost. En el último bloque (confirmación 175–194, n = 4.626 VIN) baja a 17,3, contra 8,8 al azar: con 225 elegidos queda dentro del ruido. Y el límite, sin esconderlo: es la más precisa de una familia que empata.',
     orbita: false,
   },
 
@@ -453,13 +455,40 @@ export const capitulos = [
 
   // 12 · 05 Implementación: la hoja (captura de la aplicación) --------------------
   {
+    id: 'plataforma-dia',
+    seccion: '05',
+    lado: 'derecha',
+    escena: 'futuro',
+    nucleo: true,
+    minutos: 0.5,
+    antetitulo: 'Implementación · 1 · Arranca el día',
+    titulo: 'Entra Gate Release, ', acento: 'sale la hoja',
+    bajada: 'Con la playa, el cupo y la versión vigente del modelo.',
+    cifras: [],
+    puntos: [],
+    figura: { tipo: 'local', src: [LOCAL + 'flujo-1-dia.png'], respaldo: ILUSTRACIONES + 'plataforma-mock.svg', alt: 'Día de planta: entradas del día, modelo vigente y hoja armada', pendiente: '[PENDIENTE: captura flujo-1-dia.png — herramientas/capturar_flujo.sh, salida local fuera de Git]' },
+    detalle: [
+    { titulo: 'La playa', texto: 'Unidades que esperan de 0 a 5 días.' },
+    { titulo: 'El cupo', texto: 'Lo fija Calidad de Planta: por defecto, el 5 %.' },
+    { titulo: 'Sin hoja, al azar', texto: 'Hasta que se arma, se elige como hoy.' },
+    ],
+    ampliacion: [
+    { titulo: 'Qué entra', texto: 'Las unidades que pasaron Gate Release, con su código y su día (exportación diaria). Los resultados de Auditoría Adicional vuelven por otra exportación de QLS. Cada importación es todo o nada: si una fila falla, no entra ninguna.' },
+    { titulo: 'Qué se arma', texto: 'La hoja del día con la playa, el cupo y la versión vigente del modelo (CatBoost con atributos del código). El cupo por defecto es el 5 % de lo que pasó Gate Release ese día; Calidad puede fijar otro.' },
+    { titulo: 'En la demo', texto: 'Fuente simulada sobre la base ficticia: un botón avanza al día siguiente con el mismo contrato de entradas. No hay integración con QLS ni con el programa de producción.' },
+    ],
+    notas: 'Primer paso del día: entra lo que pasó Gate Release, se ve qué espera en la playa y qué versión del modelo está vigente, y se arma la hoja. El cupo lo sigue fijando Calidad de Planta. Hasta que se arma la hoja, se elige al azar, como hoy.',
+    orbita: false,
+  },
+
+  {
     id: 'hoja',
     seccion: '05',
     lado: 'derecha', // conserva el diseño que tenía en la sección 02: texto a la derecha, captura a la izquierda
     escena: 'predictor',
     nucleo: true,
-    minutos: 2.0,
-    antetitulo: 'Implementación · La hoja',
+    minutos: 1.0,
+    antetitulo: 'Implementación · 2 · La hoja',
     titulo: 'Así la usa ', acento: 'el analista',
     bajada: 'Cada mañana: qué códigos buscar en la ronda y cuántas unidades de cada uno.',
     cifras: ['hoja.unidades', 'hoja.codigos', 'hoja.cupo'],
@@ -470,10 +499,10 @@ export const capitulos = [
     // sin números con el chip de pendiente.
     figura: {
       tipo: 'local',
-      src: [LOCAL + 'captura-hoja-dia-260.png', LOCAL + 'd-hoja.png'],
+      src: [LOCAL + 'flujo-2-hoja.png', LOCAL + 'captura-hoja-dia-260.png', LOCAL + 'd-hoja.png'],
       respaldo: ILUSTRACIONES + 'hoja-mock.svg',
       alt: 'La hoja de códigos prioritarios del día',
-      pendiente: '[PENDIENTE: captura de la hoja del Día 260 (captura-hoja-dia-260.png) — salida local fuera de Git; no se versiona porque muestra tasas por código]',
+      pendiente: '[PENDIENTE: captura flujo-2-hoja.png — herramientas/capturar_flujo.sh, salida local fuera de Git]',
     },
     detalle: [],
     ampliacion: [
@@ -482,10 +511,138 @@ export const capitulos = [
       { titulo: 'Qué muestra', texto: 'Arriba, la frase permitida con su calificador y los límites. Después, la tabla de códigos (primero el código, porque es lo que se lee), las filas del mínimo por código aparte y el bloque «por qué este código». Nunca «probabilidad de la unidad» ni un puntaje por vehículo.' },
       { titulo: 'Formatos', texto: 'Planilla (CSV/XLSX) e imprimible de una página: formato adaptable a la operación.' },
       { titulo: 'Hoja de ensayo y hoja final', texto: 'La del Día 190 (validación) sirve de ensayo; la final es la del Día 260, ya generada. Las dos usan identificadores ficticios y ningún VIN.' },
+      { titulo: 'En la plataforma', texto: 'La misma hoja, con el ranking completo en otra pestaña y el detalle del código en un panel lateral. Se sigue descargando en CSV, Excel e imprimible.' },
       { titulo: 'Diagrama de la solución', texto: 'Entradas (programa del día, cupo, resultados con Día ≤ t−5 y catálogo), tasa por código con mínimo por código y detector de cambios, y la hoja en planilla e imprimible. Ver assets/ilustraciones/solucion.svg.' },
       { titulo: 'Quién calcula la tasa', texto: 'La hoja entrega una tasa por código. En la solución elegida la calcula CatBoost con atributos del código, reentrenado cada 5 días. La hoja de ensayo del Día 190 se generó con el predictor de la primera etapa (solucion/resultados/p8.json): con CatBoost cambia la columna de tasa, no el formato.' },
     ],
     notas: 'Llevamos la hoja impresa y en planilla. Recorremos una fila: código, cantidad sugerida, tasa con rango y n, veces la tasa general, mercado de destino. La tasa de cada código la calcula la solución elegida (CatBoost); la hoja no cambia de formato. Mostramos el traspaso cuando un código no llega. La hoja de ensayo del Día 190 se generó con el predictor de la primera etapa; con CatBoost cambia la columna de tasa, no el formato. Nunca decimos «probabilidad de la unidad». En la versión núcleo, la demo baja a un minuto. Si falla el equipo, usamos las capturas de respaldo.',
+    orbita: false,
+  },
+
+  {
+    id: 'plataforma-playa',
+    seccion: '05',
+    lado: 'derecha',
+    escena: 'futuro',
+    nucleo: true,
+    minutos: 0.6,
+    antetitulo: 'Implementación · 3 · En la playa',
+    titulo: '¿La envío? ', acento: 'Lo dice el código',
+    bajada: 'El analista escribe el código del parabrisas y la app responde: enviar o no enviar, con el motivo.',
+    cifras: [],
+    puntos: [],
+    figura: { tipo: 'local', src: [LOCAL + 'flujo-3b-respuesta.png', LOCAL + 'flujo-3-seleccion.png'], respaldo: ILUSTRACIONES + 'plataforma-mock.svg', alt: 'Selección en la playa: qué buscar, respuesta por código y enviadas del día', pendiente: '[PENDIENTE: captura flujo-3-seleccion.png — herramientas/capturar_flujo.sh, salida local fuera de Git]' },
+    detalle: [
+    { titulo: 'Por código', texto: 'Una unidad de un día anterior se decide igual.' },
+    { titulo: 'Se puede deshacer', texto: 'Cada envío queda registrado con su ronda.' },
+    { titulo: 'Escritorio, celular o tablet', texto: 'Se adapta a lo que use la planta.' },
+    ],
+    ampliacion: [
+    { titulo: 'Enviar', texto: 'Registra una unidad de ese código que está en la playa, la más antigua primero, y guarda la tasa y el puesto que tenía al decidir.' },
+    { titulo: 'Terminar ronda', texto: 'Cada ~2 h se cierra la ronda y se marca qué faltó de lo buscado: lo que faltó baja al siguiente código del ranking (la misma reasignación de la hoja).' },
+    { titulo: 'Dispositivo', texto: 'Se muestra en escritorio. La interfaz se adapta a celular o tablet: el formato final depende de cómo trabaje el equipo de analistas en la playa.' },
+    ],
+    notas: 'Mostramos la decisión en la playa: se lee el código en el parabrisas, se escribe y la app responde enviar o no enviar con el motivo. Se decide por código, no por vehículo. Si un código no llega, lo que falta pasa al siguiente del ranking. La mostramos en escritorio; se adapta a celular o tablet según lo que necesite Ford.',
+    orbita: false,
+  },
+
+  {
+    id: 'plataforma-seguimiento',
+    seccion: '05',
+    lado: 'derecha',
+    escena: 'futuro',
+    nucleo: true,
+    minutos: 0.4,
+    antetitulo: 'Implementación · 4 · Seguimiento',
+    titulo: 'El cupo, ', acento: 'ronda por ronda',
+    bajada: 'Cuánto falta de cada código y qué se envió en cada ronda.',
+    cifras: [],
+    puntos: [],
+    figura: { tipo: 'local', src: [LOCAL + 'flujo-4-seguimiento.png'], respaldo: ILUSTRACIONES + 'plataforma-mock.svg', alt: 'Seguimiento del día por código y por ronda', pendiente: '[PENDIENTE: captura flujo-4-seguimiento.png — herramientas/capturar_flujo.sh, salida local fuera de Git]' },
+    detalle: [
+    { titulo: 'Mismo cupo', texto: 'Cambia cuáles, no cuántas.' },
+    { titulo: 'Rondas de ~2 h', texto: 'Cada ronda queda registrada.' },
+    ],
+    ampliacion: [
+    { titulo: 'Qué muestra', texto: 'Por código: cuántas sugería la hoja, cuántas se enviaron y cuántas faltan. Por ronda: qué se envió y qué no llegó.' },
+    ],
+    notas: 'Durante el día se ve el avance del cupo por código y por ronda. El cupo no cambia: la hoja solo cambia cuáles se eligen.',
+    orbita: false,
+  },
+
+  {
+    id: 'plataforma-resultados',
+    seccion: '05',
+    lado: 'derecha',
+    escena: 'futuro',
+    nucleo: true,
+    minutos: 0.5,
+    antetitulo: 'Implementación · 5 · Vuelve el resultado',
+    titulo: '¿Fue ', acento: 'acertada?',
+    bajada: 'Cuando vuelve la exportación de QLS, cada unidad enviada muestra su resultado.',
+    cifras: [],
+    puntos: [],
+    figura: { tipo: 'local', src: [LOCAL + 'flujo-5-resultados.png'], respaldo: ILUSTRACIONES + 'plataforma-mock.svg', alt: 'Resultados de la auditoría por unidad enviada', pendiente: '[PENDIENTE: captura flujo-5-resultados.png — herramientas/capturar_flujo.sh, salida local fuera de Git]' },
+    detalle: [
+    { titulo: 'CALIBRADA = acierto', texto: 'Lo que la hoja buscaba encontrar.' },
+    { titulo: 'Solo lo enviado', texto: 'Lo no auditado nunca revela su resultado.' },
+    ],
+    ampliacion: [
+    { titulo: 'De dónde viene', texto: 'La exportación de QLS con el resultado y el componente de Auditoría Adicional. Solo se aceptan resultados de unidades enviadas. En la demo vuelven entre 1 y 5 días después del envío.' },
+    { titulo: 'Para qué sirve', texto: 'Muestra el acierto por unidad y alimenta la próxima actualización del modelo, con el margen de 5 días. No es la medición de impacto: esa sale de los días de control.' },
+    { titulo: 'Las cifras de la captura', texto: 'Son de la demo: fuente simulada sobre la base ficticia, días 155–166 de validación. No son un resultado del modelo ni se citan como tal.' },
+    ],
+    notas: 'El resultado vuelve de QLS y se ve unidad por unidad: CALIBRADA es un acierto. Solo se conoce lo que se envió; por eso, para medir frente al azar, hacen falta los días de control. Las cifras de la captura son de la demo sobre la base ficticia: no las citamos como resultado.',
+    orbita: false,
+  },
+
+  {
+    id: 'plataforma-modelo',
+    seccion: '05',
+    lado: 'derecha',
+    escena: 'futuro',
+    nucleo: true,
+    minutos: 0.5,
+    antetitulo: 'Implementación · 6 · El modelo se actualiza',
+    titulo: 'Cada 5 días, ', acento: 'sin decidir a mano',
+    bajada: 'Una versión nueva con los resultados que ya se conocen: Día ≤ t − 5.',
+    cifras: [],
+    puntos: [],
+    figura: { tipo: 'local', src: [LOCAL + 'flujo-6-modelo.png'], respaldo: ILUSTRACIONES + 'plataforma-mock.svg', alt: 'Actualización del modelo: próxima versión, qué cambió e historial', pendiente: '[PENDIENTE: captura flujo-6-modelo.png — herramientas/capturar_flujo.sh, salida local fuera de Git]' },
+    detalle: [
+    { titulo: 'Calendario fijo', texto: 'Elegir el momento mirando resultados sobreajusta.' },
+    { titulo: 'Qué cambió', texto: 'Cada versión muestra cómo se movió el ranking.' },
+    ],
+    ampliacion: [
+    { titulo: 'Cómo funciona', texto: 'Cada versión es «el modelo con los resultados hasta el Día X». Entre versiones el orden no cambia aunque lleguen resultados. Es el mismo esquema que se evaluó en validación: CatBoost con atributos del código, reentrenado cada 5 días.' },
+    { titulo: 'Por qué nadie lo decide', texto: 'Elegir cuándo actualizar mirando los resultados es una forma de sobreajuste, y los resultados que vuelven son solo de lo que el modelo eligió. Por eso el calendario está fijo en el código, no en la pantalla.' },
+    ],
+    notas: 'El modelo se actualiza solo, cada 5 días, con los resultados ya conocidos. Es el esquema que evaluamos: CatBoost reentrenado cada 5 días. Nadie elige cuándo: eso evita sobreajustar. La pantalla muestra qué cambió en el ranking y el historial.',
+    orbita: false,
+  },
+
+  {
+    id: 'plataforma-linea',
+    seccion: '05',
+    lado: 'derecha',
+    escena: 'futuro',
+    nucleo: true,
+    minutos: 0.5,
+    antetitulo: 'Implementación · 7 · Retorno a la línea',
+    titulo: 'De la auditoría ', acento: 'a producción',
+    bajada: 'Lo auditado vuelve a la línea: por código, versión, motor y mercado, y qué componentes se calibran más.',
+    cifras: [],
+    puntos: [],
+    figura: { tipo: 'local', src: [LOCAL + 'flujo-7-linea.png'], respaldo: ILUSTRACIONES + 'plataforma-mock.svg', alt: 'Reporte para la línea: tasa por código, componentes y tendencia', pendiente: '[PENDIENTE: captura flujo-7-linea.png — herramientas/capturar_flujo.sh, salida local fuera de Git]' },
+    detalle: [
+    { titulo: 'Solo agregados', texto: 'Se descarga en CSV, sin unidades.' },
+    { titulo: 'Asociación, no causa', texto: 'Indica dónde mirar en producción.' },
+    ],
+    ampliacion: [
+    { titulo: 'Qué muestra', texto: 'Entre lo auditado: la tasa de calibración por código, versión, motor y mercado; los componentes más calibrados y la tendencia semanal.' },
+    { titulo: 'El componente', texto: 'No se usa para predecir, porque es el resultado. Acá es información para mejorar la producción.' },
+    ],
+    notas: 'Cerramos el ciclo: lo que se aprende en la auditoría vuelve a la línea, por código y por mercado, con los componentes más calibrados. Es asociación, no causa: indica dónde mirar.',
     orbita: false,
   },
 
@@ -501,14 +658,7 @@ export const capitulos = [
     bajada: 'Días de control alternados, mínimo por código y resultados con y sin actividad QLS por separado.',
     cifras: [],
     puntos: [],
-    // Capturas locales del prototipo (no se versionan); si faltan, el mock sin números.
-    figura: {
-      tipo: 'local',
-      src: [LOCAL + 'd-inicio.png'],
-      respaldo: ILUSTRACIONES + 'plataforma-mock.svg',
-      alt: 'Prototipo de la plataforma: hoja, rondas, códigos y alertas',
-      pendiente: '[PENDIENTE: capturas del prototipo de plataforma — prototipos/plataforma-web/ (shoot.sh, se generan localmente y no se versionan)]',
-    },
+    figura: { src: ILUSTRACIONES + 'plataforma-mock.svg', alt: 'Esquema de la plataforma' },
     detalle: [
       { titulo: 'Días con hoja y días al azar', texto: 'La referencia sale sin sesgo.' },
       { titulo: 'Replicable', texto: 'Otras líneas y plantas, cada una con su hoja.' },

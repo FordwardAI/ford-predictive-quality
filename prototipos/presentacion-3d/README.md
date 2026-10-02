@@ -1,6 +1,6 @@
 # Presentación 3D interactiva
 
-Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 16 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Sigue el [guion de la presentación](../../docs/entrega/guion-presentacion.md) y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
+Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 22 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Sigue el [guion de la presentación](../../docs/entrega/guion-presentacion.md) y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
 
 Es un **complemento** de la presentación oficial (.pptx sobre el template de Ford), no la reemplaza. El contenido sale de los borradores de [`docs/entrega/`](../../docs/entrega/) y las cifras, de los agregados de [`solucion/resultados/`](../../solucion/resultados/).
 
@@ -22,12 +22,12 @@ Cada pantalla tiene antetítulo, titular, bajada y, según el caso, hasta 3 cifr
 
 - **Un toque = toda la pantalla.** `→` (o espacio, PgDn, ↓) pasa a la pantalla siguiente y muestra todo su contenido con una entrada en cascada corta (≈ 1,2 s); `←` (o PgUp, ↑) vuelve a la anterior, también completa. Las pulsaciones rápidas se encadenan sin esperar a que termine la animación.
 - **Con scroll** (rueda, trackpad, barra): al llegar a una pantalla entra con la misma cascada.
-- En las pantallas de la **línea de producción** (`proceso`, `pregunta`, `aprende`) el vehículo recorre la línea solo al llegar y la escena enfoca cada estación con callout al pasar por ella. La duración sale del campo `recorrido` de cada pantalla (por defecto 6 s): `proceso` tarda ≈ 28 s para que se aprecie cada estación, `pregunta` ≈ 18 s y `aprende` 11 s (la línea mide ≈ 162 unidades, así que 11 s equivalen a la velocidad de antes). En las pantallas con varios puntos sobre el vehículo, el foco rota entre ellos cada 3 s. El panel de escaneo del túnel de Auditoría Adicional (visible en `proceso` y `aprende`) hace un ciclo de ida y vuelta cada ≈ 14 s, con las rayas casi quietas (`VELOCIDAD_ESCANEO` y `VELOCIDAD_RAYAS` en `escena/fabrica.js`). Un click en un callout o en un punto 3D enfoca ese punto.
+- En las pantallas de la **línea de producción** (`proceso`, `pregunta`, `aprende`) el vehículo recorre la línea solo al llegar (salvo `pregunta`, que lleva `continua: true` y arranca quieta en Auditoría Adicional, donde terminó `proceso`) y la escena enfoca cada estación con callout al pasar por ella. La duración sale del campo `recorrido` de cada pantalla (por defecto 6 s): `proceso` tarda ≈ 28 s para que se aprecie cada estación, `aprende` 11 s (la línea mide ≈ 162 unidades, así que 11 s equivalen a la velocidad de antes). En las pantallas con varios puntos sobre el vehículo, el foco rota entre ellos cada 3 s. El panel de escaneo del túnel de Auditoría Adicional (visible en `proceso` y `aprende`) hace un ciclo de ida y vuelta cada ≈ 14 s, con las rayas casi quietas (`VELOCIDAD_ESCANEO` y `VELOCIDAD_RAYAS` en `escena/fabrica.js`). Un click en un callout o en un punto 3D enfoca ese punto.
 - La URL guarda la pantalla (`#hoja`): al recargar se vuelve al mismo lugar.
-- El pie muestra `07 / 15` (pantalla / última pantalla; se numera desde `00`) y la sección. A la derecha, el **riel**: una marca igual por pantalla (la actual, en azul); un clic en una marca va a esa pantalla y su nombre aparece al pasar el mouse.
+- El pie muestra `07 / 21` (pantalla / última pantalla; se numera desde `00`) y la sección. A la derecha, el **riel**: una marca igual por pantalla (la actual, en azul); un clic en una marca va a esa pantalla y su nombre aparece al pasar el mouse.
 - Las notas del orador (`N`) muestran las notas, el **respaldo para preguntas** (la `ampliacion` de la pantalla, que no se proyecta) y el título de la pantalla siguiente.
 
-Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `validacion` · 05 `alternativas` · 06 `solucion` · 07 `resultado` · 08 `donde-mirar` · 09 `aprende` · 10 `seguridad` · 11 `factibilidad` · 12 `hoja` · 13 `futuro` · 14 `conclusiones` · 15 cierre. La **implementación** va junta al final del cuerpo (12 y 13, sección 05): son las pantallas donde se muestran las capturas de la aplicación (la hoja y la plataforma).
+Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `validacion` · 05 `alternativas` · 06 `solucion` · 07 `resultado` · 08 `donde-mirar` · 09 `aprende` · 10 `seguridad` · 11 `factibilidad` · 12 `plataforma-dia` · 13 `hoja` · 14 `plataforma-playa` · 15 `plataforma-seguimiento` · 16 `plataforma-resultados` · 17 `plataforma-modelo` · 18 `plataforma-linea` · 19 `futuro` · 20 `conclusiones` · 21 cierre. La **implementación** va junta al final del cuerpo (12 a 19, sección 05): son las pantallas donde se muestran las capturas de la aplicación; las siete del flujo (`flujo-*.png`) siguen el ciclo de planta de `plataforma/README.md`.
 
 **La solución y el resultado** son de CatBoost con atributos del código, reentrenado cada 5 días (vida media 15 días, semilla 1):
 
@@ -45,7 +45,7 @@ Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `
 | ↓ / ↑ | Igual que → / ← (si una pantalla no entrara en la ventana, primero la recorren) |
 | Inicio / Fin | Portada / cierre |
 | 0–6 | Ir a la portada (0) o a la primera pantalla de la sección 01–06 |
-| I / Esc | Abrir o cerrar el índice (las 16 pantallas) |
+| I / Esc | Abrir o cerrar el índice (las 22 pantallas) |
 | N | Abrir las notas del orador en otra ventana (notas, respaldo para preguntas y pantalla siguiente; sus botones también avanzan) |
 | F | Pantalla completa |
 | O | Activar o desactivar la órbita con el mouse (en los capítulos que la permiten) |
@@ -55,7 +55,7 @@ Pantallas: 00 portada · 01 `proceso` · 02 `pregunta` · 03 `predictor` · 04 `
 
 | Parámetro | Qué hace |
 | --- | --- |
-| `?nucleo=1` | Solo los capítulos con `nucleo: true` (hoy son las 16 pantallas) |
+| `?nucleo=1` | Solo los capítulos con `nucleo: true` (hoy son las 22 pantallas) |
 | `?estatico=1` | Sin WebGL: diapositivas sobre un fondo CSS. Para proyectores lentos o si falla la escena |
 | `?calidad=alta` / `baja` / `auto` | Calidad inicial de la escena (la tecla `L` la cambia en vivo). `baja` es el modo de bajo consumo para notebook a batería |
 | `?limpio=1` | Oculta los chips `[PENDIENTE: …]` (el índice sigue contando cuántos hay) |
@@ -69,12 +69,13 @@ Con **movimiento reducido** activado en el sistema operativo no hay animaciones:
 
 - **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (elección por precisión `seleccion`, particiones, veces el azar de CatBoost en la prueba final, comparación de alternativas en validación, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo cuando lo declara; `seleccion` y `veces_azar_prueba_final` no tienen respaldo (el SVG del informe muestra otra lectura) y, si no se pueden dibujar, la pantalla queda sin figura. Los colores salen de las variables `--figura-*` de `styles.css`.
 - **Ilustraciones a mano:** `assets/ilustraciones/` (proceso, solución y esquemas sin datos de la hoja y de la plataforma), versionadas e insertadas en línea para que tomen los colores del tema.
-- **Capturas locales:** la hoja y la plataforma muestran tasas por código, así que sus capturas **no se versionan**. Se generan con `herramientas/capturar_plataforma.ps1` (Windows) o `herramientas/capturar_plataforma.sh`, que dejan `d-hoja.png`, `d-inicio.png`, `d-codigos.png` y `d-alertas.png` en `assets/local/` (fuera de Git); la hoja también toma `assets/local/captura-hoja-dia-260.png` si existe. Sin ellas se ve el esquema sin números con un chip «Captura local pendiente».
+- **Capturas locales:** la hoja y la plataforma muestran tasas por código, así que sus capturas **no se versionan**. Se generan con `herramientas/capturar_plataforma.ps1` (Windows) o `herramientas/capturar_plataforma.sh`, que dejan `d-hoja.png`, `d-inicio.png`, `d-codigos.png` y `d-alertas.png` en `assets/local/` (fuera de Git); las pantallas del flujo (`plataforma-*` y `hoja`) usan `flujo-*.png` de `herramientas/capturar_flujo.sh`; la hoja también toma `assets/local/captura-hoja-dia-260.png` si existe. Sin ellas se ve el esquema sin números con un chip «Captura local pendiente».
 
 ## Herramientas
 
 | Archivo | Para qué |
 | --- | --- |
+| `herramientas/capturar_flujo.sh` | Las capturas `flujo-*.png` de la plataforma (levanta su propio servidor, recorre los días 155 a 166 con CatBoost; necesita el CSV y el catálogo fuera del repo, `FORD_CSV` y `FORD_CATALOGO`) y las deja en `assets/local/` |
 | `herramientas/capturar_plataforma.ps1` / `.sh` | Capturas locales de la plataforma y de la hoja (necesitan `prototipos/plataforma-web/data.js`, que se genera con el CSV crudo fuera del repo) |
 | `herramientas/figuras-demo.html` | Revisar las figuras de `figuras.js` y las ilustraciones en tema oscuro y claro (`?solo=<id>&tema=claro`) |
 | `herramientas/renderizar.*` | Renders de la escena 3D para `?estatico=1`, portada y documentación |
@@ -161,7 +162,6 @@ Cada placeholder tiene el formato `[PENDIENTE: qué falta — fuente esperada]`;
 | `contenido.js` → `meta.integrantes[0..2].nombre` | `[PENDIENTE: Apellido, Nombre — carátula del Informe]` (×3) | Carátula del Informe |
 | `contenido.js` → `meta.integrantes[0..2].universidad` | `[PENDIENTE: Universidad — carátula del Informe]` (×3) | Carátula del Informe |
 | `contenido.js` → `meta.integrantes[0..2].carrera` | `[PENDIENTE: Carrera (informática) — carátula del Informe]` (×2) y `[PENDIENTE: Carrera (industrial) — carátula del Informe]` (×1) | Carátula del Informe |
-| `contenido.js` → capítulo `hoja`, `figura.pendiente` (chip dentro de la figura) | `[PENDIENTE: captura de la hoja del Día 260 (captura-hoja-dia-260.png) — salida local fuera de Git; no se versiona porque muestra tasas por código]` | Salida local de la corrida única |
-| `contenido.js` → capítulo `futuro`, `figura.pendiente` (chip dentro de la figura) | `[PENDIENTE: capturas del prototipo de plataforma — prototipos/plataforma-web/ (shoot.sh, se generan localmente y no se versionan)]` | `prototipos/plataforma-web/shoot.sh` |
+| `contenido.js` → capítulos `hoja` y `plataforma-*`, `figura.pendiente` (chip dentro de la figura) | `[PENDIENTE: captura flujo-N-….png — herramientas/capturar_flujo.sh, salida local fuera de Git]` (×7) | `herramientas/capturar_flujo.sh` (o las capturas del traspaso, copiadas a `assets/local/`) |
 
 Las capturas no se versionan: si se muestran, se generan localmente el día de la presentación (ver [Figuras, ilustraciones y capturas](#figuras-ilustraciones-y-capturas)). Mientras falten, el chip se ve en la figura; `?limpio=1` lo oculta. `cifras.js` no tiene cifras pendientes.

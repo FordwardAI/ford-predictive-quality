@@ -184,6 +184,14 @@ function arrancarAuto(cap) {
   const linea = cap.escena === 'linea';
   const estaciones = linea ? estacionesDe(cap) : [];
   const meta = linea && estaciones.length ? estaciones.at(-1).p : 1;
+  // `continua`: la pantalla arranca donde terminó la pantalla anterior de la línea, sin recorrerla.
+  if (linea && cap.continua) {
+    const previa = estado.capitulos.slice(0, estado.actual).reverse().find((c) => c.escena === 'linea');
+    const fin = previa ? estacionesDe(previa).at(-1)?.p : undefined;
+    estado.tAuto.t = typeof fin === 'number' ? fin : meta;
+    aplicarProgreso();
+    return;
+  }
   if (movimientoReducido || !gsap) {
     estado.tAuto.t = meta;
     aplicarProgreso();
