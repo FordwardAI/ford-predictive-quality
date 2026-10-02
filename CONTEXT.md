@@ -48,6 +48,10 @@ _Avoid_: «País», «location» o «región» como sinónimos sueltos.
 Forma diaria de la recomendación de auditoría, armada al inicio del día con los códigos programados: los códigos de catálogo ordenados por la tasa del código vigente, con rango, vehículos programados, acumulado y cantidad sugerida por código para llenar el cupo diario. Prioriza códigos, no vehículos: dentro de un código los vehículos son equivalentes. El equipo de analistas la consume en sus rondas. Si un código no llega a la playa de despacho, la cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron, y solo se completa al azar si se agota el ranking.
 _Avoid_: Ranking de VIN; leer la cantidad sugerida como una elección de VIN concretos.
 
+**Puntaje de fin de línea**:
+Propuesta de evolución de la hoja de códigos prioritarios, a partir del feedback del jurado del 02/10 ([detalle](docs/entrega/05-1-scoring-fin-de-linea.md)). Es un orden de prioridad por VIN que se calcula al terminar la línea, antes de Gate Release, con el código de catálogo y los parámetros de línea publicados hasta ese instante. Con solo el código coincide con la hoja. No está evaluado: arranca en sombra.
+_Avoid_: Probabilidad de la unidad; usarlo antes de medir su aporte frente al catálogo solo; presentarlo como resultado obtenido.
+
 **Tasa reciente del código**:
 Proporción CALIBRADA entre los VIN auditados de un código de catálogo en una ventana cuyos resultados ya se conocen según el margen de disponibilidad. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo. En la opción elegida (tasa fija) no se recalcula a diario: se revisa periódicamente y el detector de cambios avisa entre revisiones (decisión del 30/09, [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)); la periodicidad está por fijar. El nombre «reciente» y la columna «Tasa reciente» de la hoja se conservan hasta ajustar el código.
 _Avoid_: Probabilidad de la unidad, score.

@@ -22,6 +22,7 @@ Reglas que siguen todos los archivos:
 | [03-factibilidad-economica.md](03-factibilidad-economica.md) | Implementación, operación, mantenimiento, escenarios de escala con precios públicos y fórmula del beneficio | Informe §3 · Separador 03 |
 | [04-valor-diferencial.md](04-valor-diferencial.md) | «Dónde mirar», selección que aprende, detector de cambios, señal por mercado, subcategorización | Informe §4 · Separador 04 |
 | [05-trabajo-futuro.md](05-trabajo-futuro.md) | Implementación con días de control, escalado, replicabilidad y límites de una prueba en planta | Informe §5 · Separador 05 |
+| [05-1-scoring-fin-de-linea.md](05-1-scoring-fin-de-linea.md) | Feedback del jurado (02/10): puntaje de fin de línea, mediciones en la verificación de calidad, arquitectura en GCP (Pub/Sub, MQTT, BigQuery, Dataflow), evaluación en vivo, costos y texto listo para §2.3, §3 y §5 | Informe §5 (apartado nuevo) · Preguntas |
 | [06-conclusiones.md](06-conclusiones.md) | Resultado (mejora), valor y próximos pasos concretos | Informe §6 · Separador 06 |
 | [ideas-descartadas.md](ideas-descartadas.md) | Passport, perfil por VIN, secuencias, anomalías, 20 % permanente y otras, con su motivo | Informe §2.2 o anexo · Preguntas |
 | [preguntas-jurado.md](preguntas-jurado.md) | 30 preguntas probables con respuesta corta y fuente | Preparación de preguntas |
