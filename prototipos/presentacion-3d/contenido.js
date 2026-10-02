@@ -33,9 +33,9 @@ export const meta = {
   desafio: 'Data-Driven Predictive Quality',
   equipo: 'FordwardAI',
   integrantes: [
-    { nombre: 'Mateo Serebrinsky', carrera: 'Ingeniería Informática' },
-    { nombre: 'Máximo Georgalos', carrera: 'Ingeniería Industrial' },
-    { nombre: 'Facundo Lanusse', carrera: 'Ingeniería Informática' },
+    { nombre: 'Mateo Serebrinsky', carrera: 'Ingeniería Informática', universidad: 'Universidad Austral' },
+    { nombre: 'Máximo Georgalos', carrera: 'Ingeniería Industrial', universidad: 'Universidad Austral' },
+    { nombre: 'Facundo Lanusse', carrera: 'Ingeniería Informática', universidad: 'Universidad Austral' },
   ],
 
   fecha: 'Octubre 2026',
