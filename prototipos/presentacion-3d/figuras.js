@@ -1069,7 +1069,7 @@ function figuraParticiones(datos, opciones) {
   const yCarril2 = yCarril1 + alto + 84;
   const carriles = [
     {
-      etiqueta: 'Elección (validación)', y: yCarril1,
+      etiqueta: 'Elección', y: yCarril1,
       segmentos: [
         { a: DIA_INICIAL, b: hastaComparacion, t: 'Entrenamiento', d: `Día ${DIA_INICIAL}–${hastaComparacion}`, tipo: 'entrena' },
         { a: hastaComparacion + 1, b: valIni - 1, tipo: 'margen' },
