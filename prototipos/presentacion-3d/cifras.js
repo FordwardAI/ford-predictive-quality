@@ -8,7 +8,7 @@
 // Fuentes:
 //   - solucion/resultados/prueba-final.json  lecturas de la prueba final. Se
 //     usa la primera corrida de cada preregistro:
-//       corridas[0]  lectura 1, tasa fija (preregistro.json): la cifra oficial.
+//       corridas[0]  lectura 1, tasa fija (preregistro.json): la primera etapa.
 //       corridas[1]  lectura 2, CatBoost (preregistro-precision.json).
 //       corridas[2]  repetición exacta de corridas[1] (mismos tramos y piezas;
 //                    la anterior falló al imprimir en la consola de Windows). Se

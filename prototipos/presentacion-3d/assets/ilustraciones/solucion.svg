@@ -27,11 +27,11 @@
   <rect class="il-fondo" width="1200" height="675"/>
 
   <text class="il-t" x="48" y="62" font-size="30" font-weight="500">Cómo funciona la solución cada día</text>
-  <text class="il-t il-tenue" x="48" y="94" font-size="18">Entradas, recálculo diario y salidas. El código de catálogo es el único predictor.</text>
+  <text class="il-t il-tenue" x="48" y="94" font-size="18">Entradas, modelo que se reentrena cada 5 días y salidas. Predictor: el código y sus atributos.</text>
 
   <g class="il-t il-tenue" font-size="14" font-weight="600" letter-spacing="1.2">
     <text x="48" y="148">ENTRADAS</text>
-    <text x="448" y="148">RECÁLCULO DIARIO</text>
+    <text x="448" y="148">MODELO (CADA 5 DÍAS)</text>
     <text x="848" y="148">SALIDAS</text>
   </g>
 
@@ -67,8 +67,8 @@
     <rect class="il-marco" x="448" y="166" width="340" height="432" rx="16"/>
     <rect class="il-caja" x="468" y="184" width="300" height="112" rx="12"/>
     <text class="il-t" x="618" y="218" font-size="19" font-weight="600" text-anchor="middle">Tasa de calibración por código</text>
-    <text class="il-t il-tenue" x="618" y="246" font-size="15" text-anchor="middle">la alternativa elegida en validación;</text>
-    <text class="il-t il-tenue" x="618" y="266" font-size="15" text-anchor="middle">sin historial: tasa general o de su mercado</text>
+    <text class="il-t il-tenue" x="618" y="246" font-size="15" text-anchor="middle">CatBoost con el código y sus atributos,</text>
+    <text class="il-t il-tenue" x="618" y="266" font-size="15" text-anchor="middle">reentrenado cada 5 días</text>
     <path class="il-trazo" d="M618 298V312" marker-end="url(#il-solucion-flecha)"/>
     <rect class="il-caja" x="468" y="318" width="300" height="112" rx="12"/>
     <text class="il-t" x="618" y="352" font-size="19" font-weight="600" text-anchor="middle">Mínimo por código</text>
@@ -109,5 +109,5 @@
     <text class="il-t il-tenue" x="1000" y="568" font-size="15" text-anchor="middle">para revisar el código señalado</text>
   </g>
 
-  <text class="il-t il-tenue" x="48" y="640" font-size="16">Los analistas auditan lo sugerido en la playa de despacho; esos resultados vuelven a QLS y entran al recálculo con 5 días de margen.</text>
+  <text class="il-t il-tenue" x="48" y="640" font-size="16">Los analistas auditan lo sugerido en la playa de despacho; esos resultados vuelven a QLS y entran al reentrenamiento con 5 días de margen.</text>
 </svg>

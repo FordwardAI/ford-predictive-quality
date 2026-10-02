@@ -34,7 +34,7 @@ Lo que se necesita para replicar:
 
 | Requisito | Por qué |
 | --- | --- |
-| Un código de catálogo (o equivalente) visible en la unidad | Es el único predictor y lo que el analista lee |
+| Un código de catálogo (o equivalente) visible en la unidad | Es el predictor, junto con lo que se lee de él, y lo que el analista lee |
 | Resultados de las auditorías con la fecha y el código | Alimentan el reentrenamiento del modelo |
 | Un cupo diario definido | La hoja llena ese cupo |
 | Un histórico de auditorías elegidas al azar para arrancar | Da tasas iniciales que no dependen de lo que la hoja elija |
