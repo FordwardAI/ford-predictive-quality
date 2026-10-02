@@ -82,14 +82,14 @@ Los resultados de referencia son los agregados versionados en `solucion/resultad
 **La prueba final no se vuelve a correr.** Sus tres lecturas (tasa fija y CatBoost con atributos el 30/09,
 Random Forest con atributos el 01/10) tienen sus preregistros en `solucion/preregistro.json`,
 `solucion/preregistro-precision.json` y `solucion/preregistro-efectividad.json`; la solución es CatBoost. El registro
-agregado está en `solucion/resultados/prueba-final.json` y la hoja final incluida se conserva.
+agregado está en `solucion/resultados/prueba-final.json`.
 
 ## Contenido
 
 `plataforma/` (MVP de la plataforma), `prototipos/presentacion-3d/` (la presentación), `solucion/` (código, pruebas y
 `resultados/`, solo agregados), `solucion/experimentos/` (exploratorios, no corren por defecto), `research/`
 (auditoría, particiones e informes), `docs/` (borradores del informe y documentación), `{hoja}` (hoja de códigos
-prioritarios, sin VIN) y `{anexos}` (material de apoyo). Todas las cifras valen entre auditados con actividad QLS,
+prioritarios del Día 190, de validación, sin VIN) y `{anexos}` (material de apoyo). Todas las cifras valen entre auditados con actividad QLS,
 base ficticia.
 """
 
