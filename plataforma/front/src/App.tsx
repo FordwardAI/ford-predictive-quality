@@ -45,12 +45,14 @@ function Contexto() {
       {hoja && <Badge variant="secondary">{modelo(hoja.modelo).corto}</Badge>}
       <Tooltip>
         <TooltipTrigger asChild>
-          <button type="button"><Badge variant="outline">Base ficticia</Badge></button>
+          <button type="button"><Badge variant="outline">{meta.demo ? 'Demo sintética' : 'Base ficticia'}</Badge></button>
         </TooltipTrigger>
         <TooltipContent className="max-w-sm">
-          Datos de la base ficticia, reproducidos día por día hasta que haya conexión con Ford (días {meta.validacion[0]}–{meta.validacion[1]}).
-          Fuente {meta.fuente.csv}, catálogo {meta.fuente.catalogo}. Ningún VIN sale del servidor. Propuesta de FordwardAI:
-          no es un sistema de Ford.
+          {meta.demo
+            ? <>Demo con una base sintética generada por la plataforma (días {meta.validacion[0]}–{meta.validacion[1]}): sirve para ver el flujo; sus cifras no son resultados. Con los CSV de Ford muestra la base ficticia.</>
+            : <>Datos de la base ficticia, reproducidos día por día hasta que haya conexión con Ford (días {meta.validacion[0]}–{meta.validacion[1]}).
+              Fuente {meta.fuente.csv}, catálogo {meta.fuente.catalogo}.</>}
+          {' '}Ningún VIN sale del servidor. Propuesta de FordwardAI: no es un sistema de Ford.
         </TooltipContent>
       </Tooltip>
     </div>

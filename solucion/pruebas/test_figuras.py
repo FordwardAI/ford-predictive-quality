@@ -64,3 +64,14 @@ def test_genera_omite_y_es_determinista():
         assert "prueba completa" in leyenda and "prueba >260" not in leyenda  # El tramo descriptivo no se grafica.
         nombres = {g["nombre"] for g in resumen["generadas"]}
         assert {"etiquetas_parciales", "donde_mirar", "detector_potencia"} <= nombres
+
+        # Con varias lecturas se grafica la de la solución (preregistro de precisión), no la última.
+        otra = lambda v: {"tramos": [tramo("prueba completa", v)]}
+        _escribir(res, "prueba-final", {"corridas": [
+            dict(otra(1.3), preregistro="solucion/preregistro.json"),
+            dict(otra(1.45), preregistro="solucion/preregistro-precision.json"),
+            dict(otra(1.5), preregistro="solucion/preregistro-precision.json"),
+            dict(otra(1.44), preregistro="solucion/preregistro-efectividad.json")]})
+        figuras.generar(res, dest)
+        leyenda = (dest / "README.md").read_text(encoding="utf-8").split("## veces_azar_prueba_final")[1]
+        assert "1,45×" in leyenda and "1,44×" not in leyenda and "1,5×" not in leyenda

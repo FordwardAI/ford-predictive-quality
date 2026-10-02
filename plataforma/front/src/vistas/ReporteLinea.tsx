@@ -7,12 +7,13 @@ import { Progress } from '@/components/ui/progress'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { api, type Grupo, type Linea } from '@/lib/api'
-import { useSincronizar } from '@/lib/estado'
+import { useApp, useSincronizar } from '@/lib/estado'
 import { entero, pct } from '@/lib/formato'
 
 // Lo que vuelve de la auditoría, devuelto a producción: dónde se calibra más y qué componentes, para mejorar la línea.
 // El componente calibrado no se usa para predecir (es el resultado); acá es información de retorno.
 export function ReporteLinea() {
+  const { meta } = useApp()
   const [rep, setRep] = useState<Linea | null>(null)
   const pedir = useCallback(() => api<Linea>('linea').then(setRep), [])
   useSincronizar(pedir, 30000)
@@ -25,7 +26,7 @@ export function ReporteLinea() {
 
       <p className="mb-8 max-w-3xl rounded-lg bg-ford-gray p-4">
         <b>Entre lo auditado.</b> La selección prioriza los códigos de mayor riesgo, así que estas tasas no son las de toda la
-        producción: sirven para ver dónde mirar en la línea, no para medir la planta. Base ficticia; componentes anonimizados.
+        producción: sirven para ver dónde mirar en la línea, no para medir la planta. {meta.demo ? 'Demo sintética' : 'Base ficticia'}; componentes anonimizados.
       </p>
 
       {!rep ? <p>Cargando…</p> : rep.auditadas === 0 ? (

@@ -1,5 +1,7 @@
 # Sensibilidad de los candidatos priorizados a señales de proceso hipotéticas
 
+> **Nota del 02/10/2026.** La solución presentada es **CatBoost con atributos del código, reentrenado cada 5 días**, y la prueba final se leyó tres veces: tasa fija, CatBoost y Random Forest ([cómo se iteró la solución](../docs/entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)). Este informe conserva su análisis original; donde dice «solución vigente» o «tasa fija acordada», se refiere a la primera etapa.
+
 Ampliación pedida por Facundo para completar la [primera sensibilidad](sensibilidad-proceso.md) con los candidatos recomendados en [#48](https://github.com/FordwardAI/ford-predictive-quality/pull/48). Seguimiento en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33); publicación en [#50](https://github.com/FordwardAI/ford-predictive-quality/pull/50). No cambia el predictor operativo ni el preregistro.
 
 ## Qué se compara

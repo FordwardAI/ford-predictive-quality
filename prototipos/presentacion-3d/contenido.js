@@ -1,7 +1,6 @@
 // Contenido de la presentación 3D (FordwardAI, Trials Day 2/10/2026).
 //
 // Fuentes (no inventar contenido ni cifras; editar aquí y no en ui.js):
-//   - docs/entrega/guion-presentacion.md: mensaje de cada diapositiva y notas por bloque.
 //   - docs/entrega/01 a 06 y 02-x: borradores del Informe (secciones del template).
 //   - docs/entrega/preguntas-jurado.md, docs/entrega/figuras/README.md.
 //   - docs/fuentes/documentation.md (ficha del desafío), docs/alcance-entrega.md,
@@ -212,7 +211,7 @@ export const capitulos = [
     minutos: 1.5,
     antetitulo: 'Especificaciones técnicas · Validación',
     titulo: 'Validar sin ', acento: 'mirar el futuro',
-    bajada: 'Tiempo hacia adelante, 5 días de margen y una prueba final que se abre una sola vez.',
+    bajada: 'Tiempo hacia adelante, 5 días de margen y una prueba final que solo se abre con preregistro.',
     cifras: ['validacion.n', 'prueba.n'],
     puntos: [],
     figura: { tipo: 'js', id: 'particiones', alt: 'Particiones por Día del VIN: entrenamiento, margen, validación, margen y prueba final', pie: 'Particiones por Día del VIN (1–284), con los márgenes de 5 días entre tramos.' },
@@ -307,7 +306,7 @@ export const capitulos = [
     cifras: ['catboost.prueba.precision', 'catboost.prueba.azar', 'catboost.prueba.veces'],
     puntos: [],
     // La figura usa la primera corrida del preregistro de CatBoost (corridas[1]),
-    // una fila por tramo. Sin respaldo: el SVG del informe muestra otra lectura.
+    // una fila por tramo. Sin respaldo: si no se puede dibujar, la pantalla queda sin figura.
     figura: { tipo: 'js', id: 'veces_azar_prueba_final', opciones: {}, alt: 'Veces el azar de CatBoost en la prueba final, por tramo, con su rango del 95 %', pie: 'Prueba final · CatBoost con atributos del código.' },
     // Dos tarjetas: en la columna de texto no entran en 1920×1080; van en la banda al pie.
     disposicion: 'tarjetas-escena',
@@ -440,7 +439,7 @@ export const capitulos = [
     figura: {
       tipo: 'local',
       ampliar: true,
-      src: [LOCAL + 'flujo-2-hoja.png', LOCAL + 'captura-hoja-dia-260.png', LOCAL + 'd-hoja.png'],
+      src: [LOCAL + 'flujo-2-hoja.png', LOCAL + 'captura-hoja-dia-260.png'],
       respaldo: ILUSTRACIONES + 'hoja-mock.svg',
       alt: 'La hoja de códigos prioritarios del día',
       pendiente: '[PENDIENTE: captura flujo-2-hoja.png — herramientas/capturar_flujo.sh, salida local fuera de Git]',
@@ -641,7 +640,7 @@ export const capitulos = [
     ],
     ampliacion: [
       { titulo: 'Valor para Ford', texto: 'Mismas inspecciones, mejor elegidas. Usa el código del parabrisas y el programa del día. Explicable: cada prioridad es la tasa de una versión y un mercado. Sin riesgo operativo: si la hoja no está, se elige al azar como hoy. Sigue aprendiendo con el mínimo por código y avisa cambios con el detector.' },
-      { titulo: 'Qué aprendimos', texto: 'Con el código como único predictor, el valor está en cómo se usa la tasa. El techo con el código (oráculo) queda por encima de lo logrado. El orden se invierte entre bloques de tiempo (Spearman −0,34 entre los bloques 1 a 4 y el último bloque de la validación, 54 alternativas): elegir «la ganadora» por aciertos persigue ruido. Los buenos estimadores empatan entre 17 % y 19 % en los días 100–194, cerca del techo. Cuando rota la mezcla de códigos, actualizar la tasa gana unos 5 puntos a una tasa por código sin actualizar (17–18 % contra 12,7 % en la validación, bloques 1 a 4 de los días 100–174, n = 15.279 VIN). Entre inspeccionados con actividad QLS, base ficticia, Día < 195 (research/opcion-mas-precisa.md).' },
+      { titulo: 'Qué aprendimos', texto: 'Con el código y sus atributos como predictor, el valor está en cómo se usa la tasa. El techo con el código (oráculo) queda por encima de lo logrado. El orden se invierte entre bloques de tiempo (Spearman −0,34 entre los bloques 1 a 4 y el último bloque de la validación, 54 alternativas): elegir «la ganadora» por aciertos persigue ruido. Los buenos estimadores empatan entre 17 % y 19 % en los días 100–194, cerca del techo. Cuando rota la mezcla de códigos, actualizar la tasa gana unos 5 puntos a una tasa por código sin actualizar (17–18 % contra 12,7 % en la validación, bloques 1 a 4 de los días 100–174, n = 15.279 VIN). Entre inspeccionados con actividad QLS, base ficticia, Día < 195 (research/opcion-mas-precisa.md).' },
       { titulo: 'Próximos pasos, por dependencias', texto: '1. Conectar las entradas (QLS y programa del día). 2. Cargar el histórico de inspecciones al azar. 3. Instalar el script y generar la primera hoja. 4. Capacitar al equipo de analistas. 5. Arrancar con días de control y mínimo por código. 6. Medir por separado con y sin actividad QLS. 7. Decidir con datos de planta si la hoja orienta todo el cupo. 8. Sumar la subcategorización cuando Ford la publique.' },
       { titulo: 'Qué no afirmamos', texto: 'Impacto ni ahorro en planta. Reducción de calibraciones. Que el resultado valga para VIN no inspeccionados. Causas. «Probabilidad de la unidad» o un puntaje por vehículo. Que CatBoost le gane a sus parecidas: es la más precisa de una familia que empata, y en el último bloque bajó, dentro del ruido.' },
     ],

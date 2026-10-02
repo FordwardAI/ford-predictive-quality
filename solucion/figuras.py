@@ -23,6 +23,8 @@ from matplotlib.ticker import FuncFormatter, MaxNLocator  # noqa: E402
 from .datos import RAIZ  # noqa: E402
 
 RESULTADOS = RAIZ / "solucion" / "resultados"
+# Lectura de la prueba final que se presenta: la de la solución (CatBoost), no la última corrida.
+PREREGISTRO_PRESENTADO = "solucion/preregistro-precision.json"
 FIGURAS = RAIZ / "docs" / "entrega" / "figuras"
 DPI = 200
 
@@ -295,11 +297,14 @@ def figura_veces_azar(resultados, destino):
 
 
 def figura_prueba_final(resultados, destino):
-    """Veces el azar de la ganadora en la prueba final (corrida única), por tramo leído."""
+    """Veces el azar de la solución en la prueba final, por tramo leído.
+
+    Toma la primera corrida del preregistro presentado; sin ella, la primera corrida registrada."""
     registro = _leer(resultados, "prueba-final")
     if not (registro and registro.get("corridas")):
-        return None, "falta prueba-final.json (la corrida única todavía no se hizo)"
-    corrida = registro["corridas"][-1]
+        return None, "falta prueba-final.json (la prueba final todavía no se leyó)"
+    corridas = registro["corridas"]
+    corrida = next((c for c in corridas if c.get("preregistro") == PREREGISTRO_PRESENTADO), corridas[0])
     # El tramo >260 es descriptivo (cupo ~8): no tiene rango de veces el azar que se pueda leer.
     tramos = [t for t in corrida["tramos"] if t.get("ganadora", {}).get("veces_azar_rango95")
               and not str(t.get("lectura_del_tramo", "")).startswith("descriptiva")]
@@ -334,8 +339,8 @@ def figura_prueba_final(resultados, destino):
                      f"contra {pct(azar).removesuffix(' %')} al azar",
                 f"Veces el azar de la ganadora, {principal['calificador']}.\nRango del 95 % por bootstrap de días; "
                 f"lectura de la prueba completa: {principal['lectura']}.")
-    _pie(fig, "Corrida única del preregistro acordado. El tramo >260 (cupo ~8) es solo descriptivo y no se grafica. "
-              "El límite inferior de la prueba completa queda cerca de 1×.")
+    _pie(fig, "Lectura preregistrada de la solución; las demás lecturas están en prueba-final.json. "
+              "El tramo >260 (cupo ~8) es solo descriptivo y no se grafica.")
     leyenda = (f"Veces el azar de la ganadora ({_nombre(principal['alternativa'])}) en la prueba final, por tramo: "
                + "; ".join(f"{t.lower()} {veces(r['veces_azar'])} ({veces(r['veces_azar_rango95'][0])} a "
                            f"{veces(r['veces_azar_rango95'][1])})" for t, r in filas)
@@ -523,8 +528,8 @@ def diagrama_proceso(destino):
     ax.plot([xs[5] + w / 2, xs[5] + w / 2], [y, 2.75], color=EJE, linewidth=1)
     ax.text(xs[5] + w, 2.6, notas, ha="right", va="top", fontsize=9.5, color=TINTA_2, linespacing=1.5,
             multialignment="right")
-    # Resultados que vuelven a QLS y alimentan el recálculo.
-    ax.text(xs[6] + 0.25, 2.6, "Resultado a QLS:\nentra al recálculo\ncon Día ≤ t−5", ha="left", va="top",
+    # Resultados que vuelven a QLS y alimentan el reentrenamiento.
+    ax.text(xs[6] + 0.25, 2.6, "Resultado a QLS:\nentra al reentrenamiento\ncon Día ≤ t−5", ha="left", va="top",
             fontsize=9.5, color=TINTA_2, linespacing=1.5)
     ax.plot([xs[6] + w / 2, xs[6] + w / 2], [y, 2.75], color=EJE, linewidth=1)
     ax.text(0.5, 0.45, "La herramienta predictiva no cambia el proceso ni el cupo: cambia qué unidades se "
@@ -540,25 +545,25 @@ def diagrama_proceso(destino):
 def diagrama_solucion(destino):
     fig, ax = _lienzo()
     ax.text(0.5, 8.45, "Cómo funciona la solución cada día", fontsize=16, fontweight="bold", color=TINTA)
-    ax.text(0.5, 7.95, "Entradas, recálculo diario y salidas. El código de catálogo es el único predictor.",
+    ax.text(0.5, 7.95, "Entradas, modelo que se reentrena cada 5 días y salidas. Predictor: el código de catálogo y "
+            "sus atributos.",
             fontsize=10, color=TINTA_2)
-    columnas = {"Entradas": 0.5, "Recálculo diario": 5.9, "Salidas": 11.3}
+    columnas = {"Entradas": 0.5, "Modelo (cada 5 días)": 5.9, "Salidas": 11.3}
     for titulo, x in columnas.items():
         ax.text(x, 7.25, titulo.upper(), fontsize=9.5, fontweight="bold", color=APAGADO)
     entradas = [("Programa del día", "desde producción: código de\ncatálogo de cada unidad"),
                 ("Cupo diario", "lo fija Calidad de Planta"),
                 ("Resultados de auditorías", "desde QLS, solo con Día ≤ t−5"),
-                ("Catálogo de códigos", "mercado de destino y agrupación")]
+                ("Catálogo de códigos", "mercado, motor, tracción y versión")]
     ew, eh, egap, ey0 = 4.2, 1.2, 0.35, 6.9
     ys = [ey0 - eh - i * (eh + egap) for i in range(len(entradas))]
     for (texto, detalle), ey in zip(entradas, ys):
         _caja(ax, 0.5, ey, ew, eh, texto, detalle=detalle, tamano=11)
-    # Recálculo diario.
+    # Modelo que se reentrena cada 5 días.
     rx, rw, ry, rh = 5.9, 4.3, ys[-1], ey0 - ys[-1]
     ax.add_patch(FancyBboxPatch((rx, ry), rw, rh, boxstyle="round,pad=0,rounding_size=0.15", facecolor=SUPERFICIE,
                                 edgecolor=TINTA_2, linewidth=1.2))
-    pasos = [("Tasa de calibración por código", "la alternativa elegida en validación;\nsin historial: tasa general "
-              "o de su mercado"),
+    pasos = [("Tasa de calibración por código", "CatBoost con el código y sus atributos,\nreentrenado cada 5 días"),
              ("Mínimo por código", "rotación de auditorías para seguir\naprendiendo de todos los códigos"),
              ("Detector de cambios", "CUSUM por código: avisa si un\ncódigo empeora o mejora")]
     pw, ph, pgap = rw - 0.5, 1.45, 0.3
@@ -595,12 +600,12 @@ def diagrama_solucion(destino):
     _flecha(ax, (rx + rw, sy2 + sh2 / 2), (sx, sy2 + sh2 / 2))
     _flecha(ax, (rx + rw, sy3 + (sy2 - 0.35 - sy3) / 2), (sx, sy3 + (sy2 - 0.35 - sy3) / 2))
     ax.text(0.5, 0.45, "Los analistas auditan lo sugerido en la playa de despacho; esos resultados vuelven a QLS "
-            "y entran al recálculo con 5 días de margen.", fontsize=9.5, color=TINTA_2)
+            "y entran al reentrenamiento con 5 días de margen.", fontsize=9.5, color=TINTA_2)
     return {"nombre": "diagrama_solucion", "archivos": _guardar(fig, destino, "diagrama_solucion"),
             "fuentes": ["docs/plan-de-accion.md (contrato común, P5, P6 y P8)"],
             "leyenda": "Entradas (programa del día, cupo diario de Calidad de Planta, resultados de auditorías "
-                       "con Día ≤ t−5 desde QLS y catálogo), recálculo diario (tasa por código de la alternativa "
-                       "elegida en validación, mínimo por código y detector de cambios) y salidas (hoja de "
+                       "con Día ≤ t−5 desde QLS y catálogo), modelo que se reentrena cada 5 días (tasa por código "
+                       "que estima CatBoost con el código y sus atributos, mínimo por código y detector de cambios) y salidas (hoja de "
                        "códigos prioritarios en planilla e imprimible con la lista de unidades sugeridas, y "
                        "«dónde mirar» si se sostiene)."}, None
 

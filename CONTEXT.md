@@ -53,7 +53,7 @@ Propuesta de evolución de la hoja de códigos prioritarios, a partir del feedba
 _Avoid_: Probabilidad de la unidad; usarlo antes de medir su aporte frente al catálogo solo; presentarlo como resultado obtenido.
 
 **Tasa reciente del código**:
-Proporción CALIBRADA entre los VIN auditados de un código de catálogo en una ventana cuyos resultados ya se conocen según el margen de disponibilidad. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo. En la opción elegida (tasa fija) no se recalcula a diario: se revisa periódicamente y el detector de cambios avisa entre revisiones (decisión del 30/09, [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)); la periodicidad está por fijar. El nombre «reciente» y la columna «Tasa reciente» de la hoja se conservan hasta ajustar el código.
+Proporción CALIBRADA esperada entre los auditados de un código de catálogo, estimada solo con resultados ya conocidos según el margen de disponibilidad. Es una tasa de la versión y el mercado, no la probabilidad de un vehículo. En la solución elegida la estima **CatBoost con el código y sus atributos** (mercado, motor, tracción y versión), que se reentrena cada 5 días con calendario fijo; el detector de cambios avisa entre reentrenamientos. En la primera etapa era una tasa fija por código ([cómo se iteró](docs/entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución); [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)). El nombre «reciente» y la columna «Tasa reciente» de la hoja vienen de esa etapa.
 _Avoid_: Probabilidad de la unidad, score.
 
 **VIN elegible para Auditoría Adicional**:
@@ -78,8 +78,8 @@ Tramo de VIN, anterior a la prueba final, que se usa para comparar alternativas 
 _Avoid_: Llamarlo «prueba».
 
 **Prueba final**:
-Tramo de VIN posterior a la validación, sobre el que la alternativa elegida y congelada se evalúa una sola vez frente al azar.
-_Avoid_: Elegir o ajustar una alternativa mirando su resultado.
+Tramo de VIN posterior a la validación, sobre el que una alternativa elegida y congelada se evalúa frente al azar, solo con un preregistro. Cada lectura posterior a la primera es más débil, porque se acuerda conociendo las anteriores. En este proyecto se leyó tres veces: tasa fija, CatBoost y Random Forest.
+_Avoid_: Elegir o ajustar una alternativa mirando su resultado; presentar una lectura posterior como si fuera la única.
 
 **Preregistro**:
 Registro versionado, hecho antes de leer la prueba final, de todo lo que se va a leer en ella: la alternativa elegida con sus parámetros, la configuración de cada pieza del diferencial, las semillas y el hash de la fuente. Lo que no figura en el preregistro no se lee en la prueba final.

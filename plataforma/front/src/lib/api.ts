@@ -6,7 +6,7 @@ export interface Modelo {
 }
 export type ClaveModelo = 'rf' | 'catboost' | 'tasa_fija'
 export interface Meta {
-  validacion: Par; modelos: Modelo[]; fuente: { csv: string; catalogo: string }
+  validacion: Par; modelos: Modelo[]; demo: boolean; fuente: { csv: string; catalogo: string }
   programa: { desde: number; cada: number }
 }
 export interface Version { numero: number; entrenado_hasta: number; dia: number; decidido_por: string; resultados_usados: number }

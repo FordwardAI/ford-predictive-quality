@@ -6,7 +6,7 @@ Borrador para la sección 3 del Informe (E2) y el separador 03 de la presentaci�
 
 ## De qué está hecha la solución
 
-Un script de Python con bibliotecas de código abierto (versiones fijadas en `requirements.txt`) que lee una exportación de QLS, el catálogo, el programa del día y el cupo, y produce una planilla y un imprimible. **No usa LLM ni servicios pagos**, no necesita GPU y no requiere nube ([plan][plan-fact]; [seguridad y privacidad](02-3-seguridad-privacidad.md)). No tiene costo de licencias. La evolución en tiempo real en el GCP de Ford tiene su propio costo de nube, del orden de USD 100 a 200 por mes a precios de lista, estimado en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#costo-de-la-nube-orden-de-magnitud).
+Una aplicación de Python con bibliotecas de código abierto (versiones fijadas en `requirements.txt`; [plataforma](../../plataforma/README.md)). Lee una exportación de QLS, el catálogo, el programa del día y el cupo, reentrena el modelo CatBoost cada 5 días y produce la hoja en pantalla, planilla e imprimible. **No usa LLM ni servicios pagos**, no necesita GPU y no requiere nube ([plan][plan-fact]; [seguridad y privacidad](02-3-seguridad-privacidad.md)). No tiene costo de licencias. La evolución en tiempo real en el GCP de Ford tiene su propio costo de nube, del orden de USD 100 a 200 por mes a precios de lista, estimado en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#costo-de-la-nube-orden-de-magnitud).
 
 Tiempo de una corrida diaria (hoja del día con la tasa vigente) en una notebook (Apple M1 Pro, medido el 29/09/2026): unos 2,2 s para leer el CSV completo y verificar su hash, y 0,2 s para armar la hoja del día (ranking, cantidades, planilla, imprimible y control de que no salga ningún VIN). El plan lo estima en segundos, porque con el código como predictor el cálculo es una tabla de tasas por código ([plan][plan-fact]).
 
@@ -15,9 +15,10 @@ Tiempo de una corrida diaria (hoja del día con la tasa vigente) en una notebook
 | Qué | Quién | Costo |
 | --- | --- | --- |
 | Automatizar la entrada: exportación diaria de QLS con resultados de Auditoría Adicional, y programa del día desde producción | TI y Calidad de Planta | Horas internas de Ford. No las estimamos: dependen de sus sistemas |
-| Instalar el script en una notebook o un servidor de planta | TI | Horas internas; el equipo existente alcanza (ver escenarios) |
+| Instalar la plataforma en una notebook o un servidor de planta | TI | Horas internas; el equipo existente alcanza (ver escenarios) |
 | Capacitar a los analistas en la hoja | Calidad de Planta | Una sesión corta: la hoja está pensada para usarse sin explicación técnica ([alcance de entrega][alc-ent], E3) |
 | Etapa inicial con **días de control** | Calidad de Planta | Sin auditorías extra: los días de control usan el mismo cupo, al azar como hoy ([base QLS][qls], punto 5) |
+| Evolución en tiempo real (opcional, en el GCP de Ford) | TI | Pub/Sub, BigQuery, Dataflow, Cloud Run y Cloud SQL al volumen de planta: del orden de USD 100 a 200 por mes a precios de lista. El costo principal es integrar y validar las fuentes ([costos en GCP](05-1-scoring-fin-de-linea.md#costo-de-la-nube-orden-de-magnitud)) |
 
 Fórmula para Ford: **costo de implementación = horas de integración × costo por hora + horas de capacitación × costo por hora**.
 
@@ -25,14 +26,14 @@ Fórmula para Ford: **costo de implementación = horas de integración × costo 
 
 | Qué | Consumo |
 | --- | --- |
-| Cómputo de la hoja del día y de la revisión de la tasa | Una corrida por día: unos 2,4 s en una notebook (lectura del CSV 2,2 s + hoja 0,2 s) |
+| Cómputo de la hoja del día y del reentrenamiento cada 5 días | Una corrida por día: unos 2,4 s en una notebook (lectura del CSV 2,2 s + hoja 0,2 s) |
 | Almacenamiento | La exportación de QLS y la hoja del día. La base de todo el período ocupa 54,6 MB en CSV ([población y etiquetas][pob]) |
 | Impresión o planilla | Una hoja de una página por día |
 | Auditorías | **Ninguna adicional**: el cupo lo sigue fijando Calidad de Planta |
 
 ## 3. Mantenimiento
 
-- Revisar periódicamente la opción elegida con los resultados nuevos. La prueba de concepto ya trae el comando para volver a evaluar sin fuga ([`solucion/README.md`][sol]).
+- El modelo se reentrena solo cada 5 días con los resultados nuevos; nadie elige el momento. Revisar periódicamente que la opción elegida siga siendo la mejor: la prueba de concepto ya trae el comando para volver a evaluar sin fuga ([`solucion/README.md`][sol]).
 - Atender las alertas del **detector de cambios** por código (sección 4).
 - Actualizar el catálogo cuando aparezcan códigos nuevos o Ford publique la subcategorización. Un código nuevo funciona desde el primer día con la tasa general o la de su mercado ([plan][plan-reg]).
 - Actualizar dependencias de software de forma controlada, con versiones fijadas.
@@ -51,7 +52,7 @@ Encendida todo el mes (730 horas), una `t3.small` en São Paulo cuesta 730 × 0,
 
 | Escenario | Dónde corre | Cómputo | Qué cambia con un modelo más pesado |
 | --- | --- | --- | --- |
-| **Una línea** | Una notebook existente de Calidad | Una corrida diaria de unos 2,4 s | La opción elegida en validación es la tasa fija: no hay modelo que reentrenar. Si en una revisión futura ganara un modelo reentrenado, la corrida sumaría reentrenar sobre unas decenas de miles de VIN, sin GPU (como referencia, evaluar los 18 modelos de ML en validación, con 8 reentrenamientos cada uno, llevó unos 50 s en la misma notebook) |
+| **Una línea** | Una notebook existente de Calidad | Una corrida diaria de unos 2,4 s | CatBoost se reentrena cada 5 días sobre unas decenas de miles de VIN, sin GPU. Como referencia, evaluar los 18 modelos de ML en validación, con 8 reentrenamientos cada uno, llevó unos 50 s en la misma notebook |
 | **Una planta** | Un servidor de planta existente, o una VM chica como las de la tabla | Una corrida por línea y por día | Igual que arriba, por línea |
 | **Varias plantas** | Un servidor por planta o uno central que corre una vez por planta; cada planta con su catálogo y su cupo | Crece en proporción a la cantidad de plantas: sigue siendo una tabla de tasas por código por planta | El reentrenamiento se puede programar fuera del turno |
 
@@ -69,7 +70,7 @@ A cupo fijo, cualquier par de costos positivos ordena igual a las alternativas: 
 
 La diferencia de precisión en puntos porcentuales equivale a cuántas calibraciones más se encuentran cada 100 auditorías.
 
-**Sobre la base ficticia**, la diferencia de la opción elegida en la prueba final es de 2,7 puntos porcentuales (10,9 % contra 8,2 % al azar; rango del 95 % de la diferencia: de 0,07 a 5,2 puntos), es decir, unas 2,7 calibraciones más cada 100 auditorías, entre auditados con actividad QLS, prueba final ≥200, base ficticia, n = 13.312 VIN. **Esa cifra no es un ahorro de planta**: la base es ficticia y solo cubre unidades con actividad QLS ([validación][val], punto 8; [base QLS][qls], hipótesis). Si la tasa de las unidades sin actividad QLS fuera distinta, la diferencia en planta también lo sería. La forma de medirla es la etapa con días de control.
+**Sobre la base ficticia**, la diferencia de CatBoost en la prueba final es de 3,7 puntos porcentuales (12,0 % contra 8,2 % al azar; rango del 95 % de la diferencia: de 1,2 a 6,3 puntos), es decir, unas 3,7 calibraciones más cada 100 auditorías, entre auditados con actividad QLS, prueba final ≥200, base ficticia, n = 13.312 VIN. Es una lectura más débil, acordada conociendo la de la tasa fija, que da 2,7 puntos ([cómo se iteró](02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)). **Esa cifra no es un ahorro de planta**: la base es ficticia y solo cubre unidades con actividad QLS ([validación][val], punto 8; [base QLS][qls], hipótesis). Si la tasa de las unidades sin actividad QLS fuera distinta, la diferencia en planta también lo sería. La forma de medirla es la etapa con días de control.
 
 **Costo total de propiedad, para comparar con el beneficio:** implementación (horas internas) + operación (casi nula en equipo existente, o una VM chica) + mantenimiento (horas internas de revisión).
 

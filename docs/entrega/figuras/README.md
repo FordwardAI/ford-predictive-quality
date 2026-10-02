@@ -54,7 +54,7 @@ Las figuras de resultados usan solo los agregados de `solucion/resultados/` y ci
 
 - Archivos: [`veces_azar_prueba_final.png`](veces_azar_prueba_final.png), [`veces_azar_prueba_final.svg`](veces_azar_prueba_final.svg)
 - Fuente: prueba-final.json
-- Leyenda: Veces el azar de la ganadora (tasa fija (≤ 194)) en la prueba final, por tramo: prueba completa 1,32× (1,01× a 1,64×); prueba ≤260 1,33× (1,04× a 1,65×); sensibilidad con la cohorte posterior a 260 1,33× (1,03× a 1,65×). Entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN.
+- Leyenda: Veces el azar de la ganadora (CatBoost con atributos del código reentrenado cada 5 d, vida media 15 d, semilla 1) en la prueba final, por tramo: prueba completa 1,45× (1,14× a 1,76×); prueba ≤260 1,47× (1,16× a 1,81×); sensibilidad con la cohorte posterior a 260 1,46× (1,15× a 1,77×). Entre auditados con actividad QLS, prueba completa, base ficticia, n = 13312 VIN.
 
 ## diagrama_proceso
 
@@ -70,4 +70,4 @@ Las figuras de resultados usan solo los agregados de `solucion/resultados/` y ci
 
 - Archivos: [`diagrama_solucion.png`](diagrama_solucion.png), [`diagrama_solucion.svg`](diagrama_solucion.svg)
 - Fuente: docs/plan-de-accion.md (contrato común, P5, P6 y P8)
-- Leyenda: Entradas (programa del día, cupo diario de Calidad de Planta, resultados de auditorías con Día ≤ t−5 desde QLS y catálogo), recálculo diario (tasa por código de la alternativa elegida en validación, mínimo por código y detector de cambios) y salidas (hoja de códigos prioritarios en planilla e imprimible con la lista de unidades sugeridas, y «dónde mirar» si se sostiene).
+- Leyenda: Entradas (programa del día, cupo diario de Calidad de Planta, resultados de auditorías con Día ≤ t−5 desde QLS y catálogo), modelo que se reentrena cada 5 días (tasa por código que estima CatBoost con el código y sus atributos, mínimo por código y detector de cambios) y salidas (hoja de códigos prioritarios en planilla e imprimible con la lista de unidades sugeridas, y «dónde mirar» si se sostiene).

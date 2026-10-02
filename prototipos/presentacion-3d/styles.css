@@ -5,7 +5,7 @@
    A 1920×1080: titular 108 · bajada 34 · cifra 100 · etiqueta de cifra 30 ·
    tarjeta 32/28 · callout 32/26 · antetítulo 22 · leyenda y pie 20 · nada < 18.
    Columnas: texto ≈ 46 % de un lado, figura o vehículo del otro, gutter 96. */
-@import url("../plataforma-web/tokens.css");
+@import url("tokens.css");
 
 :root {
   --u: min(calc(100vw / 1920), calc(100vh / 1080));

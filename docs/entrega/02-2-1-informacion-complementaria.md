@@ -4,12 +4,12 @@ Borrador para la sección 2.2.1 del Informe (E2). El template pide aquí «todos
 
 ## La hoja de códigos prioritarios (E3)
 
-La ficha valora «un dashboard o reporte accionable» que presente las predicciones, identifique las unidades priorizadas y muestre las variables de mayor impacto ([ficha técnica][ficha]). Nuestra respuesta para el 2/10 es un **reporte estático diario**: la hoja, en planilla e imprimible ([salida para Calidad][sal], punto 7; [uso de la agrupación][agr], punto 2). Para la implementación proponemos además una **plataforma web** que muestra la hoja, el detalle por código, las alertas, la evidencia del modelo y el seguimiento de los días de control; en la presentación se muestra con un prototipo de pantallas ([trabajo futuro](05-trabajo-futuro.md#7-plataforma-web); [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)).
+La ficha valora «un dashboard o reporte accionable» que presente las predicciones, identifique las unidades priorizadas y muestre las variables de mayor impacto ([ficha técnica][ficha]). Nuestra respuesta es la **hoja diaria**, en pantalla, planilla e imprimible ([salida para Calidad][sal], punto 7; [uso de la agrupación][agr], punto 2), dentro de una **plataforma web** que ya funciona como MVP ([`plataforma/`][plat]). Entran las unidades de Gate Release y se arma la hoja con la playa de los últimos 5 días. Los analistas eligen en la playa por código, vuelve el resultado de la auditoría con el acierto por unidad y hay un reporte para la línea. El modelo CatBoost se actualiza solo cada 5 días. Usa una fuente simulada sobre la base ficticia, con el mismo contrato de entradas que tendría la conexión con Ford ([trabajo futuro](05-trabajo-futuro.md#7-plataforma-web); [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)).
 
 ### Cómo se usa
 
-1. **Al inicio del día**, un script recibe el programa de producción (qué códigos y cuántas unidades) y el cupo que fija Calidad de Planta ([plan][plan-inc], incompatibilidad 7).
-2. Toma la tasa vigente de cada código (la de la última revisión, con resultados de auditoría ya conocidos: Día ≤ t−5) y arma la hoja.
+1. **Al inicio del día**, la plataforma recibe las unidades que pasaron Gate Release (qué códigos y cuántas unidades) y el cupo que fija Calidad de Planta ([plan][plan-inc], incompatibilidad 7).
+2. Toma la tasa de cada código que estima la versión vigente del modelo (entrenada con resultados ya conocidos, Día ≤ t−5, y renovada cada 5 días) y arma la hoja.
 3. El **equipo de analistas** la lleva en sus rondas por la playa de despacho. En cada ronda toma unidades de los códigos con cantidad pendiente, leyendo el código en el parabrisas ([operación][ope], decisiones 1 y 2).
 4. Si un código no llega a la playa, la cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron. Solo se completa al azar si se agota el ranking ([CONTEXT.md][ctx], «Hoja de códigos prioritarios»).
 
@@ -28,9 +28,9 @@ Nunca muestra «probabilidad de la unidad» ni un score por vehículo: dentro de
 
 **Formatos:** planilla (CSV/XLSX) e imprimible de una página. El informe la presenta como «formato adaptable a la operación», porque no se sabe cómo la usaría Ford ([uso de la agrupación][agr], punto 2).
 
-**Día que se muestra:** el último día de la prueba ≤260, generado después de la corrida única ([plan][plan-piezas], P8). Captura: se toma de la salida local fuera de Git (`captura-hoja-dia-260.png`, junto a la hoja); no se versiona porque muestra tasas por código.
+**Día que se muestra:** el último día de la prueba ≤260, generado con la lectura 1 (tasa fija, el predictor de la primera etapa) ([plan][plan-piezas], P8). En la plataforma, la misma hoja se arma con CatBoost. Captura: se toma de la salida local fuera de Git (`captura-hoja-dia-260.png`, junto a la hoja); no se versiona porque muestra tasas por código.
 
-**Hoja de desarrollo (Día 190, validación).** Con un programa simulado a partir de las unidades de ese día (identificadores ficticios): 297 unidades de 28 códigos, cupo de 14 y 14 unidades sugeridas, toda la cantidad sugerida en un solo código, más 2 filas de mínimo por código (P = 40), sin cupo sin cubrir y sin ningún VIN en las salidas ([`p8.json`][p8]). Entre auditados con actividad QLS, validación 155–194, base ficticia. Que un solo código concentre el cupo es lo esperable cuando su tasa se destaca: por eso existen las filas de mínimo por código.
+**Hoja de desarrollo (Día 190, validación, predictor de la primera etapa).** Con un programa simulado a partir de las unidades de ese día (identificadores ficticios): 297 unidades de 28 códigos, cupo de 14 y 14 unidades sugeridas, toda la cantidad sugerida en un solo código, más 2 filas de mínimo por código (P = 40), sin cupo sin cubrir y sin ningún VIN en las salidas ([`p8.json`][p8]). Entre auditados con actividad QLS, validación 155–194, base ficticia. Que un solo código concentre el cupo es lo esperable cuando su tasa se destaca: por eso existen las filas de mínimo por código.
 
 **Criterio de aceptación:** una persona de Calidad podría decidir qué auditar mirándola, sin explicación técnica ([alcance de entrega][alc-ent], E3).
 
@@ -38,13 +38,13 @@ Nunca muestra «probabilidad de la unidad» ni un score por vehículo: dentro de
 
 ![Proceso y punto donde entra la hoja](figuras/diagrama_proceso.png)
 
-*Figura: verificación de calidad (QLS) → Gate Release → playa de despacho (0 a 5 días; aquí los analistas eligen con la hoja) → Auditoría Adicional → OK o CALIBRADA. El resultado vuelve, con 5 días de margen, a la siguiente revisión de la tasa del código.*
+*Figura: verificación de calidad (QLS) → Gate Release → playa de despacho (0 a 5 días; aquí los analistas eligen con la hoja) → Auditoría Adicional → OK o CALIBRADA. El resultado vuelve, con 5 días de margen, al siguiente reentrenamiento del modelo.*
 
 ## Diagrama de la solución
 
 ![Diagrama de la solución](figuras/diagrama_solucion.png)
 
-*Figura: entradas (CSV de QLS con resultados de auditoría, catálogo, programa del día, cupo) → recálculo diario de la tasa reciente del código con Día ≤ t−5 → hoja de códigos prioritarios (planilla e imprimible) → auditorías del día → resultados que alimentan el recálculo siguiente, incluido el mínimo por código y el detector de cambios.*
+*Figura: entradas (CSV de QLS con resultados de auditoría, catálogo, programa del día, cupo) → tasa del código que estima CatBoost, reentrenado cada 5 días con Día ≤ t−5 → hoja de códigos prioritarios (planilla e imprimible) → auditorías del día → resultados que alimentan el reentrenamiento siguiente, incluido el mínimo por código y el detector de cambios.*
 
 ## Qué va en el .zip (E4)
 
@@ -56,11 +56,14 @@ Todo lo que no entra en el informe y permite reproducir sus números. **Sin dato
 | `solucion/pruebas/` | Pruebas con datos sintéticos, que no necesitan el CSV |
 | `requirements.txt` y `.python-version` | Entorno fijado: Python 3.13 y versiones exactas de cada paquete |
 | `solucion/resultados/*.json` | Agregados por alternativa y por día, sin VIN ni tasas por código |
-| `solucion/preregistro.json` | Preregistro de la prueba final, acordado el 30/09 en sesión conjunta ([#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33)) |
-| `research/` | Auditoría del CSV, particiones y agrupación del catálogo, con sus pruebas |
-| Hoja completa del día mostrado | Planilla (CSV/XLSX) e imprimible (HTML) del último día ≤260 (Día 260, generada por la corrida única; queda fuera de Git y entra al .zip) |
+| `solucion/preregistro*.json` | Los tres preregistros de la prueba final (tasa fija, CatBoost y Random Forest) y `solucion/resultados/prueba-final.json` con sus lecturas ([cómo se iteró](02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)) |
+| `research/` | Auditoría del CSV, particiones, agrupación del catálogo y estudios exploratorios, con sus pruebas |
+| `plataforma/` | MVP de la plataforma web (servidor Python y build de la interfaz); se levanta con el CSV y el catálogo locales |
+| `prototipos/presentacion-3d/` | La presentación, como sitio estático |
+| `docs/` | Borradores del informe, preguntas del jurado, diccionario de datos y documentación |
+| Hoja de códigos prioritarios | Planilla (CSV/XLSX) e imprimible (HTML) de la hoja de desarrollo del Día 190 (validación), que se regenera con el comando único. La del Día 260 se generó en la sesión de la prueba final y no se vuelve a generar, porque requiere leer sus etiquetas |
 | Figuras | Todas las de [`figuras/`](figuras/) (PNG y SVG), regeneradas con el comando único |
-| README de reproducción | Cómo correr todo desde cero con las rutas del CSV y del catálogo, que se verifican por SHA-256 |
+| README de reproducción (`LEEME.md`) | Cómo correr todo desde cero con las rutas del CSV y del catálogo, que se verifican por SHA-256, y cómo levantar la plataforma y la presentación |
 
 La hoja tiene tasas reales por código de la base ficticia: por eso no se versiona en el repo y va solo en el .zip ([`solucion/README.md`][sol]).
 
@@ -68,6 +71,7 @@ La hoja tiene tasas reales por código de la base ficticia: por eso no se versio
 [ctx]: ../../CONTEXT.md
 [sol]: ../../solucion/README.md
 [p8]: ../../solucion/resultados/p8.json
+[plat]: ../../plataforma/README.md
 [alc]: ../alcance-entrega.md#qué-exigen-los-templates
 [alc-ent]: ../alcance-entrega.md#entregables
 [plan-inc]: ../plan-de-accion.md#incompatibilidades-y-cómo-se-resuelven

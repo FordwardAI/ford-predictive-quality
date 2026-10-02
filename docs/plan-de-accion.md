@@ -1,5 +1,7 @@
 # Plan de acción para el Trials Day
 
+> **Documento histórico.** Es la especificación de construcción acordada el 29/09/2026 y se conserva porque los borradores enlazan sus anclas. Lo que cambió después: se eligió por precisión y la solución es **CatBoost con atributos del código, reentrenado cada 5 días**; la prueba final se leyó tres veces, y la plataforma se construyó como MVP. Lo vigente está en el [README](../README.md) y en [`docs/entrega/`](entrega/README.md) ([cómo se iteró la solución](entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)).
+
 Documento de [¿La especificación permite repartir el trabajo sin decisiones críticas pendientes?](https://github.com/FordwardAI/ford-predictive-quality/issues/13), el último ticket del [mapa de decisiones](https://github.com/FordwardAI/ford-predictive-quality/issues/1). Revisa el mapa, los datos, los templates y la consigna, y los convierte en trabajo ejecutable. **Estado: acordado el 29/09/2026 con Facundo-Lanusse, que cerró el ticket.** El trabajo se sigue en el issue [Construir la prueba de concepto y los entregables para el Trials Day](https://github.com/FordwardAI/ford-predictive-quality/issues/33).
 
 El detalle de cada decisión vive en su ticket. Este documento no lo repite: dice qué quedó vigente, qué se enmendó, con qué números se trabaja y qué hay que construir.

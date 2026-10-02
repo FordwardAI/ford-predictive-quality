@@ -5,6 +5,7 @@ Desde el 18 de septiembre de 2026, la fuente vigente es **Dataset QLS Inspecció
 - Tamaño: 54.586.528 bytes.
 - SHA-256: `a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b`.
 - UTF-8, delimitador coma y comillas dobles; finales de línea CRLF.
+- Qué es cada columna: [diccionario de datos](diccionario-datos.md).
 - Primer registro CSV: descripciones. Segundo: 41 nombres técnicos únicos. Tercero: primer evento. No usar las descripciones como encabezados.
 - Las horas usan coma decimal dentro de campos entrecomillados; se conservan como texto exacto durante la auditoría, sin redondearlas.
 - Faltantes observados: campos vacíos y nueve `#N/A` en Fecha Reparación. El lector también reconoce `NaN` para reproducir el Markdown histórico.
@@ -73,4 +74,4 @@ Las 391.616 celdas de horas difieren y son compatibles con el redondeo del Markd
 
 El CSV conserva espacios finales en algunos campos; también hay diferencias entre espacios comunes y no separables del Markdown. La comparación identifica esas diferencias, pero no limpia ni sobrescribe el CSV. Las descripciones finales continúan desalineadas: posición 38 describe el resultado y nombra Desensamblar; 39 tiene descripción vacía y nombra Código de Catálogo; 40 describe catálogo y nombra Auditoría Adicional.
 
-No se verificó equivalencia con `table.xlsx`. Las dudas sobre población, disponibilidad temporal y DIA_260 siguen abiertas. Cualquier nueva entrega debe auditarse y compararse antes de trasladar estos resultados.
+No se verificó equivalencia con `table.xlsx`. Ford respondió sobre la población el 29/09: la base reúne solo auditados con actividad QLS ([#29](https://github.com/FordwardAI/ford-predictive-quality/issues/29)). La disponibilidad temporal del historial y la causa del patrón posterior a DIA_260 siguen abiertas. Cualquier nueva entrega debe auditarse y compararse antes de trasladar estos resultados.

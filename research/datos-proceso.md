@@ -1,5 +1,7 @@
 # Datos de proceso para ampliar la priorización de Auditoría Adicional
 
+> **Nota del 02/10/2026.** La solución presentada es **CatBoost con atributos del código, reentrenado cada 5 días**, y la prueba final se leyó tres veces: tasa fija, CatBoost y Random Forest ([cómo se iteró la solución](../docs/entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)). Este informe conserva su análisis original; donde dice «solución vigente» o «tasa fija acordada», se refiere a la primera etapa.
+
 Evaluación solicitada por Facundo después de integrar la [PR #48](https://github.com/FordwardAI/ford-predictive-quality/pull/48), merge `43d703d`, el 30/09/2026 a las 21:06 de Argentina. Seguimiento en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33). Es una propuesta de investigación y captura; no adopta un modelo ni modifica el preregistro.
 
 ## Conclusión

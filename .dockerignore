@@ -1,0 +1,13 @@
+.git
+.venv
+.claude
+.agents
+.scratch
+**/__pycache__
+**/.DS_Store
+plataforma/front/node_modules
+prototipos/presentacion-3d/assets/fuente
+datos
+*.csv
+*.xlsx
+*.pickle

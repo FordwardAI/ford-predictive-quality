@@ -1,8 +1,8 @@
 # Presentación 3D interactiva
 
-Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 20 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Sigue el [guion de la presentación](../../docs/entrega/guion-presentacion.md) y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
+Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 20 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Cada pantalla trae sus notas del orador y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
 
-Es un **complemento** de la presentación oficial (.pptx sobre el template de Ford), no la reemplaza. El contenido sale de los borradores de [`docs/entrega/`](../../docs/entrega/) y las cifras, de los agregados de [`solucion/resultados/`](../../solucion/resultados/).
+Es **la presentación** del equipo (E1). El contenido sale de los borradores de [`docs/entrega/`](../../docs/entrega/) y las cifras, de los agregados de [`solucion/resultados/`](../../solucion/resultados/).
 
 ## Cómo abrirlo
 
@@ -68,16 +68,15 @@ Con **movimiento reducido** activado en el sistema operativo no hay animaciones:
 
 ## Figuras, ilustraciones y capturas
 
-- **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (elección por precisión `seleccion`, particiones, veces el azar de CatBoost en la prueba final, comparación de alternativas en validación, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo cuando lo declara; `seleccion` y `veces_azar_prueba_final` no tienen respaldo (el SVG del informe muestra otra lectura) y, si no se pueden dibujar, la pantalla queda sin figura. Los colores salen de las variables `--figura-*` de `styles.css`.
+- **Figuras de datos:** [`figuras.js`](figuras.js) las dibuja como SVG oscuro desde los agregados de `solucion/resultados/*.json` (elección por precisión `seleccion`, particiones, veces el azar de CatBoost en la prueba final, comparación de alternativas en validación, dónde mirar, etiquetas parciales y detector). Si no puede, la pantalla usa el SVG de matplotlib de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) como respaldo cuando lo declara; `seleccion` y `veces_azar_prueba_final` no tienen respaldo y, si no se pueden dibujar, la pantalla queda sin figura. Los colores salen de las variables `--figura-*` de `styles.css`.
 - **Ilustraciones a mano:** `assets/ilustraciones/` (proceso, solución y esquemas sin datos de la hoja y de la plataforma), versionadas e insertadas en línea para que tomen los colores del tema.
-- **Capturas locales:** la hoja y la plataforma muestran tasas por código, así que sus capturas **no se versionan**. Se generan con `herramientas/capturar_plataforma.ps1` (Windows) o `herramientas/capturar_plataforma.sh`, que dejan `d-hoja.png`, `d-inicio.png`, `d-codigos.png` y `d-alertas.png` en `assets/local/` (fuera de Git); las pantallas del flujo (`plataforma-*` y `hoja`) usan `flujo-*.png` de `herramientas/capturar_flujo.sh`; la hoja también toma `assets/local/captura-hoja-dia-260.png` si existe. Sin ellas se ve el esquema sin números con un chip «Captura local pendiente».
+- **Capturas locales:** la hoja y la plataforma muestran tasas por código, así que sus capturas **no se versionan**. Las pantallas del flujo (`plataforma-*` y `hoja`) usan `flujo-*.png`, que genera `herramientas/capturar_flujo.sh` con la [plataforma](../../plataforma/README.md) y deja en `assets/local/` (fuera de Git); la hoja también toma `assets/local/captura-hoja-dia-260.png` si existe. Sin ellas se ve el esquema sin números con un chip «Captura local pendiente».
 
 ## Herramientas
 
 | Archivo | Para qué |
 | --- | --- |
 | `herramientas/capturar_flujo.sh` | Las capturas `flujo-*.png` de la plataforma (levanta su propio servidor, recorre los días 155 a 166 con CatBoost; necesita el CSV y el catálogo fuera del repo, `FORD_CSV` y `FORD_CATALOGO`) y las deja en `assets/local/` |
-| `herramientas/capturar_plataforma.ps1` / `.sh` | Capturas locales de la plataforma y de la hoja (necesitan `prototipos/plataforma-web/data.js`, que se genera con el CSV crudo fuera del repo) |
 | `herramientas/figuras-demo.html` | Revisar las figuras de `figuras.js` y las ilustraciones en tema oscuro y claro (`?solo=<id>&tema=claro`) |
 | `herramientas/renderizar.*` | Renders de la escena 3D para `?estatico=1`, portada y documentación |
 | `escena/demo.html` | Probar la escena sola. Parámetros: `?escena=<id>&p=<0..1>`, `?env=estudio\|room` (entorno de luz), `?calidad=alta\|baja\|auto`, `?modelo=procedural` (sin el GLB), `?reducido` (sin transiciones), `?orbita`, `?anclas=1` (mover las anclas de los hotspots y copiar el JSON desde la consola) y `?captura=1` (un cuadro sin interfaz, lo usa `renderizar.*`) |
@@ -102,7 +101,7 @@ Para usar el modelo 3D:
 
 ## Reglas de datos
 
-- Solo agregados ya versionados en el repo. Nunca VIN individuales, tasas por código de catálogo ni tasas por mercado de destino (`LOCATION_n`). No se lee `prototipos/plataforma-web/data.js`.
+- Solo agregados ya versionados en el repo. Nunca VIN individuales, tasas por código de catálogo ni tasas por mercado de destino (`LOCATION_n`).
 - Toda cifra en pantalla lleva su leyenda: «entre auditados con actividad QLS, [tramo], base ficticia, n = …».
 - No se dice «probabilidad de la unidad» ni se dan cifras de ahorro en dinero. La recomendación no cambia cuántas unidades se auditan: cambia cuáles.
 - La base es ficticia: las cifras no prueban impacto en planta.
@@ -146,13 +145,14 @@ De [`prueba-final.json`](../../solucion/resultados/prueba-final.json) se proyect
 | `figuras.js` | Figuras de datos en SVG |
 | `herramientas/` | Capturas locales, renders y revisión de figuras |
 | `escena/` | Escena 3D (three.js): vehículo, línea de producción y materiales |
-
-**Orden de la línea (`escena/fabrica.js`, `ESTACIONES`).** Carrocería → Pintura → Montaje → Gate Release → **Playa de despacho** → Auditoría Adicional, como en el proceso real. La playa es una grilla de pickups al costado de la línea (del lado opuesto a la cámara) que empieza en su estación y se extiende hacia adelante: la cámara mira hacia adelante y a la derecha, y el degradado del texto oscurece la izquierda, así que detrás del auto no se vería. Las unidades resaltadas son las seleccionadas (≈ 5 %), y de ahí el auto sigue al túnel de Auditoría Adicional. Para mover una estación se cambia su `x` en `ESTACIONES` (y `FIN_LINEA` si hace falta); el recorrido, la cámara y las duraciones se recalculan solos. Después hay que regenerar los renders del modo estático (`herramientas/renderizar.*`).
+| `tokens.css` | Tokens de la guía de marca de Ford (colores y tipografía) |
 | `contenido.js` | Textos, capítulos y notas del orador |
 | `cifras.js` | Lectura y formato de las cifras, con respaldo |
 | `verificar_cifras.py` | Prueba de los respaldos contra los JSON |
 | `assets/` | Modelo 3D opcional (`ranger.glb`), ilustraciones y renders; `assets/local/` (capturas) no se versiona |
 | `CREDITOS.md` | Licencias y atribuciones |
+
+**Orden de la línea (`escena/fabrica.js`, `ESTACIONES`).** Carrocería → Pintura → Montaje → Gate Release → **Playa de despacho** → Auditoría Adicional, como en el proceso real. La playa es una grilla de pickups al costado de la línea (del lado opuesto a la cámara) que empieza en su estación y se extiende hacia adelante: la cámara mira hacia adelante y a la derecha, y el degradado del texto oscurece la izquierda, así que detrás del auto no se vería. Las unidades resaltadas son las seleccionadas (≈ 5 %), y de ahí el auto sigue al túnel de Auditoría Adicional. Para mover una estación se cambia su `x` en `ESTACIONES` (y `FIN_LINEA` si hace falta); el recorrido, la cámara y las duraciones se recalculan solos. Después hay que regenerar los renders del modo estático (`herramientas/renderizar.*`).
 
 ## Pendientes para completar
 

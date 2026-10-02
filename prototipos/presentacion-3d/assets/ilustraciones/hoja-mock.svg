@@ -2,7 +2,7 @@
   <title id="il-hoja-titulo">Hoja de códigos prioritarios (esquema)</title>
   <desc id="il-hoja-desc">Esquema ilustrativo, sin datos, de la hoja de códigos prioritarios en una notebook: una fila por código con cantidad sugerida, tasa con rango, n, veces la tasa general, acumulado y mercado de destino, y el panel «Por qué este código». La captura real se carga localmente porque muestra tasas por código.</desc>
   <!-- Ilustración a mano: bloques esquemáticos, SIN números ni tasas. Columnas según
-       prototipos/plataforma-web/d-hoja.html. Colores por variables CSS «figura-…». -->
+       la hoja de solucion/hoja.py. Colores por variables CSS «figura-…». -->
   <style>
     .il-fondo { fill: var(--figura-fondo, #00142E); }
     .il-t { fill: var(--figura-texto, #FFFFFF); font-family: var(--figura-fuente, "Ford F-1", Roboto, Arial, sans-serif); }

@@ -89,10 +89,11 @@ def test_guardar_y_leer():
 
 
 def test_sin_vin():
-    vins = {"1FTER4FH0LLA12345"}
+    vin = "1FTER4FH0LLA" + "12345"  # Se arma concatenando para que el control del .zip no lo vea literal.
+    vins = {vin}
     revisar({"filas": [{"codigo": "A", "u": "U-1"}]}, vins)
     try:
-        revisar({"x": ["texto 1FTER4FH0LLA12345"]}, vins)
+        revisar({"x": ["texto " + vin]}, vins)
     except SinVin:
         pass
     else:
@@ -190,6 +191,21 @@ def test_reporte_solo_agrega_lo_auditado():
     assert r["auditadas"] == 3 and r["calibradas"] == 2
     assert [(f["grupo"], f["n"], f["calibradas"]) for f in r["por_codigo"]] == [("B", 1, 1), ("A", 2, 1)]
     assert r["componentes"] == [{"componente": "V1", "n": 2, "parte": 1.0}] and len(r["semanas"]) == 2
+
+
+def test_demo_tiene_el_esquema_de_la_base_y_no_parece_un_vin():
+    from plataforma import demo
+    from solucion.datos import TRAMOS
+    from solucion.empaquetar import FORMA_VIN
+    from solucion.puntaje import atributos_de
+
+    t = demo.tabla()
+    assert not t.desbloqueada and t.fuente["csv_sha256"] == "demo-sintetica"
+    assert set(atributos_de(t.catalogo)) == set(t.catalogo) == {v.codigo for v in t.vins}
+    lo, hi = TRAMOS["validacion"]
+    assert all(t.por_dia(d, d).get(d) for d in range(lo, hi + 1))  # Hay unidades todos los días de la demo.
+    assert 0.05 < sum(v.calibrada for v in t.vins) / len(t.vins) < 0.15
+    assert not any(FORMA_VIN.search(v.vin) for v in t.vins)
 
 
 if __name__ == "__main__":

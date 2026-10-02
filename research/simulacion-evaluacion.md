@@ -1,5 +1,7 @@
 # Simulación de un mundo con verdad conocida: ¿qué opción es mejor?
 
+> **Nota del 02/10/2026.** La solución presentada es **CatBoost con atributos del código, reentrenado cada 5 días**, y la prueba final se leyó tres veces: tasa fija, CatBoost y Random Forest ([cómo se iteró la solución](../docs/entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución)). Este informe conserva su análisis original; donde dice «solución vigente» o «tasa fija acordada», se refiere a la primera etapa.
+
 Responde a la pregunta del 01/10: si no se puede distinguir 77 de 71 aciertos en la prueba final, ¿se pueden evaluar mejor las opciones con datos sintéticos? **Es una simulación: no es evidencia sobre la planta. Solo Día < 195; la prueba final no se leyó; no es elegible ni entra al preregistro.** Código: [`simulacion.py`](../solucion/experimentos/simulacion.py). Agregados: [`simulacion.json`](../solucion/experimentos/resultados/simulacion.json). Fuente: CSV `a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b` y catálogo `89e5a9d9c4312a408f996bea3e170e44428827a458fa62d76936648e1733e047`. Unidad de análisis: VIN.
 
 ## Método

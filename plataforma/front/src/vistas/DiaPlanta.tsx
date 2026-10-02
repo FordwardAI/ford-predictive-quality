@@ -116,7 +116,7 @@ export function DiaPlanta() {
 
       {planta.modo === 'simulada' && (
         <section className="flex flex-col rounded-lg bg-ford-gray p-6">
-          <h2 className="text-lg">Fuente simulada · base ficticia</h2>
+          <h2 className="text-lg">Fuente simulada · {meta.demo ? 'demo sintética' : 'base ficticia'}</h2>
           <p className="mt-2">Hasta que haya conexión con Ford, la base se reproduce día por día con el mismo contrato:
             entran las unidades de Gate Release y, de 1 a 5 días después, los resultados de lo enviado.</p>
           <div className="mt-auto flex flex-wrap items-center gap-3 pt-6">
@@ -125,7 +125,7 @@ export function DiaPlanta() {
             </Button>
             <Button variant="ghost" onClick={() => setReiniciar(true)} disabled={!!ocupado}>Reiniciar en el Día {planta.inicio}</Button>
           </div>
-          {t >= planta.fin && <p className="mt-3">La base ficticia llega hasta el Día {planta.fin}: no hay más días para simular.</p>}
+          {t >= planta.fin && <p className="mt-3">La {meta.demo ? 'demo' : 'base ficticia'} llega hasta el Día {planta.fin}: no hay más días para simular.</p>}
         </section>
       )}
       </div>

@@ -1,69 +1,84 @@
-# Ford Predictive Quality — organización del proyecto
+# Ford Predictive Quality — FordwardAI
 
-**Entrega: Trials Day, viernes 2 de octubre de 2026, Planta Pacheco (presentación de ~30 minutos y entregables al cierre, a las 15:00). Equipo FordwardAI: dos integrantes de informática y uno de industrial.**
+Solución del equipo **FordwardAI** (Mateo Serebrinsky, Máximo Georgalos y Facundo Lanusse, Universidad Austral) para el desafío *Data-Driven Predictive Quality* del Ford Innovation Challenge III. Se presentó en el Trials Day del 2 de octubre de 2026, en Planta Pacheco.
 
-El [mapa de decisiones](https://github.com/FordwardAI/ford-predictive-quality/issues/1) llegó a su destino el 29/09/2026: una especificación ejecutable. Lo que falta es construir, y eso está ordenado en el **[plan de acción](docs/plan-de-accion.md)**: piezas de trabajo, dependencias, parámetros y criterios de aceptación. No hay calendario interno ni responsables por persona: el equipo trabaja en conjunto.
+## La solución en un párrafo
 
-[Plan de acción](docs/plan-de-accion.md) · [Mapa canónico](https://github.com/FordwardAI/ford-predictive-quality/issues/1) · [Tablero del proyecto](https://github.com/orgs/FordwardAI/projects/1) · [Vocabulario](CONTEXT.md) · [Alcance de entrega](docs/alcance-entrega.md)
+Hoy el 5 % que va a Auditoría Adicional se elige al azar. Proponemos una **hoja de códigos prioritarios**: con el mismo cupo, dice qué códigos de catálogo buscar en la playa de despacho y cuántas unidades de cada uno. La tasa de cada código la estima **CatBoost con el código y sus atributos** (mercado, motor, tracción y versión), que se reentrena solo cada 5 días con lo auditado. Sobre la base ficticia, entre auditados con actividad QLS, en la prueba final (n = 13.312 VIN), de cada 100 elegidos se calibrarían **12,0** (rango del 95 %: 9,2–14,8), contra 8,2 al azar con el mismo cupo: 1,45 veces el azar.
 
-## Recorrido de entrega
+**La solución se iteró:**
+- **Primera etapa:** se elegía la alternativa más simple, y ganó una tasa fija por código (10,9 contra 8,2 en su lectura de la prueba final).
+- **Segunda etapa:** se pasó a elegir por precisión en cinco bloques de tiempo, y ganó CatBoost.
+- **Advertencia:** la lectura de CatBoost es más débil, porque se acordó conociendo la primera.
 
-- **Entradas:** CSV QLS y catálogo fuera del repo, identificados por SHA-256 en [datos locales](docs/datos-locales.md).
-- **Entorno y comandos:** [reproducción](solucion/README.md). Desde la raíz, con Python 3.13 y `requirements.txt`:
+La prueba final se leyó tres veces, y las tres lecturas están declaradas en [cómo se iteró la solución](docs/entrega/02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución). No es una medición de planta: la base es ficticia y solo tiene auditados con actividad QLS.
 
-  ```sh
-  .venv/bin/python -m solucion.run --csv '<CSV vigente>' --catalogo '<catálogo vigente>'
-  .venv/bin/python -m solucion.pruebas
-  .venv/bin/python -m solucion.empaquetar --destino '<ruta externa>/reproduccion.zip' --salida '<hoja generada>'
-  ```
+## Qué hay en el repo
 
-- **Salidas:** agregados de validación en `solucion/resultados/`; hoja de desarrollo del Día 190 en la salida externa.
-  Las dos lecturas de prueba final ya registradas se consultan en [prueba-final.json](solucion/resultados/prueba-final.json), sin repetirlas.
-- **Entregables:** [borradores del informe y presentación](docs/entrega/README.md); hoja y ZIP fuera del repo.
-  Los borradores conservan su alcance acordado; esta limpieza no elige otro modelo.
-- **Exploración:** [experimentos y comandos](solucion/experimentos/README.md), separados del flujo principal
-  y rotulados también en el ZIP. El [prototipo web](https://github.com/FordwardAI/ford-predictive-quality/tree/main/prototipos/plataforma-web) es una propuesta aparte.
+| Carpeta | Qué es |
+| --- | --- |
+| [`docs/entrega/`](docs/entrega/README.md) | Borradores del Informe por sección, figuras, ideas descartadas y preguntas del jurado |
+| [`plataforma/`](plataforma/README.md) | MVP de la plataforma web: cómo se usaría la hoja en planta, de Gate Release al reporte para la línea |
+| [`prototipos/presentacion-3d/`](prototipos/presentacion-3d/README.md) | La presentación, como sitio estático con notas del orador |
+| [`solucion/`](solucion/README.md) | Código de la prueba de concepto: validación, elección, preregistros, hoja y figuras; resultados agregados en `solucion/resultados/` |
+| [`solucion/experimentos/`](solucion/experimentos/README.md) | Experimentos exploratorios, separados del recorrido principal |
+| [`research/`](research/) | Auditoría del CSV, particiones, agrupación del catálogo y estudios ([búsqueda amplia](research/busqueda-amplia.md), [opción más precisa](research/opcion-mas-precisa.md), [datos de proceso](research/datos-proceso.md), [simulación](research/simulacion-evaluacion.md)) |
+| [`docs/`](docs/) | [Alcance de entrega](docs/alcance-entrega.md), [datos locales](docs/datos-locales.md), [diccionario de datos](docs/diccionario-datos.md), [plan de acción](docs/plan-de-accion.md) (histórico) y la [consigna](docs/fuentes/) |
 
-## Estudio de alternativas
+El vocabulario está en [CONTEXT.md](CONTEXT.md).
 
-El [estudio comparativo de modelos, columnas y ensembles](research/busqueda-amplia.md) reúne el objetivo,
-el protocolo temporal, los números relevantes, dos gráficos y la recomendación provisional para elegir candidatos.
-El [anexo completo](research/anexo-busqueda.md) lista los 238 pipelines, las 37 columnas adicionales y la
-cobertura de las 458.098 configuraciones. Todo usa períodos ya explorados, Día <195, de la base ficticia;
-es evidencia exploratoria y no reemplaza la solución acordada ni la prueba final.
+## Ver la plataforma y la presentación
 
-La [evaluación de la opción más precisa](research/opcion-mas-precisa.md) compara todas las vías con criterio propio.
-Con esta base, los estimadores por código empatan cerca del techo del código; más búsqueda no los distingue.
-Lo que importa es actualizar la tasa y contraerla hacia el mercado, y para superar ese techo hacen falta datos por VIN.
+Se levantan las dos juntas con un comando: la plataforma en <http://127.0.0.1:8765> y la presentación en <http://localhost:8000/prototipos/presentacion-3d/>. **Sin datos, la plataforma arranca en modo demo** con una base sintética del mismo esquema ([`plataforma/demo.py`](plataforma/demo.py)): sirve para ver el flujo, pero sus cifras no son resultados. Con los dos CSV de Ford (CSV QLS y catálogo, identificados por SHA-256 en [datos locales](docs/datos-locales.md)) muestra la base ficticia. Los datos nunca están en el repo.
 
-La [evaluación de datos de proceso](research/datos-proceso.md) propone qué telemetría,
-trazabilidad y mediciones pedir a Ford, con sus requisitos de unión por VIN y un piloto
-para medir el aporte incremental. No estima mejoras sin una nueva entrega.
+**Opción A · Un comando, con Python 3.13** ([descargar](https://www.python.org/downloads/)). La primera vez crea el entorno `.venv` e instala `requirements.txt`; después abre las dos páginas.
 
-## Trabajo en equipo
+| Sistema | Demo | Con los CSV de Ford |
+| --- | --- | --- |
+| macOS o Linux | `./iniciar.sh` | `./iniciar.sh "<Dataset QLS Inspección Adicional.csv>" "<Códigos de catálogo.csv>"` |
+| Windows | `iniciar.bat` | `iniciar.bat "<Dataset QLS Inspección Adicional.csv>" "<Códigos de catálogo.csv>"` |
 
-Consultar [CONTRIBUTING.md](CONTRIBUTING.md) para nombres de ramas, mensajes de commit y títulos de PR.
+**Opción B · Docker**, en cualquier sistema con Docker instalado, sin Python:
 
-Las [convenciones compartidas](AGENTS.md) rigen para Codex y Claude Code. La [guía de incorporación y skills](docs/trabajo-equipo.md) explica cómo retomar tickets, coordinar agentes y usar `ford-data-analysis` sobre el CSV sin subir datos crudos. Claude importa las mismas instrucciones mediante `CLAUDE.md`.
+```sh
+docker compose up --build
+```
 
-## Cómo avanzar
+Para usar la base de Ford, copiar los dos CSV en `./datos/` (Git la ignora) o indicar la carpeta con `FORD_DATOS=/ruta docker compose up --build`.
 
-1. Leer el [plan de acción](docs/plan-de-accion.md) y el issue [Construir la prueba de concepto y los entregables para el Trials Day](https://github.com/FordwardAI/ford-predictive-quality/issues/33).
-2. Tomar una pieza cuyas dependencias estén terminadas, marcarla en el issue y trabajarla en una rama propia.
-3. Respetar las reglas del plan: el código de catálogo es el único predictor del análisis principal, todo se elige en validación y la prueba final se corre una sola vez, en conjunto y sobre el preregistro.
-4. El código de la prueba de concepto está en `solucion/` y se corre con un solo comando ([reproducción](solucion/README.md)); los borradores de los entregables, en `docs/entrega/`; el prototipo de la plataforma web propuesta, en `prototipos/plataforma-web/`.
-5. Dejar en GitHub toda la información de trabajo (código, agregados revisados y borradores). Los .docx y .pptx finales, los templates y los datos crudos quedan fuera del repo.
+**Opción C · A mano.**
+1. Crear el entorno: `python3.13 -m venv .venv` y `.venv/bin/pip install -r requirements.txt`. En Windows, el intérprete es `.venv\Scripts\python`.
+2. Levantar la plataforma: `.venv/bin/python -m plataforma.servidor`, con `--csv` y `--catalogo` si se usan los datos de Ford.
+3. Levantar la presentación: `python3 -m http.server 8000` desde la raíz.
 
-## Decisiones
+Solo para recalcular los resultados (no para verlos), xgboost y lightgbm necesitan OpenMP: `brew install libomp` en macOS y `apt-get install libgomp1` en Linux.
 
-Cada decisión vive en su ticket; el mapa las indexa en «Decisions so far» y el plan resume qué rige hoy y qué se enmendó. Las investigaciones de base son [población y etiquetas](research/poblacion-etiquetas.md), [consigna y fuentes](research/consigna-fuentes.md), [consultas a Ford](research/consultas-ford.md) y el [registro de la agrupación del catálogo](research/catalogo-agrupacion.md).
+**La plataforma** arranca en el Día 155. Primero se arma la hoja; **Avanzar al día siguiente** simula la llegada de unidades y resultados. El recorrido (Día de planta → Hoja → Selección → Seguimiento → Resultados → Modelo → Reporte para la línea) está en el [README de la plataforma](plataforma/README.md). Ningún VIN sale del servidor. El build de la interfaz está versionado, así que no hace falta Node.
 
-## Qué se sabe de la consigna
+**La presentación** necesita internet, porque three.js, GSAP y las fuentes se cargan por CDN. Se recorre con las flechas o con scroll; `N` muestra las notas del orador y `?estatico=1` evita el 3D en equipos lentos. Las capturas de la plataforma no se versionan porque muestran tasas por código. Sin ellas, esas pantallas muestran un esquema, con un aviso que se oculta con `?limpio=1`. Para generarlas (con los CSV, Chrome y bash):
 
-La ficha pide justificar el enfoque y el modelo, y describir la preparación de datos y la validación. Valora un reporte accionable y evalúa también aplicabilidad, innovación y presentación oral con soporte visual. El formato de la entrega lo fijan los templates del Drive: Informe de la Solución (.docx), presentación (.pptx) y un .zip con lo que no entre en el informe. Ver [alcance de entrega](docs/alcance-entrega.md#qué-exigen-los-templates).
+```sh
+FORD_CSV="<Dataset QLS Inspección Adicional.csv>" FORD_CATALOGO="<Códigos de catálogo.csv>" prototipos/presentacion-3d/herramientas/capturar_flujo.sh
+```
 
-La base está declarada **ficticia** y reúne solo auditados con actividad QLS. El benchmark operativo es el muestreo al azar del 5 %; la proporción CALIBRADA dentro de la base es un concepto distinto. La fuente vigente es el CSV recibido el 18 de septiembre, auditado completo; ver [identificación y reproducción](docs/datos-locales.md). Entre auditados con actividad QLS de la base ficticia hay 195.808 eventos, 59.681 VIN y 6.079 VIN CALIBRADA. Los 4.910 VIN cuya primera inspección registrada es posterior a DIA_260 son todos OK. Ford analiza una posible mejora en planta cerca de ese día, sin confirmarla; la causa no está acreditada.
+Más opciones en el [README de la presentación](prototipos/presentacion-3d/README.md).
 
-## Fuentes
+## Reproducir los resultados
 
-La fuente canónica de las decisiones es el mapa en GitHub, con sus sub-issues y dependencias nativas. Las copias locales en `.scratch/` son una instantánea de la migración y no deben usarse como un segundo tracker. La consigna y el documento inicial están en [fuentes](docs/fuentes/).
+```sh
+.venv/bin/python -m solucion.pruebas                                     # pruebas sintéticas, sin el CSV
+.venv/bin/python -m solucion.run --csv "<CSV vigente>" --catalogo "<catálogo vigente>"
+.venv/bin/python -m solucion.empaquetar --destino "<ruta externa>/reproduccion.zip" --salida "<hoja generada>"
+```
+
+Desde la raíz, con el entorno de la opción C. `solucion.run` recalcula la validación, la hoja de desarrollo y las figuras, y verifica los hashes de las entradas. Los resultados de referencia son los agregados versionados de las corridas documentadas. Los modelos de ML (incluida la elección por precisión, `--piezas precision`, donde gana CatBoost) pueden variar según el procesador; sus cifras de referencia son las de [`precision.json`](solucion/resultados/precision.json). Las lecturas de la prueba final no se repiten: están en [`prueba-final.json`](solucion/resultados/prueba-final.json). Detalle en [reproducción](solucion/README.md).
+
+## Límites
+
+- La base es **ficticia** y reúne solo auditados con actividad QLS: cada cifra se dice «entre auditados con actividad QLS, [tramo], base ficticia, n = …».
+- No afirmamos impacto ni ahorro en planta, reducción de calibraciones, validez para unidades no auditadas ni causas. Eso se mide en planta, con días de control.
+- Hay 195.808 eventos, 59.681 VIN y 6.079 VIN CALIBRADA. Los 4.910 VIN cuya primera inspección es posterior a DIA_260 son todos OK; Ford analiza una posible mejora en planta, sin confirmarla.
+
+## Trabajo en equipo y decisiones
+
+Las [convenciones compartidas](AGENTS.md) rigen para Codex y Claude Code; [CONTRIBUTING.md](CONTRIBUTING.md) fija ramas, commits y PRs, y la [guía del equipo](docs/trabajo-equipo.md) explica las skills. Cada decisión vive en su ticket. El [mapa de decisiones](https://github.com/FordwardAI/ford-predictive-quality/issues/1) las indexa, la construcción se siguió en [#33](https://github.com/FordwardAI/ford-predictive-quality/issues/33) y el estado está en el [tablero del proyecto](https://github.com/orgs/FordwardAI/projects/1).

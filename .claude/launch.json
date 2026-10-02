@@ -1,1 +1,1 @@
-{"version":"0.0.1","configurations":[{"name":"presentacion-3d","runtimeExecutable":"python3","runtimeArgs":["-m","http.server","8000"],"port":8000}]}
+{"version":"0.0.1","configurations":[{"name":"presentacion-3d","runtimeExecutable":"python3","runtimeArgs":["-m","http.server","8000"],"port":8000},{"name":"plataforma","runtimeExecutable":"sh","runtimeArgs":["-c",".venv/bin/python -m plataforma.servidor --csv \"${FORD_CSV:-../datos/Dataset QLS Inspección Adicional.csv}\" --catalogo \"${FORD_CATALOGO:-../datos/Códigos de catálogo.csv}\" --puerto 8765"],"port":8765}]}

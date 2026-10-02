@@ -2,6 +2,7 @@
 
     .venv/bin/python -m plataforma.servidor --csv "<Dataset QLS Inspección Adicional.csv>" \\
         --catalogo "<Códigos de catálogo.csv>" [--puerto 8765]
+    .venv/bin/python -m plataforma.servidor            # sin los CSV: demo con la base sintética de demo.py
 
 Ciclo de planta: entran las unidades que pasaron Gate Release (`POST /api/ingreso`), el responsable de la selección
 elige cuáles van a Auditoría Adicional, vuelven los resultados (`POST /api/resultados`) y la plataforma muestra el
@@ -29,6 +30,7 @@ from solucion.cupo import cupo as cupo_5
 from solucion.datos import MARGEN, TRAMOS
 from solucion.puntaje import Fuente
 
+from . import demo as demo_mod
 from . import modelo as modelo_mod
 from . import modelos as modelos_mod
 from .estado import Dia
@@ -41,6 +43,8 @@ CACHE = Path.home() / ".cache" / "ford-predictive-quality"
 VALIDACION = TRAMOS["validacion"]
 # Límites de la hoja para planta: sin el de la prueba final, que es un dato de la evaluación del equipo.
 LIMITES = [x for x in hoja.LIMITES if "prueba final" not in x]
+# En la demo, el primer límite (la base ficticia) se reemplaza: los datos son sintéticos.
+LIMITES_DEMO = ["Demo con una base sintética generada por la plataforma: sus cifras no son resultados."] + LIMITES[1:]
 TEXTOS_E3 = hoja.textos  # El original: las descargas lo reemplazan un momento por los textos de planta.
 
 
@@ -48,8 +52,11 @@ class Plataforma:
     """Estado del servidor: tabla, modelos, almacén de planta, fuente simulada y el día en curso."""
 
     def __init__(self, csv_path, catalogo_path, cache=CACHE):
-        self.carpeta = cache / "plataforma"
-        self.tabla = datos.cargar(csv_path, catalogo_path, cache=cache)
+        self.demo = csv_path is None
+        # La demo guarda su estado aparte: nunca se mezcla con el de la base ficticia.
+        self.carpeta = cache / ("plataforma-demo" if self.demo else "plataforma")
+        self.tabla = demo_mod.tabla() if self.demo else datos.cargar(csv_path, catalogo_path, cache=cache)
+        self.limites = LIMITES_DEMO if self.demo else LIMITES
         assert not self.tabla.desbloqueada, "La plataforma usa la tabla enmascarada"
         self.vins = {v.vin for v in self.tabla.vins} | {v.vin for v in self.tabla.cohorte}
         self.modelos = modelos_mod.construir(self.tabla)
@@ -145,7 +152,7 @@ class Plataforma:
             "exploracion": [{"codigo": c, "ultimo": u} for c, u in h.exploracion],
             "unidades": [{"codigo": c, "motivo": m, "ids": ids} for c, m, ids in h.unidades],
             "por_que": [{**p, "texto": hoja._por_que_txt(h, p)} for p in h.por_que],
-            "textos": tx, "limites": LIMITES,
+            "textos": tx, "limites": self.limites,
         }
 
     def textos(self, h):
@@ -168,7 +175,7 @@ class Plataforma:
         nombres = ("textos", "LIMITES", "PENDIENTES", "PENDIENTES_FINAL", "_agrupaciones_txt")
         guardado = [getattr(hoja, n) for n in nombres]
         # Sin notas de la evaluación del equipo: límite y pendientes de la prueba final, χ² de validación.
-        reemplazo = [lambda h: self.textos(h), LIMITES, [], [], lambda h: ""]
+        reemplazo = [lambda h: self.textos(h), self.limites, [], [], lambda h: ""]
         for n, v in zip(nombres, reemplazo):
             setattr(hoja, n, v)
         try:
@@ -260,7 +267,7 @@ class Plataforma:
                 "bajan": sum(f["puesto_nuevo"] > f["puesto_actual"] for f in filas)}
 
     def meta(self):
-        return {"validacion": VALIDACION, "modelos": modelos_mod.fichas(),
+        return {"validacion": VALIDACION, "modelos": modelos_mod.fichas(), "demo": self.demo,
                 "fuente": {"csv": self.tabla.fuente.get("csv_sha256", "")[:12],
                            "catalogo": self.tabla.fuente.get("catalogo_sha256", "")[:12]},
                 "programa": modelo_mod.PROGRAMA}
@@ -418,13 +425,20 @@ class Manejador(SimpleHTTPRequestHandler):
 
 def main(argv=None):
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    a.add_argument("--csv", required=True, type=Path)
-    a.add_argument("--catalogo", required=True, type=Path)
+    a.add_argument("--csv", type=Path, help="Sin --csv ni --catalogo arranca la demo con la base sintética")
+    a.add_argument("--catalogo", type=Path)
     a.add_argument("--puerto", type=int, default=8765)
+    a.add_argument("--host", default="127.0.0.1",
+                   help="Interfaz donde escucha; 0.0.0.0 solo dentro de un contenedor (Docker)")
     a.add_argument("--cache", type=Path, default=CACHE)
     o = a.parse_args(argv)
+    if (o.csv is None) != (o.catalogo is None):
+        a.error("--csv y --catalogo van juntos (o ninguno, para la demo)")
+    if o.csv is None:
+        print("Sin --csv ni --catalogo: demo con la base sintética (plataforma/demo.py); sus cifras no son resultados.",
+              flush=True)
     Manejador.plataforma = Plataforma(o.csv, o.catalogo, o.cache)
-    servidor = ThreadingHTTPServer(("127.0.0.1", o.puerto), Manejador)
+    servidor = ThreadingHTTPServer((o.host, o.puerto), Manejador)
     print(f"Plataforma lista en http://127.0.0.1:{o.puerto} (Ctrl+C para cortar)", flush=True)
     try:
         servidor.serve_forever()

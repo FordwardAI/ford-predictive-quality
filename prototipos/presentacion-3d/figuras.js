@@ -1077,7 +1077,7 @@ function figuraParticiones(datos, opciones) {
       ],
     },
     {
-      etiqueta: 'Prueba final (corrida única)', y: yCarril2,
+      etiqueta: 'Prueba final (con preregistro)', y: yCarril2,
       segmentos: [
         { a: DIA_INICIAL, b: hastaFinal, t: 'Entrenamiento final', d: `Día ${DIA_INICIAL}–${hastaFinal}`, tipo: 'entrena' },
         { a: hastaFinal + 1, b: pruIni - 1, tipo: 'margen' },

@@ -1,23 +1,27 @@
 # Preguntas probables del jurado
 
-Borrador de apoyo para el bloque de preguntas (~10 minutos) de la presentación (E1). Respuestas cortas, para decir en voz alta, con su fuente. El jurado se supone mixto, técnico y de planta ([plan][plan-pend]). Las cifras de validación llevan su calificador; las de la prueba final se completan después de la corrida.
+Borrador de apoyo para el bloque de preguntas (~10 minutos) de la presentación (E1). Respuestas cortas, para decir en voz alta, con su fuente. El jurado se supone mixto, técnico y de planta ([plan][plan-pend]). Las cifras de validación y de la prueba final llevan su calificador. La solución es **CatBoost con atributos del código, reentrenado cada 5 días**; la iteración está en [cómo se iteró la solución][iter].
 
 ## Sobre el enfoque y el modelo
 
-**1. La ficha pide un modelo de ML. ¿Por qué la solución es una tasa por código?**
-Comparamos ML y no ML con la misma regla: gana la mayor precisión en el cupo en validación y, si hay empate, la más simple ([alternativas][alt], puntos 7 y 8). Con un solo predictor, todo modelo estima la misma tabla de tasas por código; la tasa ya es un estimador estadístico de esa tabla. En validación, 29 de 31 alternativas empataron con la mejor y la regla eligió la tasa fija, la más simple ([`eleccion.json`][elec]). Es un hallazgo, no una renuncia: el valor está en cómo se usa la tasa ([plan][plan-com]).
+**1. La ficha pide un modelo de ML. ¿Qué modelo usan?**
+CatBoost, un modelo de árboles de decisión, con el código de catálogo y lo que se lee de él: mercado, motor, tracción y versión. Se reentrena solo cada 5 días con lo auditado. Llegamos en dos etapas:
+- **Primera:** la regla desempataba por simplicidad, 29 de 31 alternativas empataron y ganó una tasa fija por código ([`eleccion.json`][elec]).
+- **Segunda:** elegimos por precisión entre 54 alternativas en cinco bloques de tiempo, y ganó CatBoost, con 18,4 % en selección contra 11,2 % al azar ([`precision.json`][prec]).
 
-**2. ¿Por qué el único predictor es el código de catálogo?**
-Porque es lo único que se sabe con certeza al momento de elegir: está en el parabrisas y se conoce desde el programa de producción ([operación][ope], puntos 5 y 6). El historial no tiene marca de Gate Release, así que no se puede probar que existiera al elegir ([admisibilidad][adm], puntos 3 y 4).
+No decimos que sea el mejor algoritmo: es la más precisa de una familia que empata. Lo que importa es que la tasa se actualice y se apoye en el mercado.
+
+**2. ¿Por qué el predictor es el código de catálogo?**
+Porque el código, y lo que se lee de él, es lo único que se sabe con certeza al momento de elegir: está en el parabrisas y se conoce desde el programa de producción ([operación][ope], puntos 5 y 6). El historial no tiene marca de Gate Release, así que no se puede probar que existiera al elegir ([admisibilidad][adm], puntos 3 y 4).
 
 **3. El desafío habla de tiempos de ciclo, parámetros de ajuste e interacciones. ¿Dónde están?**
-No están en la base. Los pedimos a Ford el 18/09 y Ford respondió que el dataset entregado tenía lo necesario ([consultas a Ford][cfo]). Las interacciones entre posiciones del código las pueden captar los modelos de ML: compitieron en validación y empataron con la tasa fija ([`p4.json`][p4]).
+No están en la base. Los pedimos a Ford el 18/09 y Ford respondió que el dataset entregado tenía lo necesario ([consultas a Ford][cfo]). Las interacciones entre posiciones del código las captan los modelos de ML con atributos, como CatBoost ([`precision.json`][prec]).
 
 **4. El historial de reparaciones es casi todo el dataset. ¿Por qué no lo usan?**
-Por disponibilidad: puede incluir eventos posteriores al momento de elegir, porque entre Gate Release y la auditoría pasan de 0 a 5 días ([admisibilidad][adm], punto 4). Además, en los experimentos exploratorios dio AUC de 0,50 a 0,52, como el azar ([experimentos][exp]). Igual lo evaluamos en un anexo con la misma partición: solo con historial, 8,7–9,0 % en el cupo contra 9,9 % esperado al azar; sumado al código, empata con la tasa fija, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN ([`p6.json`][p6]).
+Por disponibilidad: puede incluir eventos posteriores al momento de elegir, porque entre Gate Release y la auditoría pasan de 0 a 5 días ([admisibilidad][adm], punto 4). Además, en los experimentos exploratorios dio AUC de 0,50 a 0,52, como el azar ([experimentos][exp]). Igual lo evaluamos en un anexo con la misma partición: solo con historial, 8,7–9,0 % en el cupo contra 9,9 % esperado al azar; sumado al código, no mejora al código solo, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN ([`p6.json`][p6]).
 
 **5. ¿Probaron redes neuronales, boosting, ensambles?**
-Sí: logística, Naive Bayes, Random Forest, XGBoost, LightGBM, CatBoost, MLP, promedio y stacking, en modo fijo y reentrenado ([alternativas][alt], punto 3). Los mejores llegaron a 17,1 % en validación, dentro del empate con la tasa fija (15,1 %); ninguno la superó con un rango que excluya el empate ([`p4.json`][p4]).
+Sí: logística, Naive Bayes, Random Forest, XGBoost, LightGBM, CatBoost, MLP, promedio y stacking, en modo fijo y reentrenado, con el código solo y con sus atributos ([alternativas][alt], punto 3; [`precision.json`][prec]). Con atributos, CatBoost, Random Forest y XGBoost quedaron arriba, a pocos aciertos entre sí (18,4 %, 18,2 % y 18,1 % en selección). En el último bloque, con la mezcla de códigos estable, casi todas empatan.
 
 **6. ¿Por qué priorizan códigos y no vehículos?**
 Porque con el código como predictor, dos unidades del mismo código son indistinguibles. Mostrar un puntaje por vehículo daría una precisión individual que no existe ([salida para Calidad][sal], puntos 1 y 2).
@@ -36,14 +40,19 @@ Porque la proporción CALIBRADA baja con el tiempo: de 14,5 % (Día del VIN 0–
 **10. ¿Por qué 5 días de margen?**
 Es el máximo que informó Ford entre Gate Release y la auditoría ([reunión del 22/09][reu]).
 
-**11. ¿Por qué ganó la tasa fija si la móvil hacia el mercado tuvo más precisión?**
-Porque empatan: el rango de su diferencia incluye cero. La regla, fijada antes de mirar, elige entonces la más simple ([`eleccion.json`][elec]; [alternativas][alt], punto 7). Vale también con los modelos de ML: 29 de 31 empatan.
+**11. ¿Por qué cambiaron de la tasa fija a CatBoost?**
+Porque con la regla de la primera etapa casi todo empataba y ganaba la más simple, sin que la validación de 35 días pudiera separar a las alternativas. Cambiamos el criterio a la precisión y medimos en cinco bloques de tiempo, con 965 elegidos en vez de 391. Ahí se vio lo robusto: cerca del Día 100 rota la mezcla de códigos y la tasa fija cae a 12,7 %, mientras las que se actualizan se sostienen en 17–18 % ([`precision.json`][prec]; [opción más precisa][omp]).
 
 **12. ¿Cuánta diferencia puede detectar la validación?**
 Con 391 elegidos, el rango de la precisión en el cupo es de unos ±3,4 a ±4,5 puntos: separa del azar, pero casi no separa a las alternativas entre sí ([`p3.json`][p3]; [plan][plan-inc], incompatibilidad 11).
 
 **13. ¿La prueba final ya se había mirado?**
-Sí, en parte: los experimentos exploratorios usaron ese tramo y se publicaron tasas por mercado dentro de él. Lo declaramos en el preregistro y en los límites; la cifra puede ser optimista ([validación][val], punto 2; [plan][plan-inc], incompatibilidad 4).
+Sí, en parte: los experimentos exploratorios usaron ese tramo y se publicaron tasas por mercado dentro de él. Lo declaramos en el preregistro y en los límites; la cifra puede ser optimista ([validación][val], punto 2; [plan][plan-inc], incompatibilidad 4). Además, la leímos tres veces, cada una con su preregistro:
+- tasa fija: 10,9 % contra 8,2 % al azar;
+- CatBoost: 12,0 %, 1,45 veces el azar;
+- Random Forest: 11,8 %.
+
+La de CatBoost se acordó conociendo la primera, y por eso es una lectura más débil. Las tres superan al azar ([cómo se iteró][iter]).
 
 **14. ¿Por qué precisión en el cupo y no AUC o accuracy?**
 Porque la decisión es elegir un número fijo de unidades por día. Importa cuántas de las elegidas se calibran. El AUC queda como diagnóstico ([mejora útil][mej], punto 6).
@@ -71,7 +80,7 @@ No lo afirmamos: Ford no pudo dar costos y la base es ficticia. Dejamos la fórm
 ## Sobre la operación
 
 **21. ¿Qué necesita la planta para implementarlo?**
-Una exportación diaria de QLS con los resultados de auditoría, el programa del día, el cupo de Calidad de Planta y una notebook o un servidor donde correr el script ([trabajo futuro](05-trabajo-futuro.md)).
+Una exportación diaria de QLS con los resultados de auditoría, el programa del día, el cupo de Calidad de Planta y una notebook o un servidor donde correr la [plataforma](../../plataforma/README.md) ([trabajo futuro](05-trabajo-futuro.md)).
 
 **22. ¿Cuánto cuesta?**
 No tiene licencias ni necesita nube. Corre en equipo existente. Como techo, una VM chica en la nube cuesta del orden de USD 0,02 a 0,07 por hora según tamaño y región (precios públicos consultados el 29/09/2026) ([factibilidad](03-factibilidad-economica.md)).
@@ -83,7 +92,7 @@ Usa la tasa general, o la de su mercado en la variante de mercado, hasta tener r
 La cantidad pendiente pasa a los códigos siguientes del ranking que sí llegaron; solo se completa al azar si se agota el ranking ([CONTEXT.md][ctx], «Hoja de códigos prioritarios»).
 
 **25. Si la hoja siempre elige los mismos códigos, ¿cómo se entera de que otro empeoró?**
-Con el mínimo por código: cada código recibe por rotación al menos una auditoría cada cierto período, y el detector de cambios avisa si su tasa se mueve ([base QLS][qls], punto 5). En validación se eligió una auditoría por código cada 40 días, que mantuvo 15,3 % en el cupo; el detector encontró el 90,8 % de las subas sintéticas al doble, con demora mediana de 10 días ([`p5.json`][p5]; [`p6.json`][p6]).
+Con el mínimo por código: cada código recibe por rotación al menos una auditoría cada cierto período, y el detector de cambios avisa si su tasa se mueve ([base QLS][qls], punto 5). En validación, con el predictor de la primera etapa, se eligió una auditoría por código cada 40 días, que mantuvo 15,3 % en el cupo; el detector encontró el 90,8 % de las subas sintéticas al doble, con demora mediana de 10 días ([`p5.json`][p5]; [`p6.json`][p6]).
 
 **26. ¿Por qué no dejar un 20 % al azar para siempre?**
 Porque, si la hoja rinde más que el azar, ese 20 % cuesta calibraciones todos los días. Los días de control miden la hoja solo durante la implementación, y después la hoja orienta todo el cupo ([base QLS][qls], punto 5).
@@ -92,7 +101,7 @@ Porque, si la hoja rinde más que el azar, ese 20 % cuesta calibraciones todos l
 No lo podemos calcular sin datos reales de planta: depende de la tasa y del cupo reales. Queda para calcularlo con los primeros datos ([base QLS][qls], punto 7).
 
 **28. ¿Introduce un riesgo de ciberseguridad?**
-No uno nuevo relevante: lee una exportación, no se conecta a la red de automatización, no usa nube ni LLM y no usa datos personales. Si falla, se elige al azar como hoy ([seguridad y privacidad](02-3-seguridad-privacidad.md)). La evolución en tiempo real correría en el GCP de Ford, con conexión solo saliente desde planta (pregunta 32).
+Limita su exposición: lee una exportación, no se conecta a la red de automatización, no usa nube ni LLM y no usa datos personales. Para operar en la red de planta hacen falta usuarios, permisos, comunicación cifrada y recuperación aprobados por IT. Si falla, se elige al azar como hoy ([seguridad y privacidad](02-3-seguridad-privacidad.md)). La evolución en tiempo real correría en el GCP de Ford, con conexión solo saliente desde planta (pregunta 32).
 
 **29. ¿Qué aporta más allá de la selección?**
 «Dónde mirar» (qué componente revisar primero), el detector de cambios por código y un insumo para la subcategorización del catálogo ([valor diferencial](04-valor-diferencial.md)).
@@ -112,6 +121,9 @@ Pub/Sub para todo. MQTT donde la fuente sea un equipo de planta (herramientas de
 Como sugerencia con sus motivos, y la decisión queda en Calidad de Ford. Primero en sombra («se habría retenido» contra el resultado posterior), porque en la base ficticia el historial del VIN no separó calibradas. El sistema nunca escribe en QLS, el MES ni los controladores ([evaluación en vivo](05-1-scoring-fin-de-linea.md#evaluación-en-vivo)).
 
 [ctx]: ../../CONTEXT.md
+[iter]: 02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución
+[prec]: ../../solucion/resultados/precision.json
+[omp]: ../../research/opcion-mas-precisa.md
 [ficha]: ../fuentes/documentation.md
 [exp]: ../../research/experimentos-modelado.md
 [cat]: ../../research/catalogo-agrupacion.md

@@ -8,7 +8,7 @@
 // Fuentes:
 //   - solucion/resultados/prueba-final.json  lecturas de la prueba final. Se
 //     usa la primera corrida de cada preregistro:
-//       corridas[0]  lectura 1, tasa fija (preregistro.json): la cifra oficial.
+//       corridas[0]  lectura 1, tasa fija (preregistro.json): la primera etapa.
 //       corridas[1]  lectura 2, CatBoost (preregistro-precision.json).
 //       corridas[2]  repetición exacta de corridas[1] (mismos tramos y piezas;
 //                    la anterior falló al imprimir en la consola de Windows). Se
@@ -29,7 +29,7 @@
 //   - docs/entrega/03-factibilidad-economica.md  tiempos medidos,
 //     sin JSON (archivo: null).
 //
-// Regla de leyenda (guion de la presentación): toda cifra en pantalla lleva
+// Regla de leyenda (docs/entrega/README.md): toda cifra en pantalla lleva
 // «entre inspeccionados con actividad QLS, [tramo], base ficticia, n = …».
 //
 // prototipos/presentacion-3d/verificar_cifras.py compara cada respaldo con su

@@ -1,0 +1,20 @@
+# Plataforma (http://127.0.0.1:8765) y presentación (http://localhost:8000/prototipos/presentacion-3d/):
+#
+#   docker compose up --build
+#
+# Sin datos, la plataforma usa la demo sintética. Para usar la base de Ford, copiar los dos CSV en ./datos
+# (ignorada por Git) o indicar otra carpeta: FORD_DATOS=/ruta/a/los/csv docker compose up --build
+# Los puertos se publican solo en esta máquina (127.0.0.1); otros: PUERTO_PLATAFORMA=… PUERTO_PRESENTACION=…
+services:
+  plataforma:
+    build: .
+    image: fordwardai-entrega
+    ports:
+      - "127.0.0.1:${PUERTO_PLATAFORMA:-8765}:8765"
+    volumes:
+      - "${FORD_DATOS:-./datos}:/datos:ro"
+  presentacion:
+    image: fordwardai-entrega
+    command: ["python", "-m", "http.server", "8000"]
+    ports:
+      - "127.0.0.1:${PUERTO_PRESENTACION:-8000}:8000"
