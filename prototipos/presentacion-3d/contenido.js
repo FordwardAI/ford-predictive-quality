@@ -334,66 +334,6 @@ export const capitulos = [
     orbita: false,
   },
 
-  // 8 · 04 Valor diferencial: dónde mirar --------------------------------------
-  {
-    id: 'donde-mirar',
-    seccion: '04',
-    escena: 'donde-mirar',
-    nucleo: true,
-    minutos: 1.0,
-    antetitulo: 'Valor diferencial e innovación',
-    titulo: 'Además de cuál, ', acento: 'dónde mirar',
-    bajada: 'Para cada código, los tres componentes que más se calibraron antes.',
-    cifras: ['dondeMirar.prueba.codigo', 'dondeMirar.prueba.general'],
-    // Sin puntos sobre el vehículo: los componentes reales están anonimizados en la base, así que no hay
-    // dónde ubicarlos y el foco no tiene por qué ir pasando por zonas del auto.
-    puntos: [],
-    figura: null,
-    detalle: [
-      { titulo: 'Componentes anonimizados', texto: 'En la base no se pueden ubicar en la unidad.' },
-      { titulo: 'Asociación, no causa', texto: 'Indica por dónde empezar la revisión.' },
-    ],
-    ampliacion: [
-      { titulo: 'Qué sugiere la hoja', texto: 'Para cada código, los 3 componentes más calibrados en sus inspecciones. Los componentes de Inspección Adicional están anonimizados en la base: se listan, sin ubicarlos en la unidad (el vehículo de la escena es ilustrativo).' },
-      { titulo: 'De dónde sale la lista', texto: 'De inspecciones del código con resultado ya conocido (Día ≤ t−5), suavizada hacia la distribución general.' },
-      { titulo: 'Asociación, no causa', texto: 'Indica por dónde empezar la revisión, no por qué se calibra.' },
-      { titulo: 'Cinco piezas, cada una con su estado', texto: '«Dónde mirar»: mejora en validación y en la prueba final. Selección que aprende de sus inspecciones: elegida en validación. Detector de cambios: calibrado en validación. Señal por mercado de destino: evaluada en validación. Insumo para la subcategorización: no se sostiene en validación. Las cifras de estas piezas se evaluaron con el predictor de la primera etapa.' },
-      { titulo: 'En validación', texto: 'Sobre las 59 CALIBRADA que eligió el predictor de la primera etapa, los 3 primeros del código acertaron 61,0 % contra 30,5 % de la lista general; sobre todas (n = 780), 40,0 % contra 33,5 %. Entre inspeccionados con actividad QLS, validación 155–194, base ficticia.' },
-      { titulo: 'Por qué', texto: 'Los mentores señalaron que la clave está en qué componente presentó la falla. Lo usamos como lo que se predice dentro de la unidad elegida.' },
-    ],
-    notas: 'Cada pieza la decimos con su estado: evaluada en validación, leída en la prueba si estaba en el preregistro, o «solo validación» rotulado así. Los componentes reales están anonimizados: la hoja los listaría, pero no los ubica en la unidad; el vehículo es ilustrativo. Estas piezas se evaluaron con el predictor de la primera etapa; con CatBoost no se repitieron.',
-    orbita: true,
-  },
-
-  // 9 · 04 Una selección que aprende -------------------------------------------
-  {
-    id: 'aprende',
-    seccion: '04',
-    escena: 'linea',
-    recorrido: 11, // la línea ahora es más larga (162 u): 11 s mantienen la velocidad de antes (≈ 14 u/s)
-    nucleo: true,
-    minutos: 1.0,
-    antetitulo: 'Valor diferencial e innovación',
-    titulo: 'Aprende de ', acento: 'sus propias inspecciones',
-    bajada: 'Un mínimo por código mantiene las tasas al día y un detector avisa cuando un código cambia.',
-    cifras: ['minimo.precision', 'detector.subeX2', 'detector.alarmas'],
-    puntos: [
-      { id: 'inspeccion-adicional', titulo: 'El resultado vuelve', texto: 'Cada resultado actualiza la tasa de su código, con 5 días de margen.' },
-    ],
-    figura: null,
-    detalle: [],
-    ampliacion: [
-      { titulo: 'El resultado vuelve', texto: 'Cada resultado de inspección alimenta, con 5 días de margen, la siguiente revisión de la tasa de su código: en la solución elegida, el reentrenamiento de CatBoost cada 5 días.' },
-      { titulo: 'El problema', texto: 'Si la hoja orienta todo el cupo, en planta solo se conoce lo que la hoja eligió: los códigos que nunca se eligen dejan de tener datos nuevos.' },
-      { titulo: 'Mínimo por código', texto: 'Cada código que se produce recibe, por rotación, al menos una inspección cada 40 días (elegido en validación, evaluado con el predictor de la primera etapa). Con etiquetas parciales conserva la precisión del ranking puro; reservar un 20 % al azar la baja.' },
-      { titulo: 'Detector de cambios', texto: 'Un CUSUM de Bernoulli por código, calibrado para no superar una falsa alarma cada 30 días en todo el catálogo. Sus alarmas son observaciones, no causas, y no modifican al predictor. Evaluado con el predictor de la primera etapa.' },
-      { titulo: 'Señal por mercado de destino', texto: 'La hoja explica cada prioridad por el mercado de destino, en el bloque «por qué este código». No prueba que el mercado cause calibraciones.' },
-      { titulo: 'Subcategorización', texto: 'Agrupar códigos por perfil de fallas no da un orden estable en validación. Queda la herramienta para cuando Ford publique su subcategorización.' },
-    ],
-    notas: 'Seguimos con el estado de cada pieza. Estas piezas se evaluaron con el predictor de la primera etapa; con CatBoost no se repitieron. En la prueba final, el mínimo por código dio inconcluso: lo decimos así si preguntan.',
-    orbita: false,
-  },
-
   // 10 · 02 Seguridad y privacidad — 2.3 ---------------------------------------
   {
     id: 'seguridad',
@@ -655,7 +595,7 @@ export const capitulos = [
     minutos: 1.2,
     antetitulo: 'Implementación · Trabajo futuro',
     titulo: 'Implementar ', acento: 'midiendo',
-    bajada: 'Días de control alternados, mínimo por código y resultados con y sin actividad QLS por separado.',
+    bajada: 'Días de control alternados y resultados con y sin actividad QLS por separado.',
     cifras: [],
     puntos: [],
     figura: { src: ILUSTRACIONES + 'plataforma-mock.svg', alt: 'Esquema de la plataforma' },
@@ -694,7 +634,7 @@ export const capitulos = [
     detalle: [
       { titulo: 'Mejora frente al azar', texto: 'En la prueba final, sobre la base ficticia.' },
       { titulo: 'CatBoost con atributos del código', texto: 'La más precisa de un grupo que empata.' },
-      { titulo: 'Siguiente: medir en planta', texto: 'Días de control, mínimo por código y hoja diaria.' },
+      { titulo: 'Siguiente: medir en planta', texto: 'Días de control y hoja diaria.' },
     ],
     ampliacion: [
       { titulo: 'Valor para Ford', texto: 'Mismas inspecciones, mejor elegidas. Usa el código del parabrisas y el programa del día. Explicable: cada prioridad es la tasa de una versión y un mercado. Sin riesgo operativo: si la hoja no está, se elige al azar como hoy. Sigue aprendiendo con el mínimo por código y avisa cambios con el detector.' },
