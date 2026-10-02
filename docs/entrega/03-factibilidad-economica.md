@@ -6,7 +6,7 @@ Borrador para la sección 3 del Informe (E2) y el separador 03 de la presentaci�
 
 ## De qué está hecha la solución
 
-Un script de Python con bibliotecas de código abierto (versiones fijadas en `requirements.txt`) que lee una exportación de QLS, el catálogo, el programa del día y el cupo, y produce una planilla y un imprimible. **No usa LLM ni servicios pagos**, no necesita GPU y no requiere nube ([plan][plan-fact]; [seguridad y privacidad](02-3-seguridad-privacidad.md)). No tiene costo de licencias.
+Un script de Python con bibliotecas de código abierto (versiones fijadas en `requirements.txt`) que lee una exportación de QLS, el catálogo, el programa del día y el cupo, y produce una planilla y un imprimible. **No usa LLM ni servicios pagos**, no necesita GPU y no requiere nube ([plan][plan-fact]; [seguridad y privacidad](02-3-seguridad-privacidad.md)). No tiene costo de licencias. La evolución en tiempo real en el GCP de Ford tiene su propio costo de nube, del orden de USD 100 a 200 por mes a precios de lista, estimado en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#costo-de-la-nube-orden-de-magnitud).
 
 Tiempo de una corrida diaria (hoja del día con la tasa vigente) en una notebook (Apple M1 Pro, medido el 29/09/2026): unos 2,2 s para leer el CSV completo y verificar su hash, y 0,2 s para armar la hoja del día (ranking, cantidades, planilla, imprimible y control de que no salga ningún VIN). El plan lo estima en segundos, porque con el código como predictor el cálculo es una tabla de tasas por código ([plan][plan-fact]).
 
@@ -39,7 +39,7 @@ Fórmula para Ford: **costo de implementación = horas de integración × costo 
 
 ## 4. Escenarios de escala
 
-Precios públicos consultados el 29/09/2026, por hora, Linux, a demanda, en dólares, sin disco ni transferencia. Se incluyen solo como techo de referencia: la solución no necesita nube.
+Precios públicos consultados el 29/09/2026, por hora, Linux, a demanda, en dólares, sin disco ni transferencia. Se incluyen solo como techo de referencia: la solución evaluada no necesita nube. La evolución en tiempo real, sí ([costos en GCP](05-1-scoring-fin-de-linea.md#costo-de-la-nube-orden-de-magnitud)).
 
 | Proveedor e instancia | Recursos | US East | São Paulo (Brasil) | Fuente |
 | --- | --- | ---: | ---: | --- |

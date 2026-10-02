@@ -47,7 +47,7 @@ Cuando Ford publique la subcategorización, se trata como una fuente nueva: se v
 
 ## 5. Historial de QLS
 
-El historial (incidencias, reparaciones, tiempos) queda fuera del predictor porque no está probado que exista al momento de elegir. Si Ford prueba esa disponibilidad (por ejemplo, con una marca de Gate Release en la exportación), se reabre, empezando por las **secuencias** de eventos ([representación][rep], punto 3; [alternativas][alt], punto 15). El anexo de historial deja preparada esa evaluación. En validación, el historial solo no se distinguió del azar (8,7 % y 9,0 % en el cupo, contra 9,9 % esperado) y sumado al código empató con la tasa fija, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN ([`p6.json`][p6]).
+El historial (incidencias, reparaciones, tiempos) queda fuera del predictor porque no está probado que exista al momento de elegir. Si Ford prueba esa disponibilidad (por ejemplo, con una marca de Gate Release en la exportación), se reabre, empezando por las **secuencias** de eventos ([representación][rep], punto 3; [alternativas][alt], punto 15). El anexo de historial deja preparada esa evaluación. Ford indicó (02/10) que la información puede obtenerse en tiempo real; con eventos que llevan su hora, el historial entra como variable candidata en sombra del [puntaje de fin de línea](05-1-scoring-fin-de-linea.md). En validación, el historial solo no se distinguió del azar (8,7 % y 9,0 % en el cupo, contra 9,9 % esperado) y sumado al código empató con la tasa fija, entre auditados con actividad QLS, validación 155–194, base ficticia, n = 8.038 VIN ([`p6.json`][p6]).
 
 ## 6. Consulta operativa pendiente
 
@@ -65,7 +65,11 @@ Propuesta de implementación, no un entregable del 2/10 ([#33](https://github.co
 
 **Prototipo:** galería de pantallas en [`prototipos/plataforma-web/`](https://github.com/FordwardAI/ford-predictive-quality/tree/main/prototipos/plataforma-web), con los tokens de la guía de marca de Ford y sin logo. Los datos (`data.js`) y las capturas se regeneran localmente y no se versionan.
 
-**Límites:** el prototipo usa la base ficticia y cifras de validación. No hay integración con QLS ni con el programa de producción; esa integración es el trabajo principal para llevarla a planta. Los riesgos de acceso y de datos se analizan en [seguridad y privacidad](02-3-seguridad-privacidad.md).
+**Límites:** el prototipo usa la base ficticia y cifras de validación. No hay integración con QLS ni con el programa de producción; esa integración es el trabajo principal para llevarla a planta. Cómo se llevaría al GCP de Ford (Cloud Run con IAP, Cloud SQL en lugar de SQLite y los `/api/*` como topics de Pub/Sub) está en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#componentes). Los riesgos de acceso y de datos se analizan en [seguridad y privacidad](02-3-seguridad-privacidad.md).
+
+## 8. Puntaje de fin de línea (feedback del jurado, 02/10)
+
+La hoja evoluciona hacia un puntaje por VIN que se calcula al terminar la línea, antes de Gate Release, con el código de catálogo y los parámetros de la línea publicados hasta ese momento. Con solo el catálogo coincide con la hoja actual. Los eventos viajan en tiempo real al BigQuery de Ford, por Pub/Sub y MQTT donde corresponda. Las mediciones de la verificación de calidad entran como variables, y las de Auditoría Adicional solo como etiqueta. Todo arranca en sombra. Arquitectura, contrato de eventos, costos y texto para el Informe: [05-1-scoring-fin-de-linea.md](05-1-scoring-fin-de-linea.md).
 
 [ctx]: ../../CONTEXT.md
 [sol]: ../../solucion/README.md
