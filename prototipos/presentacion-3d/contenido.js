@@ -33,10 +33,11 @@ export const meta = {
   desafio: 'Data-Driven Predictive Quality',
   equipo: 'FordwardAI',
   integrantes: [
-    { nombre: '[PENDIENTE: Apellido, Nombre — carátula del Informe]', universidad: '[PENDIENTE: Universidad — carátula del Informe]', carrera: '[PENDIENTE: Carrera (informática) — carátula del Informe]' },
-    { nombre: '[PENDIENTE: Apellido, Nombre — carátula del Informe]', universidad: '[PENDIENTE: Universidad — carátula del Informe]', carrera: '[PENDIENTE: Carrera (informática) — carátula del Informe]' },
-    { nombre: '[PENDIENTE: Apellido, Nombre — carátula del Informe]', universidad: '[PENDIENTE: Universidad — carátula del Informe]', carrera: '[PENDIENTE: Carrera (industrial) — carátula del Informe]' },
+    { nombre: 'Mateo Serebrinsky', carrera: 'Ingeniería Informática' },
+    { nombre: 'Máximo Georgalos', carrera: 'Ingeniería Industrial' },
+    { nombre: 'Facundo Lanusse', carrera: 'Ingeniería Informática' },
   ],
+
   fecha: 'Octubre 2026',
 };
 

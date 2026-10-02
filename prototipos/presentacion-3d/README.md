@@ -111,7 +111,7 @@ Para usar el modelo 3D:
 
 - **Textos:** [`contenido.js`](contenido.js). `meta` (evento, desafío, equipo, integrantes y fecha), `secciones` (template del Informe) y `capitulos` (uno por pantalla: escena 3D, titular con su `acento`, bajada, cifras, puntos —callouts—, figura, tarjetas en `detalle`, `ampliacion` —respaldo para preguntas, solo en las notas— y notas del orador). Los titulares deben quedar en menos de 8 palabras.
 - **Disposición:** el texto va de un lado (≈ 46 % del ancho; `lado: 'izquierda' | 'derecha'`, o por sección) y la figura o el vehículo del otro. Sin figura, las tarjetas van en una banda al pie; si así la pantalla no entra en la ventana, pasan al pie de la columna del vehículo (y, si todavía no entra, también los callouts). `disposicion: 'tarjetas-texto' | 'tarjetas-escena'` fuerza dónde van las tarjetas. El encabezado de `contenido.js` explica cada campo. Cada pantalla debe entrar en 1920×1080 sin desbordar: si no entra, recortar texto antes que achicar la letra.
-- **Integrantes:** reemplazar los tres `[PENDIENTE: …]` de `meta.integrantes` por nombre (`Apellido, Nombre`), universidad y carrera. El equipo tiene dos integrantes de informática y uno de industrial.
+- **Integrantes:** `meta.integrantes` tiene nombre y carrera de los tres; la universidad no está cargada (agregar `universidad` si se quiere mostrar).
 - **Escenas y puntos:** los ids válidos están en el contrato de la escena (`escena/escena.js`): `portada`, `linea`, `datos`, `predictor`, `validacion`, `resultado`, `seguridad`, `factibilidad`, `donde-mirar`, `futuro`, `cierre`; puntos `etiqueta-parabrisas`, `carroceria`, `pintura`, `montaje`, `gate-release`, `inspeccion-adicional`, `componente-1` a `componente-3` (zonas ilustrativas del vehículo; ninguna pantalla las usa hoy: los componentes reales están anonimizados y `donde-mirar` no tiene puntos) y `playa-despacho`.
 - **Figuras:** `figura` acepta `{ tipo: 'js', id, opciones, src }` (figuras.js, con `src` de respaldo), `{ src, respaldo }` (ilustración con respaldo) y `{ tipo: 'local', src: [candidatos], respaldo, pendiente }` (captura local). Los SVG de respaldo de [`docs/entrega/figuras/`](../../docs/entrega/figuras/) se regeneran con el comando de [`solucion/`](../../solucion/README.md), no a mano.
 
@@ -159,9 +159,6 @@ Cada placeholder tiene el formato `[PENDIENTE: qué falta — fuente esperada]`;
 
 | Dónde | Placeholder | Fuente esperada |
 | --- | --- | --- |
-| `contenido.js` → `meta.integrantes[0..2].nombre` | `[PENDIENTE: Apellido, Nombre — carátula del Informe]` (×3) | Carátula del Informe |
-| `contenido.js` → `meta.integrantes[0..2].universidad` | `[PENDIENTE: Universidad — carátula del Informe]` (×3) | Carátula del Informe |
-| `contenido.js` → `meta.integrantes[0..2].carrera` | `[PENDIENTE: Carrera (informática) — carátula del Informe]` (×2) y `[PENDIENTE: Carrera (industrial) — carátula del Informe]` (×1) | Carátula del Informe |
 | `contenido.js` → capítulos `hoja` y `plataforma-*`, `figura.pendiente` (chip dentro de la figura) | `[PENDIENTE: captura flujo-N-….png — herramientas/capturar_flujo.sh, salida local fuera de Git]` (×7) | `herramientas/capturar_flujo.sh` (o las capturas del traspaso, copiadas a `assets/local/`) |
 
 Las capturas no se versionan: si se muestran, se generan localmente el día de la presentación (ver [Figuras, ilustraciones y capturas](#figuras-ilustraciones-y-capturas)). Mientras falten, el chip se ve en la figura; `?limpio=1` lo oculta. `cifras.js` no tiene cifras pendientes.
