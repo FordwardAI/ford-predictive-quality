@@ -36,7 +36,7 @@ def test_vin_de_la_tabla_y_forma_de_vin_fallan_tambien_dentro_de_un_xlsx():
         assert empaquetar.controlar(_zip(d, {"anexos/n.txt": "unidad " + "3FA6P0H75ER" + "123456"}))
         assert not empaquetar.controlar(_zip(d, {"anexos/n.txt": "unidad SYN001002"}), vins=["SYN009999"])
         # El modelo 3D es binario: sus bytes pueden tener forma de VIN sin serlo.
-        assert not empaquetar.controlar(_zip(d, {"prototipos/presentacion-3d/assets/m.glb": "P1P0P2P2P0P3P3P0P"}))
+        assert not empaquetar.controlar(_zip(d, {"prototipos/presentacion-3d/assets/m.glb": "P1P0P2P2" + "P0P3P3P0P"}))
 
 
 def test_lo_versionado_incluye_codigo_plataforma_y_presentacion_sin_datos():
