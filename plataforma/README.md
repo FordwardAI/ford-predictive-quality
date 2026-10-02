@@ -28,7 +28,7 @@ Todavía no se sabe cómo se reparten estas tareas en planta (quién arma la hoj
 
 ### Contrato de las entradas
 
-Los tres endpoints reciben JSON `{"filas": [...]}` o CSV con encabezado, como texto (`{"csv": "..."}`). La pantalla Día de planta importa los CSV. Cada importación es todo o nada: si una fila falla, no entra ninguna y la respuesta dice cuál fila y por qué.
+Los tres endpoints reciben JSON `{"filas": [...]}` o CSV con encabezado, como texto (`{"csv": "..."}`). La pantalla Día de planta importa los CSV. Ingreso y resultados son todo o nada: si una fila falla, no entra ninguna y la respuesta dice cuál fila y por qué. Despacho procesa cada fila por separado.
 
 | Entrada | Columnas | Validaciones |
 | --- | --- | --- |

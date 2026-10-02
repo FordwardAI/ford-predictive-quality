@@ -70,7 +70,7 @@ Más opciones en el [README de la presentación](prototipos/presentacion-3d/READ
 .venv/bin/python -m solucion.empaquetar --destino "<ruta externa>/reproduccion.zip" --salida "<hoja generada>"
 ```
 
-`solucion.run` recalcula la validación, la hoja de desarrollo y las figuras, y verifica los hashes de las entradas. Las lecturas de la prueba final no se repiten: están en [`prueba-final.json`](solucion/resultados/prueba-final.json). Detalle en [reproducción](solucion/README.md).
+`solucion.run` recalcula la validación, la hoja de desarrollo y las figuras, y verifica los hashes de las entradas. Los resultados de referencia son los agregados versionados de las corridas documentadas. Los modelos de ML (incluida la elección por precisión, `--piezas precision`, donde gana CatBoost) pueden variar según el procesador; sus cifras de referencia son las de [`precision.json`](solucion/resultados/precision.json). Las lecturas de la prueba final no se repiten: están en [`prueba-final.json`](solucion/resultados/prueba-final.json). Detalle en [reproducción](solucion/README.md).
 
 ## Límites
 

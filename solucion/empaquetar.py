@@ -28,62 +28,69 @@ BINARIOS = {".glb", ".webp"}
 CARPETA_HOJA, CARPETA_ANEXOS = "hoja/", "anexos/"
 FORMA_VIN = re.compile(r"\b(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-HJ-NPR-Z0-9]{17}\b")
 
-README = """# Reproducción de la prueba de concepto (FordwardAI)
+README = """# Entrega FordwardAI: cómo ver y reproducir la solución
 
 Versión del código: `{version}`. Fuente de los datos: los hashes de `docs/datos-locales.md` (CSV `a24860d8…c5a82b`,
-catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: hay que tener los dos archivos locales.
+catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: la plataforma y la reproducción necesitan los dos
+archivos locales (el CSV QLS y el catálogo). La presentación no los necesita.
 
-1. Python 3.13 (ver `.python-version`). Desde esta carpeta:
-   ```sh
-   python3.13 -m venv .venv
-   .venv/bin/pip install -r requirements.txt          # Windows: .venv\\Scripts\\pip
-   ```
-   xgboost y lightgbm necesitan OpenMP del sistema: en macOS, `brew install libomp`; en Linux (Debian/Ubuntu),
-   `apt-get install libgomp1`. En Windows hace falta `set PYTHONUTF8=1`.
-2. Pruebas sintéticas (no necesitan los datos):
-   ```sh
-   .venv/bin/python -m solucion.pruebas
-   ```
-3. Recalcular, con las rutas locales de los dos archivos (el código verifica sus hashes; la salida va fuera de esta carpeta):
-   ```sh
-   .venv/bin/python -m solucion.run --csv "/ruta/Dataset QLS Inspección Adicional.csv" \\
-     --catalogo "/ruta/Códigos de catálogo.csv" --salida ../salida
-   ```
-4. Comparar solo los resultados del comando por defecto en `solucion/resultados/` con los recién escritos. Coinciden `preparacion`, `p3`, `p5`,
-   `p8` y `p9` salvo nombres de archivo y `version_codigo`; en `p4` y `eleccion` (modelos de ML) y en `p6` puede variar
-   la 3.ª cifra decimal o la semilla mediana según la plataforma, sin cambiar la alternativa ganadora.
+## 1. Entorno (una vez)
 
-5. **La prueba final no se vuelve a correr.** Sus tres lecturas (tasa fija y CatBoost con atributos el 30/09,
-   Random Forest con atributos el 01/10) tienen sus preregistros en `solucion/preregistro.json`,
-   `solucion/preregistro-precision.json` y `solucion/preregistro-efectividad.json`. La solución es CatBoost.
-   Su registro agregado está en `solucion/resultados/prueba-final.json`. El comando regenera validación y
-   la hoja de desarrollo del Día 190; las cifras finales se leen del registro y la hoja final incluida se conserva.
+Python 3.13 (ver `.python-version`). Desde esta carpeta:
+```sh
+python3.13 -m venv .venv
+.venv/bin/pip install -r requirements.txt          # Windows: .venv\\Scripts\\pip
+```
+xgboost y lightgbm necesitan OpenMP del sistema: en macOS, `brew install libomp`; en Linux (Debian/Ubuntu),
+`apt-get install libgomp1`. En Windows, el intérprete es `.venv\\Scripts\\python` y hace falta `set PYTHONUTF8=1`.
 
-Los experimentos opcionales y sus agregados están en `solucion/experimentos/`:
-ver [sus comandos y límites](solucion/experimentos/README.md). No son la solución acordada ni corren por defecto.
-Sus informes están en `research/`; los borradores de entrega y fuentes, en `docs/`.
+## 2. Ver la plataforma
 
-## Ver la plataforma y la presentación
+MVP con una fuente simulada sobre la base ficticia (Días 155–194):
+```sh
+.venv/bin/python -m plataforma.servidor --csv "/ruta/Dataset QLS Inspección Adicional.csv" \\
+  --catalogo "/ruta/Códigos de catálogo.csv" --puerto 8765
+```
+Abrir http://127.0.0.1:8765. El día arranca en Día de planta: «Armar la hoja», después Hoja del día, Selección,
+Seguimiento, Resultados, Modelo y Reporte para la línea; «Avanzar al día siguiente» simula la llegada de unidades y
+resultados. Ningún VIN sale del servidor. Detalle en `plataforma/README.md`.
 
-Con el entorno del paso 1, desde esta carpeta:
+## 3. Ver la presentación
 
-- **Plataforma** (MVP; fuente simulada sobre la base ficticia, Días 155–194):
+Sitio estático; necesita internet para three.js, GSAP y las fuentes. Desde esta carpeta:
+```sh
+python3 -m http.server 8000
+```
+Abrir http://localhost:8000/prototipos/presentacion-3d/. Se recorre con las flechas; `N` muestra las notas del orador.
+Las capturas de la plataforma no vienen en el .zip porque muestran tasas por código: sin ellas se ve un esquema, con
+un aviso que `?limpio=1` oculta. Se generan con `prototipos/presentacion-3d/herramientas/capturar_flujo.sh`.
+
+## 4. Comprobar los resultados (opcional)
+
+Los resultados de referencia son los agregados versionados en `solucion/resultados/`, de las corridas documentadas.
+- Pruebas sintéticas, sin los datos: `.venv/bin/python -m solucion.pruebas`.
+- Recalcular la validación y la hoja de desarrollo del Día 190 (unos minutos; la salida va fuera de esta carpeta):
   ```sh
-  .venv/bin/python -m plataforma.servidor --csv "/ruta/Dataset QLS Inspección Adicional.csv" \
-    --catalogo "/ruta/Códigos de catálogo.csv" --puerto 8765
+  .venv/bin/python -m solucion.run --csv "/ruta/Dataset QLS Inspección Adicional.csv" \\
+    --catalogo "/ruta/Códigos de catálogo.csv" --salida ../salida
   ```
-  y abrir http://127.0.0.1:8765. Detalle en `plataforma/README.md`.
-- **Presentación** (sitio estático; necesita internet para three.js, GSAP y las fuentes):
-  ```sh
-  python3 -m http.server 8000
-  ```
-  y abrir http://localhost:8000/prototipos/presentacion-3d/. Las capturas de la plataforma no vienen en el .zip
-  (muestran tasas por código): se generan con `prototipos/presentacion-3d/herramientas/capturar_flujo.sh`.
+  Coinciden `preparacion`, `p3`, `p5`, `p8` y `p9`, salvo `version_codigo`. En `p4`, `eleccion` y `p6` (modelos de ML)
+  puede variar la 3.ª cifra decimal o la semilla mediana según el procesador, sin cambiar la alternativa ganadora.
+- La elección por precisión (`--piezas precision`, donde gana CatBoost) también entrena modelos de ML y depende del
+  procesador: sus cifras de referencia son las de `solucion/resultados/precision.json`.
 
-Contenido: `solucion/` (código y pruebas), `research/` (auditoría, particiones e informes), `docs/` (documentación),
-`plataforma/` (MVP de la plataforma), `prototipos/presentacion-3d/` (la presentación), `solucion/resultados/` (solo
-agregados), `{hoja}` (hoja de códigos prioritarios, sin VIN) y `{anexos}` (material de apoyo).
-Todas las cifras valen entre auditados con actividad QLS, base ficticia.
+**La prueba final no se vuelve a correr.** Sus tres lecturas (tasa fija y CatBoost con atributos el 30/09,
+Random Forest con atributos el 01/10) tienen sus preregistros en `solucion/preregistro.json`,
+`solucion/preregistro-precision.json` y `solucion/preregistro-efectividad.json`; la solución es CatBoost. El registro
+agregado está en `solucion/resultados/prueba-final.json` y la hoja final incluida se conserva.
+
+## Contenido
+
+`plataforma/` (MVP de la plataforma), `prototipos/presentacion-3d/` (la presentación), `solucion/` (código, pruebas y
+`resultados/`, solo agregados), `solucion/experimentos/` (exploratorios, no corren por defecto), `research/`
+(auditoría, particiones e informes), `docs/` (borradores del informe y documentación), `{hoja}` (hoja de códigos
+prioritarios, sin VIN) y `{anexos}` (material de apoyo). Todas las cifras valen entre auditados con actividad QLS,
+base ficticia.
 """
 
 
