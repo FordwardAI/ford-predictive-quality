@@ -19,7 +19,7 @@ def test_zip_limpio_pasa_y_csv_de_datos_falla():
     with tempfile.TemporaryDirectory() as d:
         assert empaquetar.controlar(_zip(d, {"solucion/a.py": "x = 1", "hoja/hoja.csv": "codigo;n\nAAA1;3"})) == []
         assert empaquetar.controlar(_zip(d, {"datos/base.csv": "a,b"}))  # CSV fuera de la hoja.
-        assert empaquetar.controlar(_zip(d, {"prototipos/plataforma-web/data.js": "var D = {}"}))
+        assert empaquetar.controlar(_zip(d, {"prototipos/presentacion-3d/assets/local/data.js": "var D = {}"}))
 
 
 # El VIN de ejemplo se arma concatenando para que el control del .zip no lo vea literal.

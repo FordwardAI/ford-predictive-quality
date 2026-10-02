@@ -1,7 +1,7 @@
 // Contenido de la presentación 3D (FordwardAI, Trials Day 2/10/2026).
 //
 // Fuentes (no inventar contenido ni cifras; editar aquí y no en ui.js):
-//   - docs/entrega/guion-presentacion.md: mensaje de cada diapositiva y notas por bloque.
+//   - docs/entrega/speech-presentacion.md: guion hablado de cada pantalla.
 //   - docs/entrega/01 a 06 y 02-x: borradores del Informe (secciones del template).
 //   - docs/entrega/preguntas-jurado.md, docs/entrega/figuras/README.md.
 //   - docs/fuentes/documentation.md (ficha del desafío), docs/alcance-entrega.md,
@@ -440,7 +440,7 @@ export const capitulos = [
     figura: {
       tipo: 'local',
       ampliar: true,
-      src: [LOCAL + 'flujo-2-hoja.png', LOCAL + 'captura-hoja-dia-260.png', LOCAL + 'd-hoja.png'],
+      src: [LOCAL + 'flujo-2-hoja.png', LOCAL + 'captura-hoja-dia-260.png'],
       respaldo: ILUSTRACIONES + 'hoja-mock.svg',
       alt: 'La hoja de códigos prioritarios del día',
       pendiente: '[PENDIENTE: captura flujo-2-hoja.png — herramientas/capturar_flujo.sh, salida local fuera de Git]',

@@ -25,7 +25,7 @@
 
 ## Marca
 
-- Paleta, tipografía y reglas de uso según la guía pública del design system de Ford: <https://brand.ford.com/>. Los tokens se reutilizan de [`prototipos/plataforma-web/tokens.css`](../plataforma-web/tokens.css).
+- Paleta, tipografía y reglas de uso según la guía pública del design system de Ford: <https://brand.ford.com/>. Los tokens están en [`tokens.css`](tokens.css).
 - **No se usan** el Ford Oval, la Signature ni ningún logo de Ford.
 
 ## Contenido

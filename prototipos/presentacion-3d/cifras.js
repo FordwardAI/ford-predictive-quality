@@ -29,7 +29,7 @@
 //   - docs/entrega/03-factibilidad-economica.md  tiempos medidos,
 //     sin JSON (archivo: null).
 //
-// Regla de leyenda (guion de la presentación): toda cifra en pantalla lleva
+// Regla de leyenda (speech de la presentación): toda cifra en pantalla lleva
 // «entre inspeccionados con actividad QLS, [tramo], base ficticia, n = …».
 //
 // prototipos/presentacion-3d/verificar_cifras.py compara cada respaldo con su
