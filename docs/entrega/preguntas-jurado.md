@@ -92,13 +92,24 @@ Porque, si la hoja rinde más que el azar, ese 20 % cuesta calibraciones todos l
 No lo podemos calcular sin datos reales de planta: depende de la tasa y del cupo reales. Queda para calcularlo con los primeros datos ([base QLS][qls], punto 7).
 
 **28. ¿Introduce un riesgo de ciberseguridad?**
-No uno nuevo relevante: lee una exportación, no se conecta a la red de automatización, no usa nube ni LLM y no usa datos personales. Si falla, se elige al azar como hoy ([seguridad y privacidad](02-3-seguridad-privacidad.md)).
+No uno nuevo relevante: lee una exportación, no se conecta a la red de automatización, no usa nube ni LLM y no usa datos personales. Si falla, se elige al azar como hoy ([seguridad y privacidad](02-3-seguridad-privacidad.md)). La evolución en tiempo real correría en el GCP de Ford, con conexión solo saliente desde planta (pregunta 32).
 
 **29. ¿Qué aporta más allá de la selección?**
 «Dónde mirar» (qué componente revisar primero), el detector de cambios por código y un insumo para la subcategorización del catálogo ([valor diferencial](04-valor-diferencial.md)).
 
 **30. ¿Se puede replicar en otras plantas?**
 Sí, si tienen un código de catálogo visible, resultados de auditoría con fecha y un cupo diario. Cada planta corre su propia hoja ([trabajo futuro](05-trabajo-futuro.md)).
+
+## Sobre la evolución en tiempo real (feedback del 02/10)
+
+**31. ¿Pueden dar un puntaje al final de la línea con los parámetros de producción?**
+Sí, como evolución de la hoja: el mismo servicio, al terminar la línea y antes de Gate Release, suma al código los parámetros publicados hasta ese momento. Con solo el código da la hoja actual. Sin datos reales de parámetros no sabemos cuánto mejora; por eso arranca en sombra y se compara con el catálogo solo en un período nuevo ([puntaje de fin de línea](05-1-scoring-fin-de-linea.md)).
+
+**32. ¿Usarían MQTT y Pub/Sub?**
+Pub/Sub para todo. MQTT donde la fuente sea un equipo de planta (herramientas de apriete, PLC, metrología), con el broker en la DMZ y salida solo hacia GCP. Las aplicaciones como QLS publicarían directo en Pub/Sub. Todo termina en el BigQuery que Ford ya usa ([arquitectura](05-1-scoring-fin-de-linea.md#arquitectura-en-gcp)).
+
+**33. ¿Podrían retener un VIN antes de Gate Release?**
+Como sugerencia con sus motivos, y la decisión queda en Calidad de Ford. Primero en sombra («se habría retenido» contra el resultado posterior), porque en la base ficticia el historial del VIN no separó calibradas. El sistema nunca escribe en QLS, el MES ni los controladores ([evaluación en vivo](05-1-scoring-fin-de-linea.md#evaluación-en-vivo)).
 
 [ctx]: ../../CONTEXT.md
 [ficha]: ../fuentes/documentation.md

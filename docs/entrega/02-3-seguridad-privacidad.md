@@ -42,7 +42,7 @@ La base de Ford trae además identificadores anonimizados de inspectores y repar
 
 ## Dónde corre y quién accede
 
-- **Dónde corre:** un script de Python que se ejecuta en una notebook o en un servidor de la planta. **No requiere nube, no llama a servicios externos y no usa modelos de lenguaje (LLM)** ([plan][plan-fact], «Factibilidad económica y escalado»). Las dependencias son paquetes de código abierto con versiones fijadas en `requirements.txt`; una vez instaladas, funciona sin conexión.
+- **Dónde corre:** un script de Python que se ejecuta en una notebook o en un servidor de la planta. **No requiere nube, no llama a servicios externos y no usa modelos de lenguaje (LLM)** ([plan][plan-fact], «Factibilidad económica y escalado»). Las dependencias son paquetes de código abierto con versiones fijadas en `requirements.txt`; una vez instaladas, funciona sin conexión. La evolución con puntaje de fin de línea sí correría en el proyecto de GCP de Ford, con conexión solo saliente desde planta y sin escribir en QLS, el MES ni los controladores; sus controles están en [puntaje de fin de línea](05-1-scoring-fin-de-linea.md#seguridad-y-privacidad).
 - **Qué no toca:** no se conecta a controladores, robots ni a la red de automatización de la línea. No escribe en QLS: lee una exportación. En los términos de IEC 62443, no forma parte de ninguna zona de control; si Ford la instala en un servidor de planta, ese servidor queda dentro de la zona de TI que Ford ya tenga definida.
 - **Quién accede:**
 
@@ -81,7 +81,7 @@ Valoración cualitativa del equipo, no medida.
 
 ## Conclusión para el informe
 
-La solución no introduce un riesgo de ciberseguridad nuevo relevante: lee una exportación, corre fuera de la red de automatización, no usa nube ni LLM, no trata datos personales y, si falla, la planta vuelve al método actual sin interrumpir nada. Los controles que quedan del lado de Ford (acceso a la hoja, lugar donde corre y mantenimiento) son los de cualquier planilla interna de Calidad.
+La solución no introduce un riesgo de ciberseguridad nuevo relevante: lee una exportación, corre fuera de la red de automatización, no usa nube ni LLM, no trata datos personales y, si falla, la planta vuelve al método actual sin interrumpir nada. Los controles que quedan del lado de Ford (acceso a la hoja, lugar donde corre y mantenimiento) son los de cualquier planilla interna de Calidad. La evolución en tiempo real agrega dos riesgos, retención sugerida sin fundamento y telemetría incompleta, que se controlan arrancando en sombra ([puntaje de fin de línea](05-1-scoring-fin-de-linea.md#texto-para-el-informe)).
 
 [alc]: ../alcance-entrega.md#qué-exigen-los-templates
 [agents]: ../../AGENTS.md
