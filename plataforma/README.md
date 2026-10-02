@@ -49,13 +49,17 @@ Las semillas están registradas en `plataforma/simulador.py`. El reloj arranca e
 
 ## Cómo correrla
 
-Desde la raíz, con el entorno de [`solucion/README.md`](../solucion/README.md):
+Lo más simple es `./iniciar.sh` (macOS o Linux), `iniciar.bat` (Windows) o `docker compose up --build`, desde la raíz: levantan la plataforma y la presentación juntas ([README](../README.md#ver-la-plataforma-y-la-presentación)). A mano, desde la raíz y con el entorno de [`solucion/README.md`](../solucion/README.md):
 
 ```sh
+.venv/bin/python -m plataforma.servidor            # demo con la base sintética (sin los CSV de Ford)
 .venv/bin/python -m plataforma.servidor --csv "<Dataset QLS Inspección Adicional.csv>" --catalogo "<Códigos de catálogo.csv>"
 ```
 
-Abrir `http://127.0.0.1:8765`. El almacén de planta y el estado del día quedan fuera del repo (`~/.cache/ford-predictive-quality/plataforma/`).
+Abrir `http://127.0.0.1:8765`.
+- **Demo:** sin `--csv` ni `--catalogo` usa [`demo.py`](demo.py). Es una base sintética con el mismo esquema: 24 códigos de 4 mercados, unas 250 unidades por día e identificadores `DEMO-…`. Sirve para ver el flujo, pero sus cifras no son resultados; la interfaz y la hoja lo dicen («Demo sintética»).
+- **Estado:** el almacén de planta y el estado del día quedan fuera del repo, en `~/.cache/ford-predictive-quality/plataforma/` (o `plataforma-demo/`, separado).
+- **Contenedor:** `--host 0.0.0.0` sirve solo dentro de un contenedor; `docker-compose.yml` publica el puerto únicamente en 127.0.0.1.
 
 ```sh
 .venv/bin/python -m plataforma.test_plataforma   # lógica del día y filtro sin VIN (sintéticas, sin CSV)

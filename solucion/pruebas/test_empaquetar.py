@@ -46,6 +46,7 @@ def test_lo_versionado_incluye_codigo_plataforma_y_presentacion_sin_datos():
     assert "solucion/run.py" in archivos and "requirements.txt" in archivos and ".python-version" in archivos
     assert "plataforma/servidor.py" in archivos and "plataforma/web/index.html" in archivos
     assert "prototipos/presentacion-3d/index.html" in archivos
+    assert {"iniciar.sh", "iniciar.bat", "Dockerfile", "docker-compose.yml", "docker/plataforma.sh"} <= set(archivos)
     assert not [a for a in archivos if a.endswith((".csv", ".xlsx")) or "/assets/local/" in a or "/node_modules/" in a
                 or (a.startswith("prototipos/") and not a.startswith(empaquetar.PRESENTACION))]
     assert {"docs/datos-locales.md", "solucion/experimentos/README.md", "research/busqueda-amplia.md",

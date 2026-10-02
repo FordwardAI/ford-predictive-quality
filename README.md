@@ -29,32 +29,33 @@ El vocabulario está en [CONTEXT.md](CONTEXT.md).
 
 ## Ver la plataforma y la presentación
 
-Todo se corre desde la raíz del repo (o de la carpeta del .zip). Los datos **no** están en el repo: hacen falta el CSV QLS y el catálogo, identificados por SHA-256 en [datos locales](docs/datos-locales.md).
+Se levantan las dos juntas con un comando: la plataforma en <http://127.0.0.1:8765> y la presentación en <http://localhost:8000/prototipos/presentacion-3d/>. **Sin datos, la plataforma arranca en modo demo** con una base sintética del mismo esquema ([`plataforma/demo.py`](plataforma/demo.py)): sirve para ver el flujo, pero sus cifras no son resultados. Con los dos CSV de Ford (CSV QLS y catálogo, identificados por SHA-256 en [datos locales](docs/datos-locales.md)) muestra la base ficticia. Los datos nunca están en el repo.
 
-**1. Entorno (una vez).** Python 3.13:
+**Opción A · Un comando, con Python 3.13** ([descargar](https://www.python.org/downloads/)). La primera vez crea el entorno `.venv` e instala `requirements.txt`; después abre las dos páginas.
 
-```sh
-python3.13 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-```
+| Sistema | Demo | Con los CSV de Ford |
+| --- | --- | --- |
+| macOS o Linux | `./iniciar.sh` | `./iniciar.sh "<Dataset QLS Inspección Adicional.csv>" "<Códigos de catálogo.csv>"` |
+| Windows | `iniciar.bat` | `iniciar.bat "<Dataset QLS Inspección Adicional.csv>" "<Códigos de catálogo.csv>"` |
 
-xgboost y lightgbm necesitan OpenMP del sistema: en macOS, `brew install libomp`; en Linux (Debian/Ubuntu), `apt-get install libgomp1`. En Windows, el intérprete es `.venv\Scripts\python` y conviene `set PYTHONUTF8=1`.
-
-**2. Plataforma.** El build de la interfaz está versionado, así que alcanza con Python (Node solo hace falta para cambiar la interfaz):
+**Opción B · Docker**, en cualquier sistema con Docker instalado, sin Python:
 
 ```sh
-.venv/bin/python -m plataforma.servidor --csv "<Dataset QLS Inspección Adicional.csv>" --catalogo "<Códigos de catálogo.csv>" --puerto 8765
+docker compose up --build
 ```
 
-Abrir <http://127.0.0.1:8765>. Arranca en el Día 155 con una fuente simulada sobre la base ficticia. **Avanzar al día siguiente** reproduce la llegada de unidades y resultados. El recorrido del día (Día de planta → Hoja → Selección → Seguimiento → Resultados → Modelo → Reporte para la línea) está en el [README de la plataforma](plataforma/README.md). Ningún VIN sale del servidor.
+Para usar la base de Ford, copiar los dos CSV en `./datos/` (Git la ignora) o indicar la carpeta con `FORD_DATOS=/ruta docker compose up --build`.
 
-**3. Presentación.** Es un sitio estático y necesita internet, porque three.js, GSAP y las fuentes se cargan por CDN:
+**Opción C · A mano.**
+1. Crear el entorno: `python3.13 -m venv .venv` y `.venv/bin/pip install -r requirements.txt`. En Windows, el intérprete es `.venv\Scripts\python`.
+2. Levantar la plataforma: `.venv/bin/python -m plataforma.servidor`, con `--csv` y `--catalogo` si se usan los datos de Ford.
+3. Levantar la presentación: `python3 -m http.server 8000` desde la raíz.
 
-```sh
-python3 -m http.server 8000
-```
+Solo para recalcular los resultados (no para verlos), xgboost y lightgbm necesitan OpenMP: `brew install libomp` en macOS y `apt-get install libgomp1` en Linux.
 
-Abrir <http://localhost:8000/prototipos/presentacion-3d/>. Se recorre con las flechas o con scroll; `N` muestra las notas del orador y `?estatico=1` evita el 3D en equipos lentos. Las capturas de la plataforma no se versionan porque muestran tasas por código. Sin ellas, esas pantallas muestran un esquema sin números, con un aviso que se oculta con `?limpio=1`. Para generarlas hacen falta los dos CSV y Chrome (bash, en macOS o Linux):
+**La plataforma** arranca en el Día 155. Primero se arma la hoja; **Avanzar al día siguiente** simula la llegada de unidades y resultados. El recorrido (Día de planta → Hoja → Selección → Seguimiento → Resultados → Modelo → Reporte para la línea) está en el [README de la plataforma](plataforma/README.md). Ningún VIN sale del servidor. El build de la interfaz está versionado, así que no hace falta Node.
+
+**La presentación** necesita internet, porque three.js, GSAP y las fuentes se cargan por CDN. Se recorre con las flechas o con scroll; `N` muestra las notas del orador y `?estatico=1` evita el 3D en equipos lentos. Las capturas de la plataforma no se versionan porque muestran tasas por código. Sin ellas, esas pantallas muestran un esquema, con un aviso que se oculta con `?limpio=1`. Para generarlas (con los CSV, Chrome y bash):
 
 ```sh
 FORD_CSV="<Dataset QLS Inspección Adicional.csv>" FORD_CATALOGO="<Códigos de catálogo.csv>" prototipos/presentacion-3d/herramientas/capturar_flujo.sh
@@ -70,7 +71,7 @@ Más opciones en el [README de la presentación](prototipos/presentacion-3d/READ
 .venv/bin/python -m solucion.empaquetar --destino "<ruta externa>/reproduccion.zip" --salida "<hoja generada>"
 ```
 
-`solucion.run` recalcula la validación, la hoja de desarrollo y las figuras, y verifica los hashes de las entradas. Los resultados de referencia son los agregados versionados de las corridas documentadas. Los modelos de ML (incluida la elección por precisión, `--piezas precision`, donde gana CatBoost) pueden variar según el procesador; sus cifras de referencia son las de [`precision.json`](solucion/resultados/precision.json). Las lecturas de la prueba final no se repiten: están en [`prueba-final.json`](solucion/resultados/prueba-final.json). Detalle en [reproducción](solucion/README.md).
+Desde la raíz, con el entorno de la opción C. `solucion.run` recalcula la validación, la hoja de desarrollo y las figuras, y verifica los hashes de las entradas. Los resultados de referencia son los agregados versionados de las corridas documentadas. Los modelos de ML (incluida la elección por precisión, `--piezas precision`, donde gana CatBoost) pueden variar según el procesador; sus cifras de referencia son las de [`precision.json`](solucion/resultados/precision.json). Las lecturas de la prueba final no se repiten: están en [`prueba-final.json`](solucion/resultados/prueba-final.json). Detalle en [reproducción](solucion/README.md).
 
 ## Límites
 

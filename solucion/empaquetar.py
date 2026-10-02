@@ -18,8 +18,10 @@ from pathlib import Path
 from solucion.datos import RAIZ
 
 PREFIJOS = {"solucion/": None, "research/": {".py", ".json", ".md", ".png", ".svg"},
-            "docs/": {".md", ".png", ".svg"}, "plataforma/": None, "prototipos/presentacion-3d/": None}
-RAIZ_INCLUIDA = {"requirements.txt", ".python-version", "README.md", "AGENTS.md", "CLAUDE.md", "CONTEXT.md", "CONTRIBUTING.md"}
+            "docs/": {".md", ".png", ".svg"}, "plataforma/": None, "prototipos/presentacion-3d/": None,
+            "docker/": None}
+RAIZ_INCLUIDA = {"requirements.txt", ".python-version", "README.md", "AGENTS.md", "CLAUDE.md", "CONTEXT.md", "CONTRIBUTING.md",
+                 "iniciar.sh", "iniciar.bat", "Dockerfile", "docker-compose.yml", ".dockerignore"}
 EXCLUIDOS = ("/__pycache__/", "/.venv/", "/node_modules/", "/assets/local/", "/assets/fuente/")
 PRESENTACION = "prototipos/presentacion-3d/"
 DATOS_CRUDOS = {".csv", ".xlsx", ".xls", ".pickle", ".pkl", ".parquet"}
@@ -31,43 +33,41 @@ FORMA_VIN = re.compile(r"\b(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-HJ-NPR-Z0-9]{17}\
 README = """# Entrega FordwardAI: cómo ver y reproducir la solución
 
 Versión del código: `{version}`. Fuente de los datos: los hashes de `docs/datos-locales.md` (CSV `a24860d8…c5a82b`,
-catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip**: la plataforma y la reproducción necesitan los dos
-archivos locales (el CSV QLS y el catálogo). La presentación no los necesita.
+catálogo `89e5a9d9…3e047`). **Los datos no vienen en este .zip.** Sin ellos, la plataforma arranca en modo demo con una base sintética.
 
-## 1. Entorno (una vez)
+## 1. Levantar la plataforma y la presentación
 
-Python 3.13 (ver `.python-version`). Desde esta carpeta:
-```sh
-python3.13 -m venv .venv
-.venv/bin/pip install -r requirements.txt          # Windows: .venv\\Scripts\\pip
-```
-xgboost y lightgbm necesitan OpenMP del sistema: en macOS, `brew install libomp`; en Linux (Debian/Ubuntu),
-`apt-get install libgomp1`. En Windows, el intérprete es `.venv\\Scripts\\python` y hace falta `set PYTHONUTF8=1`.
+Plataforma en http://127.0.0.1:8765 y presentación en http://localhost:8000/prototipos/presentacion-3d/.
+La presentación necesita internet (three.js, GSAP y las fuentes). Elegir una opción, desde esta carpeta:
 
-## 2. Ver la plataforma
+- **Un comando, con Python 3.13** (https://www.python.org/downloads/). La primera vez crea `.venv` e instala
+  `requirements.txt`.
+  - Demo: `./iniciar.sh` en macOS o Linux, `iniciar.bat` en Windows.
+  - Con los datos de Ford: `./iniciar.sh "/ruta/Dataset QLS Inspección Adicional.csv" "/ruta/Códigos de catálogo.csv"`
+    (en Windows, `iniciar.bat` con los mismos dos argumentos).
+- **Docker**, sin Python: `docker compose up --build`. Para usar los datos de Ford, copiar los dos CSV en `./datos/` o
+  correr `FORD_DATOS=/ruta docker compose up --build`.
+- **A mano:**
+  1. `python3.13 -m venv .venv` y `.venv/bin/pip install -r requirements.txt` (en Windows, `.venv\\Scripts\\python`).
+  2. `.venv/bin/python -m plataforma.servidor`, sumando `--csv` y `--catalogo` para los datos de Ford.
+  3. `python3 -m http.server 8000`.
 
-MVP con una fuente simulada sobre la base ficticia (Días 155–194):
-```sh
-.venv/bin/python -m plataforma.servidor --csv "/ruta/Dataset QLS Inspección Adicional.csv" \\
-  --catalogo "/ruta/Códigos de catálogo.csv" --puerto 8765
-```
-Abrir http://127.0.0.1:8765. El día arranca en Día de planta: «Armar la hoja», después Hoja del día, Selección,
-Seguimiento, Resultados, Modelo y Reporte para la línea; «Avanzar al día siguiente» simula la llegada de unidades y
-resultados. Ningún VIN sale del servidor. Detalle en `plataforma/README.md`.
+**Modo demo.** La base sintética (`plataforma/demo.py`) tiene el mismo esquema que la real y sirve para ver el flujo:
+sus cifras no son resultados, y la interfaz lo dice («Demo sintética»).
 
-## 3. Ver la presentación
+**Plataforma.** Arranca en el Día 155. «Armar la hoja» y después Hoja del día, Selección, Seguimiento, Resultados,
+Modelo y Reporte para la línea; «Avanzar al día siguiente» simula la llegada de unidades y resultados. Ningún VIN sale
+del servidor. Detalle en `plataforma/README.md`.
 
-Sitio estático; necesita internet para three.js, GSAP y las fuentes. Desde esta carpeta:
-```sh
-python3 -m http.server 8000
-```
-Abrir http://localhost:8000/prototipos/presentacion-3d/. Se recorre con las flechas; `N` muestra las notas del orador.
-Las capturas de la plataforma no vienen en el .zip porque muestran tasas por código: sin ellas se ve un esquema, con
-un aviso que `?limpio=1` oculta. Se generan con `prototipos/presentacion-3d/herramientas/capturar_flujo.sh`.
+**Presentación.** Se recorre con las flechas; `N` muestra las notas del orador. Las capturas de la plataforma no vienen en
+el .zip porque muestran tasas por código: sin ellas se ve un esquema, con un aviso que `?limpio=1` oculta. Si se
+reciben aparte, van en `prototipos/presentacion-3d/assets/local/`.
 
-## 4. Comprobar los resultados (opcional)
+## 2. Comprobar los resultados (opcional)
 
 Los resultados de referencia son los agregados versionados en `solucion/resultados/`, de las corridas documentadas.
+Con el entorno de la opción a mano; xgboost y lightgbm necesitan OpenMP: `brew install libomp` en macOS,
+`apt-get install libgomp1` en Linux y `set PYTHONUTF8=1` en Windows.
 - Pruebas sintéticas, sin los datos: `.venv/bin/python -m solucion.pruebas`.
 - Recalcular la validación y la hoja de desarrollo del Día 190 (unos minutos; la salida va fuera de esta carpeta):
   ```sh
@@ -86,7 +86,8 @@ agregado está en `solucion/resultados/prueba-final.json`.
 
 ## Contenido
 
-`plataforma/` (MVP de la plataforma), `prototipos/presentacion-3d/` (la presentación), `solucion/` (código, pruebas y
+`iniciar.sh`, `iniciar.bat`, `Dockerfile` y `docker-compose.yml` (arranque), `plataforma/` (MVP de la plataforma),
+`prototipos/presentacion-3d/` (la presentación), `solucion/` (código, pruebas y
 `resultados/`, solo agregados), `solucion/experimentos/` (exploratorios, no corren por defecto), `research/`
 (auditoría, particiones e informes), `docs/` (borradores del informe y documentación), `{hoja}` (hoja de códigos
 prioritarios del Día 190, de validación, sin VIN) y `{anexos}` (material de apoyo). Todas las cifras valen entre auditados con actividad QLS,

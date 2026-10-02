@@ -193,6 +193,21 @@ def test_reporte_solo_agrega_lo_auditado():
     assert r["componentes"] == [{"componente": "V1", "n": 2, "parte": 1.0}] and len(r["semanas"]) == 2
 
 
+def test_demo_tiene_el_esquema_de_la_base_y_no_parece_un_vin():
+    from plataforma import demo
+    from solucion.datos import TRAMOS
+    from solucion.empaquetar import FORMA_VIN
+    from solucion.puntaje import atributos_de
+
+    t = demo.tabla()
+    assert not t.desbloqueada and t.fuente["csv_sha256"] == "demo-sintetica"
+    assert set(atributos_de(t.catalogo)) == set(t.catalogo) == {v.codigo for v in t.vins}
+    lo, hi = TRAMOS["validacion"]
+    assert all(t.por_dia(d, d).get(d) for d in range(lo, hi + 1))  # Hay unidades todos los días de la demo.
+    assert 0.05 < sum(v.calibrada for v in t.vins) / len(t.vins) < 0.15
+    assert not any(FORMA_VIN.search(v.vin) for v in t.vins)
+
+
 if __name__ == "__main__":
     fallas = 0
     for nombre, f in sorted((n, f) for n, f in globals().items() if n.startswith("test_")):
