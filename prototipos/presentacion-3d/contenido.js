@@ -186,8 +186,6 @@ export const capitulos = [
     ],
     figura: null,
     detalle: [
-      { titulo: 'Sin tiempos de ciclo', texto: 'No están en la base; se pidieron a Ford el 18/09.' },
-      { titulo: 'Historial: no probado', texto: 'La base no marca Gate Release.' },
       { titulo: 'Nunca predictores', texto: 'El resultado y el componente de Inspección Adicional.' },
     ],
     ampliacion: [
