@@ -5,6 +5,7 @@ Desde el 18 de septiembre de 2026, la fuente vigente es **Dataset QLS Inspecció
 - Tamaño: 54.586.528 bytes.
 - SHA-256: `a24860d86afdd841d1c9c4ac12155a861299b80dbc161bcd17d2aaff43c5a82b`.
 - UTF-8, delimitador coma y comillas dobles; finales de línea CRLF.
+- Qué es cada columna: [diccionario de datos](diccionario-datos.md).
 - Primer registro CSV: descripciones. Segundo: 41 nombres técnicos únicos. Tercero: primer evento. No usar las descripciones como encabezados.
 - Las horas usan coma decimal dentro de campos entrecomillados; se conservan como texto exacto durante la auditoría, sin redondearlas.
 - Faltantes observados: campos vacíos y nueve `#N/A` en Fecha Reparación. El lector también reconoce `NaN` para reproducir el Markdown histórico.

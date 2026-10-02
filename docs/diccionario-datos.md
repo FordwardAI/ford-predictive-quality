@@ -1,3 +1,7 @@
+# Diccionario de datos
+
+Columnas del CSV QLS vigente ([datos locales](datos-locales.md)), con los nombres técnicos originales. Lo que no está confirmado se indica en cada fila. El resultado y el componente de la Auditoría Adicional nunca son predictores ([CONTEXT.md](../CONTEXT.md)).
+
 | Nombre | Descripción |
 | --- | --- |
 | VIN | Identificador único del vehículo. Un VIN puede tener varios eventos de calidad. |

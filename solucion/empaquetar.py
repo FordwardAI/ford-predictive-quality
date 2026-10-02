@@ -3,7 +3,7 @@
     python -m solucion.empaquetar --destino reproduccion.zip [--salida DIR_HOJA] [--anexo ARCHIVO ...]
         [--csv CSV --catalogo CATALOGO]
 
-Parte de `git ls-files` (lo versionado), así que `.venv`, cachés, `data.js` y capturas quedan fuera. La hoja y los
+Parte de `git ls-files` (lo versionado), así que `.venv`, cachés, `node_modules` y las capturas locales quedan fuera. La hoja y los
 anexos se agregan desde fuera del repo. Al generar verifica que el .zip no tenga ningún .csv de datos, ningún VIN de la
 tabla (si se pasan `--csv` y `--catalogo`) ni nada con forma de VIN.
 """
@@ -18,9 +18,10 @@ from pathlib import Path
 from solucion.datos import RAIZ
 
 PREFIJOS = {"solucion/": None, "research/": {".py", ".json", ".md", ".png", ".svg"},
-            "docs/": {".md", ".png", ".svg"}}
+            "docs/": {".md", ".png", ".svg"}, "plataforma/": None, "prototipos/presentacion-3d/": None}
 RAIZ_INCLUIDA = {"requirements.txt", ".python-version", "README.md", "AGENTS.md", "CLAUDE.md", "CONTEXT.md", "CONTRIBUTING.md"}
-EXCLUIDOS = ("/__pycache__/", "/.venv/", "prototipos/")
+EXCLUIDOS = ("/__pycache__/", "/.venv/", "/node_modules/", "/assets/local/", "/assets/fuente/")
+PRESENTACION = "prototipos/presentacion-3d/"
 DATOS_CRUDOS = {".csv", ".xlsx", ".xls", ".pickle", ".pkl", ".parquet"}
 CARPETA_HOJA, CARPETA_ANEXOS = "hoja/", "anexos/"
 FORMA_VIN = re.compile(r"\b(?=[A-Z0-9]*\d)(?=[A-Z0-9]*[A-Z])[A-HJ-NPR-Z0-9]{17}\b")
@@ -59,7 +60,25 @@ Los experimentos opcionales y sus agregados están en `solucion/experimentos/`:
 ver [sus comandos y límites](solucion/experimentos/README.md). No son la solución acordada ni corren por defecto.
 Sus informes están en `research/`; los borradores de entrega y fuentes, en `docs/`.
 
-Contenido: `solucion/` (código y pruebas), `research/` (auditoría, particiones e informes), `docs/` (documentación), `solucion/resultados/` (solo
+## Ver la plataforma y la presentación
+
+Con el entorno del paso 1, desde esta carpeta:
+
+- **Plataforma** (MVP; fuente simulada sobre la base ficticia, Días 155–194):
+  ```sh
+  .venv/bin/python -m plataforma.servidor --csv "/ruta/Dataset QLS Inspección Adicional.csv" \
+    --catalogo "/ruta/Códigos de catálogo.csv" --puerto 8765
+  ```
+  y abrir http://127.0.0.1:8765. Detalle en `plataforma/README.md`.
+- **Presentación** (sitio estático; necesita internet para three.js, GSAP y las fuentes):
+  ```sh
+  python3 -m http.server 8000
+  ```
+  y abrir http://localhost:8000/prototipos/presentacion-3d/. Las capturas de la plataforma no vienen en el .zip
+  (muestran tasas por código): se generan con `prototipos/presentacion-3d/herramientas/capturar_flujo.sh`.
+
+Contenido: `solucion/` (código y pruebas), `research/` (auditoría, particiones e informes), `docs/` (documentación),
+`plataforma/` (MVP de la plataforma), `prototipos/presentacion-3d/` (la presentación), `solucion/resultados/` (solo
 agregados), `{hoja}` (hoja de códigos prioritarios, sin VIN) y `{anexos}` (material de apoyo).
 Todas las cifras valen entre auditados con actividad QLS, base ficticia.
 """
@@ -108,7 +127,9 @@ def controlar(destino, vins=()):
             sufijo = Path(nombre).suffix
             if sufijo in DATOS_CRUDOS and not nombre.startswith(CARPETA_HOJA):
                 problemas.append(f"{nombre}: archivo de datos fuera de la hoja")
-            if Path(nombre).name == "data.js" or nombre.startswith(("prototipos/", ".venv/")):
+            fuera = nombre.startswith("prototipos/") and not nombre.startswith(PRESENTACION)
+            if (Path(nombre).name == "data.js" or fuera or nombre.startswith(".venv/")
+                    or any(x in "/" + nombre for x in EXCLUIDOS)):
                 problemas.append(f"{nombre}: no debe ir en el .zip")
         for nombre, texto in _textos(zf):
             palabras = set(re.findall(r"[A-Za-z0-9]+", texto))

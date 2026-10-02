@@ -20,6 +20,9 @@ def test_zip_limpio_pasa_y_csv_de_datos_falla():
         assert empaquetar.controlar(_zip(d, {"solucion/a.py": "x = 1", "hoja/hoja.csv": "codigo;n\nAAA1;3"})) == []
         assert empaquetar.controlar(_zip(d, {"datos/base.csv": "a,b"}))  # CSV fuera de la hoja.
         assert empaquetar.controlar(_zip(d, {"prototipos/presentacion-3d/assets/local/data.js": "var D = {}"}))
+        assert empaquetar.controlar(_zip(d, {"prototipos/presentacion-3d/assets/local/flujo-2-hoja.png": "x"}))
+        assert empaquetar.controlar(_zip(d, {"prototipos/otro/index.html": "<html>"}))
+        assert empaquetar.controlar(_zip(d, {"prototipos/presentacion-3d/index.html": "<html>"})) == []
 
 
 # El VIN de ejemplo se arma concatenando para que el control del .zip no lo vea literal.
@@ -34,12 +37,15 @@ def test_vin_de_la_tabla_y_forma_de_vin_fallan_tambien_dentro_de_un_xlsx():
         assert not empaquetar.controlar(_zip(d, {"anexos/n.txt": "unidad SYN001002"}), vins=["SYN009999"])
 
 
-def test_lo_versionado_incluye_codigo_y_excluye_datos_y_prototipo():
+def test_lo_versionado_incluye_codigo_plataforma_y_presentacion_sin_datos():
     if not (RAIZ / ".git").exists():
         return  # Dentro del .zip de reproducción no hay repositorio.
     archivos = empaquetar.archivos_versionados()
     assert "solucion/run.py" in archivos and "requirements.txt" in archivos and ".python-version" in archivos
-    assert not [a for a in archivos if a.startswith("prototipos/") or a.endswith((".csv", ".xlsx"))]
+    assert "plataforma/servidor.py" in archivos and "plataforma/web/index.html" in archivos
+    assert "prototipos/presentacion-3d/index.html" in archivos
+    assert not [a for a in archivos if a.endswith((".csv", ".xlsx")) or "/assets/local/" in a or "/node_modules/" in a
+                or (a.startswith("prototipos/") and not a.startswith(empaquetar.PRESENTACION))]
     assert {"docs/datos-locales.md", "solucion/experimentos/README.md", "research/busqueda-amplia.md",
             "solucion/experimentos/resultados/busqueda.json", "solucion/preregistro.json",
             "solucion/preregistro-precision.json", "solucion/resultados/prueba-final.json"} <= set(archivos)
