@@ -60,7 +60,7 @@ Todo lo que no entra en el informe y permite reproducir sus números. **Sin dato
 | `research/` | Auditoría del CSV, particiones, agrupación del catálogo y estudios exploratorios, con sus pruebas |
 | `plataforma/` | MVP de la plataforma web (servidor Python y build de la interfaz); se levanta con el CSV y el catálogo locales |
 | `prototipos/presentacion-3d/` | La presentación, como sitio estático |
-| `docs/` | Borradores del informe, speech, diccionario de datos y documentación |
+| `docs/` | Borradores del informe, preguntas del jurado, diccionario de datos y documentación |
 | Hoja completa del día mostrado | Planilla (CSV/XLSX) e imprimible (HTML) del último día ≤260 (Día 260, generada con la lectura 1; queda fuera de Git y entra al .zip) |
 | Figuras | Todas las de [`figuras/`](figuras/) (PNG y SVG), regeneradas con el comando único |
 | README de reproducción (`LEEME.md`) | Cómo correr todo desde cero con las rutas del CSV y del catálogo, que se verifican por SHA-256, y cómo levantar la plataforma y la presentación |

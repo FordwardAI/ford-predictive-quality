@@ -1,6 +1,6 @@
 # Borradores de la entrega
 
-Pieza **P10** del [plan de acción][plan-piezas], seguida en [#33][i33]. Estos borradores en Markdown son la base del Informe (E2), que se arma **fuera del repo** sobre el template de Ford ([alcance de entrega][alc]). La presentación (E1) es el sitio de [`prototipos/presentacion-3d/`](../../prototipos/presentacion-3d/README.md), con su [speech](speech-presentacion.md). Los datos personales de la carátula van solo en los archivos finales.
+Pieza **P10** del [plan de acción][plan-piezas], seguida en [#33][i33]. Estos borradores en Markdown son la base del Informe (E2), que se arma **fuera del repo** sobre el template de Ford ([alcance de entrega][alc]). La presentación (E1) es el sitio de [`prototipos/presentacion-3d/`](../../prototipos/presentacion-3d/README.md): cada pantalla trae sus notas del orador (tecla `N`). Los datos personales de la carátula van solo en los archivos finales.
 
 **La solución es CatBoost con atributos del código, reentrenado cada 5 días.** Se llegó en dos etapas, y la prueba final se leyó tres veces: tasa fija, CatBoost y Random Forest. Todos los borradores cuentan la misma historia, cuyo detalle está en [cómo se iteró la solución](02-2-especificaciones-tecnicas.md#cómo-se-iteró-la-solución).
 
@@ -29,7 +29,6 @@ Reglas que siguen todos los archivos:
 | [06-conclusiones.md](06-conclusiones.md) | Resultado, valor y próximos pasos concretos | Informe §6 |
 | [ideas-descartadas.md](ideas-descartadas.md) | Passport, perfil por VIN, secuencias, anomalías, 20 % permanente y otras, con su motivo | Informe §2.2 o anexo · Preguntas |
 | [preguntas-jurado.md](preguntas-jurado.md) | 33 preguntas probables con respuesta corta y fuente | Preparación de preguntas |
-| [speech-presentacion.md](speech-presentacion.md) | Guion hablado de la presentación 3D, pantalla por pantalla, unos 30 minutos | Presentación (E1) |
 
 Las figuras se referencian con los nombres que genera P9 en [`figuras/`](figuras/) (PNG y SVG): `comparacion_alternativas`, `veces_azar`, `veces_azar_prueba_final`, `etiquetas_parciales`, `donde_mirar`, `detector_potencia`, `diagrama_proceso` y `diagrama_solucion`. Se regeneran con el comando único de [`solucion/`](../../solucion/README.md).
 

@@ -1,7 +1,6 @@
 // Contenido de la presentación 3D (FordwardAI, Trials Day 2/10/2026).
 //
 // Fuentes (no inventar contenido ni cifras; editar aquí y no en ui.js):
-//   - docs/entrega/speech-presentacion.md: guion hablado de cada pantalla.
 //   - docs/entrega/01 a 06 y 02-x: borradores del Informe (secciones del template).
 //   - docs/entrega/preguntas-jurado.md, docs/entrega/figuras/README.md.
 //   - docs/fuentes/documentation.md (ficha del desafío), docs/alcance-entrega.md,
@@ -212,7 +211,7 @@ export const capitulos = [
     minutos: 1.5,
     antetitulo: 'Especificaciones técnicas · Validación',
     titulo: 'Validar sin ', acento: 'mirar el futuro',
-    bajada: 'Tiempo hacia adelante, 5 días de margen y una prueba final que se abre una sola vez.',
+    bajada: 'Tiempo hacia adelante, 5 días de margen y una prueba final que solo se abre con preregistro.',
     cifras: ['validacion.n', 'prueba.n'],
     puntos: [],
     figura: { tipo: 'js', id: 'particiones', alt: 'Particiones por Día del VIN: entrenamiento, margen, validación, margen y prueba final', pie: 'Particiones por Día del VIN (1–284), con los márgenes de 5 días entre tramos.' },

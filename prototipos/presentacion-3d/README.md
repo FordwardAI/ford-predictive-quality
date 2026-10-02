@@ -1,6 +1,6 @@
 # Presentación 3D interactiva
 
-Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 20 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Lo acompaña el [speech de la presentación](../../docs/entrega/speech-presentacion.md) y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
+Sitio estático para presentar la solución de FordwardAI en el Trials Day (2/10/2026): 20 pantallas sobre una escena 3D oscura (línea de producción simulada y un vehículo en modo x-ray con puntos interactivos) que se recorren con scroll **o** con flechas, como diapositivas. Un toque de flecha muestra la pantalla entera: no hay pasos ni nada que abrir. Cada pantalla trae sus notas del orador y cubre las secciones del template del Informe (01 a 06, con 2.1 a 2.3).
 
 Es **la presentación** del equipo (E1). El contenido sale de los borradores de [`docs/entrega/`](../../docs/entrega/) y las cifras, de los agregados de [`solucion/resultados/`](../../solucion/resultados/).
 
