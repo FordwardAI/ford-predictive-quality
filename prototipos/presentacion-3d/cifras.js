@@ -30,7 +30,7 @@
 //     sin JSON (archivo: null).
 //
 // Regla de leyenda (guion de la presentación): toda cifra en pantalla lleva
-// «entre auditados con actividad QLS, [tramo], base ficticia, n = …».
+// «entre inspeccionados con actividad QLS, [tramo], base ficticia, n = …».
 //
 // prototipos/presentacion-3d/verificar_cifras.py compara cada respaldo con su
 // campo en el JSON y falla si difieren. Mantener el formato de DEFINICIONES:
@@ -53,8 +53,8 @@ const TRAMOS = {
   dondeMirar: { texto: 'validación 155–194', n: 'dondeMirar.n', unidad: 'VIN CALIBRADA elegidos por el predictor de la primera etapa' },
   dondeMirarPrueba: { texto: 'prueba final Día 200–284', n: 'dondeMirar.prueba.n', unidad: 'VIN CALIBRADA elegidos por el predictor de la primera etapa' },
   hoja190: { texto: 'hoja de desarrollo del Día 190 (validación)', n: 'validacion.n', unidad: 'VIN en validación; unidades con identificadores ficticios' },
-  seleccion: { texto: 'selección 100–174 (prueba final no releída)', n: 'seleccion.n', unidad: 'VIN' },
-  confirmacion: { texto: 'confirmación 175–194 (prueba final no releída)', n: 'confirmacion.n', unidad: 'VIN' },
+  seleccion: { texto: 'validación, bloques 1 a 4 (días 100–174; prueba final no releída)', n: 'seleccion.n', unidad: 'VIN' },
+  confirmacion: { texto: 'validación, último bloque (días 175–194; prueba final no releída)', n: 'confirmacion.n', unidad: 'VIN' },
 };
 
 export const DEFINICIONES = [
@@ -62,11 +62,11 @@ export const DEFINICIONES = [
   { clave: 'base.eventos', archivo: 'research/audit-csv.json', ruta: 'rows', formato: 'entero', respaldo: 195808,
     tramo: 'base', etiqueta: 'eventos de calidad en la base' },
   { clave: 'base.vin', archivo: 'research/audit-csv.json', ruta: 'vins', formato: 'entero', respaldo: 59681,
-    tramo: 'base', etiqueta: 'VIN auditados con actividad QLS' },
+    tramo: 'base', etiqueta: 'VIN inspeccionados con actividad QLS' },
   { clave: 'base.calibradas', archivo: 'research/audit-csv.json', ruta: 'vin_label_sets.CALIBRADA', formato: 'entero', respaldo: 6079,
     tramo: 'base', etiqueta: 'VIN con resultado CALIBRADA' },
   { clave: 'base.proporcion', archivo: 'research/audit-csv.json', ruta: 'vin_label_sets.CALIBRADA/vins', formato: 'pct1', respaldo: 0.1018582128315544,
-    tramo: 'base', etiqueta: 'de cada 100 auditados se calibran hoy' },
+    tramo: 'base', etiqueta: 'de cada 100 inspeccionados se calibran hoy' },
   { clave: 'base.codigos', archivo: 'research/catalog-groups.json', ruta: 'cobertura.codigos_base', formato: 'entero', respaldo: 98, fijo: true,
     tramo: 'base', etiqueta: 'códigos de catálogo distintos' },
   { clave: 'base.duplicados', archivo: 'solucion/resultados/preparacion.json', ruta: 'eventos.duplicados_exactos_conservados', formato: 'entero', respaldo: 477,
@@ -124,7 +124,7 @@ export const DEFINICIONES = [
   { clave: 'prueba.vecesRango', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.veces_azar_rango95', formato: 'rangoVeces', respaldo: [1.0078349707617178, 1.6396184187210794],
     tramo: 'prueba', etiqueta: 'rango del 95 % de las veces el azar' },
   { clave: 'prueba.diferencia', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.precision_cupo-corridas[0].tramos[0].ganadora.azar_mismo_cupo', formato: 'puntos1', respaldo: 0.02661503947351481,
-    tramo: 'prueba', etiqueta: 'calibraciones más cada 100 auditorías (no es un ahorro de planta)' },
+    tramo: 'prueba', etiqueta: 'calibraciones más cada 100 inspecciones (no es un ahorro de planta)' },
   { clave: 'prueba.difMin', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[0].ganadora.diferencia_con_azar_rango95[0]', formato: 'puntos2', respaldo: 0.0006670068465509677,
     tramo: 'prueba', etiqueta: 'límite inferior de la diferencia con el azar: mejora, pero por poco' },
   { clave: 'prueba.hasta260.n', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].tramos[1].ganadora.vins', formato: 'entero', respaldo: 13135,
@@ -137,9 +137,9 @@ export const DEFINICIONES = [
   // --- La solución elegida: CatBoost con atributos del código -----------------
   // Elección por precisión (propuesta aprobada el 30/09): precision.json.
   { clave: 'seleccion.n', archivo: 'solucion/resultados/precision.json', ruta: 'calificador_seleccion#n', formato: 'entero', respaldo: 15279,
-    tramo: 'seleccion', etiqueta: 'VIN en selección (cuatro bloques)' },
+    tramo: 'seleccion', etiqueta: 'VIN en los bloques 1 a 4 de la validación' },
   { clave: 'confirmacion.n', archivo: 'solucion/resultados/precision.json', ruta: 'calificador_confirmacion#n', formato: 'entero', respaldo: 4626,
-    tramo: 'confirmacion', etiqueta: 'VIN en confirmación' },
+    tramo: 'confirmacion', etiqueta: 'VIN en el último bloque de la validación' },
   { clave: 'catboost.seleccion', archivo: 'solucion/resultados/precision.json', ruta: 'ganadora.precision_seleccion', formato: 'pct1', respaldo: 0.1837837837837838,
     tramo: 'seleccion', etiqueta: 'de cada 100 elegidos por CatBoost se calibran' },
   { clave: 'catboost.tasaFijaSeleccion', archivo: 'solucion/resultados/precision.json', ruta: 'tasa_fija.precision_seleccion', formato: 'pct1', respaldo: 0.12702702702702703,
@@ -191,7 +191,7 @@ export const DEFINICIONES = [
   { clave: 'dondeMirar.prueba.general', archivo: 'solucion/resultados/prueba-final.json', ruta: 'corridas[0].piezas.p6.resultado.componente.prueba_final.calibrada_elegidas_por_la_ganadora.acierto_general', formato: 'pct1', respaldo: 0.352112676056338,
     tramo: 'dondeMirarPrueba', etiqueta: 'aciertan con la lista general (prueba final)' },
   { clave: 'minimo.P', archivo: 'solucion/resultados/p5.json', ruta: 'minimo_por_codigo.P', formato: 'entero', respaldo: 40,
-    tramo: 'validacion', etiqueta: 'días como máximo entre dos auditorías de un mismo código (mínimo por código)' },
+    tramo: 'validacion', etiqueta: 'días como máximo entre dos inspecciones de un mismo código (mínimo por código)' },
   { clave: 'minimo.precision', archivo: 'solucion/resultados/p5.json', ruta: 'resultados[2].precision_cupo', formato: 'pct1', respaldo: 0.1534526854219949,
     tramo: 'validacion', etiqueta: 'de cada 100 elegidos se calibran con etiquetas parciales y mínimo por código' },
   { clave: 'minimo.epsilon20', archivo: 'solucion/resultados/p5.json', ruta: 'resultados[5].precision_cupo', formato: 'pct1', respaldo: 0.13810741687979539,
@@ -341,7 +341,7 @@ export async function cargarCifras() {
       const t = TRAMOS[d.tramo];
       const n = numeros.get(t.n);
       const nTexto = n === null || n === undefined ? '[PENDIENTE]' : formatear('entero', n);
-      leyenda = `entre auditados con actividad QLS, ${t.texto}, base ficticia, n = ${nTexto} ${t.unidad}`;
+      leyenda = `entre inspeccionados con actividad QLS, ${t.texto}, base ficticia, n = ${nTexto} ${t.unidad}`;
     }
     cifras.set(d.clave, {
       valor: pendiente ? '[PENDIENTE]' : formatear(d.formato, numero),

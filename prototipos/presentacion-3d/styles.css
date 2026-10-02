@@ -456,7 +456,7 @@ kbd {
 }
 .integrante-nombre { display: block; font-size: var(--t-callout); line-height: 1.25; }
 .integrante-dato { display: block; margin-top: calc(4 * var(--u)); font-size: var(--t-leyenda); letter-spacing: 0; color: var(--w-72); }
-.integrante-parte + .integrante-parte::before { content: " · "; }
+.integrante-parte { display: block; }
 .limpio .solo-pendiente { display: none; }
 .integrantes .pendiente { white-space: normal; text-align: left; line-height: 1.35; padding: 2px .7em; margin: 2px 0; }
 .portada-meta {
